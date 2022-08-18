@@ -35,7 +35,9 @@ Several fallbacks exist: Docker in a VM, rebuild container after changes, craft 
 
 ## Security
 
-- Any password stored must be hashed, use a strong password hashing algorithm
+- Any password stored must be hashed
+
+Use a strong password hashing algorithm
 
 - The website must be protected against SQL injection
 
@@ -50,20 +52,25 @@ Several fallbacks exist: Docker in a VM, rebuild container after changes, craft 
 - User should be able to upload an avatar
 
 - User should be able to enable two-factor authentication
+
 Google Authenticator or sending a text message to their phone
 
 - User should be able to add other users as friends and see their current status
+
 online, offline, in a game, and so forth
 
 - Stats have to be displayed on the user profile
+
 Such as: wins and losses, ladder level, achievements, and so forth
 
 - User should have a Match History including 1v1 games, ladder, and anything else useful
+
 Anyone who is logged in should be able to consult it.
 
 ## Chat
 
 - create channels (chat rooms)
+
 public, or private, or protected by a password
 
 - Channel owner
@@ -75,6 +82,7 @@ public, or private, or protected by a password
 - Send direct messages to other users
 
 - Block other users
+
 See no more messages from the account they blocked
 
 - Invite other users to play a Pong game through the chat interface
@@ -86,14 +94,18 @@ See no more messages from the account they blocked
 - Play a live Pong game versus another player directly on the website
 
 - Matchmaking system
+
 User can join a queue until they get automatically matched with someone else
 
 - Canvas game or game rendered in 3D
+
 It must be faithful to the original Pong (1972)
 
 - Customization options
+
 For example, power-ups or different maps
-Select a default version of the game without any extra features if they want to
+
+- Select a default version of the game without any extra features if they want to
  
 - The game must be responsive
 
