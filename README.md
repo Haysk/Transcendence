@@ -29,7 +29,7 @@ Several fallbacks exist: Docker in a VM, rebuild container after changes, craft 
 ## Overview
 - library / framework with last stable version.
 
-- Compatible with the latest up to date version of Chrome, FireFox and Safari
+- Compatible with the latest up to date version of Chrome, FireFox
 
 - Single-page application.
 
