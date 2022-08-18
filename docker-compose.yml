@@ -20,5 +20,5 @@ volumes:
     driver: local
     driver_opts:
       type: none
-      device: /mnt/nfs/homes/ade-temm/sgoinfre
+      device: /mnt/nfs/homes/$USER/sgoinfre
       o: bind
