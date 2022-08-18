@@ -6,7 +6,7 @@ networks:
 
 services:
   back-end:
-    build: srcs/back-end/.
+    build: ../back-end/.
     volumes: 
       - volume-transcendence:/var:rw
     container_name: container_transcendence
