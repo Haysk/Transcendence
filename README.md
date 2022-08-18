@@ -55,7 +55,7 @@ Google Authenticator or sending a text message to their phone
 - User should be able to add other users as friends and see their current status
 online, offline, in a game, and so forth
 
--Stats have to be displayed on the user profile
+- Stats have to be displayed on the user profile
 Such as: wins and losses, ladder level, achievements, and so forth
 
 - User should have a Match History including 1v1 games, ladder, and anything else useful
