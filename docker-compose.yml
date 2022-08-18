@@ -1,0 +1,24 @@
+version: "3.9"
+networks:
+  transcendence-network:
+    driver: bridge
+    name: transcendence-network
+
+services:
+  back-end:
+    build: srcs/back-end/.
+    volumes: 
+      - volume-transcendence:/var:rw
+    container_name: container_transcendence
+    restart: unless-stopped
+    networks:
+      - transcendence-network
+
+volumes:
+  volume-transcendence:
+    name: volume-transcendence
+    driver: local
+    driver_opts:
+      type: none
+      device: /mnt/nfs/homes/ade-temm/sgoinfre
+      o: bind
