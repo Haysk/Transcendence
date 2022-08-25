@@ -11,7 +11,7 @@ export class ApiService {
   constructor(private httpClient: HttpClient) { }
 
   getTechs() {
-    return this.httpClient.get<Technology[]>(`${this.API_SERVER}/techs`);
+    return this.httpClient.get<Technology[]>(`${this.API_SERVER}/tech`);
   }
 
   getTech(id: number) {
@@ -19,14 +19,14 @@ export class ApiService {
   }
 
   createTech(techno: Technology) {
-    return this.httpClient.post<Technology>(`${this.API_SERVER}/techs`, techno);
+    return this.httpClient.post<Technology>(`${this.API_SERVER}/tech`, techno);
   }
 
   updateTech(techno: Technology) {
-    return this.httpClient.patch<Technology>(`${this.API_SERVER}/techs/${techno.id}`, techno);
+    return this.httpClient.patch<Technology>(`${this.API_SERVER}/tech/${techno.id}`, techno);
   }
 
   removeTech(id: number) {
-    return this.httpClient.delete(`${this.API_SERVER}/techs/${id}`);
+    return this.httpClient.delete(`${this.API_SERVER}/tech/${id}`);
   }
 }

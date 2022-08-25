@@ -25,3 +25,10 @@ model Post {
   author    User?    @relation(fields: [authorId], references: [id])
   authorId  Int?
 }
+
+model Tech {
+	id Int @default(autoincrement()) @id
+	name String @unique
+	category String?
+	details String?
+}
