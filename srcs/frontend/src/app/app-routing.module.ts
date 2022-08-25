@@ -4,12 +4,14 @@ import { HomeComponent } from './home/home.component';
 import { PongComponent } from './pong/pong.component';
 import { TechnoAddComponent } from './techno-add/techno-add.component';
 import { TechnoListComponent } from './techno-list/techno-list.component';
+import { ChatComponent } from './chat/chat.component';
 
 const routes: Routes = [
   { path: '', component: HomeComponent },
   { path: 'add-techno', component: TechnoAddComponent},
   { path: 'all-technos', component: TechnoListComponent},
-  { path: 'pong', component: PongComponent }
+  { path: 'pong', component: PongComponent },
+  { path: 'chat', component: ChatComponent },
 ];
 
 @NgModule({
