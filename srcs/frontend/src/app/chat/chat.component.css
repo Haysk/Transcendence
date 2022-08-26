@@ -1,4 +1,4 @@
 td /* Toutes les cellules des tableaux... */
 {
-    border: 1px solid black; /* auront une bordure de 1px */
+    border: 10px solid rgb(162, 114, 114); /* auront une bordure de 1px */
 }
