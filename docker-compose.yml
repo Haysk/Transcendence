@@ -20,8 +20,6 @@ services:
   backend:
     container_name: backend
     image: node:lts-alpine
-    environment:
-      DATABASE_URL: "${DATABASE_URL}"
     ports:
       - '3000:3000'
     networks:
