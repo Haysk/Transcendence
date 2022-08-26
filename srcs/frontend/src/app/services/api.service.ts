@@ -1,6 +1,6 @@
 import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
-import { Technology } from '../models/technology';
+import { Tech } from '../models/technology';
 
 @Injectable({
   providedIn: 'root'
@@ -11,19 +11,19 @@ export class ApiService {
   constructor(private httpClient: HttpClient) { }
 
   getTechs() {
-    return this.httpClient.get<Technology[]>(`${this.API_SERVER}/tech`);
+    return this.httpClient.get<Tech[]>(`${this.API_SERVER}/techs`);
   }
 
   getTech(id: number) {
-    return this.httpClient.get<Technology>(`${this.API_SERVER}/techs/${id}`)
+    return this.httpClient.get<Tech>(`${this.API_SERVER}/tech/${id}`)
   }
 
-  createTech(techno: Technology) {
-    return this.httpClient.post<Technology>(`${this.API_SERVER}/tech`, techno);
+  createTech(techno: Tech) {
+    return this.httpClient.post<Tech>(`${this.API_SERVER}/tech`, techno);
   }
 
-  updateTech(techno: Technology) {
-    return this.httpClient.patch<Technology>(`${this.API_SERVER}/tech/${techno.id}`, techno);
+  updateTech(techno: Tech) {
+    return this.httpClient.patch<Tech>(`${this.API_SERVER}/tech/${techno.id}`, techno);
   }
 
   removeTech(id: number) {

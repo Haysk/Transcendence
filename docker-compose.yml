@@ -29,7 +29,7 @@ services:
     volumes:
       - ./srcs/backend:/backend
     working_dir: /backend
-    command: sh -c "npm install && npx prisma migrate dev && npm run start:dev"
+    command: sh -c "npm install && npx prisma migrate deploy && npm run start:dev"
 
   frontend:
     container_name: frontend

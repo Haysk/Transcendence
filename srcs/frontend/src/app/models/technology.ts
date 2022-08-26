@@ -1,6 +1,6 @@
-export interface Technology {
+export interface Tech {
     id: number;
-    technoname: string;
+	name: string;
     category: string;
     details: string;
 }

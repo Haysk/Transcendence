@@ -1,5 +1,5 @@
 import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
-import { Technology } from '../models/technology';
+import { Tech } from '../models/technology';
 
 @Component({
   selector: 'app-techno-details',
@@ -8,17 +8,17 @@ import { Technology } from '../models/technology';
 })
 export class TechnoDetailsComponent implements OnInit {
   @Input()
-  tech!: Technology;
+  tech!: Tech;
 
   @Output()
-  deleteTech = new EventEmitter<Technology>;
+  deleteTech = new EventEmitter<Tech>;
 
   constructor() { }
 
   ngOnInit(): void {
   }
 
-  delete(tech: Technology) {
+  delete(tech: Tech) {
     console.log('delete', tech);
     this.deleteTech.emit(tech);
   }

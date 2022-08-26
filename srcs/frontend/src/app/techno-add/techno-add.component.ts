@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { Technology } from '../models/technology';
+import { Tech } from '../models/technology';
 import { ApiService } from '../services/api.service';
 
 @Component({
@@ -14,7 +14,7 @@ export class TechnoAddComponent implements OnInit {
   ngOnInit(): void {
   }
 
-  addTechno(form: { value: Technology; reset: () => void; }) {
+  addTechno(form: { value: Tech; reset: () => void; }) {
     this.apiService.createTech(form.value).subscribe((result)=>{
       console.log(result);
     });

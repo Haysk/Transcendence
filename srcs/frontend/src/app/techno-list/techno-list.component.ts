@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { Technology } from '../models/technology';
+import { Tech } from '../models/technology';
 import { ApiService } from '../services/api.service';
 
 @Component({
@@ -8,10 +8,10 @@ import { ApiService } from '../services/api.service';
   styleUrls: ['./techno-list.component.css']
 })
 export class TechnoListComponent implements OnInit {
-  dataSource: Technology[] = [];
-  techno: Technology = {
+  dataSource: Tech[] = [];
+  techno: Tech = {
     id: 0,
-    technoname: '',
+    name: '',
     category: '',
     details: ''
   };
@@ -29,7 +29,7 @@ export class TechnoListComponent implements OnInit {
     });
   }
 
-  async deleteTechno(techno: Technology) {
+  async deleteTechno(techno: Tech) {
     console.log('deleteTechno', techno);
     this.apiService.removeTech(techno.id).subscribe((result)=>{
       console.log(result);
