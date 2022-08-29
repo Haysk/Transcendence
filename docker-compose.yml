@@ -20,6 +20,8 @@ services:
   backend:
     container_name: backend
     image: node:lts-alpine
+    environment:
+      DATABASE_URL: "${DATABASE_URL}"
     ports:
       - '3000:3000'
     networks:
@@ -28,6 +30,8 @@ services:
       - ./srcs/backend:/backend
     working_dir: /backend
     command: sh -c "npm install && npx prisma migrate deploy && npm run start:dev"
+    depends_on:
+      - postgres
 
   frontend:
     container_name: frontend
@@ -43,6 +47,8 @@ services:
       - ./srcs/frontend:/frontend
     working_dir: /frontend
     command: sh -c "npm install && npm install -g @angular/cli && ng serve --host 0.0.0.0 --disable-host-check"
+    depends_on:
+      - backend
 
 networks:
   network:
