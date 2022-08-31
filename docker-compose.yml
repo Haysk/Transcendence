@@ -37,8 +37,8 @@ services:
     container_name: frontend
     image: node:lts-alpine
     environment:
-      API_PORT: "${API_PORT}"
-      API_HOST: "${API_HOST}"
+      API_PORT: ${API_PORT}
+      API_HOST: ${API_HOST}
     ports:
       - '4200:4200'
     networks:
@@ -46,7 +46,8 @@ services:
     volumes:
       - ./srcs/frontend:/frontend
     working_dir: /frontend
-    command: sh -c "npm install && npm install -g @angular/cli && ng serve --host 0.0.0.0 --disable-host-check"
+    command: sh -c "npm install && npm install -g @angular/cli && ng serve -o --ssl true --ssl-key server.key --ssl-cert server.pem --host 0.0.0.0 --disable-host-check"
+#    command: sh -c "npm install && npm install -g @angular/cli && ng serve --host 0.0.0.0 --disable-host-check"
     depends_on:
       - backend
 

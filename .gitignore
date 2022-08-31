@@ -105,3 +105,11 @@ dist
 
 # Angular
 .angular/
+
+#prisma
+migrations/
+
+# ssl Certif
+*.csr
+*.key
+*.pem

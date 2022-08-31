@@ -6,7 +6,7 @@ import { Tech } from '../models/technology';
   providedIn: 'root'
 })
 export class ApiService {
-  API_SERVER = "http://localhost:3000";
+  API_SERVER = "https://localhost:3000";
 
   constructor(private httpClient: HttpClient) { }
 
