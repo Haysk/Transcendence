@@ -15,7 +15,9 @@ https://en.wikipedia.org/wiki/Single-page_application
 - TypeScript
 
 ### Build
-- docker-compose up --build
+```
+docker-compose up --build
+```
 
 Use Docker in rootless mode
 
@@ -29,15 +31,19 @@ Several fallbacks exist: Docker in a VM, rebuild container after changes, craft 
 ## Utils
 
 Create frontend SSL Certif :
-```openssl req -new -newkey rsa:4096 -nodes -keyout server.key -out
+```
+openssl req -new -newkey rsa:4096 -nodes -keyout server.key -out
 server.csr
 
-openssl x509 -req -sha256 -days 365 -in server.csr -signkey server.key -out server.pem```
+openssl x509 -req -sha256 -days 365 -in server.csr -signkey server.key -out server.pem
+```
 
 Create api SSL Certif :
-```openssl req -new -newkey rsa:4096 -nodes -keyout api.key -out api.csr
+```
+openssl req -new -newkey rsa:4096 -nodes -keyout api.key -out api.csr
 
-openssl x509 -req -sha256 -days 365 -in api.csr -signkey api.key -out api.pem```
+openssl x509 -req -sha256 -days 365 -in api.csr -signkey api.key -out api.pem
+```
 
 ## Overview
 - library / framework with last stable version.
