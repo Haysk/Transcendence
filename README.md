@@ -32,8 +32,7 @@ Several fallbacks exist: Docker in a VM, rebuild container after changes, craft 
 
 Create frontend SSL Certif :
 ```
-openssl req -new -newkey rsa:4096 -nodes -keyout server.key -out
-server.csr
+openssl req -new -newkey rsa:4096 -nodes -keyout server.key -out server.csr
 
 openssl x509 -req -sha256 -days 365 -in server.csr -signkey server.key -out server.pem
 ```
