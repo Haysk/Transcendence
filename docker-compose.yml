@@ -24,12 +24,16 @@ services:
       DATABASE_URL: ${DATABASE_URL}
     ports:
       - '3000:3000'
+      - '5555:5555'
     networks:
       - network
     volumes:
       - ./srcs/backend:/backend
     working_dir: /backend
-    command: sh -c "npm install && npx prisma migrate dev && npm run start:dev"
+    command: >
+      sh -c "npm install &&
+      npx prisma migrate dev &&
+      npm run start:dev"
     depends_on:
       - postgres
 
@@ -46,8 +50,13 @@ services:
     volumes:
       - ./srcs/frontend:/frontend
     working_dir: /frontend
-    command: sh -c "npm install && npm install -g @angular/cli && ng serve -o --ssl true --ssl-key server.key --ssl-cert server.pem --host 0.0.0.0 --disable-host-check"
-#    command: sh -c "npm install && npm install -g @angular/cli && ng serve --host 0.0.0.0 --disable-host-check"
+    command: >
+      sh -c "apk add openssl &&
+      openssl req -new -newkey rsa:4096 -nodes -subj "/C=/ST=/L=/O=/CN=" -keyout server.key -out server.csr &&
+      openssl x509 -req -sha256 -days 365 -in server.csr -signkey server.key -out server.pem &&
+      npm install &&
+      npm install -g @angular/cli &&
+      ng serve -o --ssl true --ssl-key server.key --ssl-cert server.pem --host 0.0.0.0 --disable-host-check"
     depends_on:
       - backend
 
