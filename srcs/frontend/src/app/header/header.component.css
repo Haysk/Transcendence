@@ -1,0 +1,93 @@
+
+.all_header{
+    width: 100%;
+    height:100px;
+    background-color: rgb(241, 243, 242);
+    display: flex;
+    justify-content: space-around;
+  
+}
+
+.logo_header{
+    width: 200px;
+    height: 100px;
+    background-color: rgb(60, 165, 130);
+}
+
+.nav_header{
+    width: 400px;
+    height: 100px;
+    background-color: rgb(80, 7, 148);
+    display: flex;
+    justify-content: flex-start;
+    
+}
+
+.game_nav_header{
+    width: 100px;
+    height: 100px;
+    background-color: rgb(78, 109, 57);
+}
+
+.game_nav_header:hover{
+    width: 100px;
+    height: 100px;
+    background-color: rgb(255, 217, 0);
+    /* background-image: url("../../assets/daft1_2.gif");
+    background-size: contain;
+    background-repeat: no-repeat;
+    background-position: center; */
+
+    /* background-color: rgb(255, 217, 0); */
+}
+
+.show_nav_header{
+    width: 100px;
+    height: 100px;
+    background-color: rgb(105, 201, 41);
+}
+
+.show_nav_header:hover{
+    width: 100px;
+    height: 100px;
+    background-color: rgb(255, 217, 0);
+    /* background-image: url("../../assets/cree-ton-gif.gif");
+    background-size: contain;
+    background-repeat: no-repeat;
+    background-position: center; */
+}
+
+.vip_nav_header{
+    width: 100px;
+    height: 100px;
+    background-color: rgb(1, 182, 143);
+}
+
+.vip_nav_header:hover{
+    width: 100px;
+    height: 100px;
+    background-color: rgb(255, 217, 0);
+}
+
+.private_nav_header{
+    width: 100px;
+    height: 100px;
+    background-color: rgb(33, 75, 5);
+}
+
+.private_nav_header:hover{
+    width: 100px;
+    height: 100px;
+    background-color: rgb(255, 217, 0);
+}
+
+.username_header{
+    
+    align-items: center;
+    text-align: center;
+    padding-top:30px;
+    font-size: 20px;
+    width: 200px;
+    height: 100px;
+ 
+}
