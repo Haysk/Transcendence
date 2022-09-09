@@ -1,5 +1,7 @@
-import { Component, OnInit, Input } from '@angular/core';
+import { Component, OnInit, Input, Injectable } from '@angular/core';
+import { User } from '../models/user';
 
+@Injectable()
 @Component({
   selector: 'app-header',
   templateUrl: './header.component.html',
@@ -7,12 +9,10 @@ import { Component, OnInit, Input } from '@angular/core';
 })
 export class HeaderComponent implements OnInit {
   @Input() user!: User;
-  userName!: string;
 
   constructor() { }
 
   ngOnInit(): void {
-    this.userName = 'Chilee';
   }
 
 }
