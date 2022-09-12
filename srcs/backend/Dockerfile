@@ -6,10 +6,10 @@ RUN npm install -g npm
 WORKDIR /usr/src/app
 
 # A wildcard is used to ensure both package.json AND package-lock.json are copied
-COPY package*.json ./
+# COPY package*.json ./
 
 # Install app dependencies
-RUN npm install
+# RUN npm install
 
 COPY entrypoint.sh /entrypoint.sh
 
