@@ -1,6 +1,7 @@
 FROM node:18-alpine
 
 RUN npm install -g npm
+RUN npm install -g @angular/cli
 
 # Create app directory
 WORKDIR /usr/src/app
