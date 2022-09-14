@@ -30,6 +30,6 @@ describe('AppComponent', () => {
     const fixture = TestBed.createComponent(AppComponent);
     fixture.detectChanges();
     const compiled = fixture.nativeElement as HTMLElement;
-    expect(compiled.querySelector('.content span')?.textContent).toContain('todo-app app is running!');
+    expect(compiled.querySelector('h3')?.textContent).toContain('Bienvenue sur Angular');
   });
 });
