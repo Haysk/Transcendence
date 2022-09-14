@@ -54,17 +54,15 @@ export class PongComponent implements OnInit, OnDestroy {
   ngOnInit(): void {
     this.moveSubscription = this.socketService
       .getMove()
-      .subscribe((move: any) => {
+      .subscribe((move: IInput) => {
         this.game.updateInput(move);
       });
-    this.startSubscription = this.socketService
-      .getStart()
-      .subscribe((move: any) => {
-        this.game.start();
-      });
+    this.startSubscription = this.socketService.getStart().subscribe(() => {
+      this.game.start();
+    });
     this.gameStatesSubscription = this.socketService
       .getGameStates()
-      .subscribe((states: any) => {
+      .subscribe((states: IGameStates) => {
         this.game.updateStates(states);
       });
     this.tickSubscription = interval(interval_tick).subscribe(() => {
@@ -121,14 +119,14 @@ export class PongComponent implements OnInit, OnDestroy {
   }
 
   toUp(key: string) {
-    if (this.gameConfig.left.mode.type === 'local') {
+    if (this.gameConfig.left.mode.type === "local") {
       if (key === this.gameConfig.left.mode.upKey) {
         this.moveLeft.up = false;
       } else if (key === this.gameConfig.left.mode.downKey) {
         this.moveLeft.down = false;
       }
     }
-    if (this.gameConfig.right.mode.type === 'local') {
+    if (this.gameConfig.right.mode.type === "local") {
       if (key === this.gameConfig.right.mode.upKey) {
         this.moveRight.up = false;
       } else if (key === this.gameConfig.right.mode.downKey) {
@@ -138,14 +136,14 @@ export class PongComponent implements OnInit, OnDestroy {
   }
 
   toDown(key: string) {
-    if (this.gameConfig.left.mode.type === 'local') {
+    if (this.gameConfig.left.mode.type === "local") {
       if (key === this.gameConfig.left.mode.upKey) {
         this.moveLeft.up = true;
       } else if (key === this.gameConfig.left.mode.downKey) {
         this.moveLeft.down = true;
       }
     }
-    if (this.gameConfig.right.mode.type === 'local') {
+    if (this.gameConfig.right.mode.type === "local") {
       if (key === this.gameConfig.right.mode.upKey) {
         this.moveRight.up = true;
       } else if (key === this.gameConfig.right.mode.downKey) {
@@ -163,7 +161,7 @@ export class PongComponent implements OnInit, OnDestroy {
       this.gameConfig.board.board.margin -
       this.gameConfig.right.racket.width;
 
-    if (this.gameConfig.left.mode.type !== 'remote') {
+    if (this.gameConfig.left.mode.type !== "remote") {
       const move = this.getInput(
         this.gameConfig.left.mode,
         this.gameConfig.left.id,
@@ -173,7 +171,7 @@ export class PongComponent implements OnInit, OnDestroy {
       this.game.updateInput(move);
       this.sendMove(move);
     }
-    if (this.gameConfig.right.mode.type !== 'remote') {
+    if (this.gameConfig.right.mode.type !== "remote") {
       const move = this.getInput(
         this.gameConfig.right.mode,
         this.gameConfig.right.id,
@@ -184,7 +182,7 @@ export class PongComponent implements OnInit, OnDestroy {
       this.sendMove(move);
     }
     this.game.tick();
-    if (this.gameConfig.board.mode.type === 'server') {
+    if (this.gameConfig.board.mode.type === "server") {
       //this.gameConfig.states = this.game.getGameStates();
     } else {
       this.sendGameStates(this.gameConfig.states);
@@ -201,14 +199,14 @@ export class PongComponent implements OnInit, OnDestroy {
     localMove: IInput,
     remoteMove: IInput
   ): IInput {
-    if (racketMode.type === 'local') {
+    if (racketMode.type === "local") {
       return localMove;
-    } else if (racketMode.type === 'ai') {
+    } else if (racketMode.type === "ai") {
       this.ai.setStates(this.gameConfig.states);
       this.ai.setLevel(racketMode.level);
       this.ai.setUserId(userId);
       return this.ai.getInput();
-    } else if (racketMode.type === 'remote') {
+    } else if (racketMode.type === "remote") {
       return remoteMove;
     } else {
       return {
@@ -236,11 +234,11 @@ export class PongComponent implements OnInit, OnDestroy {
     y: number,
     width: number,
     height: number,
-    radius: any = 5,
+    radius: number | { tl: number; tr: number; br: number; bl: number } = 5,
     fill = false,
     stroke = true
   ) {
-    if (typeof radius === 'number') {
+    if (typeof radius === "number") {
       radius = { tl: radius, tr: radius, br: radius, bl: radius };
     } else {
       radius = { ...{ tl: 0, tr: 0, br: 0, bl: 0 }, ...radius };
@@ -283,7 +281,7 @@ export class PongComponent implements OnInit, OnDestroy {
   }
 
   darken() {
-    this.ctx.fillStyle = 'rgba(0, 0, 0, 0.2)';
+    this.ctx.fillStyle = "rgba(0, 0, 0, 0.2)";
     this.ctx.fillRect(0, 0, this.canvas.width, this.canvas.height);
   }
 
@@ -292,7 +290,7 @@ export class PongComponent implements OnInit, OnDestroy {
     this.ctx.clearRect(0, 0, this.canvas.width, this.canvas.height);
 
     // draw net
-    this.ctx.strokeStyle = 'white';
+    this.ctx.strokeStyle = "white";
     this.ctx.beginPath();
     this.ctx.setLineDash([5, 15]);
     this.ctx.moveTo(this.gameConfig.board.board.width / 2, 0);
@@ -331,9 +329,9 @@ export class PongComponent implements OnInit, OnDestroy {
     this.drawBall();
 
     // draw score
-    this.ctx.font = '30px Arial';
-    this.ctx.fillStyle = 'white';
-    this.ctx.textAlign = 'center';
+    this.ctx.font = "30px Arial";
+    this.ctx.fillStyle = "white";
+    this.ctx.textAlign = "center";
     this.ctx.fillText(
       String(this.gameConfig.states.scoreLeft),
       this.gameConfig.board.board.width * 0.4,

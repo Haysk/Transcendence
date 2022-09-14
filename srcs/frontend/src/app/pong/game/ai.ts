@@ -169,7 +169,7 @@ export class Ai {
     centerRacket: number,
     heightRacket: number
   ): IInput {
-    let input: IInput = {
+    const input: IInput = {
       userId: this.userId,
       up: false,
       down: false,

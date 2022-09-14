@@ -6,7 +6,8 @@
     "start": "ng serve --port 4200 --host 0.0.0.0 --public-host localhost --disable-host-check",
     "build": "ng build",
     "watch": "ng build --watch --configuration development",
-    "test": "ng test"
+    "test": "ng test",
+    "lint": "eslint . --ext .ts"
   },
   "private": true,
   "dependencies": {
@@ -17,6 +18,7 @@
     "@angular/platform-browser": "^14.1.0",
     "@angular/platform-browser-dynamic": "^14.1.0",
     "@angular/router": "^14.1.0",
+    "eslint": "^8.23.1",
     "geometric": "^2.4.0",
     "line-intersect": "^3.0.0",
     "npm": "^8.19.1",
@@ -32,6 +34,7 @@
     "@angular/compiler-cli": "^14.1.0",
     "@types/geometric": "^2.2.0",
     "@types/jasmine": "~4.0.0",
+    "@typescript-eslint/eslint-plugin": "^5.37.0",
     "jasmine-core": "~4.2.0",
     "karma": "~6.4.0",
     "karma-chrome-launcher": "~3.1.0",
