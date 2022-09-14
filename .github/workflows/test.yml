@@ -23,12 +23,12 @@ jobs:
       with:
         node-version: ${{ matrix.node-version }}
         cache: 'npm'
-    # - name: test front
-      # run: |
-        # cd srcs/frontend
-        # npm ci
-        # npm run build --if-present
-        # npm test
+    - name: test front
+      run: |
+        cd srcs/frontend
+        npm ci
+        npm run build --if-present
+        npm test
     - name: test back
       run: |
         cd srcs/backend
