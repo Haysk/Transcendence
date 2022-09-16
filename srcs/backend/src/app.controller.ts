@@ -20,19 +20,19 @@ export class AppController {
 		private readonly techService: TechService,
 	) { }
 
-	@Get('api/post/:id')
+	@Get('post/:id')
 	async getPostById(@Param('id') id: string): Promise<PostModel> {
 		return this.postService.post({ id: Number(id) });
 	}
 
-	@Get('api/feed')
+	@Get('feed')
 	async getPublishedPosts(): Promise<PostModel[]> {
 		return this.postService.posts({
 			where: { published: true },
 		});
 	}
 
-	@Get('api/filtered-posts/:searchString')
+	@Get('filtered-posts/:searchString')
 	async getFilteredPosts(
 		@Param('searchString') searchString: string,
 	): Promise<PostModel[]> {
@@ -50,7 +50,7 @@ export class AppController {
 		});
 	}
 
-	@Post('api/post')
+	@Post('post')
 	async createDraft(
 		@Body() postData: { title: string; content?: string; authorEmail: string },
 	): Promise<PostModel> {
@@ -64,14 +64,14 @@ export class AppController {
 		});
 	}
 
-	@Post('api/user')
+	@Post('user')
 	async signupUser(
 		@Body() userData: { name?: string; email: string },
 	): Promise<UserModel> {
 		return this.userService.createUser(userData);
 	}
 
-	@Put('api/publish/:id')
+	@Put('publish/:id')
 	async publishPost(@Param('id') id: string): Promise<PostModel> {
 		return this.postService.updatePost({
 			where: { id: Number(id) },
@@ -79,29 +79,29 @@ export class AppController {
 		});
 	}
 
-	@Delete('api/post/:id')
+	@Delete('post/:id')
 	async deletePost(@Param('id') id: string): Promise<PostModel> {
 		return this.postService.deletePost({ id: Number(id) });
 	}
 	
-	@Get('api/techs')
+	@Get('techs')
 	async getTechs(): Promise<TechModel[]> {
 		return this.techService.techs({});
 	}
 
-	@Get('api/tech/:id')
+	@Get('tech/:id')
 	async getTech(@Param('id') id: string): Promise<TechModel> {
 		return this.techService.tech({id: Number(id)});
 	}
 
-	@Post('api/tech')
+	@Post('tech')
 	async addTech(
 		@Body() techData: {name: string, categorie?: string, details?: string},
 	) : Promise<TechModel> {
 		return this.techService.createTech(techData);
 	}
 
-	@Post('api/tech/:id')
+	@Post('tech/:id')
 	async updateTech(@Param('id') id: string,
 		@Body() techData: {name?: string, categorie?: string, details?: string}
 	): Promise<TechModel> {
@@ -111,7 +111,7 @@ export class AppController {
 		});
 	}
 
-	@Delete('api/tech/:id')
+	@Delete('tech/:id')
 	async deleteTech(@Param('id') id: string): Promise<TechModel> {
 		return this.techService.deleteTech({ id: Number(id) });
 	}
