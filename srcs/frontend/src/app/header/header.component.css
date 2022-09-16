@@ -1,8 +1,8 @@
 
 .all_header{
     width: 100%;
-    height:100px;
-    background-color: rgb(241, 243, 242);
+    height:120px;
+    background-color: #414141;
     display: flex;
     justify-content: space-around;
   
@@ -10,84 +10,129 @@
 
 .logo_header{
     width: 200px;
-    height: 100px;
-    background-color: rgb(60, 165, 130);
+    height: 120px;
+    /* background-color: rgb(60, 165, 130); */
+    background-image: url("../../assets/icons/logo_f.jpg");
+    background-size: contain;
+    background-repeat: no-repeat;
+    background-position: center; 
 }
 
+/* .logo_header:hover{
+    width: 200px;
+    height: 120px;
+    background-color: rgb(60, 165, 130);
+    background-image: url("../../assets/icons/logo_t.gif");
+    background-size: contain;
+    background-repeat: no-repeat;
+    background-position: center; 
+} */
+
+
+
 .nav_header{
-    width: 400px;
-    height: 100px;
-    background-color: rgb(80, 7, 148);
+    width: 480px;
+    height: 120px;
+    /* background-color: rgb(80, 7, 148); */
     display: flex;
     justify-content: flex-start;
     
 }
 
 .game_nav_header{
-    width: 100px;
-    height: 100px;
-    background-color: rgb(78, 109, 57);
+    width: 120px;
+    height: 120px;
+    /* background-color: #414141; */
+    background-image: url("../../assets/icons/gameroom-f.jpg");
+    background-size: contain;
+    background-repeat: no-repeat;
+    background-position: center; 
+    margin-right: 20px;
 }
 
 .game_nav_header:hover{
-    width: 100px;
-    height: 100px;
-    background-color: rgb(255, 217, 0);
-    /* background-image: url("../../assets/daft1_2.gif");
+    width: 120px;
+    height: 120px;
+    background-color: #414141;
+    background-image: url("../../assets/icons/gameroom.gif");
     background-size: contain;
     background-repeat: no-repeat;
-    background-position: center; */
+    background-position: center; 
 
     /* background-color: rgb(255, 217, 0); */
 }
 
 .show_nav_header{
-    width: 100px;
-    height: 100px;
-    background-color: rgb(105, 201, 41);
+    width: 120px;
+    height: 120px;
+    /* background-color: #414141; */
+    background-image: url("../../assets/icons/showroom-f.jpg");
+    background-size: contain;
+    background-repeat: no-repeat;
+    background-position: center; 
+    margin-right: 20px;
 }
 
 .show_nav_header:hover{
-    width: 100px;
-    height: 100px;
-    background-color: rgb(255, 217, 0);
-    /* background-image: url("../../assets/cree-ton-gif.gif");
+    width: 120px;
+    height: 120px;
+    /* background-color: rgb(255, 217, 0); */
+    background-image: url("../../assets/icons/showroom.gif");
     background-size: contain;
     background-repeat: no-repeat;
-    background-position: center; */
+    background-position: center; 
 }
 
 .vip_nav_header{
-    width: 100px;
-    height: 100px;
-    background-color: rgb(1, 182, 143);
+    width: 120px;
+    height: 120px;
+    /* background-color: rgb(1, 182, 143); */
+    margin-right: 20px;
+    background-image: url("../../assets/icons/viproom-f.jpg");
+    background-size: contain;
+    background-repeat: no-repeat;
+    background-position: center; 
 }
 
 .vip_nav_header:hover{
-    width: 100px;
-    height: 100px;
-    background-color: rgb(255, 217, 0);
+    width: 120px;
+    height: 120px;
+    /* background-color: rgb(255, 217, 0); */
+    background-image: url("../../assets/icons/viproom.gif");
+    background-size: contain;
+    background-repeat: no-repeat;
+    background-position: center; 
 }
 
 .private_nav_header{
-    width: 100px;
-    height: 100px;
-    background-color: rgb(33, 75, 5);
+    width: 120px;
+    height: 120px;
+    /* background-color: rgb(33, 75, 5); */
+    margin-right: 20px;
+    background-image: url("../../assets/icons/restroom-f.jpg");
+    background-size: contain;
+    background-repeat: no-repeat;
+    background-position: center; 
 }
 
 .private_nav_header:hover{
-    width: 100px;
-    height: 100px;
-    background-color: rgb(255, 217, 0);
+    width: 120px;
+    height: 120px;
+    /* background-color: rgb(255, 217, 0); */
+    background-image: url("../../assets/icons/restroom.gif");
+    background-size: contain;
+    background-repeat: no-repeat;
+    background-position: center; 
 }
 
 .username_header{
     
     align-items: center;
     text-align: center;
-    padding-top:30px;
+    padding-top:45px;
     font-size: 20px;
     width: 200px;
     height: 100px;
+    color: aliceblue;
  
 }

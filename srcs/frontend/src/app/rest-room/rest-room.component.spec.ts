@@ -1,18 +1,18 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 
-import { PrivateRoomComponent } from './private-room.component';
+import { RestRoomComponent } from './rest-room.component';
 
-describe('PrivateRoomComponent', () => {
-  let component: PrivateRoomComponent;
-  let fixture: ComponentFixture<PrivateRoomComponent>;
+describe('RestRoomComponent', () => {
+  let component: RestRoomComponent;
+  let fixture: ComponentFixture<RestRoomComponent>;
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      declarations: [ PrivateRoomComponent ]
+      declarations: [ RestRoomComponent ]
     })
     .compileComponents();
 
-    fixture = TestBed.createComponent(PrivateRoomComponent);
+    fixture = TestBed.createComponent(RestRoomComponent);
     component = fixture.componentInstance;
     fixture.detectChanges();
   });

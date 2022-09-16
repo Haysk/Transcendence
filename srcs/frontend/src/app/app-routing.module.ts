@@ -7,7 +7,9 @@ import { PongComponent } from './pong/pong.component';
 import { GameRoomComponent } from './game-room/game-room.component';
 import { ShowRoomComponent } from './show-room/show-room.component';
 import { VipRoomComponent } from './vip-room/vip-room.component';
-import { PrivateRoomComponent } from './private-room/private-room.component';
+import { RestRoomComponent } from './rest-room/rest-room.component';
+
+
 
 
 const routes: Routes = [
@@ -15,7 +17,7 @@ const routes: Routes = [
   { path: 'game-room', component: GameRoomComponent },
   { path: 'show-room', component: ShowRoomComponent},
   { path: 'vip-room', component: VipRoomComponent},
-  { path: 'private-room', component: PrivateRoomComponent},
+  { path: 'rest-room', component: RestRoomComponent},
   { path: 'pong', component: PongComponent }
 ];
 

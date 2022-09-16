@@ -1,7 +1,124 @@
 .all_game{
     width: 100%;
     height: 100vh;
-    background-color: rgb(75, 66, 54);
-    
+    background-color: #212229;
+    display: flex;
+    align-items: center;
+    flex-direction: column;
+    padding-top: 100px;
   
+
+  
+}
+
+.titre_game{
+    /* background-color: blueviolet; */
+    background-image: url("../../assets/imgs/game_room_90sgames-2.png");
+    width: 250px;
+    height: 100px;
+    background-size: contain;
+    background-repeat: no-repeat;
+    background-position: center; 
+    margin-left: 200px;
+    
+}
+
+
+.bloc_item_games{
+    /* background-color: #8b642d; */
+    padding-top: 100px;
+    width: 960px;
+    height: 500px;
+    display: flex;
+    flex-wrap:wrap;
+    justify-content: center;
+    margin-left: 200px;
+
+
+}
+
+.game_pong{
+    /* background-color: rgb(114, 158, 158); */
+    background-image: url("../../assets/imgs/game_room_pong.jpg");
+    width: 250px;
+    height: 200px;
+    margin-right: 20px;
+    margin-bottom: 20px;
+    border-radius: 10px;
+    background-size: contain;
+    background-repeat: no-repeat;
+    background-position: center; 
+
+    
+}
+
+.game_mariokart{
+    width: 250px;
+    height: 200px;
+    margin-right: 20px;
+    margin-bottom: 20px;
+    border-radius: 10px;
+    background-size: contain;
+    background-repeat: no-repeat;
+    background-position: center; 
+    background-image: url("../../assets/imgs/game_room_mariokart.jpg");
+    opacity: calc(60%);
+    
+    
+}
+
+
+
+.game_streetfi{
+    width: 250px;
+    height: 200px;
+    margin-right: 20px;
+    margin-bottom: 20px;
+    border-radius: 10px;
+    background-size: contain;
+    background-repeat: no-repeat;
+    background-position: center; 
+    background-image: url("../../assets/imgs/game_room_sf.jpg");
+    opacity: calc(60%);
+}
+
+.game_tennis{
+    width: 250px;
+    height: 200px;
+    margin-right: 20px;
+    margin-bottom: 20px;
+    border-radius: 10px;
+    background-size: contain;
+    background-repeat: no-repeat;
+    background-position: center; 
+    background-image: url("../../assets/imgs/game_room_tenis.jpg");
+    opacity: calc(60%);
+}
+
+
+
+.game_tetris{
+    width: 250px;
+    height: 200px;
+    margin-right: 20px;
+    margin-bottom: 20px;
+    border-radius: 10px;
+    background-size: contain;
+    background-repeat: no-repeat;
+    background-position: center; 
+    background-image: url("../../assets/imgs/game_room_tetris.jpg");
+    opacity: calc(60%);
+}
+
+.game_puzzleBubble{
+    width: 250px;
+    height: 200px;
+    margin-right: 20px;
+    margin-bottom: 20px;
+    border-radius: 10px;
+    background-size: contain;
+    background-repeat: no-repeat;
+    background-position: center; 
+    background-image: url("../../assets/imgs/game_room_puzzlebubble.jpg");
+    opacity: calc(60%);
 }

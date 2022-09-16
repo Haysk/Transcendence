@@ -1,5 +1,121 @@
 .all_home{
     width: 100%;
-    height: 100vh;
-    background-color: rgb(131, 127, 75);
+    height: 95vh;
+    background-color: #333333;
+}
+
+.bloc_item_home{
+    padding-top: 600px;
+    /* background-color: rgb(112, 175, 175); */
+    width: 100%;
+    height: 200px;
+    display: flex;
+    flex-direction: row;
+    flex-wrap:wrap;
+    justify-content: center;
+
+}
+
+.bloc_game_home{
+    background-color: rgb(131, 189, 189);
+    background-image: url("../../assets/icons/gameroom-f.jpg");
+    width: 200px;
+    height: 150px;
+    border-radius: 10px;
+    margin-right: 20px;
+    margin-bottom: 20px;
+    background-size: contain;
+    background-repeat: no-repeat;
+    background-position: center; 
+}
+
+.bloc_game_home:hover{
+    background-color: rgb(131, 189, 189);
+    background-image: url("../../assets/icons/gameroom.gif");
+    width: 200px;
+    height: 150px;
+    border-radius: 10px;
+    margin-right: 20px;
+    margin-bottom: 20px;
+    background-size: contain;
+    background-repeat: no-repeat;
+    background-position: center; 
+}
+
+.bloc_show_home{
+    background-color: rgb(78, 85, 85);
+    background-image: url("../../assets/icons/showroom-f.jpg");
+    width: 200px;
+    height: 150px;
+    border-radius: 10px;
+    margin-right: 20px;
+    margin-bottom: 20px;
+    background-size: contain;
+    background-repeat: no-repeat;
+    background-position: center; 
+}
+.bloc_show_home:hover{
+    background-color: rgb(78, 85, 85);
+    background-image: url("../../assets/icons/showroom.gif");
+    width: 200px;
+    height: 150px;
+    border-radius: 10px;
+    margin-right: 20px;
+    margin-bottom: 20px;
+    background-size: contain;
+    background-repeat: no-repeat;
+    background-position: center; 
+}
+
+.bloc_vip_home{
+    background-color: rgb(83, 121, 121);
+    background-image: url("../../assets/icons/viproom-f.jpg");
+    width: 200px;
+    height: 150px;
+    border-radius: 10px;
+    margin-right: 20px;
+    margin-bottom: 20px;
+    background-size: contain;
+    background-repeat: no-repeat;
+    background-position: center; 
+}
+
+
+.bloc_vip_home:hover{
+    background-color: rgb(83, 121, 121);
+    background-image: url("../../assets/icons/viproom.gif");
+    width: 200px;
+    height: 150px;
+    border-radius: 10px;
+    margin-right: 20px;
+    margin-bottom: 20px;
+    background-size: contain;
+    background-repeat: no-repeat;
+    background-position: center; 
+}
+
+.bloc_rest_home{
+    background-color: rgb(28, 59, 59);
+    background-image: url("../../assets/icons/restroom-f.jpg");
+    width: 200px;
+    height: 150px;
+    border-radius: 10px;
+    margin-right: 20px;
+    margin-bottom: 20px;
+    background-size: contain;
+    background-repeat: no-repeat;
+    background-position: center; 
+}
+
+.bloc_rest_home:hover{
+    background-color: rgb(28, 59, 59);
+    background-image: url("../../assets/icons/restroom.gif");
+    width: 200px;
+    height: 150px;
+    border-radius: 10px;
+    margin-right: 20px;
+    margin-bottom: 20px;
+    background-size: contain;
+    background-repeat: no-repeat;
+    background-position: center; 
 }

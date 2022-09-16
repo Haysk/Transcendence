@@ -14,7 +14,8 @@ import { HeaderComponent } from './header/header.component';
 import { GameRoomComponent } from './game-room/game-room.component';
 import { ShowRoomComponent } from './show-room/show-room.component';
 import { VipRoomComponent } from './vip-room/vip-room.component';
-import { PrivateRoomComponent } from './private-room/private-room.component';
+import { BlocChatComponent } from './bloc-chat/bloc-chat.component';
+import { RestRoomComponent } from './rest-room/rest-room.component';
 
 @NgModule({
   declarations: [
@@ -28,10 +29,13 @@ import { PrivateRoomComponent } from './private-room/private-room.component';
     GameRoomComponent,
     ShowRoomComponent,
     VipRoomComponent,
-    PrivateRoomComponent
+   
+    BlocChatComponent,
+        RestRoomComponent
   ],
   imports: [
     BrowserModule,
+  
     AppRoutingModule,
     HttpClientModule,
     FormsModule
