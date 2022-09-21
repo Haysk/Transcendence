@@ -16,6 +16,7 @@ import { ShowRoomComponent } from './show-room/show-room.component';
 import { VipRoomComponent } from './vip-room/vip-room.component';
 import { BlocChatComponent } from './bloc-chat/bloc-chat.component';
 import { RestRoomComponent } from './rest-room/rest-room.component';
+import { LoginComponent } from './login/login.component';
 
 @NgModule({
   declarations: [
@@ -31,7 +32,8 @@ import { RestRoomComponent } from './rest-room/rest-room.component';
     VipRoomComponent,
    
     BlocChatComponent,
-        RestRoomComponent
+    RestRoomComponent,
+    LoginComponent
   ],
   imports: [
     BrowserModule,

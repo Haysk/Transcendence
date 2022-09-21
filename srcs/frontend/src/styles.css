@@ -10,14 +10,3 @@ body {
     font-family: 'Titillium Web', sans-serif;
 }
 
-button{
-    color:rgb(61, 197, 134);
-    font-size: 16px;
-    background-color: #11111d;
-    border-radius: 20px;
-    /* border: 0cm; */
-    margin-right: 10px;
-    padding-right: 10px;
-    padding-left: 10px;
-    cursor: pointer;
-}

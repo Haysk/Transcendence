@@ -31,3 +31,44 @@
     background-repeat: no-repeat;
     background-position: center; 
 }
+
+
+@media only screen and (max-width: 600px) {
+
+
+    .all_bloc_chat{
+        position: fixed;
+        bottom:420px;
+        right:0px;
+        width: 100px;
+        height: 100px;
+        background-color: #414141;
+        color :beige;
+        text-align: center;
+        font-size: large;
+        padding-top: 20px;
+        background-image: url("../../assets/icons/chatroom-f.jpg");
+        background-size: contain;
+        background-repeat: no-repeat;
+        background-position: center; 
+    }
+    
+    .all_bloc_chat:hover{
+        position: fixed;
+        bottom:420px;
+        right:0px;
+        width: 100px;
+        height: 100px;
+        background-color: #414141;
+        color :beige;
+        text-align: center;
+        font-size: large;
+        padding-top: 20px;
+        background-image: url("../../assets/icons/chatroom.gif");
+        background-size: contain;
+        background-repeat: no-repeat;
+        background-position: center; 
+    }
+    
+
+}
