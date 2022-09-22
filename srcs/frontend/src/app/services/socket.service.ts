@@ -6,7 +6,7 @@ import { io } from 'socket.io-client';
   providedIn: 'root',
 })
 export class SocketService {
-  private url = 'https://localhost:8080';
+  private url = 'https://localhost:8081';
   private socket;
 
   constructor() {
