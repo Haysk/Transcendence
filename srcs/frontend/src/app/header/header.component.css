@@ -76,7 +76,7 @@
     width: 120px;
     height: 120px;
     /* background-color: rgb(1, 182, 143); */
-    margin-right: 20px;
+    margin-right: 10px;
     background-image: url("../../assets/icons/viproom-f.jpg");
     background-size: contain;
     background-repeat: no-repeat;
@@ -98,7 +98,7 @@
     height: 120px;
     /* background-color: rgb(33, 75, 5); */
     margin-right: 20px;
-    background-image: url("../../assets/icons/restroom-f.jpg");
+    background-image: url("../../assets/icons/lounge.jpg");
     background-size: contain;
     background-repeat: no-repeat;
     background-position: center; 
@@ -108,7 +108,7 @@
     width: 120px;
     height: 120px;
     /* background-color: rgb(255, 217, 0); */
-    background-image: url("../../assets/icons/restroom.gif");
+    background-image: url("../../assets/icons/lounge.gif");
     background-size: contain;
     background-repeat: no-repeat;
     background-position: center; 
@@ -210,7 +210,7 @@
         width: 100px;
         height: 100px;
         /* background-color: rgb(1, 182, 143); */
-        margin-right: 20px;
+        margin-right: 10px;
         background-image: url("../../assets/icons/viproom-f.jpg");
         background-size: contain;
         background-repeat: no-repeat;
@@ -232,7 +232,7 @@
         height: 100px;
         /* background-color: rgb(33, 75, 5); */
         margin-right: 20px;
-        background-image: url("../../assets/icons/restroom-f.jpg");
+        background-image: url("../../assets/icons/lounge.jpg");
         background-size: contain;
         background-repeat: no-repeat;
         background-position: center; 
@@ -242,7 +242,7 @@
         width: 100px;
         height: 100px;
         /* background-color: rgb(255, 217, 0); */
-        background-image: url("../../assets/icons/restroom.gif");
+        background-image: url("../../assets/icons/lounge.gif");
         background-size: contain;
         background-repeat: no-repeat;
         background-position: center; 

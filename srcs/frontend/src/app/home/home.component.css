@@ -111,7 +111,7 @@
 
 .bloc_rest_home{
     background-color: rgb(28, 59, 59);
-    background-image: url("../../assets/icons/restroom-f.jpg");
+    background-image: url("../../assets/icons/lounge.jpg");
     width: 200px;
     height: 150px;
     border-radius: 10px;
@@ -124,7 +124,7 @@
 
 .bloc_rest_home:hover{
     background-color: rgb(28, 59, 59);
-    background-image: url("../../assets/icons/restroom.gif");
+    background-image: url("../../assets/icons/lounge.gif");
     width: 200px;
     height: 150px;
     border-radius: 10px;
@@ -241,7 +241,7 @@
     
     .bloc_rest_home{
         background-color: rgb(28, 59, 59);
-        background-image: url("../../assets/icons/restroom-f.jpg");
+        background-image: url("../../assets/icons/lounge.jpg");
         width: 173px;
         height: 130px;
         border-radius: 10px;
@@ -254,7 +254,7 @@
     
     .bloc_rest_home:hover{
         background-color: rgb(28, 59, 59);
-        background-image: url("../../assets/icons/restroom.gif");
+        background-image: url("../../assets/icons/lounge.gif");
         width: 173px;
         height: 130px;
         border-radius: 10px;
