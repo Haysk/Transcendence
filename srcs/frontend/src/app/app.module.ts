@@ -11,6 +11,7 @@ import { TechnoListComponent } from './techno-list/techno-list.component';
 import { TechnoDetailsComponent } from './techno-details/techno-details.component';
 import { PongComponent } from './pong/pong.component';
 import { ChatComponent } from './chat/chat.component';
+import { DirectChatComponent } from './direct-chat/direct-chat.component';
 
 @NgModule({
   declarations: [
@@ -20,7 +21,8 @@ import { ChatComponent } from './chat/chat.component';
     TechnoListComponent,
     TechnoDetailsComponent,
     PongComponent,
-    ChatComponent
+    ChatComponent,
+    DirectChatComponent
   ],
   imports: [
     BrowserModule,
