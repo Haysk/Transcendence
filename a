@@ -1,0 +1,131 @@
+#1 [internal] load build definition from Dockerfile
+#1 transferring dockerfile: 32B done
+#1 DONE 0.0s
+
+#2 [internal] load .dockerignore
+#2 transferring context: 34B done
+#2 DONE 0.0s
+
+#3 [internal] load metadata for docker.io/library/node:18-alpine
+#3 DONE 0.6s
+
+#4 [1/5] FROM docker.io/library/node:18-alpine@sha256:831d5eca5b7437a8132031a25bd18bdb0399e7415d4e8e02a8c14426b6dcf17f
+#4 DONE 0.0s
+
+#5 [internal] load build context
+#5 transferring context: 34B done
+#5 DONE 0.0s
+
+#6 [2/5] RUN npm install -g npm
+#6 CACHED
+
+#7 [3/5] WORKDIR /usr/src/app
+#7 CACHED
+
+#8 [4/5] COPY entrypoint.sh /entrypoint.sh
+#8 CACHED
+
+#9 [5/5] RUN chmod +x /entrypoint.sh
+#9 CACHED
+
+#10 exporting to image
+#10 exporting layers done
+#10 writing image sha256:8b2c35e95775835d90e45b253a09361cb3cafc74d60c38f92ff9f1257fe4d68d done
+#10 naming to docker.io/library/backend done
+#10 DONE 0.0s
+Attaching to backend, postgres
+postgres  | The files belonging to this database system will be owned by user "postgres".
+postgres  | This user must also own the server process.
+postgres  | 
+postgres  | The database cluster will be initialized with locale "en_US.utf8".
+postgres  | The default database encoding has accordingly been set to "UTF8".
+postgres  | The default text search configuration will be set to "english".
+postgres  | 
+postgres  | Data page checksums are disabled.
+postgres  | 
+postgres  | fixing permissions on existing directory /var/lib/postgresql/data ... ok
+postgres  | creating subdirectories ... ok
+postgres  | selecting dynamic shared memory implementation ... posix
+postgres  | selecting default max_connections ... 100
+postgres  | selecting default shared_buffers ... 128MB
+postgres  | selecting default time zone ... Etc/UTC
+postgres  | creating configuration files ... ok
+postgres  | running bootstrap script ... ok
+postgres  | performing post-bootstrap initialization ... ok
+postgres  | syncing data to disk ... ok
+postgres  | 
+postgres  | 
+postgres  | Success. You can now start the database server using:
+postgres  | 
+postgres  |     pg_ctl -D /var/lib/postgresql/data -l logfile start
+postgres  | 
+postgres  | initdb: warning: enabling "trust" authentication for local connections
+postgres  | You can change this by editing pg_hba.conf or using the option -A, or
+postgres  | --auth-local and --auth-host, the next time you run initdb.
+postgres  | waiting for server to start....2022-09-23 10:02:21.096 UTC [48] LOG:  starting PostgreSQL 14.5 (Debian 14.5-1.pgdg110+1) on x86_64-pc-linux-gnu, compiled by gcc (Debian 10.2.1-6) 10.2.1 20210110, 64-bit
+postgres  | 2022-09-23 10:02:21.098 UTC [48] LOG:  listening on Unix socket "/var/run/postgresql/.s.PGSQL.5432"
+postgres  | 2022-09-23 10:02:21.103 UTC [49] LOG:  database system was shut down at 2022-09-23 10:02:20 UTC
+postgres  | 2022-09-23 10:02:21.108 UTC [48] LOG:  database system is ready to accept connections
+postgres  |  done
+postgres  | server started
+postgres  | CREATE DATABASE
+postgres  | 
+postgres  | 
+postgres  | /usr/local/bin/docker-entrypoint.sh: ignoring /docker-entrypoint-initdb.d/*
+postgres  | 
+postgres  | 2022-09-23 10:02:21.284 UTC [48] LOG:  received fast shutdown request
+postgres  | waiting for server to shut down....2022-09-23 10:02:21.285 UTC [48] LOG:  aborting any active transactions
+postgres  | 2022-09-23 10:02:21.286 UTC [48] LOG:  background worker "logical replication launcher" (PID 55) exited with exit code 1
+postgres  | 2022-09-23 10:02:21.286 UTC [50] LOG:  shutting down
+postgres  | 2022-09-23 10:02:21.298 UTC [48] LOG:  database system is shut down
+postgres  |  done
+postgres  | server stopped
+postgres  | 
+postgres  | PostgreSQL init process complete; ready for start up.
+postgres  | 
+postgres  | 2022-09-23 10:02:21.401 UTC [1] LOG:  starting PostgreSQL 14.5 (Debian 14.5-1.pgdg110+1) on x86_64-pc-linux-gnu, compiled by gcc (Debian 10.2.1-6) 10.2.1 20210110, 64-bit
+postgres  | 2022-09-23 10:02:21.402 UTC [1] LOG:  listening on IPv4 address "0.0.0.0", port 5432
+postgres  | 2022-09-23 10:02:21.402 UTC [1] LOG:  listening on IPv6 address "::", port 5432
+postgres  | 2022-09-23 10:02:21.404 UTC [1] LOG:  listening on Unix socket "/var/run/postgresql/.s.PGSQL.5432"
+postgres  | 2022-09-23 10:02:21.408 UTC [62] LOG:  database system was shut down at 2022-09-23 10:02:21 UTC
+postgres  | 2022-09-23 10:02:21.411 UTC [1] LOG:  database system is ready to accept connections
+backend   | 
+backend   | up to date, audited 690 packages in 1s
+backend   | 
+backend   | 88 packages are looking for funding
+backend   |   run `npm fund` for details
+backend   | 
+backend   | found 0 vulnerabilities
+backend   | Prisma schema loaded from prisma/schema.prisma
+backend   | Datasource "db": PostgreSQL database "work_db", schema "public" at "postgres:5432"
+backend   | 
+backend   | No migration found in prisma/migrations
+backend   | 
+backend   | 
+backend   | No pending migrations to apply.
+postgres  | 2022-09-23 10:02:23.154 UTC [70] LOG:  could not receive data from client: Connection reset by peer
+backend   | 
+backend   | > backend@0.0.1 start:dev
+backend   | > nest start --watch
+backend   | 
+backend   | c[[90m10:02:24 AM[0m] Starting compilation in watch mode...
+backend   | 
+backend   | [[90m10:02:26 AM[0m] Found 0 errors. Watching for file changes.
+backend   | 
+backend   | [32m[Nest] 196  - [39m09/23/2022, 10:02:26 AM [32m    LOG[39m [38;5;3m[NestFactory] [39m[32mStarting Nest application...[39m
+backend   | [32m[Nest] 196  - [39m09/23/2022, 10:02:26 AM [32m    LOG[39m [38;5;3m[InstanceLoader] [39m[32mAppModule dependencies initialized[39m[38;5;3m +32ms[39m
+backend   | [32m[Nest] 196  - [39m09/23/2022, 10:02:26 AM [32m    LOG[39m [38;5;3m[RoutesResolver] [39m[32mAppController {/}:[39m[38;5;3m +5ms[39m
+backend   | [32m[Nest] 196  - [39m09/23/2022, 10:02:26 AM [32m    LOG[39m [38;5;3m[RouterExplorer] [39m[32mMapped {/post/:id, GET} route[39m[38;5;3m +3ms[39m
+backend   | [32m[Nest] 196  - [39m09/23/2022, 10:02:26 AM [32m    LOG[39m [38;5;3m[RouterExplorer] [39m[32mMapped {/feed, GET} route[39m[38;5;3m +1ms[39m
+backend   | [32m[Nest] 196  - [39m09/23/2022, 10:02:26 AM [32m    LOG[39m [38;5;3m[RouterExplorer] [39m[32mMapped {/filtered-posts/:searchString, GET} route[39m[38;5;3m +1ms[39m
+backend   | [32m[Nest] 196  - [39m09/23/2022, 10:02:26 AM [32m    LOG[39m [38;5;3m[RouterExplorer] [39m[32mMapped {/post, POST} route[39m[38;5;3m +1ms[39m
+backend   | [32m[Nest] 196  - [39m09/23/2022, 10:02:26 AM [32m    LOG[39m [38;5;3m[RouterExplorer] [39m[32mMapped {/user, POST} route[39m[38;5;3m +0ms[39m
+backend   | [32m[Nest] 196  - [39m09/23/2022, 10:02:26 AM [32m    LOG[39m [38;5;3m[RouterExplorer] [39m[32mMapped {/publish/:id, PUT} route[39m[38;5;3m +1ms[39m
+backend   | [32m[Nest] 196  - [39m09/23/2022, 10:02:26 AM [32m    LOG[39m [38;5;3m[RouterExplorer] [39m[32mMapped {/post/:id, DELETE} route[39m[38;5;3m +1ms[39m
+backend   | [32m[Nest] 196  - [39m09/23/2022, 10:02:26 AM [32m    LOG[39m [38;5;3m[RouterExplorer] [39m[32mMapped {/techs, GET} route[39m[38;5;3m +0ms[39m
+backend   | [32m[Nest] 196  - [39m09/23/2022, 10:02:26 AM [32m    LOG[39m [38;5;3m[RouterExplorer] [39m[32mMapped {/tech/:id, GET} route[39m[38;5;3m +2ms[39m
+backend   | [32m[Nest] 196  - [39m09/23/2022, 10:02:26 AM [32m    LOG[39m [38;5;3m[RouterExplorer] [39m[32mMapped {/tech, POST} route[39m[38;5;3m +0ms[39m
+backend   | [32m[Nest] 196  - [39m09/23/2022, 10:02:26 AM [32m    LOG[39m [38;5;3m[RouterExplorer] [39m[32mMapped {/tech/:id, POST} route[39m[38;5;3m +1ms[39m
+backend   | [32m[Nest] 196  - [39m09/23/2022, 10:02:26 AM [32m    LOG[39m [38;5;3m[RouterExplorer] [39m[32mMapped {/tech/:id, DELETE} route[39m[38;5;3m +1ms[39m
+backend   | [32m[Nest] 196  - [39m09/23/2022, 10:02:26 AM [32m    LOG[39m [38;5;3m[NestApplication] [39m[32mNest application successfully started[39m[38;5;3m +58ms[39m
+Gracefully stopping... (press Ctrl+C again to force)

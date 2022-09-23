@@ -3,7 +3,7 @@
   "version": 1,
   "newProjectRoot": "projects",
   "projects": {
-    "todo-app": {
+    "transcendence-front": {
       "projectType": "application",
       "schematics": {},
       "root": "",
@@ -13,7 +13,7 @@
         "build": {
           "builder": "@angular-devkit/build-angular:browser",
           "options": {
-            "outputPath": "dist/todo-app",
+            "outputPath": "dist/transcendence-front",
             "index": "src/index.html",
             "main": "src/main.ts",
             "polyfills": "src/polyfills.ts",
@@ -67,10 +67,10 @@
             "proxyConfig": "proxy.conf.json"},
           "configurations": {
             "production": {
-              "browserTarget": "todo-app:build:production"
+              "browserTarget": "transcendence-front:build:production"
             },
             "development": {
-              "browserTarget": "todo-app:build:development"
+              "browserTarget": "transcendence-front:build:development"
             }
           },
           "defaultConfiguration": "development"
@@ -78,7 +78,7 @@
         "extract-i18n": {
           "builder": "@angular-devkit/build-angular:extract-i18n",
           "options": {
-            "browserTarget": "todo-app:build"
+            "browserTarget": "transcendence-front:build"
           }
         },
         "test": {
