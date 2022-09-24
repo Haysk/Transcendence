@@ -41,6 +41,7 @@ export class MessageService {
   }
 
   async createMessage(data: Prisma.MessageCreateInput): Promise<Message> {
+    console.log("oui");
     return this.prisma.message.create({
       data,
     });
