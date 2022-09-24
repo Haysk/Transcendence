@@ -15,6 +15,18 @@ export class SocketService {
     this.socket = io(this.url);
   }
 
+  sendMessage(message: string): void {
+    this.socket.emit('msgToServer', message);
+  }
+
+  getMessage(): Observable<string> {
+    return new Observable<string>((observer) => {
+      this.socket.on('msgToClient', (message) => {
+        observer.next(message);
+      });
+    });
+  }
+
   sendMove(move: IInput): void {
     this.socket.emit('moveToServer', move);
   }

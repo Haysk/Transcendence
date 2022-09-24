@@ -14,9 +14,14 @@ https://en.wikipedia.org/wiki/Single-page_application
 ### FrontEnd
 - TypeScript
 
-### Build
+### Build dev
 ```
 docker-compose up --build
+```
+
+### Build prod
+```
+docker-compose -f docker-compose-prod.yml up --build
 ```
 
 Use Docker in rootless mode
@@ -27,22 +32,6 @@ Can’t use so called “bind-mount volumes” between the host and the containe
 container.
 
 Several fallbacks exist: Docker in a VM, rebuild container after changes, craft own docker image with root as unique UID
-
-### Utils
-
-Create frontend SSL Certif :
-```
-openssl req -new -newkey rsa:4096 -nodes -keyout server.key -out server.csr
-
-openssl x509 -req -sha256 -days 365 -in server.csr -signkey server.key -out server.pem
-```
-
-Create api SSL Certif :
-```
-openssl req -new -newkey rsa:4096 -nodes -keyout api.key -out api.csr
-
-openssl x509 -req -sha256 -days 365 -in api.csr -signkey api.key -out api.pem
-```
 
 ## Overview
 - library / framework with last stable version.

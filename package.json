@@ -1,5 +1,8 @@
 {
   "devDependencies": {
     "@angular/cli": "^14.2.2"
+  },
+  "dependencies": {
+    "websocket-driver": "^0.7.4"
   }
 }
