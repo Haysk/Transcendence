@@ -10,6 +10,8 @@ import { TechnoAddComponent } from './techno-add/techno-add.component';
 import { TechnoListComponent } from './techno-list/techno-list.component';
 import { TechnoDetailsComponent } from './techno-details/techno-details.component';
 import { PongComponent } from './pong/pong.component';
+import { ChatComponent } from './chat/chat.component';
+import { DirectChatComponent } from './direct-chat/direct-chat.component';
 
 @NgModule({
   declarations: [
@@ -18,7 +20,9 @@ import { PongComponent } from './pong/pong.component';
     TechnoAddComponent,
     TechnoListComponent,
     TechnoDetailsComponent,
-    PongComponent
+    PongComponent,
+    ChatComponent,
+    DirectChatComponent
   ],
   imports: [
     BrowserModule,
