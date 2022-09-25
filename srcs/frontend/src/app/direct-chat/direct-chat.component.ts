@@ -11,8 +11,8 @@ import { User } from '../models/user'
 export class DirectChatComponent implements OnInit {
   @Input() Me!: User;
   @Input() Dest!: User;
-  message: string = '';
-  messages: String[] = [];
+  message = '';
+  messages: string[] = [];
 
   constructor(private socketService: SocketService, private apiService: ApiService) {}
 

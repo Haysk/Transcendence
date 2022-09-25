@@ -26,8 +26,8 @@ export class ChatComponent implements OnInit {
   @Input() Me!: User;
   @Input() Dest!: User;
   @Input() User_list!: User[];
-  message: string = '';
-  messages: String[] = [];
+  message = '';
+  messages: string[] = [];
 
   constructor(private socketService: SocketService, private apiService: ApiService,
     @Inject('user_list') User_list: User[], @Inject('whoAmI') Me: User)
