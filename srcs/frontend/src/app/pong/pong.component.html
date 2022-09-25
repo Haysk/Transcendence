@@ -17,12 +17,12 @@
     <h2>Menu</h2>
     <button (click)="reset()">new game</button>
     <button (click)="resetAll()">reset all params</button>
-    <!--
+    
     <app-pong-player [player]="gameConfig.left"></app-pong-player>
     <app-pong-player [player]="gameConfig.right"></app-pong-player>
     <app-pong-ball [ball]="gameConfig.ball"></app-pong-ball>
     <app-pong-game [game]="gameConfig"></app-pong-game>
-    -->
+    
   </div>
   <div class="menu" *ngIf="gameConfig.states.start && win() != null">
     <h2>{{ "Player " + win() + " win" }}</h2>
