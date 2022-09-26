@@ -2,6 +2,7 @@ import { Component, OnInit, Input } from '@angular/core';
 import { SocketService } from '../services/socket.service';
 import { ApiService } from '../services/api.service';
 import { User } from '../models/user'
+import { Message } from '../models/message';
 
 @Component({
   selector: 'app-direct-chat',
@@ -13,6 +14,7 @@ export class DirectChatComponent implements OnInit {
   @Input() Dest!: User;
   message: string = '';
   messages: String[] = [];
+  to_create!: Message;
 
   constructor(private socketService: SocketService, private apiService: ApiService) {}
 
@@ -23,9 +25,12 @@ export class DirectChatComponent implements OnInit {
   }
   
   sendMessage() {
+    console.log("A ");
     this.socketService.sendMessage(this.message);
-    this.apiService.createMessage(this.Dest.id, this.Me.name, this.Me.id, this.message);
-    // console.log("dest id : " + this.Dest.id + " | " + "Me.name : " + this.Me.name + " | " + "Me.id : " + this.Me.id + " | " + "content : " + this.message);
+    this.apiService.createMessage({userId: this.Dest.id, fromUserName: this.Me.name , fromUserId: this.Me.id, content: this.message}).subscribe((result)=>{
+      console.log(result);
+    });
+    console.log("D ");
     this.message = '';
   }
 }

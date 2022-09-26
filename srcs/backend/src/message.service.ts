@@ -32,6 +32,7 @@ export class MessageService {
   }
 
   async getMessages(params: {fromUserId: number, userId: number}): Promise<Message[]> {
+    console.log("get message service backend")
     return await this.prisma.message.findMany({
       where: {
         fromUserId: params.fromUserId,
@@ -41,11 +42,17 @@ export class MessageService {
   }
 
   async createMessage(data: Prisma.MessageCreateInput): Promise<Message> {
-    console.log("oui");
-    return this.prisma.message.create({
+    console.log("create message service backend");
+    return await this.prisma.message.create({
       data,
     });
   }
+
+  // const Message = await prisma.message.create({
+  //   *   data: {
+  //   *     // ... data to create a Message
+  //   *   }
+  //   * })
 
   async updateMessage(params: {
     where: Prisma.MessageWhereUniqueInput;
