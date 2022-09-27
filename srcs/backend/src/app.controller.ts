@@ -24,14 +24,16 @@ export class AppController {
 	async addMessage(
 		@Body() messageData: {userId: number, fromUserName: string, fromUserId: number, content: string},
 	): Promise<MessageModel> {
-		return this.messageService.createMessage(messageData);
+		console.log("@Post message dans app.controller backend");
+		return await this.messageService.createMessage(messageData);
 	}
 
 	@Get('messages/:data')
 	async getMessages(
 		@Body() data: {fromUserId: number, userId: number}
 		): Promise<MessageModel[]> {
-			return this.messageService.getMessages(data);
+			console.log("@Get message dans app.controller backend")
+			return await this.messageService.getMessages(data);
 		}
 
 	@Post('user')

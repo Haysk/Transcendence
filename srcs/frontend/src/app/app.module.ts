@@ -12,6 +12,7 @@ import { TechnoDetailsComponent } from './techno-details/techno-details.componen
 import { PongComponent } from './pong/pong.component';
 import { ChatComponent } from './chat/chat.component';
 import { DirectChatComponent } from './direct-chat/direct-chat.component';
+import { ChatHistoryComponent } from './chat-history/chat-history.component';
 
 @NgModule({
   declarations: [
@@ -22,7 +23,8 @@ import { DirectChatComponent } from './direct-chat/direct-chat.component';
     TechnoDetailsComponent,
     PongComponent,
     ChatComponent,
-    DirectChatComponent
+    DirectChatComponent,
+    ChatHistoryComponent
   ],
   imports: [
     BrowserModule,
