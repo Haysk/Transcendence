@@ -24,6 +24,7 @@ export class AppGateway
 
   @SubscribeMessage('msgToServer')
   handleMessage(client: any, payload: any): void {
+    console.log("yolo on a recu le message:", payload);
     this.server.emit('msgToClient', payload);
   }
 

@@ -18,7 +18,7 @@ export class DirectChatComponent implements OnInit {
 
   ngOnInit(): void {
     this.socketService.getMessage().subscribe((message: any) => {
-      this.messages.push(message);
+    this.messages.push(message);
     });
   }
   
@@ -28,4 +28,9 @@ export class DirectChatComponent implements OnInit {
     this.apiService.createMessage(this.Dest.id, this.Me.name, this.Me.id, this.message);
     this.message = '';
   }
+
+  // receiveMessage() {
+  //   console.log("message receive => " + this.message + " dest => " + this.Dest.id + " dest name =>" + this.Dest.name +" my id =>" + this.Me.id + " my name => " + this.Me.name);
+  //   this.socketService.receiveMessage(this.message);
+  // }
 }
