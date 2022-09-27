@@ -13,6 +13,7 @@ import { PongComponent } from './pong/pong.component';
 import { ChatComponent } from './chat/chat.component';
 import { DirectChatComponent } from './direct-chat/direct-chat.component';
 import { ChatHistoryComponent } from './chat-history/chat-history.component';
+import { SelectUserComponent } from './select-user/select-user.component';
 
 @NgModule({
   declarations: [
@@ -24,7 +25,8 @@ import { ChatHistoryComponent } from './chat-history/chat-history.component';
     PongComponent,
     ChatComponent,
     DirectChatComponent,
-    ChatHistoryComponent
+    ChatHistoryComponent,
+    SelectUserComponent
   ],
   imports: [
     BrowserModule,

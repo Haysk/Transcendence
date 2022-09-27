@@ -1,2 +1,5 @@
 <br/>
+<div *ngFor="let user of User_list">
+	<app-select-user [user]="user" ></app-select-user>
+</div>
 <app-direct-chat [Dest]="this.Dest" [Me]="this.Me"></app-direct-chat>
