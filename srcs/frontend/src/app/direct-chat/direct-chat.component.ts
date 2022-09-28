@@ -25,13 +25,15 @@ export class DirectChatComponent implements OnInit {
   }
   
   sendMessage() {
+<<<<<<< HEAD
     // console.log("send message => " + this.message + " dest => " + this.Dest.id + " dest name =>" + this.Dest.name +" my id =>" + this.Me.id + " my name => " + this.Me.name);
     console.log("A ");
+=======
+>>>>>>> origin/new_chat
     this.socketService.sendMessage(this.message);
     this.apiService.createMessage({userId: this.Dest.id, fromUserName: this.Me.name , fromUserId: this.Me.id, content: this.message}).subscribe((result)=>{
       console.log(result);
     });
-    console.log("D ");
     this.message = '';
   }
 

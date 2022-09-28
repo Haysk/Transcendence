@@ -28,11 +28,12 @@ export class AppController {
 		return await this.messageService.createMessage(messageData);
 	}
 
-	@Get('messages/:data')
+	@Get('messages/:fromUserId:userId')
 	async getMessages(
-		@Body() data: {fromUserId: number, userId: number}
+		@Param('fromUserId') fromUserId: number, @Param('userId') userId: number
 		): Promise<MessageModel[]> {
-			console.log("@Get message dans app.controller backend")
+			const data = {fromUserId, userId};
+			//console.log("app.controller : fromUserId : " + fromUserId + " userId : " + userId);
 			return await this.messageService.getMessages(data);
 		}
 

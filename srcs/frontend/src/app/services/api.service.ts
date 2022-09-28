@@ -39,9 +39,9 @@ export class ApiService {
 
   getMessages(fromUserId: number, userId: number)
   {
-    console.log("get message api service called");
+    // console.log("api service : fromUserId : " + fromUserId + " userId : " + userId);
     const data = {fromUserId, userId};
-    return this.httpClient.get<Message[]>(`${this.API_SERVER}/messages/${data}`);
+    return this.httpClient.get<Message[]>(`${this.API_SERVER}/messages/${fromUserId}${userId}`);
   }
 
   createMessage(message: Message)
