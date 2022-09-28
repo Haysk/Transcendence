@@ -1,5 +1,7 @@
-<p>____________________</p>
-<div *ngFor="let message of messages">
+
+<div class="message_all">
+<div class="message_chat" *ngFor="let message of messages">
 	{{message.fromUserName}}: {{message.content}}
 </div>
-<p>____________________</p>
+
+</div><!-- fin de div message_all -->

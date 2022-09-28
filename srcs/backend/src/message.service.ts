@@ -4,7 +4,7 @@ import { Message, Prisma } from '@prisma/client';
 
 @Injectable()
 export class MessageService {
-  constructor(private prisma: PrismaService) {}
+  constructor(private prisma: PrismaService) { }
 
   async message(
     messageWhereUniqueInput: Prisma.MessageWhereUniqueInput,
@@ -31,28 +31,26 @@ export class MessageService {
     });
   }
 
-  async getMessages(params: {fromUserId: number, userId: number}): Promise<Message[]> {
-    console.log("get message service backend")
+  async getMessages(params: { fromUserId: number, userId: number }): Promise<Message[]> {
     return await this.prisma.message.findMany({
       where: {
-        fromUserId: params.fromUserId,
-        userId: params.userId,
+        fromUserId: Number(params.fromUserId),
+        userId: Number(params.userId),
       }
     })
+      && this.prisma.message.findMany({
+        where: {
+          fromUserId: Number(params.userId),
+          userId: Number(params.fromUserId),
+        }
+      })
   }
 
   async createMessage(data: Prisma.MessageCreateInput): Promise<Message> {
-    console.log("create message service backend");
     return await this.prisma.message.create({
       data,
     });
   }
-
-  // const Message = await prisma.message.create({
-  //   *   data: {
-  //   *     // ... data to create a Message
-  //   *   }
-  //   * })
 
   async updateMessage(params: {
     where: Prisma.MessageWhereUniqueInput;

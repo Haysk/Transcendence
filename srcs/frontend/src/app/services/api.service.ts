@@ -39,7 +39,7 @@ export class ApiService {
 
   getMessages(fromUserId: number, userId: number)
   {
-    console.log("api service : fromUserId : " + fromUserId + " userId : " + userId);
+    // console.log("api service : fromUserId : " + fromUserId + " userId : " + userId);
     const data = {fromUserId, userId};
     return this.httpClient.get<Message[]>(`${this.API_SERVER}/messages/${fromUserId}${userId}`);
   }
