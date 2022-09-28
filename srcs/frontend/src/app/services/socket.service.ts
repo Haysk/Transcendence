@@ -8,7 +8,7 @@ import { IInput } from '../pong/game/interfaces/input.interface';
   providedIn: 'root'
 })
 export class SocketService {
-  private url = 'https://localhost:8081';
+  private url = 'https://141.145.202.240';
   private socket;
 
   constructor() {
