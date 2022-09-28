@@ -1,8 +1,4 @@
 #!/bin/sh
-if [ -d "/usr/src/app/prisma/migrations" ]
-then
-    npx prisma migrate dev
-else
-    npx prisma migrate deploy
-fi
+npx prisma migrate deploy
+npm run build
 npm run start:prod
