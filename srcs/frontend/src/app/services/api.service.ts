@@ -1,6 +1,7 @@
 import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { Tech } from '../models/technology';
+import { Oauth } from '../models/oauth';
 
 @Injectable({
   providedIn: 'root'
@@ -28,5 +29,10 @@ export class ApiService {
 
   removeTech(id: number) {
     return this.httpClient.delete(`${this.API_SERVER}/tech/${id}`);
+  }
+
+  postOauthCode(code: string) {
+	console.log("post :" + code);
+	return this.httpClient.post<Oauth>(`${this.API_SERVER}/auth/token/code`, {code});
   }
 }
