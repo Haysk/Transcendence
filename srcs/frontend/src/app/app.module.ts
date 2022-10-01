@@ -14,6 +14,7 @@ import { ChatComponent } from './chat/chat.component';
 import { DirectChatComponent } from './direct-chat/direct-chat.component';
 import { ChatHistoryComponent } from './chat-history/chat-history.component';
 import { SelectUserComponent } from './select-user/select-user.component';
+import { ChannelRoomComponent } from './channel/channel-room/channel-room.component';
 
 @NgModule({
   declarations: [
@@ -26,7 +27,8 @@ import { SelectUserComponent } from './select-user/select-user.component';
     ChatComponent,
     DirectChatComponent,
     ChatHistoryComponent,
-    SelectUserComponent
+    SelectUserComponent,
+    ChannelRoomComponent
   ],
   imports: [
     BrowserModule,

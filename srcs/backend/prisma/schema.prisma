@@ -16,10 +16,18 @@ model           User {
   sockets       Socket[]
   avatarUrl     String
   online        Boolean
+  //channel       CategoriesOnChannel[]
   friends       User[] @relation("friends")
   friendsof     User[] @relation("friends")
   blocked       User[] @relation("blocked")
   blockedby     User[] @relation("blocked")
+}
+
+model           Channel_room {
+  name          String  @unique
+  admin         Boolean
+  message       String[]
+  //user          CategoriesOnUsers[]
 }
 
 model           Socket {
