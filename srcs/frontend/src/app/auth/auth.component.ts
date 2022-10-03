@@ -22,11 +22,11 @@ export class AuthComponent implements OnInit {
 			this.code = params['code'];
 			if (this.code) {
 				this.apiService.postOauthCode(this.code).subscribe();
-				this.router.navigate([], {
-					queryParams:{
-						'code': null
-					}
-				})
+				// this.router.navigate([], {
+				// 	queryParams:{
+				// 		'code': null
+				// 	}
+				// })
 			}
 		});
 	}

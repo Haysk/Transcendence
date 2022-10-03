@@ -2,14 +2,14 @@ import { Module } from '@nestjs/common';
 import { AppController } from './app.controller';
 import { PrismaService } from './prisma.service';
 import { UserService } from './user.service';
-<<<<<<< HEAD
 import { MessageService } from './message.service';
-// import { PostService } from './post.service';
 import { TechService } from './tech.service';
 import { AppGateway } from './app.gateway';
+import { HttpModule } from '@nestjs/axios';
+import { OauthService } from './oauth.service';
 
 @Module({
-  imports: [],
+  imports: [HttpModule],
   controllers: [
     AppController
   ],
@@ -18,17 +18,8 @@ import { AppGateway } from './app.gateway';
     UserService, 
     TechService, 
     MessageService, 
-    AppGateway
+    AppGateway, 
+    OauthService
   ],
-=======
-import { TechService } from './tech.service';
-import { OauthService } from './oauth.service';
-import { HttpModule } from '@nestjs/axios';
-
-@Module({
-  imports: [HttpModule],
-  controllers: [AppController],
-  providers: [PrismaService, UserService, TechService, OauthService],
->>>>>>> 0b0e71f655e76242c9fc858a57c145da25a19a7b
 })
 export class AppModule {}

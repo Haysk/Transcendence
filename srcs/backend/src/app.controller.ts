@@ -9,13 +9,9 @@ import {
 } from '@nestjs/common';
 import { UserService } from './user.service';
 import { TechService } from './tech.service';
-<<<<<<< HEAD
 import { MessageService } from './message.service';
-import { User as UserModel, Tech as TechModel, Message as MessageModel} from '@prisma/client';
-=======
 import { OauthService } from './oauth.service';
-import { User as UserModel, Tech as TechModel, Oauth as OauthModel } from '@prisma/client';
->>>>>>> 0b0e71f655e76242c9fc858a57c145da25a19a7b
+import { User as UserModel, Tech as TechModel, Oauth as OauthModel, Message as MessageModel } from '@prisma/client';
 
 @Controller()
 export class AppController {
@@ -26,7 +22,6 @@ export class AppController {
 		private readonly oauthService: OauthService,
 	) { }
 
-<<<<<<< HEAD
 	@Post('message')
 	async addMessage(
 		@Body() messageData: {userId: number, fromUserName: string, fromUserId: number, content: string},
@@ -46,13 +41,11 @@ export class AppController {
 
 	@Post('user')
 	async signupUser(
-		@Body() userData: { name: string; online: boolean; avatarUrl: string },
+		@Body() userData: { id: number, name: string; online: boolean; avatarUrl: string },
 	): Promise<UserModel> {
 		return this.userService.createUser(userData);
 	}
 	
-=======
->>>>>>> 0b0e71f655e76242c9fc858a57c145da25a19a7b
 	@Get('techs')
 	async getTechs(): Promise<TechModel[]> {
 		return this.techService.techs({});

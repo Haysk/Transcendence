@@ -10,37 +10,64 @@ datasource    db {
   url      = env("DATABASE_URL")
 }
 
-<<<<<<< HEAD
-model           User {
-  id            Int     @default(autoincrement()) @id
-  name          String  @unique
-  sockets       Socket[]
-  avatarUrl     String
-  online        Boolean
-  friends       User[] @relation("friends")
-  friendsof     User[] @relation("friends")
-  blocked       User[] @relation("blocked")
-  blockedby     User[] @relation("blocked")
-}
+// <<<<<<< HEAD
+// model           User {
+//   id            Int     @default(autoincrement()) @id
+//   name          String  @unique
+//   sockets       Socket[]
+//   avatarUrl     String
+//   online        Boolean
+//   friends       User[] @relation("friends")
+//   friendsof     User[] @relation("friends")
+//   blocked       User[] @relation("blocked")
+//   blockedby     User[] @relation("blocked")
+// }
+
+// model           Socket {
+//   id            Int     @default(autoincrement()) @id
+//   myUser        User @relation(fields: [userId], references: [id])
+//   userId        Int
+//   value         Int
+// =======
+// model User {
+// 	id	Int @id
+// 	email	String?	@unique
+// 	login	String?	@unique
+// 	first_name	String?
+// 	last_name	String?
+// 	url	String?
+// 	displayname	String?
+// 	image_url	String?
+// 	oauth_id	Int @unique
+// 	oauth Oauth? @relation(fields: [oauth_id], references: [id])
+// >>>>>>> 0b0e71f655e76242c9fc858a57c145da25a19a7b
+//}
 
 model           Socket {
   id            Int     @default(autoincrement()) @id
   myUser        User @relation(fields: [userId], references: [id])
   userId        Int
   value         Int
-=======
+}
+
 model User {
-	id	Int @id
-	email	String?	@unique
-	login	String?	@unique
-	first_name	String?
-	last_name	String?
-	url	String?
-	displayname	String?
-	image_url	String?
-	oauth_id	Int @unique
-	oauth Oauth? @relation(fields: [oauth_id], references: [id])
->>>>>>> 0b0e71f655e76242c9fc858a57c145da25a19a7b
+	id	          Int @id
+	email	        String?	@unique
+	login	        String?	@unique
+	first_name	  String?
+	last_name	    String?
+	url	          String?
+	displayname	  String?
+	image_url	    String?
+	oauth_id	    Int @unique
+	oauth Oauth?  @relation(fields: [oauth_id], references: [id])
+  avatarUrl     String
+  online        Boolean
+  sockets       Socket[]
+  friends       User[] @relation("friends")
+  friendsof     User[] @relation("friends")
+  blocked       User[] @relation("blocked")
+  blockedby     User[] @relation("blocked")
 }
 
 model           Tech {

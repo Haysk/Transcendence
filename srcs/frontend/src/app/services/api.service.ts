@@ -1,12 +1,9 @@
 import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { Tech } from '../models/technology';
-<<<<<<< HEAD
-import { User } from '../models/user'
+import { User } from '../models/user';
 import { Message } from '../models/message';
-=======
 import { Oauth } from '../models/oauth';
->>>>>>> 0b0e71f655e76242c9fc858a57c145da25a19a7b
 
 @Injectable({
   providedIn: 'root'

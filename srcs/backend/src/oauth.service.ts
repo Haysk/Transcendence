@@ -94,7 +94,9 @@ export class OauthService {
 							last_name: result.data.last_name,
 							url: result.data.url,
 							displayname: result.data.displayname,
-							image_url: result.data.image_url	
+							image_url: result.data.image_url,
+							avatarUrl: "",
+							online: true,
 						},
 					},
 				}
