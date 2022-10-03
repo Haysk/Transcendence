@@ -17,6 +17,11 @@ import { VipRoomComponent } from './vip-room/vip-room.component';
 import { BlocChatComponent } from './bloc-chat/bloc-chat.component';
 import { RestRoomComponent } from './rest-room/rest-room.component';
 import { LoginComponent } from './login/login.component';
+import { ChatComponent } from './chat/chat.component';
+import { DirectChatComponent } from './direct-chat/direct-chat.component';
+import { ChatHistoryComponent } from './chat-history/chat-history.component';
+import { SelectUserComponent } from './select-user/select-user.component';
+import { AuthComponent } from './auth/auth.component';
 
 @NgModule({
   declarations: [
@@ -33,7 +38,13 @@ import { LoginComponent } from './login/login.component';
    
     BlocChatComponent,
     RestRoomComponent,
-    LoginComponent
+    LoginComponent,
+    ChatComponent,
+    DirectChatComponent,
+    ChatHistoryComponent,
+    SelectUserComponent,
+    AuthComponent,
+    HeaderComponent
   ],
   imports: [
     BrowserModule,

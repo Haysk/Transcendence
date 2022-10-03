@@ -1,0 +1,8 @@
+<app-chat-history [Me]="Me" [Dest]="Dest"></app-chat-history>
+
+<div *ngFor="let message of messages">
+	{{ message }}
+</div>
+  
+<input [(ngModel)]="message" />
+<button (click)="sendMessage()">Send</button>
