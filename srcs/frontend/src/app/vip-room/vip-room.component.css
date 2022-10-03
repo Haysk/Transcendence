@@ -1,0 +1,81 @@
+.all_vip{
+    width: 100%;
+    height: 100vh;
+    background-color: rgb(33, 40, 46);
+    background-image: url("../../assets/imgs/vip2540x1240px.jpg");
+    background-size: cover;
+    background-repeat: no-repeat;
+    background-position: center; 
+    display: flex;
+    justify-content: center;
+}
+
+.bloc_vip{
+
+    width: 600px;
+    height: auto;
+    /* background-color: rgba(157, 180, 201, 0.349); */
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+
+
+
+}
+
+.title_vip{
+
+    width: 100%;
+    height: 70px;
+    /* background-color: rgb(33, 40, 46); */
+    background-image: url("../../assets/imgs/vip_title.png");
+    background-size: contain;
+    background-repeat: no-repeat;
+    background-position: center; 
+    margin-top: 50px;
+    margin-bottom: 20px;
+
+}
+
+.user_photo{
+    width: 200px;
+    height:200px;
+    /* background-color: bisque; */
+    background-size: contain;
+    background-repeat: no-repeat;
+    background-position: center; 
+    
+
+}
+
+.user_name{
+    width: 200px;
+    height:50px;
+    background-color: rgb(39, 34, 29);
+    color:antiquewhite;
+    text-align: center;
+    font-size: 20px;
+    padding-top: 5px;
+}
+
+.title_historique{
+    width: 70%;
+    height:50px;
+    background-color: rgba(92, 80, 22, 0.534);
+    margin-top: 30px;
+    color: rgb(184, 142, 7);
+    text-align: center;
+    font-size: 26px;
+    font-weight: bold;
+    padding-top: 7px;
+}
+
+/* .bloc_vip_historique{
+
+    width: 100%;
+    height:300px;
+    background-color: rgba(92, 80, 22, 0.281);
+    margin-top: 10px;
+
+
+} */

@@ -1,11 +1,8 @@
-<div style="text-align:center;">
-  <h3>Bienvenue sur Angular</h3>
 
-  <a routerLink="/">Accueil</a> |
-  <a routerLink="/add-techno">Ajouter une techno</a> |
-  <a routerLink="/all-technos">Toutes les technos</a> |
-  <a routerLink="/pong">Pong</a> | 
-  <a routerLink="/chat">Chat</a> | 
-  <a routerLink="/auth">Auth</a>
-</div>
+<!-- <app-header [user]="user" ></app-header>
+<app-bloc-chat ></app-bloc-chat> -->
+<app-header [user]="user" *ngIf="visible" ></app-header>
+<app-bloc-chat *ngIf="visible"></app-bloc-chat>
 <router-outlet></router-outlet>
+
+

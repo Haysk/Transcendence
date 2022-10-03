@@ -10,12 +10,18 @@ import { TechnoAddComponent } from './techno-add/techno-add.component';
 import { TechnoListComponent } from './techno-list/techno-list.component';
 import { TechnoDetailsComponent } from './techno-details/techno-details.component';
 import { PongComponent } from './pong/pong.component';
+import { HeaderComponent } from './header/header.component';
+import { GameRoomComponent } from './game-room/game-room.component';
+import { ShowRoomComponent } from './show-room/show-room.component';
+import { VipRoomComponent } from './vip-room/vip-room.component';
+import { BlocChatComponent } from './bloc-chat/bloc-chat.component';
+import { RestRoomComponent } from './rest-room/rest-room.component';
+import { LoginComponent } from './login/login.component';
 import { ChatComponent } from './chat/chat.component';
 import { DirectChatComponent } from './direct-chat/direct-chat.component';
 import { ChatHistoryComponent } from './chat-history/chat-history.component';
 import { SelectUserComponent } from './select-user/select-user.component';
 import { AuthComponent } from './auth/auth.component';
-import { HeaderComponent } from './header/header.component';
 
 @NgModule({
   declarations: [
@@ -25,15 +31,24 @@ import { HeaderComponent } from './header/header.component';
     TechnoListComponent,
     TechnoDetailsComponent,
     PongComponent,
+    HeaderComponent,
+    GameRoomComponent,
+    ShowRoomComponent,
+    VipRoomComponent,
+   
+    BlocChatComponent,
+    RestRoomComponent,
+    LoginComponent,
     ChatComponent,
     DirectChatComponent,
     ChatHistoryComponent,
     SelectUserComponent,
-	  AuthComponent,
+    AuthComponent,
     HeaderComponent
   ],
   imports: [
     BrowserModule,
+  
     AppRoutingModule,
     HttpClientModule,
     FormsModule

@@ -1,0 +1,26 @@
+<div class="all_game">
+
+    <div class="titre_game"></div>
+    <div class="bloc_item_games">
+        <div class="game_pong" (click)="showavailable()"></div>
+        <div class="game_mariokart">Coming soon</div>
+        <div class="game_streetfi">Coming soon</div>
+        <div class="game_tennis">Coming soon</div>
+        <div class="game_tetris">Coming soon</div>
+        <div class="game_puzzleBubble">Coming soon</div>
+    </div><!-- fin de div bloc_item_games  -->
+
+    <div class="player_available" *ngIf="visible">
+    
+        <h2>Palyers available for PONG</h2>    
+      
+        <div class="env_player_available">
+        <div class="user_photo"  style="background-image:url(../../assets/chilee.jpg)" ></div>
+        <div class="user_name">chilee</div>
+        <a class="playerdispo" routerLink="/pong">PLAY</a>
+        </div>
+
+    </div><!-- fin de div player_available  -->
+
+    
+</div><!-- fin de div all_game  -->
