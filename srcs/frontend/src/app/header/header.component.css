@@ -126,6 +126,126 @@
  
 }
 
+/* button[type="logout"]{
+    width: 80px;
+    height: 20px;
+    background-color: rgb(224, 250, 250);
+    border-radius: 10px;
+    border: none;
+    cursor: pointer;
+} */
+.logout{
+    width: 100 px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    margin-top: 5px;
+
+
+}
+
+button[type="logout"]{
+    position: relative;
+    width: 100px;
+    height: 30px;
+    text-align: center;
+    line-height: 28px;
+    background-color: rgb(41, 75, 80);
+    text-transform: uppercase;
+    font-size: 14px;
+    letter-spacing: 1px;
+    text-decoration: none;
+    -webkit-box-reflect: below 1px linear-gradient (transparent, #0004);
+    border: none;
+    border-radius: 20px;
+    cursor: pointer;
+}
+
+button[type="logout"]::before{
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: linear-gradient(45deg, #fb0094, #00f, #0f0, #ff0, #f00, #fb0094,#00f,#0f0, #ff0, #f00);
+    background-size: 400%;
+    opacity: 0;
+    transition: 0.5s;
+    animation: animate 20s linear infinite;
+    border-radius: 20px;
+   
+
+}
+
+button[type="logout"]::after{
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: linear-gradient(45deg, #fb0094, #00f, #0f0, #ff0, #f00, #fb0094,#00f,#0f0, #ff0, #f00);
+    background-size: 400%;
+    opacity: 0;
+    filter: blur(20px);
+    transition: 0.5s;
+    animation: animate 20s linear infinite;
+    border-radius: 20px;
+
+    
+
+}
+
+button[type="logout"]:hover::before,
+button[type="logout"]:hover::after{
+    opacity: 1;
+
+}
+
+@keyframes animate{
+    0%{
+        background-position: 0 0;
+    }
+    50%{
+        background-position: 300% 0;
+    }
+    100%{
+        background-position: 0 0;
+    }
+
+}
+
+button[type="logout"] span{
+    position: absolute;
+    display: block;
+    top: 1px;
+    left: 1px;
+    right: 1px;
+    bottom: 1px;
+    text-align: cetner;
+    background: #0c0c0c;
+    color: rgba(250, 241, 241);
+    transition: 0.5s;
+    z-index: 1;
+    border-radius: 20px;
+}
+
+button[type="logout"]:hover span{
+    color: rgba(255,255,255,1);
+}
+
+button[type="logout"] span::before{
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 50%;
+    background: rgba(255, 255, 255, 0.1);
+    border-radius: 20px;
+
+}
 
 @media only screen and (max-width: 600px) {
 
@@ -251,15 +371,130 @@
     .username_header{
         
         display: flex;
-        justify-content: end;
-        padding-top:15px;
+        justify-content: flex-end;
+        padding-top:30px;
         font-size: 16px;
         width: 100%;
-        padding-right: 80px;
+        padding-right: 70px;
         color: aliceblue;
      
     }
 
+
+    .logout{
+        width: 100 px;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        margin-top: 5px;
+        margin-left: 10px;
+    
+    
+    }
+
+button[type="logout"]{
+    position: relative;
+    width: 90px;
+    height: 26px;
+    text-align: center;
+    line-height: 24px;
+    background-color: rgb(41, 75, 80);
+    text-transform: uppercase;
+    font-size: 14px;
+    letter-spacing: 1px;
+    text-decoration: none;
+    -webkit-box-reflect: below 1px linear-gradient (transparent, #0004);
+    border: none;
+    border-radius: 20px;
+    cursor: pointer;
+    margin-right: 18px;
+}
+
+button[type="logout"]::before{
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: linear-gradient(45deg, #fb0094, #00f, #0f0, #ff0, #f00, #fb0094,#00f,#0f0, #ff0, #f00);
+    background-size: 400%;
+    opacity: 0;
+    transition: 0.5s;
+    animation: animate 20s linear infinite;
+    border-radius: 20px;
+   
+
+}
+
+button[type="logout"]::after{
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: linear-gradient(45deg, #fb0094, #00f, #0f0, #ff0, #f00, #fb0094,#00f,#0f0, #ff0, #f00);
+    background-size: 400%;
+    opacity: 0;
+    filter: blur(20px);
+    transition: 0.5s;
+    animation: animate 20s linear infinite;
+    border-radius: 20px;
+
+    
+
+}
+
+button[type="logout"]:hover::before,
+button[type="logout"]:hover::after{
+    opacity: 1;
+
+}
+
+@keyframes animate{
+    0%{
+        background-position: 0 0;
+    }
+    50%{
+        background-position: 300% 0;
+    }
+    100%{
+        background-position: 0 0;
+    }
+
+}
+
+button[type="logout"] span{
+    position: absolute;
+    display: block;
+    top: 1px;
+    left: 1px;
+    right: 1px;
+    bottom: 1px;
+    text-align: cetner;
+    background: #0c0c0c;
+    color: rgba(250, 241, 241);
+    transition: 0.5s;
+    z-index: 1;
+    border-radius: 20px;
+}
+
+button[type="logout"]:hover span{
+    color: rgba(255,255,255,1);
+}
+
+button[type="logout"] span::before{
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 50%;
+    background: rgba(255, 255, 255, 0.1);
+    border-radius: 20px;
+
+}
 
 
 }

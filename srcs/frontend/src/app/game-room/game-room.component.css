@@ -1,3 +1,5 @@
+
+
 .all_game{
     width: 100%;
     height: 100vh;
@@ -53,6 +55,7 @@
     background-size: contain;
     background-repeat: no-repeat;
     background-position: center; 
+    cursor: pointer;
 
     
 }
@@ -147,20 +150,70 @@
     
 }
 
+h2{
+    background-color: black;
+    height: 40px;
+}
+
+.player_available{
+    color: rgb(144, 250, 6);
+    
+    text-align: center;
+    width: 700px;
+    
+    background-color: rgba(34, 158, 137, 0.281);
+    border-radius: 10px;
+
+    
+}
+
+.env_player_available{
+    width: 120px;
+    background-color: rgb(51, 48, 38);
+    margin: 20px;
+}
+
+.user_photo{
+    width: 120px;
+    height:120px;
+    /* background-color: bisque; */
+    background-size: contain;
+    background-repeat: no-repeat;
+    background-position: center; 
+}
+
+.user_name{
+    background-color: rgb(0, 12, 8);
+
+}
+
+.playerdispo{
+    font-size: 16px;
+    text-decoration: none;
+}
+
+.playerdispo:visited {
+    color: rgb(144, 250, 6);
+  }
+
+.playerdispo:link {
+    color: rgb(144, 250, 6);
+  }
+
 
 
 @media only screen and (max-width: 600px) {
 
     .all_game{
         width: 100%;
-        height: 85vh;
+        height: 100vh;
         background-color: #212229;
         display: flex;
         align-items: center;
         flex-direction: column;
         padding-top: 100px;
     
-        background-image: url("../../assets/imgs/game_600px.jpg");
+        background-image: url("../../assets/imgs/game_600px2.jpg");
         background-size: cover;
         background-repeat: no-repeat;
         background-position: center; 
@@ -222,7 +275,7 @@
         background-image: url("../../assets/imgs/game_room_mariokart.jpg");
         color:rgb(255, 255, 255);
         text-align: center;
-        padding-top: 80px;
+        padding-top: 60px;
     
         
     }
@@ -241,7 +294,7 @@
         background-image: url("../../assets/imgs/game_room_sf.jpg");
         color:rgb(255, 255, 255);
         text-align: center;
-        padding-top: 80px;
+        padding-top: 60px;
     
         
     }
@@ -258,7 +311,7 @@
         background-image: url("../../assets/imgs/game_room_tenis.jpg");
         color:rgb(255, 255, 255);
         text-align: center;
-        padding-top: 80px;
+        padding-top: 60px;
     
         
     }
@@ -277,7 +330,7 @@
         background-image: url("../../assets/imgs/game_room_tetris.jpg");
         color:rgb(255, 255, 255);
         text-align: center;
-        padding-top: 80px;
+        padding-top: 60px;
     
       
     }
@@ -294,12 +347,61 @@
         background-image: url("../../assets/imgs/game_room_puzzlebubble.jpg");
         color:rgb(255, 255, 255);
         text-align: center;
-        padding-top: 80px;
+        padding-top: 60px;
     
        
         
     }
 
 
+    h2{
+        background-color: black;
+        height: 40px;
+    }
+    
+    .player_available{
+        color: rgb(144, 250, 6);
+        
+        text-align: center;
+        width: 500px;
+        margin-top: 100px;
+        background-color: rgba(34, 158, 137, 0.281);
+        border-radius: 10px;
+           
+    }
+    
+    .env_player_available{
+        width: 120px;
+        background-color: rgb(51, 48, 38);
+        margin: 20px;
+    }
+    
+    .user_photo{
+        width: 120px;
+        height:120px;
+        /* background-color: bisque; */
+        background-size: contain;
+        background-repeat: no-repeat;
+        background-position: center; 
+    }
+    
+    .user_name{
+        background-color: rgb(0, 12, 8);
+    
+    }
+    
+    .playerdispo{
+        font-size: 16px;
+        text-decoration: none;
+    }
+    
+    .playerdispo:visited {
+        color: rgb(144, 250, 6);
+      }
+    
+    .playerdispo:link {
+        color: rgb(144, 250, 6);
+      }
+    
 
 }

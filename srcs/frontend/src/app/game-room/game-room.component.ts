@@ -12,4 +12,10 @@ export class GameRoomComponent implements OnInit {
   ngOnInit(): void {
   }
 
+  visible:boolean=false;
+  showavailable(){
+    this.visible= this.visible?false:true;    
+
+  }
+
 }

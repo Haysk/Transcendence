@@ -57,3 +57,47 @@
     right: 10px;
     background-color: red;
 }
+
+
+
+
+
+
+
+
+.title_pong{
+    color: rgb(252, 248, 248);
+    text-align: center;
+
+
+
+}
+
+.bloc{
+    position: fixed;
+    height: 100vh;
+    width: 100%;
+    overflow: hidden;
+
+}
+
+.bloc video{
+    position: absolute;
+   min-width: 100%;
+    min-height: 100%;
+    top: 50%;
+    left: 50%;
+    z-index:-100;
+    transform: translate(-50%, -50%); 
+
+}
+
+.bloc::before{
+    position: absolute;
+    content: "";
+    min-width: 100%;
+    min-height: 100%;
+    z-index:-99;
+    background-color: rgba(10, 1, 1, 0.486);
+
+}

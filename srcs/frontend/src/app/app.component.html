@@ -1,7 +1,8 @@
 
-<app-header [user]="user"></app-header>
-<app-bloc-chat></app-bloc-chat>
+<!-- <app-header [user]="user" ></app-header>
+<app-bloc-chat ></app-bloc-chat> -->
+<app-header [user]="user" *ngIf="visible" ></app-header>
+<app-bloc-chat *ngIf="visible"></app-bloc-chat>
 <router-outlet></router-outlet>
-
 
 

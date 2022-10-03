@@ -1,6 +1,6 @@
 .all_show{
     width: 100%;
-    height: 90vh;
+    height: 100vh;
     background-color: rgb(12, 17, 13);
     background-image: url("../../assets/imgs/show_2540x1240px.jpg");
     background-size: cover;
@@ -58,9 +58,9 @@
 
     .all_show{
         width: 100%;
-        height: 88vh;
+        height: 100vh;
         background-color: rgb(12, 17, 13);
-        background-image: url("../../assets/imgs/show_600px.jpg");
+        background-image: url("../../assets/imgs/show_600px2.jpg");
         background-size: cover;
         background-repeat: no-repeat;
         background-position: center; 

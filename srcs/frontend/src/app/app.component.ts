@@ -11,6 +11,7 @@ import { User } from './models/user';
 export class AppComponent implements OnInit{
   user!: User;
   title = 'todo-app';
+  visible:boolean = true;
 
   constructor(){
   }

@@ -1,7 +1,7 @@
 <header>
 <div class="all_header">
 
-    <a class="logo_header" routerLink="/"></a><!-- fin de logo_header -->
+    <a class="logo_header" routerLink="/home"></a><!-- fin de logo_header -->
     
     <div class="nav_header">
         <a class="game_nav_header" routerLink="/game-room"></a><!-- fin de game_nav_header -->
@@ -10,7 +10,10 @@
         <a class="private_nav_header" routerLink="/rest-room"></a><!-- fin de private_nav_header -->
     </div><!-- fin de nav_header -->
         
-    <div class="username_header"> Welcome " {{user.name}} "
+    <div class="username_header"> Welcome " {{user.name}} " 
+        <div class="logout">
+        <button type ="logout"><span>Logout</span></button>
+        </div>
     </div><!-- fin de username_header -->
     
 

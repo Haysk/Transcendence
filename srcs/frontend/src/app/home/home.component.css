@@ -1,6 +1,7 @@
+
 .all_home{
     width: 100%;
-    height: 90vh;
+    height: 100vh;
     background-color: #000000;
     background-image: url("../../assets/imgs/home_2540x1240px_nologo.jpg");
     background-size: cover;
@@ -20,7 +21,7 @@
 
 
 .bloc_item_home{
-    padding-top: 225px;
+    margin-top: 20%;
     /* background-color: rgb(112, 175, 175); */
     width: 100%;
     height: auto;
@@ -138,20 +139,23 @@
 
 @media only screen and (max-width: 600px) {
 
+   
+
+
     .all_home{
         width: 100%;
-        height: 90vh;
+        min-height: 100vh;
         background-color: #000000;
-        background-image: url("../../assets/imgs/home_600px.jpg");
+        background-image: url("../../assets/imgs/home_600px2.jpg");
         background-size: cover;
         background-repeat: no-repeat;
         background-position: center; 
-        padding-bottom: 100px;
+        /* padding-bottom: 200px;     */
     
     }
   
     .bloc_item_home{
-        padding-top: 225px;
+        padding-top: 150px;
         /* background-color: rgb(112, 175, 175); */
         width: 85%;
         height: auto;

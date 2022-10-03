@@ -50,16 +50,19 @@
     
     font-size: 50px;
     color: rgb(160, 136, 31);
+    /* background-color: blue; */
 }
 
 .content_rest{
     font-size: 25px;
     color: rgb(39, 37, 28);
+    /* background-color: aqua; */
 }
 
 .content_rest_black{
     font-size: 25px;
     color: rgb(155, 154, 151);
+    /* background-color: rgb(187, 255, 0); */
 
 }
 
