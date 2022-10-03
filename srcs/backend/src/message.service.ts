@@ -34,16 +34,10 @@ export class MessageService {
   async getMessages(params: { fromUserId: number, userId: number }): Promise<Message[]> {
     return await this.prisma.message.findMany({
       where: {
-        fromUserId: Number(params.fromUserId),
-        userId: Number(params.userId),
+        fromUserId: { in: [Number(params.fromUserId), Number(params.userId)]},
+        userId: {in: [Number(params.userId), Number(params.fromUserId)]},
       }
     })
-      && this.prisma.message.findMany({
-        where: {
-          fromUserId: Number(params.userId),
-          userId: Number(params.fromUserId),
-        }
-      })
   }
 
   async createMessage(data: Prisma.MessageCreateInput): Promise<Message> {

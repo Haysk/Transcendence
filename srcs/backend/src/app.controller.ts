@@ -9,8 +9,13 @@ import {
 } from '@nestjs/common';
 import { UserService } from './user.service';
 import { TechService } from './tech.service';
+<<<<<<< HEAD
 import { MessageService } from './message.service';
 import { User as UserModel, Tech as TechModel, Message as MessageModel} from '@prisma/client';
+=======
+import { OauthService } from './oauth.service';
+import { User as UserModel, Tech as TechModel, Oauth as OauthModel } from '@prisma/client';
+>>>>>>> 0b0e71f655e76242c9fc858a57c145da25a19a7b
 
 @Controller()
 export class AppController {
@@ -18,8 +23,10 @@ export class AppController {
 		private readonly messageService: MessageService,
 		private readonly userService: UserService,
 		private readonly techService: TechService,
+		private readonly oauthService: OauthService,
 	) { }
 
+<<<<<<< HEAD
 	@Post('message')
 	async addMessage(
 		@Body() messageData: {userId: number, fromUserName: string, fromUserId: number, content: string},
@@ -44,6 +51,8 @@ export class AppController {
 		return this.userService.createUser(userData);
 	}
 	
+=======
+>>>>>>> 0b0e71f655e76242c9fc858a57c145da25a19a7b
 	@Get('techs')
 	async getTechs(): Promise<TechModel[]> {
 		return this.techService.techs({});
@@ -74,6 +83,14 @@ export class AppController {
 	@Delete('tech/:id')
 	async deleteTech(@Param('id') id: string): Promise<TechModel> {
 		return this.techService.deleteTech({ id: Number(id) });
+	}
+
+	@Post('auth/token/code')
+	async postInitOauth(
+		@Body() oauthData: {code: string}
+	) : Promise<OauthModel> {
+		this.oauthService.getCode(oauthData);
+		return this.oauthService.initUser(oauthData);
 	}
 }
 

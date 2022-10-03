@@ -1,6 +1,5 @@
 import { Component, OnInit, Input } from '@angular/core';
 import { User } from '../models/user';
-import { Router } from '@angular/router';
 import { ChatComponent } from '../chat/chat.component';
 
 @Component({
@@ -13,7 +12,7 @@ export class SelectUserComponent implements OnInit {
   @Input() user!: User;
   show_chat: Boolean = false;
   show_hide: String = "chat";
-  constructor(private router: Router) { }
+  constructor() { }
 
   ngOnInit(): void {
   }

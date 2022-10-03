@@ -11,6 +11,7 @@ import { User } from '../models/user'
     {
       provide: 'user_list',
       useValue: [
+        {id: 1, name: "Alexandre", online: true},
         {id: 2, name: "Antoine", online: true},
         {id: 3, name: "Arnaud", online: false},
         {id: 4, name: "Ching", online: true}
@@ -18,6 +19,7 @@ import { User } from '../models/user'
     },
     {
       provide: 'whoAmI',
+      //useValue : {id: 2, name: "Antoine", online: true}
       useValue: {id: 1, name: "Alexandre", email: "someEmail", online: true}
     },
 ]
