@@ -6,15 +6,16 @@ import { Component, OnInit } from '@angular/core';
   styleUrls: ['./game-room.component.css']
 })
 export class GameRoomComponent implements OnInit {
-
+  visible! :boolean;
   constructor() { }
 
   ngOnInit(): void {
+    this.visible=false;
   }
 
-  visible:boolean=false;
   showavailable(){
-    this.visible= this.visible?false:true;    
+    this.visible= this.visible?false:true;
+    console.log(this.visible);
 
   }
 

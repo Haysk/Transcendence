@@ -16,6 +16,6 @@ export class AppComponent implements OnInit{
   constructor(){
   }
   ngOnInit(): void {
-    this.user = {id: 1, name: 'adylwsk', email: "email"};
+    //this.user = {id: 1, name: 'adylwsk', avatarUrl: '', online: true, sockets: NULL};
   }
 }
