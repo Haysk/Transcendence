@@ -7,12 +7,9 @@ import { Transport, MicroserviceOptions } from '@nestjs/microservices';
   templateUrl: './channel-room.component.html',
   styleUrls: ['./channel-room.component.css'],
 
-//   providers: [
-//     {
-//       provide: 'channel',
-//     }
-// ]
 })
+
+
 export class ChannelRoomComponent implements OnInit {
 
   constructor() { }

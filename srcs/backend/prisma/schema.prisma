@@ -23,12 +23,13 @@ model           User {
   blockedby     User[] @relation("blocked")
 }
 
-model           Channel_room {
-  name          String  @unique
-  admin         Boolean
-  message       String[]
-  //user          CategoriesOnUsers[]
-}
+// model           Channel_room {
+//   name          String  @unique
+//   // admin         User[]
+//   message       String[]
+
+//   //user          CategoriesOnUsers[]
+// }
 
 model           Socket {
   id            Int     @default(autoincrement()) @id
