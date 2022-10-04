@@ -35,7 +35,6 @@ import { AuthComponent } from './auth/auth.component';
     GameRoomComponent,
     ShowRoomComponent,
     VipRoomComponent,
-   
     BlocChatComponent,
     RestRoomComponent,
     LoginComponent,
@@ -48,7 +47,6 @@ import { AuthComponent } from './auth/auth.component';
   ],
   imports: [
     BrowserModule,
-  
     AppRoutingModule,
     HttpClientModule,
     FormsModule

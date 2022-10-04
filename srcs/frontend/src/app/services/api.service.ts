@@ -33,9 +33,9 @@ export class ApiService {
     return this.httpClient.delete(`${this.API_SERVER}/tech/${id}`);
   }
 
-  createUser(name: string, online: boolean, avatarUrl: string)
+  getUser(code: string | null)
   {
-    return this.httpClient.post<User>(`${this.API_SERVER}/user`, {name, online, avatarUrl});
+    return this.httpClient.get<User>(`${this.API_SERVER}/user/${code}`);
   }
 
   getMessages(fromUserId: number, userId: number)

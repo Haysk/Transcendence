@@ -51,23 +51,21 @@ model           Socket {
 }
 
 model User {
-	id	          Int @id
-	email	        String?	@unique
-	login	        String?	@unique
-	first_name	  String?
-	last_name	    String?
-	url	          String?
-	displayname	  String?
-	image_url	    String?
-	oauth_id	    Int @unique
-	oauth Oauth?  @relation(fields: [oauth_id], references: [id])
-  avatarUrl     String
-  online        Boolean
-  sockets       Socket[]
-  friends       User[] @relation("friends")
-  friendsof     User[] @relation("friends")
-  blocked       User[] @relation("blocked")
-  blockedby     User[] @relation("blocked")
+	id				Int @id
+	email			String?	@unique
+	login			String?	@unique
+	first_name		String?
+	last_name		String?
+	url				String?
+	displayname		String?
+	image_url		String?
+	oauth_id		Int @unique
+	oauth Oauth?	@relation(fields: [oauth_id], references: [id])
+	sockets			Socket[]
+	friends			User[] @relation("friends")
+	friendsof		User[] @relation("friends")
+	blocked			User[] @relation("blocked")
+	blockedby		User[] @relation("blocked")
 }
 
 model           Tech {

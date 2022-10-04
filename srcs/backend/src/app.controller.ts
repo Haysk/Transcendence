@@ -38,13 +38,6 @@ export class AppController {
 			//console.log("app.controller : fromUserId : " + fromUserId + " userId : " + userId);
 			return await this.messageService.getMessages(data);
 		}
-
-	@Post('user')
-	async signupUser(
-		@Body() userData: { id: number, name: string; online: boolean; avatarUrl: string },
-	): Promise<UserModel> {
-		return this.userService.createUser(userData);
-	}
 	
 	@Get('techs')
 	async getTechs(): Promise<TechModel[]> {
@@ -84,6 +77,11 @@ export class AppController {
 	) : Promise<OauthModel> {
 		this.oauthService.getCode(oauthData);
 		return this.oauthService.initUser(oauthData);
+	}
+
+	@Get('user/:code')
+	async getUserByCode(@Param('code') code: string): Promise<UserModel> {
+		return this.userService.user({code: String(code)});
 	}
 }
 

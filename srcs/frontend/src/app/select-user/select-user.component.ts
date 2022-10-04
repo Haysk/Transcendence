@@ -18,7 +18,7 @@ export class SelectUserComponent implements OnInit {
   }
 
   sendBtn(dest : User): void {
-    console.log("Me = " + this.Me.name + " | dest : " + dest.name);
+    console.log("Me = " + this.Me.login + " | dest : " + dest.login);
     this.show_chat == false ? this.show_chat = true : this.show_chat = false;
     this.show_hide == "chat" ? this.show_hide = "close" : this.show_hide = "chat";
   }

@@ -7,10 +7,12 @@ export class UserService {
   constructor(private prisma: PrismaService) {}
 
   async user(
-    userWhereUniqueInput: Prisma.UserWhereUniqueInput,
+    oauthWhereInput: Prisma.OauthWhereInput,
   ): Promise<User | null> {
-    return this.prisma.user.findUnique({
-      where: userWhereUniqueInput,
+    return this.prisma.user.findFirstOrThrow({
+      where: {
+		oauth: oauthWhereInput
+	  }
     });
   }
 

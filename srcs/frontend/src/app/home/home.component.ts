@@ -1,5 +1,6 @@
 import { Component, OnInit } from '@angular/core';
-import { ActivatedRoute } from '@angular/router';
+import { Router, ActivatedRoute } from '@angular/router';
+import { ApiService } from '../services/api.service';
 
 @Component({
 	selector: 'app-home',
@@ -8,15 +9,10 @@ import { ActivatedRoute } from '@angular/router';
 })
 export class HomeComponent implements OnInit {
 	
-	code: string = "";
-
-	constructor(private route: ActivatedRoute) { }
+	constructor(private route: ActivatedRoute,
+				private apiService: ApiService,
+				private router: Router) { }
 
 	ngOnInit(): void {
-		this.route.queryParams.subscribe(params => {
-			console.log(params);
-			this.code = params['code'];
-			console.log(this.code);
-		})
 	}
 }

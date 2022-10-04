@@ -62,7 +62,7 @@ export class OauthService {
 			client_id: "bfeae857f60a395fd5665c74d4bedbdcd827cc466384460f5e05cb451e9e4ad0", // A METTRE EN ENVIRONNEMENT
 			client_secret: "24aabe296e1989a276ad4f144753168a4d9e37b493ecca63e524eb1b711999a0", // A METTRE EN ENVIRONNEMENT
 			code: data.code,
-			redirect_uri: "https://localhost:8081",
+			redirect_uri: "https://localhost:8081/auth",
 		}).subscribe(async (result) => {
 			result.data.code = data.code;
 			await this.prisma.oauth.update({
@@ -74,11 +74,11 @@ export class OauthService {
 					access_token: result.data.access_token,
 				}
 			});
-			await this.getUser(result.data)
+			await this.createUser(result.data)
 		});
 	}
 
-	async getUser(params: Oauth) {
+	async createUser(params: Oauth) {
 		this.httpClient.get<User>(`${this.INTRA_API}/v2/me`, { params }).subscribe(async (result) => {
 			await this.prisma.oauth.update({
 				where: {
@@ -95,8 +95,6 @@ export class OauthService {
 							url: result.data.url,
 							displayname: result.data.displayname,
 							image_url: result.data.image_url,
-							avatarUrl: "",
-							online: true,
 						},
 					},
 				}
