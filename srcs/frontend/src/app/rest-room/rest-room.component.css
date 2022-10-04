@@ -24,7 +24,7 @@
 }
 
 .arnaud{
-    background-color: rgb(131, 131, 131);
+    background-color: #2c261e;
     background-image: url("../../assets/imgs/rest_room_arnaud_2450px.jpg");
     width: 100%;
     height: 400px;
@@ -76,7 +76,7 @@
 
 .alex{
     background-image: url("../../assets/imgs/rest_room_alex2450px.jpg");
-    background-color: rgb(8, 92, 92);
+    background-color: #2c261e;
     width: 100%;
     height: 400px;
     background-repeat: no-repeat;
@@ -88,7 +88,7 @@
 }
 
 .antoine_c{
-    background-color: rgb(131, 131, 131);
+    background-color: #2c261e;
     background-image: url("../../assets/imgs/rest_room_antoineC2450px.jpg");
     width: 100%;
     height: 400px;
@@ -109,9 +109,9 @@
 }
 
 .antoine_t{
-    background-color: rgb(62, 116, 116);
+    background-color: #2c261e;
     background-image: url("../../assets/imgs/rest_room_antoineT2_2450px.jpg");
-    background-color: rgb(8, 92, 92);
+  
     width: 100%;
     height: 400px;
     background-repeat: no-repeat;
@@ -131,7 +131,7 @@
 }
 
 .ching{
-    background-color: rgb(97, 143, 143);
+    background-color: #2c261e;
     background-image: url("../../assets/imgs/rest_room_ching_2450px.jpg");
     width: 100%;
     height: 400px;

@@ -62,6 +62,7 @@ button{
     height: 30px;
     padding-bottom: 0px;
     color: aliceblue;
+    cursor: pointer;
 }
 
 button:hover{

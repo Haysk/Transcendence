@@ -7,6 +7,7 @@ import { Component, OnInit } from '@angular/core';
 })
 export class ShowRoomComponent implements OnInit {
 
+  matches = ["chilee vs ade-temm", "anclarmat vs antton-t", "sara vs julien"];
   constructor() { }
 
   ngOnInit(): void {
