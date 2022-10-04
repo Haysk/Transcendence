@@ -10,6 +10,7 @@ datasource    db {
   url      = env("DATABASE_URL")
 }
 
+<<<<<<< HEAD
 model           User {
   id            Int     @default(autoincrement()) @id
   name          String  @unique
@@ -36,6 +37,19 @@ model           Socket {
   myUser        User @relation(fields: [userId], references: [id])
   userId        Int
   value         Int
+=======
+model User {
+	id	Int @id
+	email	String?	@unique
+	login	String?	@unique
+	first_name	String?
+	last_name	String?
+	url	String?
+	displayname	String?
+	image_url	String?
+	oauth_id	Int @unique
+	oauth Oauth? @relation(fields: [oauth_id], references: [id])
+>>>>>>> origin/OAut
 }
 
 model           Tech {
@@ -51,4 +65,13 @@ model           Message {
   fromUserName  String
   fromUserId    Int
   content       String
+}
+
+
+model Oauth {
+	id Int @default(autoincrement()) @id
+	code String @unique
+	refresh_token String? @unique
+	access_token String? @unique
+	user User?
 }

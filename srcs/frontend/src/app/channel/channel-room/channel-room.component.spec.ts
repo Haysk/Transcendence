@@ -24,5 +24,5 @@ describe('ChannelRoomComponent', () => {
 
   // io.on("connection", Socket => {
   //   Socket.join("some room");
-  });
+  //});
 });

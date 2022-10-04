@@ -10,11 +10,16 @@ import { TechnoAddComponent } from './techno-add/techno-add.component';
 import { TechnoListComponent } from './techno-list/techno-list.component';
 import { TechnoDetailsComponent } from './techno-details/techno-details.component';
 import { PongComponent } from './pong/pong.component';
+<<<<<<< HEAD
 import { ChatComponent } from './chat/chat.component';
 import { DirectChatComponent } from './direct-chat/direct-chat.component';
 import { ChatHistoryComponent } from './chat-history/chat-history.component';
 import { SelectUserComponent } from './select-user/select-user.component';
 import { ChannelRoomComponent } from './channel/channel-room/channel-room.component';
+=======
+import { AuthComponent } from './auth/auth.component';
+import { HeaderComponent } from './header/header.component';
+>>>>>>> origin/OAut
 
 @NgModule({
   declarations: [
@@ -24,11 +29,16 @@ import { ChannelRoomComponent } from './channel/channel-room/channel-room.compon
     TechnoListComponent,
     TechnoDetailsComponent,
     PongComponent,
+<<<<<<< HEAD
     ChatComponent,
     DirectChatComponent,
     ChatHistoryComponent,
     SelectUserComponent,
     ChannelRoomComponent
+=======
+	AuthComponent,
+ HeaderComponent
+>>>>>>> origin/OAut
   ],
   imports: [
     BrowserModule,
