@@ -8,11 +8,12 @@ import { ApiService } from '../services/api.service';
 	styleUrls: ['./home.component.css']
 })
 export class HomeComponent implements OnInit {
-	
+	login: string = "";
 	constructor(private route: ActivatedRoute,
 				private apiService: ApiService,
 				private router: Router) { }
 
 	ngOnInit(): void {
+		this.login = localStorage["login"];
 	}
 }

@@ -12,6 +12,7 @@ import { TechService } from './tech.service';
 import { MessageService } from './message.service';
 import { OauthService } from './oauth.service';
 import { User as UserModel, Tech as TechModel, Oauth as OauthModel, Message as MessageModel } from '@prisma/client';
+import { delay } from 'rxjs';
 
 @Controller()
 export class AppController {
@@ -74,14 +75,15 @@ export class AppController {
 	@Post('auth/token/code')
 	async postInitOauth(
 		@Body() oauthData: {code: string}
-	) : Promise<OauthModel> {
-		this.oauthService.getCode(oauthData);
-		return this.oauthService.initUser(oauthData);
+	): Promise<UserModel> {
+		await this.oauthService.getCode(oauthData);
+		return await this.oauthService.initUser(oauthData);
+		//return this.userService.user(oauthData);
 	}
 
 	@Get('user/:code')
 	async getUserByCode(@Param('code') code: string): Promise<UserModel> {
-		return this.userService.user({code: String(code)});
+		return await this.userService.user({code: String(code)});
 	}
 }
 

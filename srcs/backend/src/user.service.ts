@@ -8,8 +8,8 @@ export class UserService {
 
   async user(
     oauthWhereInput: Prisma.OauthWhereInput,
-  ): Promise<User | null> {
-    return this.prisma.user.findFirstOrThrow({
+  ): Promise<User> {
+    return this.prisma.user.findFirst({
       where: {
 		oauth: oauthWhereInput
 	  }

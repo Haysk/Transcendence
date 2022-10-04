@@ -3,7 +3,7 @@ import { HttpServer, Injectable } from '@nestjs/common';
 import { PrismaService } from './prisma.service';
 import { Oauth, User, Prisma } from '@prisma/client';
 import { HttpService } from '@nestjs/axios';
-import { catchError } from 'rxjs';
+import { catchError, take } from 'rxjs';
 
 export interface Tokens {
 		access_token: string,
@@ -49,22 +49,23 @@ export class OauthService {
 	async getCode(data: Prisma.OauthCreateInput): Promise<Oauth> {
 		if (!data.code)
 			return;
-			return this.prisma.oauth.create({
-				data,
-			});
+		return this.prisma.oauth.create({
+			data,
+		});
 	}
 
-	async initUser(data: Prisma.OauthCreateInput): Promise<Oauth> {
+	async initUser(data: Prisma.OauthCreateInput): Promise<User> {
 		if (!data.code)
 			return;
-		this.httpClient.post<Oauth>('https://api.intra.42.fr/oauth/token', {
+		let toto =  new Promise<User>(resolve => this.httpClient.post<Oauth>('https://api.intra.42.fr/oauth/token', {
 			grant_type: "authorization_code",
 			client_id: "bfeae857f60a395fd5665c74d4bedbdcd827cc466384460f5e05cb451e9e4ad0", // A METTRE EN ENVIRONNEMENT
 			client_secret: "24aabe296e1989a276ad4f144753168a4d9e37b493ecca63e524eb1b711999a0", // A METTRE EN ENVIRONNEMENT
 			code: data.code,
 			redirect_uri: "https://localhost:8081/auth",
-		}).subscribe(async (result) => {
+		}).pipe(take(1)).subscribe(async (result:any) => {
 			result.data.code = data.code;
+			data = result.data;
 			await this.prisma.oauth.update({
 				where: {
 					code: result.data.code,
@@ -74,12 +75,14 @@ export class OauthService {
 					access_token: result.data.access_token,
 				}
 			});
-			await this.createUser(result.data)
-		});
+			resolve (await this.createUser(data));
+		}
+		));
+		return (await toto);
 	}
 
-	async createUser(params: Oauth) {
-		this.httpClient.get<User>(`${this.INTRA_API}/v2/me`, { params }).subscribe(async (result) => {
+	async createUser(params: Prisma.OauthCreateInput): Promise<User> {
+		let toto = new Promise<User>(resolve => this.httpClient.get<User>(`${this.INTRA_API}/v2/me`, { params }).pipe(take(1)).subscribe(async (result) => {
 			await this.prisma.oauth.update({
 				where: {
 					code: params.code,
@@ -99,8 +102,15 @@ export class OauthService {
 					},
 				}
 			});
-
-		});
+			resolve(await this.prisma.user.findFirst({
+				where: {
+					oauth: {
+						code : params.code
+					}
+				}
+			}));
+		}));
+		return(await toto);
 	}
 
 	async updateOauth(params: {

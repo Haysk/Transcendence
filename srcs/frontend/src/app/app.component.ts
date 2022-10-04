@@ -16,6 +16,9 @@ export class AppComponent implements OnInit{
   constructor(){
   }
   ngOnInit(): void {
-    //this.user = {id: 1, name: 'adylwsk', avatarUrl: '', online: true, sockets: NULL};
+  }
+
+  public getLogin(): string {
+	return localStorage["login"]
   }
 }

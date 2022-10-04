@@ -33,8 +33,9 @@ export class ApiService {
     return this.httpClient.delete(`${this.API_SERVER}/tech/${id}`);
   }
 
-  getUser(code: string | null)
+  getUser(code: string)
   {
+	console.log("toto");
     return this.httpClient.get<User>(`${this.API_SERVER}/user/${code}`);
   }
 
@@ -53,6 +54,6 @@ export class ApiService {
 
   postOauthCode(code: string) {
 	console.log("post :" + code);
-	return this.httpClient.post<Oauth>(`${this.API_SERVER}/auth/token/code`, {code});
+	return this.httpClient.post<User>(`${this.API_SERVER}/auth/token/code`, {code});
   }
 }
