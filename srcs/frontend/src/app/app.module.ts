@@ -22,6 +22,7 @@ import { DirectChatComponent } from './direct-chat/direct-chat.component';
 import { ChatHistoryComponent } from './chat-history/chat-history.component';
 import { SelectUserComponent } from './select-user/select-user.component';
 import { AuthComponent } from './auth/auth.component';
+import { SalonComponent } from './salon/salon.component';
 
 @NgModule({
   declarations: [
@@ -44,7 +45,8 @@ import { AuthComponent } from './auth/auth.component';
     ChatHistoryComponent,
     SelectUserComponent,
     AuthComponent,
-    HeaderComponent
+    HeaderComponent,
+    SalonComponent
   ],
   imports: [
     BrowserModule,
@@ -53,7 +55,9 @@ import { AuthComponent } from './auth/auth.component';
     HttpClientModule,
     FormsModule
   ],
-  providers: [],
+  providers: [
+    
+  ],
   bootstrap: [AppComponent]
 })
 export class AppModule { }

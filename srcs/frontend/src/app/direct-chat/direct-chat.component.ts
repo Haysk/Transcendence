@@ -29,6 +29,6 @@ export class DirectChatComponent implements OnInit {
     this.apiService.createMessage({userId: this.Dest.id, fromUserName: this.Me.name , fromUserId: this.Me.id, content: this.message}).subscribe((result)=>{
       console.log(result);
     });
-    this.message = '';
+    this.message = "";
   }
 }

@@ -1,0 +1,6 @@
+<h2>Welcome to Salon Transendence</h2>
+
+chilee:<input type="text" (keydown.enter)="sendMessage()" [(ngModel)]="message">
+<div class="" *ngFor="let userMessage of conversation">
+    {{ userMessage }}
+</div>

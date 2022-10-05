@@ -9,6 +9,7 @@ import { VipRoomComponent } from './vip-room/vip-room.component';
 import { RestRoomComponent } from './rest-room/rest-room.component';
 import { LoginComponent } from './login/login.component';
 import { ChatComponent } from './chat/chat.component';
+import { SalonComponent } from './salon/salon.component';
 
 
 
@@ -23,7 +24,8 @@ const routes: Routes = [
   { path: 'pong', component: PongComponent },
   { path: 'home', component: HomeComponent },
   { path: 'chat', component: ChatComponent },
-  { path: 'auth', component: AuthComponent }
+  { path: 'auth', component: AuthComponent },
+  { path: 'salon', component: SalonComponent}
 ];
 
 @NgModule({

@@ -55,4 +55,10 @@ export class ApiService {
 	console.log("post :" + code);
 	return this.httpClient.post<Oauth>(`${this.API_SERVER}/auth/token/code`, {code});
   }
+
+  //pour la page Show-room-affiche les matches en cours
+  getMatches(){
+    return ["chilee vs ade-temm", "anclarmat vs antton-t", "hello kitty vs snoppy"];
+  }
+
 }
