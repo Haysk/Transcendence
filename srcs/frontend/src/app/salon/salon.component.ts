@@ -1,4 +1,6 @@
 import { Component, OnInit } from '@angular/core';
+import { ApiService } from '../services/api.service';
+
 
 @Component({
   selector: 'app-salon',
@@ -7,11 +9,14 @@ import { Component, OnInit } from '@angular/core';
 })
 export class SalonComponent implements OnInit {
 
+  guests:string[] = [];
   message: string= '';
   conversation: string[] =[];
- 
+  
 
-  constructor() { }
+  constructor(private apiService:ApiService) {
+    this.guests = apiService.getGuests();
+   }
 
   ngOnInit(): void {
   }

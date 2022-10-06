@@ -61,4 +61,9 @@ export class ApiService {
     return ["chilee vs ade-temm", "anclarmat vs antton-t", "hello kitty vs snoppy"];
   }
 
+  //pour la page salon - palyers in salon
+  getGuests(){
+    return ["adylewsk", "chilee", "anclamar"];
+  }
+
 }

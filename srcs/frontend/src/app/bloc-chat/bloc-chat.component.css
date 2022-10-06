@@ -2,17 +2,12 @@
     position: fixed;
     bottom:0px;
     right:0px;
-    width: 400px;
+    width: 500px;
     color :rgb(53, 53, 46);
-    text-align: center;
+    
     font-size: large;
     z-index: 1;
-    /* background-color: blueviolet;
-   */
-    /* background-image: url("../../assets/icons/chatroom-f.jpg");
-    background-size: contain;
-    background-repeat: no-repeat;
-    background-position: center;  */
+
 }
 .page_input{
     display: flex;
@@ -85,16 +80,11 @@ button:hover{
         position: fixed;
         bottom:0px;
         right:0px;
-        width: 300px;
+        width: 500px;
         color :rgb(53, 53, 46);
-        text-align: center;
+        
         font-size: large;
-        /* background-color: blueviolet; */
-      
-        /* background-image: url("../../assets/icons/chatroom-f.jpg");
-        background-size: contain;
-        background-repeat: no-repeat;
-        background-position: center;  */
+        z-index: 1;
     }
     .page_input{
         display: flex;

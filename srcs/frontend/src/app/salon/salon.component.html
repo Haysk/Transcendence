@@ -1,6 +1,48 @@
-<h2>Welcome to Salon Transendence</h2>
+<div class="background_salon">
 
-chilee:<input type="text" (keydown.enter)="sendMessage()" [(ngModel)]="message">
-<div class="" *ngFor="let userMessage of conversation">
-    {{ userMessage }}
-</div>
+<div class="all_salon">
+
+    <div class="titre_salon">
+        <div class="titre_salon_p1">Channel &nbsp;</div>
+        <div class="titre_salon_p2">"Name Chanenel"</div>
+        <div class="titre_salon_p3">
+            <button type ="exit"><span>exit</span></button>
+        </div>
+    </div><!-- fin de titre_salon -->
+
+
+
+
+    <div class="contenu_salon"> 
+
+        <div class="env_conversation" style="overflow-y: auto; height: xyz;" #scrollMe [scrollTop]="scrollMe.scrollHeight">
+            <div class="conversation_salon" *ngFor="let userMessage of conversation"> {{ userMessage }}
+            </div><!-- fin de conversation_salon -->
+        </div><!-- fin de env_conversation -->
+        
+        <div class="guest_salon">
+            <div class="titre_guest">
+                Guests in Salon
+            </div><!-- fin de titre_guest -->
+
+            <div class="user_salon" *ngFor="let guest of guests">
+                <div class="avatar_user" style="background-image:url(../../assets/adylewsk.jpg)"> </div>
+                <div class="name_user">{{guest}}</div>
+            </div><!-- fin de user_salon -->
+
+        </div><!-- fin de guest_salon -->
+
+    </div><!-- fin de contenu_salon -->
+
+
+
+
+    <div class="input_salon">
+    <input type="text" (keydown.enter)="sendMessage()" [(ngModel)]="message">
+    </div><!-- fin de input_salon -->
+
+
+
+</div><!-- fin de all_salon -->
+
+</div><!-- fin de background_salon -->
