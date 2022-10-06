@@ -3,12 +3,13 @@ import { Injectable } from '@angular/core';
 import { Tech } from '../models/technology';
 import { User } from '../models/user'
 import { Message } from '../models/message';
+import { environment } from 'src/environments/environment';
 
 @Injectable({
   providedIn: 'root'
 })
 export class ApiService {
-  API_SERVER = "https://141.145.202.240/api";
+  API_SERVER = "https://" + environment.IP_HOST + "/api";
 
   constructor(private httpClient: HttpClient) { }
 

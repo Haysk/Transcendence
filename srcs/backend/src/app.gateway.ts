@@ -11,7 +11,7 @@ import { Server, Socket } from 'socket.io';
 
 @WebSocketGateway({
   cors: {
-    origin: 'https://141.145.202.240',
+    origin: 'https://' + process.env.IP_HOST,
     credential:true,
   },
 })

@@ -1,6 +1,7 @@
 import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs';
 import { io } from 'socket.io-client';
+import { environment } from 'src/environments/environment';
 import { IGameStates } from '../pong/game/interfaces/game-states.interface';
 import { IInput } from '../pong/game/interfaces/input.interface';
 
@@ -8,7 +9,7 @@ import { IInput } from '../pong/game/interfaces/input.interface';
   providedIn: 'root'
 })
 export class SocketService {
-  private url = 'https://141.145.202.240';
+  private url = 'https://' + environment.IP_HOST;
   private socket;
 
   constructor() {
