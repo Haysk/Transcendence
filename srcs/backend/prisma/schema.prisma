@@ -86,7 +86,6 @@ model           Message {
 
 model Oauth {
 	id Int @default(autoincrement()) @id
-	code String @unique
 	refresh_token String? @unique
 	access_token String? @unique
 	user User?

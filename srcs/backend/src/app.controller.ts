@@ -11,7 +11,7 @@ import { UserService } from './user.service';
 import { TechService } from './tech.service';
 import { MessageService } from './message.service';
 import { OauthService } from './oauth.service';
-import { User as UserModel, Tech as TechModel, Oauth as OauthModel, Message as MessageModel } from '@prisma/client';
+import { User as UserModel, Tech as TechModel, Oauth as OauthModel, Message as MessageModel, Prisma, PrismaClient } from '@prisma/client';
 import { delay } from 'rxjs';
 
 @Controller()
@@ -74,16 +74,22 @@ export class AppController {
 
 	@Post('auth/token/code')
 	async postInitOauth(
-		@Body() oauthData: {code: string}
+		@Body() oauthCode: {code: string}
 	): Promise<UserModel> {
-		await this.oauthService.getCode(oauthData);
-		return await this.oauthService.initUser(oauthData);
+		var oauth = await this.oauthService.getToken(oauthCode);
+		if (oauth != null) {
+			var user = await this.userService.createUser(oauth);
+			return user;
+		}
+		else {
+			throw Prisma.PrismaClientKnownRequestError
+		}
 		//return this.userService.user(oauthData);
 	}
 
-	@Get('user/:code')
-	async getUserByCode(@Param('code') code: string): Promise<UserModel> {
-		return await this.userService.user({code: String(code)});
-	}
+	// @Get('user/:code')
+	// async getUserByCode(@Param('code') code: string): Promise<UserModel> {
+	// 	return await this.userService.user({code: String(code)});
+	// }
 }
 
