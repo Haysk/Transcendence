@@ -22,6 +22,8 @@ import { DirectChatComponent } from './direct-chat/direct-chat.component';
 import { ChatHistoryComponent } from './chat-history/chat-history.component';
 import { SelectUserComponent } from './select-user/select-user.component';
 import { AuthComponent } from './auth/auth.component';
+import { ChannelComponent } from './channel/channel.component';
+import { FriendComponent } from './friend/friend.component';
 
 @NgModule({
   declarations: [
@@ -44,7 +46,9 @@ import { AuthComponent } from './auth/auth.component';
     ChatHistoryComponent,
     SelectUserComponent,
     AuthComponent,
-    HeaderComponent
+    HeaderComponent,
+    ChannelComponent,
+    FriendComponent
   ],
   imports: [
     BrowserModule,

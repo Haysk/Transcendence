@@ -7,9 +7,12 @@ import { TechService } from './tech.service';
 import { AppGateway } from './app.gateway';
 import { HttpModule } from '@nestjs/axios';
 import { OauthService } from './oauth.service';
+import { SocketModule } from './socket/socket.module';
 
 @Module({
-  imports: [HttpModule],
+  imports: [HttpModule,
+    SocketModule
+  ],
   controllers: [
     AppController
   ],

@@ -9,6 +9,8 @@ import { VipRoomComponent } from './vip-room/vip-room.component';
 import { RestRoomComponent } from './rest-room/rest-room.component';
 import { LoginComponent } from './login/login.component';
 import { ChatComponent } from './chat/chat.component';
+import { ChannelComponent } from './channel/channel.component';
+import { FriendComponent } from './friend/friend.component';
 
 
 
@@ -23,7 +25,9 @@ const routes: Routes = [
   { path: 'pong', component: PongComponent },
   { path: 'home', component: HomeComponent },
   { path: 'chat', component: ChatComponent },
-  { path: 'auth', component: AuthComponent }
+  { path: 'auth', component: AuthComponent },
+  { path: 'channel', component:ChannelComponent},
+  { path: 'friend', component:FriendComponent}
 ];
 
 @NgModule({
