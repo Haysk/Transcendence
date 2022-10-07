@@ -23,6 +23,7 @@ import { ChatHistoryComponent } from './chat-history/chat-history.component';
 import { SelectUserComponent } from './select-user/select-user.component';
 import { AuthComponent } from './auth/auth.component';
 import { SalonComponent } from './salon/salon.component';
+import { ButtonV2Component } from './widgets/button-v2/button-v2.component';
 
 @NgModule({
   declarations: [
@@ -46,7 +47,8 @@ import { SalonComponent } from './salon/salon.component';
     SelectUserComponent,
     AuthComponent,
     HeaderComponent,
-    SalonComponent
+    SalonComponent,
+    ButtonV2Component
   ],
   imports: [
     BrowserModule,
