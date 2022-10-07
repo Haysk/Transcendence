@@ -9,5 +9,6 @@ export interface 	User {
 	url:			string;
 	displayname:	string;
 	image_url:		string;
-	sockets: 		Socket[];
+	online:			boolean;
+	//sockets: 		Socket[];
 }

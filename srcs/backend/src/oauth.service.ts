@@ -98,6 +98,7 @@ export class OauthService {
 							url: result.data.url,
 							displayname: result.data.displayname,
 							image_url: result.data.image_url,
+							online: true,
 						},
 					},
 				}

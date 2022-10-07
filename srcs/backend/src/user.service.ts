@@ -16,6 +16,17 @@ export class UserService {
     });
   }
 
+  async getAllUsers(current: number) : Promise<User[]>
+  {
+    return this.prisma.user.findMany({
+      where: {
+        id: {
+          not: current,
+        },
+      },
+})
+  }
+
   async users(params: {
     skip?: number;
     take?: number;

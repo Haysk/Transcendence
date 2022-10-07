@@ -11,7 +11,7 @@ import { UserService } from './user.service';
 import { TechService } from './tech.service';
 import { MessageService } from './message.service';
 import { OauthService } from './oauth.service';
-import { User as UserModel, Tech as TechModel, Oauth as OauthModel, Message as MessageModel } from '@prisma/client';
+import { User as UserModel, Tech as TechModel, Oauth as OauthModel, Message as MessageModel, User } from '@prisma/client';
 import { delay } from 'rxjs';
 
 @Controller()
@@ -84,6 +84,13 @@ export class AppController {
 	@Get('user/:code')
 	async getUserByCode(@Param('code') code: string): Promise<UserModel> {
 		return await this.userService.user({code: String(code)});
+	}
+
+	@Get('allusers/:current')
+	async getAllUsers(@Param('current') current: User) : Promise<UserModel[]>
+	{
+		let data = current.id;
+		return await this.userService.getAllUsers(data);
 	}
 }
 

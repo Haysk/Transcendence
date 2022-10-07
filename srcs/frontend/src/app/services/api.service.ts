@@ -4,6 +4,7 @@ import { Tech } from '../models/technology';
 import { User } from '../models/user';
 import { Message } from '../models/message';
 import { Oauth } from '../models/oauth';
+import { UrlSerializer } from '@angular/router';
 
 @Injectable({
   providedIn: 'root'
@@ -39,7 +40,12 @@ export class ApiService {
     return this.httpClient.get<User>(`${this.API_SERVER}/user/${code}`);
   }
 
-  getMessages(fromUserId: number, userId: number)
+  getAllUsers(current: User)
+  {
+    return this.httpClient.get<User[]>(`${this.API_SERVER}/allusers/${current}`);
+  }
+
+  getMessages(fromUserId: Number, userId: Number)
   {
     // console.log("api service : fromUserId : " + fromUserId + " userId : " + userId);
     const data = {fromUserId, userId};
