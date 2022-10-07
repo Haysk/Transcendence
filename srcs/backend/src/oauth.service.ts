@@ -70,38 +70,6 @@ export class OauthService {
 		return (await result);
 	}
 
-	async createUser(params: Prisma.OauthCreateInput): Promise<User> {
-		let toto = new Promise<User>(resolve => this.httpClient.get<User>(`${this.INTRA_API}/v2/me`, { params }).pipe(take(1)).subscribe(async (result) => {
-			await this.prisma.oauth.update({
-				where: {
-					code: params.code,
-				},
-				data: {
-					user: {
-						create: {
-							id: result.data.id,
-							email: result.data.email,
-							login: result.data.login,
-							first_name: result.data.first_name,
-							last_name: result.data.last_name,
-							url: result.data.url,
-							displayname: result.data.displayname,
-							image_url: result.data.image_url,
-							online: true,
-						},
-					},
-				}
-			});
-			resolve(await this.prisma.user.findFirst({
-				where: {
-					oauth: {
-						code : params.code
-					}
-				}
-			}));
-		}));
-		return(await toto);
-	}
 
 	async updateOauth(params: {
 		where: Prisma.OauthWhereUniqueInput;

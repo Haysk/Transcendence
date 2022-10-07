@@ -40,9 +40,14 @@ export class ApiService {
     return this.httpClient.get<User>(`${this.API_SERVER}/user/${code}`);
   }
 
-  getAllUsers(current: User)
+  getAllUsers(current: number)
   {
     return this.httpClient.get<User[]>(`${this.API_SERVER}/allusers/${current}`);
+  }
+
+  createUser(data: User)
+  {
+    return this.httpClient.post<User>(`${this.API_SERVER}/createUser`, data);
   }
 
   getMessages(fromUserId: Number, userId: Number)

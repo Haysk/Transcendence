@@ -2,6 +2,8 @@ import { Component, OnInit, Input, Inject } from '@angular/core';
 import { SocketService } from '../services/socket.service';
 import { ApiService } from '../services/api.service';
 import { User } from '../models/user'
+import { NgForm }   from '@angular/forms';
+
 
 @Component({
   selector: 'app-chat',
@@ -36,8 +38,8 @@ export class ChatComponent implements OnInit {
               image_url: this.getImageUrl(),
               online: this.getOnline(),
             };
-  Dest!: User;
-  User_list: User[] = this.getUsers();
+  Dest: User = {id: 0, login: "", email: "", first_name: "", last_name: "", url: "", displayname: "", image_url: "", online: false};
+  User_list!: User[];
   message: string = '';
   messages: String[] = [];
 
@@ -45,25 +47,30 @@ export class ChatComponent implements OnInit {
   {
   }
 
-  ngOnInit(): void {
-  }
-
-  getUsers() : User[]{
-    this.apiService.getAllUsers(this.Me).subscribe(
+  async ngOnInit(): Promise<void> {
+    await this.apiService.getAllUsers(this.Me.id).subscribe(
       (result => {
         this.User_list = result;
       }));
-    this.Dest = this.User_list[0];
-    return this.User_list;
+  }
+  
+  onSubmitForm(form: NgForm){
+    this.Dest.id = Number(form.value.id);
+    this.Dest.login = form.value.login;
+    this.Dest.email = form.value.email;
+    this.Dest.first_name = form.value.first_name;
+    this.Dest.last_name = form.value.last_name;
+    this.Dest.url = form.value.url;
+    this.Dest.displayname = form.value.display_name;
+    this.Dest.image_url = form.value.image_url;
+    this.Dest.online = true;
+    this.apiService.createUser(this.Dest);
   }
 
-  // getUsers(){
-  //   this.apiService.getAllUsers(this.Me).subscribe(
-  //     (result => {
-  //       this.User_list = result;
-  //     }));
-  //   this.Dest = this.User_list[0];
-  // }
+  addUser()
+  {
+    // this.apiService.
+  }
 
   getId(): number{
     let id = localStorage.getItem("id");

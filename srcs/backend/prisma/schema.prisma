@@ -59,7 +59,7 @@ model User {
 	url				String?
 	displayname		String?
 	image_url		String?
-	online			Boolean
+	online			Boolean @default(false)
 	oauth_id		Int @unique
 	oauth Oauth?	@relation(fields: [oauth_id], references: [id])
 	sockets			Socket[]

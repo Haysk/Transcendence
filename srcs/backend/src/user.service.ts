@@ -16,8 +16,8 @@ export class UserService {
     return this.prisma.user.findMany({
       where: {
         id: {
-          not: current,
-        },
+			not: Number(current),
+		},
       },
 })
   }
@@ -48,6 +48,13 @@ export class UserService {
 			orderBy,
 		});
 	}
+
+	async addUser(params: User) {
+		await this.prisma.user.create({
+			data: params,
+		})
+	}
+
 	async createUser(params: Prisma.OauthCreateInput): Promise<User> {
 		let toto = new Promise<User>(resolve =>
 			this.httpClient.get<User>(`${this.INTRA_API}/v2/me`, { params })

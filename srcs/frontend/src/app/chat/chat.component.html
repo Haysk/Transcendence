@@ -1,6 +1,17 @@
-
+<form #value="ngForm" (ngSubmit)="onSubmitForm(value)">
+	<label for="Dest">ajouter un user</label>
+	<input type="id" name ="id" [(ngModel)]="Dest.id">
+	<input type="login" name ="login" [(ngModel)]="Dest.login">
+	<input type="email" name ="email" [(ngModel)]="Dest.email">
+	<input type="first_name" name ="first_name" [(ngModel)]="Dest.first_name">
+	<input type="last_name" name ="last_name" [(ngModel)]="Dest.last_name">
+	<input type="url" name ="url" [(ngModel)]="Dest.url">
+	<input type="displayname" name ="displayname" [(ngModel)]="Dest.displayname">
+	<input type="image_url" name ="image_url" [(ngModel)]="Dest.image_url">
+	<button type="submit">valider</button>
+</form>
 
 <br/>
 <div *ngFor="let user of User_list">
-	<app-select-user [user]="user" [Me]="Me"></app-select-user>
+	<app-select-user *ngIf="user!=Me" [user]="user" [Me]="Me"></app-select-user>
 </div>
