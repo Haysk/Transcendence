@@ -7,6 +7,8 @@ import { Component, OnInit } from '@angular/core';
 })
 export class VipRoomComponent implements OnInit {
 
+  displayname = localStorage.getItem("displayname");
+  image_url = localStorage.getItem("image_url");
   constructor() { }
 
   ngOnInit(): void {

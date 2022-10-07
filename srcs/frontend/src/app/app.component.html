@@ -1,8 +1,8 @@
 
 <!-- <app-header [user]="user" ></app-header>
 <app-bloc-chat ></app-bloc-chat> -->
-<app-bloc-chat *ngIf="getLogin()"></app-bloc-chat>
-<app-header [user]="user" *ngIf="getLogin()" ></app-header>
+<app-bloc-chat *ngIf="getRoute() != '/'"></app-bloc-chat>
+<app-header [user]="user" *ngIf="getRoute() != '/'" ></app-header>
 <router-outlet></router-outlet>
 
 
