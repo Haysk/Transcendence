@@ -7,6 +7,8 @@ import {
   WebSocketGateway,
   WebSocketServer,
 } from '@nestjs/websockets';
+import { PrismaClient } from '@prisma/client';
+import { PrismaService } from './prisma.service';
 import { Server, Socket } from 'socket.io';
 
 @WebSocketGateway({
@@ -18,6 +20,8 @@ import { Server, Socket } from 'socket.io';
 export class AppGateway
   implements OnGatewayInit, OnGatewayConnection, OnGatewayDisconnect
 {
+  constructor(private Prisma : PrismaService){}
+
   @WebSocketServer()
   server!: Server;
   private logger: Logger = new Logger('AppGateway');
@@ -25,6 +29,28 @@ export class AppGateway
   @SubscribeMessage('msgToServer')
   handleMessage(client: any, payload: any): void {
     this.server.emit('msgToClient', payload);
+  }
+
+  @SubscribeMessage('sendLogin')
+  async setupLogin(client: Socket, payload: any): Promise<void>
+  {
+    //console.log("LOGIN :" + payload + " | mysocket : " + client.id)
+    await this.Prisma.user.update({
+      where: {
+        login: payload,
+      },
+      data: {
+        mysocket: client.id,
+      },
+    });
+  }
+
+  @SubscribeMessage('msgToMe')
+  handlePrivMsg(client:any, payload: any): void
+  {
+    this.server.sockets.socketsJoin('test_room');
+    this.server.sockets.to("test_room").emit('msgToClient', client);
+    //this.server.emit('msgToClient', client);
   }
 
   @SubscribeMessage('moveToServer')

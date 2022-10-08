@@ -42,6 +42,7 @@ export class ChatComponent implements OnInit {
   User_list!: User[];
   message: string = '';
   messages: String[] = [];
+  test!: string;
 
   constructor(private socketService: SocketService, private apiService: ApiService)
   {
@@ -52,6 +53,13 @@ export class ChatComponent implements OnInit {
       (result => {
         this.User_list = result;
       }));
+
+      this.socketService.sendLogin(this.Me.login);
+
+      this.socketService.getPrivMsg().subscribe((result => {
+        this.test = result;
+        console.log("ICI LE TEST :" + this.test)
+      }))
   }
   
   onSubmitForm(form: NgForm){

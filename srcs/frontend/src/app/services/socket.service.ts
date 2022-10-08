@@ -13,8 +13,24 @@ export class SocketService {
     this.socket = io(this.url);
   }
 
+  getId(): String{
+    return this.socket.id;
+  }
+
   sendMessage(message: string): void {
     this.socket.emit('msgToServer', message);
+  }
+
+  sendLogin(login: string): void {
+    this.socket.emit('sendLogin', login);
+  }
+
+  getPrivMsg() : Observable<string> {
+    return new Observable<string>((observer) => {
+      this.socket.on('msgToClient', (message) => {
+        observer.next(message)
+      });
+    });
   }
 
   getMessage(): Observable<string> {

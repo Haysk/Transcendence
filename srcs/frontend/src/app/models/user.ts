@@ -10,5 +10,6 @@ export interface 	User {
 	displayname:	string;
 	image_url:		string;
 	online:			boolean;
+	socket?:		string;			
 	//sockets: 		Socket[];
 }

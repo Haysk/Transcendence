@@ -77,6 +77,7 @@ export class UserService {
 										access_token: params.access_token,
 									},
 								},
+								mysocket: ""
 							}
 						});
 					} catch (e) {
