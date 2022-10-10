@@ -37,7 +37,7 @@ export class MessageService {
         fromUserId: { in: [Number(params.fromUserId), Number(params.userId)]},
         userId: {in: [Number(params.userId), Number(params.fromUserId)]},
       }
-    })
+    });
   }
 
   async createMessage(data: Prisma.MessageCreateInput): Promise<Message> {

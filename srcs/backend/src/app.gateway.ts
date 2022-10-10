@@ -40,7 +40,7 @@ export class AppGateway
         login: payload,
       },
       data: {
-        mysocket: client.id,
+        socket: client.id,
       },
     });
   }
@@ -48,8 +48,8 @@ export class AppGateway
   @SubscribeMessage('msgToMe')
   handlePrivMsg(client:any, payload: any): void
   {
-    this.server.sockets.socketsJoin('test_room');
-    this.server.sockets.to("test_room").emit('msgToClient', client);
+    // this.server.sockets.socketsJoin('test_room');
+    this.server.sockets.to(payload).emit('msgToClient', client);
     //this.server.emit('msgToClient', client);
   }
 

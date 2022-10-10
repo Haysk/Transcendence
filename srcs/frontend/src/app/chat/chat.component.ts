@@ -54,30 +54,11 @@ export class ChatComponent implements OnInit {
         this.User_list = result;
       }));
 
-      this.socketService.sendLogin(this.Me.login);
+      this.socketService.sendLogin(this.Me.login); //obtenir son socket
 
       this.socketService.getPrivMsg().subscribe((result => {
         this.test = result;
-        console.log("ICI LE TEST :" + this.test)
       }))
-  }
-  
-  onSubmitForm(form: NgForm){
-    this.Dest.id = Number(form.value.id);
-    this.Dest.login = form.value.login;
-    this.Dest.email = form.value.email;
-    this.Dest.first_name = form.value.first_name;
-    this.Dest.last_name = form.value.last_name;
-    this.Dest.url = form.value.url;
-    this.Dest.displayname = form.value.display_name;
-    this.Dest.image_url = form.value.image_url;
-    this.Dest.online = true;
-    this.apiService.createUser(this.Dest);
-  }
-
-  addUser()
-  {
-    // this.apiService.
   }
 
   getId(): number{

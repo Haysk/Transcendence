@@ -12,7 +12,6 @@ import { TechService } from './tech.service';
 import { MessageService } from './message.service';
 import { OauthService } from './oauth.service';
 import { User as UserModel, Tech as TechModel, Oauth as OauthModel, Message as MessageModel, Prisma, PrismaClient } from '@prisma/client';
-import { delay, first } from 'rxjs';
 
 @Controller()
 export class AppController {
@@ -29,6 +28,12 @@ export class AppController {
 	): Promise<MessageModel> {
 		console.log("@Post message dans app.controller backend");
 		return await this.messageService.createMessage(messageData);
+	}
+
+	@Get('getSocket/:login')
+	async getSocket(@Param('login') login: string) : Promise<UserModel>
+	{
+		return await this.userService.findUsertByLogin(login);
 	}
 
 	@Get('messages/:fromUserId:userId')
@@ -86,21 +91,6 @@ export class AppController {
 		}
 		//return this.userService.user(oauthData);
 	}
-
-	// @Get('user/:code')
-	// async getUserByCode(@Param('code') code: string): Promise<UserModel> {
-	// 	return await this.userService.user({code: String(code)});
-	// }
-	
-	// @Post('createUser')
-	// async createUser(@Param('id') id: number, @Param('login') login: string, @Param('email') email: string
-	// , @Param('first_name') first_name: string, @Param('last_name') last_name: string, @Param('url') url: string
-	// , @Param('displayname') displayname: string, @Param('image_url') image_url: string, @Param('online') online: boolean
-	// ): Promise<void>
-	// {
-	// 	const tmp = {id: id, login: login, email: email, first_name: first_name, last_name: last_name, url: url, displayname: displayname, image_url: image_url, online: online, oauth_id:0, socket:""}; 
-	// 	return await this.userService.addUser(tmp);
-	// }
 
 	@Get('allusers/:current')
 	async getAllUsers(@Param('current') id: number) : Promise<UserModel[]>

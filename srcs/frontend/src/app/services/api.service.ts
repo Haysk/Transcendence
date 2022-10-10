@@ -3,6 +3,7 @@ import { Injectable } from '@angular/core';
 import { Tech } from '../models/technology';
 import { User } from '../models/user';
 import { Message } from '../models/message';
+import { Observable } from 'rxjs';
 import { Oauth } from '../models/oauth';
 import { UrlSerializer } from '@angular/router';
 
@@ -13,6 +14,11 @@ export class ApiService {
   API_SERVER = "https://localhost:8081/api";
 
   constructor(private httpClient: HttpClient) { }
+
+  getSocket(login: string)
+  {
+    return this.httpClient.get<User>(`${this.API_SERVER}/getSocket/${login}`)
+  }
 
   getTechs() {
     return this.httpClient.get<Tech[]>(`${this.API_SERVER}/techs`);
@@ -52,7 +58,7 @@ export class ApiService {
 
   getMessages(fromUserId: Number, userId: Number)
   {
-    // console.log("api service : fromUserId : " + fromUserId + " userId : " + userId);
+    console.log("api service : fromUserId : " + fromUserId + " userId : " + userId);
     const data = {fromUserId, userId};
     return this.httpClient.get<Message[]>(`${this.API_SERVER}/messages/${fromUserId}${userId}`);
   }

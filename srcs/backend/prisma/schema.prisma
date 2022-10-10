@@ -29,7 +29,7 @@ model User {
 	online			Boolean @default(false)
 	oauth_id		Int @unique
 	oauth Oauth?	@relation(fields: [oauth_id], references: [id])
-	mysocket		String?
+	socket		String?
 	friends			User[] @relation("friends")
 	friendsof		User[] @relation("friends")
 	blocked			User[] @relation("blocked")

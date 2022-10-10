@@ -22,6 +22,15 @@ export class UserService {
 })
   }
 
+  async findUsertByLogin(login: string) : Promise<User>
+  {
+	return await this.prisma.user.findUnique({
+		where: {
+			login: login
+		}
+	})
+  }
+
 	async user(
 		oauthWhereInput: Prisma.OauthWhereInput,
 	): Promise<User> {
@@ -77,7 +86,7 @@ export class UserService {
 										access_token: params.access_token,
 									},
 								},
-								mysocket: ""
+								socket: ""
 							}
 						});
 					} catch (e) {
