@@ -36,12 +36,12 @@ export class AppController {
 		return await this.userService.findUsertByLogin(login);
 	}
 
-	@Get('messages/:fromUserId:userId')
+	@Get('messages/:fromUserId/:userId')
 	async getMessages(
-		@Param('fromUserId') fromUserId: number, @Param('userId') userId: number
+		@Param('fromUserId') fromUserId: Number, @Param('userId') userId: Number
 		): Promise<MessageModel[]> {
-			const data = {fromUserId, userId};
-			//console.log("app.controller : fromUserId : " + fromUserId + " userId : " + userId);
+			let data  = {fromUserId, userId};
+			console.log("app.controller : data.fromUserId : " + data.fromUserId + " data.userId : " + data.userId);
 			return await this.messageService.getMessages(data);
 		}
 	

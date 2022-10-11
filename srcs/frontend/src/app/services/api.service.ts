@@ -58,14 +58,15 @@ export class ApiService {
 
   getMessages(fromUserId: Number, userId: Number)
   {
-    console.log("api service : fromUserId : " + fromUserId + " userId : " + userId);
+    // console.log("api service : fromUserId : " + fromUserId + " userId : " + userId);
     const data = {fromUserId, userId};
-    return this.httpClient.get<Message[]>(`${this.API_SERVER}/messages/${fromUserId}${userId}`);
+    console.log("api service : data.fromUserId : " + data.fromUserId + " data.userId : " + data.userId);
+    return this.httpClient.get<Message[]>(`${this.API_SERVER}/messages/${fromUserId}/${userId}`);
   }
 
   createMessage(message: Message)
   {    
-    console.log("post message api service called");
+    // console.log("post message api service called");
     return this.httpClient.post<Message>(`${this.API_SERVER}/message`, message);
   }
 
