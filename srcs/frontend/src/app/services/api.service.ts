@@ -42,7 +42,7 @@ export class ApiService {
   {
     // console.log("api service : fromUserId : " + fromUserId + " userId : " + userId);
     const data = {fromUserId, userId};
-    return this.httpClient.get<Message[]>(`${this.API_SERVER}/messages/${fromUserId}${userId}`);
+    return this.httpClient.get<Message[]>(`${this.API_SERVER}/messages/${fromUserId}/${userId}`);
   }
 
   createMessage(message: Message)
@@ -63,7 +63,7 @@ export class ApiService {
 
   //pour la page salon - palyers in salon
   getGuests(){
-    return ["adylewsk", "chilee", "anclamar"];
+    return ["chilee", "anclamar", "anton"];
   }
 
 }

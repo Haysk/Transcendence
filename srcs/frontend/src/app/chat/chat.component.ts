@@ -11,10 +11,11 @@ import { User } from '../models/user'
     {
       provide: 'user_list',
       useValue: [
-        {id: 1, name: "Alexandre", online: true},
+        {id: 1, name: "Alex", online: true},
         {id: 2, name: "Antoine", online: true},
-        {id: 3, name: "Arnaud", online: false},
-        {id: 4, name: "Ching", online: true}
+        {id: 3, name: "Arnaud", online: true},
+        {id: 4, name: "Ching", online: false},
+
       ]
     },
     {
@@ -30,6 +31,12 @@ export class ChatComponent implements OnInit {
   @Input() User_list!: User[];
   message: string = '';
   messages: String[] = [];
+  showchat:Boolean=false ;
+
+  receiveShowchat($event: Boolean) {
+    console.log("ICI :" + $event)
+    this.showchat = $event
+  }
 
   constructor(private socketService: SocketService, private apiService: ApiService,
     @Inject('user_list') User_list: User[], @Inject('whoAmI') Me: User)

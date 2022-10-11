@@ -1,4 +1,4 @@
-import { Component, OnInit, Input } from '@angular/core';
+import { Component, OnInit, Input, Output, EventEmitter } from '@angular/core';
 import { User } from '../models/user';
 import { ChatComponent } from '../chat/chat.component';
 
@@ -12,6 +12,8 @@ export class SelectUserComponent implements OnInit {
   @Input() user!: User;
   show_chat: Boolean = false;
   show_hide: String = "chat";
+
+  @Output() showchatEvent = new EventEmitter<Boolean>();
   constructor() { }
 
   ngOnInit(): void {
@@ -19,7 +21,8 @@ export class SelectUserComponent implements OnInit {
 
   sendBtn(dest : User): void {
     console.log("Me = " + this.Me.name + " | dest : " + dest.name);
-    this.show_chat == false ? this.show_chat = true : this.show_chat = false;
-    this.show_hide == "chat" ? this.show_hide = "close" : this.show_hide = "chat";
+    this.show_chat = this.show_chat?false:true;
+    this.show_hide = this.show_chat?"close":"chat";
+    this.showchatEvent.emit(this.show_chat); 
   }
 }

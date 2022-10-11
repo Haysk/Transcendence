@@ -195,6 +195,13 @@ button[type="exit"] span::before{
  
 }
 
+.titre_administrator{
+    color:rgb(107, 179, 155);
+    text-align: center;
+    background-color: rgb(32, 43, 39);
+
+}
+
 .titre_guest{
     color:rgb(107, 179, 155);
     text-align: center;
@@ -202,7 +209,7 @@ button[type="exit"] span::before{
 
 }
 
-.user_salon{
+/* .user_salon{
     width: 100%;
     height: auto;
     padding-top: 5px;
@@ -225,7 +232,7 @@ button[type="exit"] span::before{
     padding-left: 5px;
     color: aliceblue;
 
-}
+} */
 
 .input_salon{
     width: 100%;

@@ -24,6 +24,7 @@ import { SelectUserComponent } from './select-user/select-user.component';
 import { AuthComponent } from './auth/auth.component';
 import { SalonComponent } from './salon/salon.component';
 import { ButtonV2Component } from './widgets/button-v2/button-v2.component';
+import { UserInSalonComponent } from './widgets/user-in-salon/user-in-salon.component';
 
 @NgModule({
   declarations: [
@@ -48,7 +49,8 @@ import { ButtonV2Component } from './widgets/button-v2/button-v2.component';
     AuthComponent,
     HeaderComponent,
     SalonComponent,
-    ButtonV2Component
+    ButtonV2Component,
+    UserInSalonComponent
   ],
   imports: [
     BrowserModule,

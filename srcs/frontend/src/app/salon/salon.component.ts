@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { ApiService } from '../services/api.service';
+// import { ApiService } from '../services/api.service';
 
 
 @Component({
@@ -9,13 +9,13 @@ import { ApiService } from '../services/api.service';
 })
 export class SalonComponent implements OnInit {
 
-  guests:string[] = [];
-  message: string= '';
+  // guests:string[] = [];
   conversation: string[] =[];
+  message: string= '';
   
 
-  constructor(private apiService:ApiService) {
-    this.guests = apiService.getGuests();
+  constructor() {
+
    }
 
   ngOnInit(): void {

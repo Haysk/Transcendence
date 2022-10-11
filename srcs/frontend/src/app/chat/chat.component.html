@@ -1,4 +1,63 @@
-<br/>
+<!-- <br/>
 <div *ngFor="let user of User_list">
 	<app-select-user [user]="user" [Me]="Me"></app-select-user>
-</div>
+</div> -->
+
+
+<div class="all_chat">
+	
+	<div class="part1">
+		<img src="../../assets/icons/chat_titre.png">
+	
+		
+
+
+	</div><!-- fin de div part1 -->
+
+<!-- ///////////////////////////////////////////////////////// -->
+
+	<div class="part2">
+	
+		<div class="part2_left">
+			<!-- <app-select-user [Me]="User_list[0]" [user]="User_list[1]" (showchatEvent)="receiveShowchat($event)"></app-select-user> -->
+
+			<app-direct-chat *ngIf="this.showchat==true"> </app-direct-chat>
+
+		
+
+
+
+		</div><!-- fin de div part2_left -->
+	
+		<div class="part2_right">
+			<div class="part2_titre_online">Users list</div>
+			<div class="part2_users_online">
+				<div *ngFor="let user of User_list">
+					<app-select-user [user]="user" [Me]="Me" (showchatEvent)="receiveShowchat($event)"></app-select-user>
+				</div>
+				
+			</div>
+			<div class="part2_titre_friends">Firends Online</div>
+			<div class="part2_friends_online">
+			
+			</div>
+			<div class="part2_titre_create">Create Salon</div>
+			<div class="part2_salon_available">List of Salon</div>
+			<div class="part2_list_salon">
+				<div class="link_salon" >name of channel</div>
+			</div>
+
+		</div><!-- fin de div part2_right -->
+
+	</div><!-- fin de div part2 -->
+
+
+<!-- ///////////////////////////////////////////////////////// -->
+
+	<div class="part3">
+
+
+
+	</div><!-- fin de div part3 -->
+
+</div><!-- fin de div all-chat -->
