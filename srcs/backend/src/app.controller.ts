@@ -11,7 +11,7 @@ import { UserService } from './user.service';
 import { TechService } from './tech.service';
 import { MessageService } from './message.service';
 import { OauthService } from './oauth.service';
-import { User as UserModel, Tech as TechModel, Oauth as OauthModel, Message as MessageModel } from '@prisma/client';
+import { User as UserModel, Tech as TechModel, Oauth as OauthModel, Message as MessageModel, Prisma, PrismaClient } from '@prisma/client';
 
 @Controller()
 export class AppController {
@@ -30,6 +30,12 @@ export class AppController {
 		return await this.messageService.createMessage(messageData);
 	}
 
+	@Get('getSocket/:login')
+	async getSocket(@Param('login') login: string) : Promise<UserModel>
+	{
+		return await this.userService.findUsertByLogin(login);
+	}
+
 	@Get('messages/:fromUserId:userId')
 	async getMessages(
 		@Param('fromUserId') fromUserId: number, @Param('userId') userId: number
@@ -38,13 +44,6 @@ export class AppController {
 			//console.log("app.controller : fromUserId : " + fromUserId + " userId : " + userId);
 			return await this.messageService.getMessages(data);
 		}
-
-	@Post('user')
-	async signupUser(
-		@Body() userData: { id: number, name: string; online: boolean; avatarUrl: string },
-	): Promise<UserModel> {
-		return this.userService.createUser(userData);
-	}
 	
 	@Get('techs')
 	async getTechs(): Promise<TechModel[]> {
@@ -80,10 +79,24 @@ export class AppController {
 
 	@Post('auth/token/code')
 	async postInitOauth(
-		@Body() oauthData: {code: string}
-	) : Promise<OauthModel> {
-		this.oauthService.getCode(oauthData);
-		return this.oauthService.initUser(oauthData);
+		@Body() oauthCode: {code: string}
+	): Promise<UserModel> {
+		var oauth = await this.oauthService.getToken(oauthCode);
+		if (oauth != null) {
+			var user = await this.userService.createUser(oauth);
+			return user;
+		}
+		else {
+			throw Prisma.PrismaClientKnownRequestError
+		}
+		//return this.userService.user(oauthData);
+	}
+
+	@Get('allusers/:current')
+	async getAllUsers(@Param('current') id: number) : Promise<UserModel[]>
+	{
+		let data = id;
+		return await this.userService.getAllUsers(data);
 	}
 }
 

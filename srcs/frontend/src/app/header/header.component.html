@@ -10,9 +10,9 @@
         <a class="private_nav_header" routerLink="/rest-room"></a><!-- fin de private_nav_header -->
     </div><!-- fin de nav_header -->
         
-    <div class="username_header"> Welcome
+    <div class="username_header"> {{login}}
         <div class="logout">
-        <button type ="logout"><span>Logout</span></button>
+        <button type ="logout" (click)="logout()"><span>Logout</span></button>
         </div>
     </div><!-- fin de username_header -->
     
