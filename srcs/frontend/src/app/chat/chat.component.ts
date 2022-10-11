@@ -57,16 +57,12 @@ export class ChatComponent implements OnInit {
   User_list!: User[];
   message: string = '';
   messages: String[] = [];
-<<<<<<< HEAD
   showchat:Boolean=false ;
 
   receiveShowchat($event: Boolean) {
     console.log("ICI :" + $event)
     this.showchat = $event
   }
-=======
-  test!: string;
->>>>>>> c83c66fa1635e6e30a1e9d10c32b88e7694be931
 
   constructor(private socketService: SocketService, private apiService: ApiService)
   {
@@ -80,9 +76,9 @@ export class ChatComponent implements OnInit {
 
       this.socketService.sendLogin(this.Me.login); //obtenir son socket
 
-      this.socketService.getPrivMsg().subscribe((result => {
-        this.test = result;
-      }))
+      // this.socketService.getPrivMsg().subscribe((result => {
+      //   this.test = result;
+      // }))
   }
 
   getId(): number{

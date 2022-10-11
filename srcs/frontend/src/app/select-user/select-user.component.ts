@@ -20,7 +20,7 @@ export class SelectUserComponent implements OnInit {
   }
 
   sendBtn(dest : User): void {
-    console.log("Me = " + this.Me.name + " | dest : " + dest.name);
+    console.log("Me = " + this.Me.login + " | dest : " + dest.login);
     this.show_chat = this.show_chat?false:true;
     this.show_hide = this.show_chat?"close":"chat";
     this.showchatEvent.emit(this.show_chat); 
