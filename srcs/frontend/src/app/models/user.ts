@@ -11,5 +11,5 @@ export interface 	User {
 	image_url:		string;
 	online:			boolean;
 	socket?:		string;			
-	//sockets: 		Socket[];
+	friends?:		User[];
 }
