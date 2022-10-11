@@ -1,6 +1,7 @@
 import { Component, OnInit, Input } from '@angular/core';
 import { Friend } from '../models/friend.model';
 import { User } from '../models/user';
+import { TestingFakeProfileComponent } from '../testing-fake-profile/testing-fake-profile.component';
 
 @Component({
   selector: 'app-friend',
@@ -10,7 +11,8 @@ import { User } from '../models/user';
 export class FriendComponent implements OnInit {
   @Input() friend!: Friend;
   @Input() user!: User;
-  
+  @Input() testuser!: TestingFakeProfileComponent
+
   getUser!: User;
   test!: string;
   createDate!: Date;

@@ -24,6 +24,7 @@ import { SelectUserComponent } from './select-user/select-user.component';
 import { AuthComponent } from './auth/auth.component';
 import { ChannelComponent } from './channel/channel.component';
 import { FriendComponent } from './friend/friend.component';
+import { TestingFakeProfileComponent } from './testing-fake-profile/testing-fake-profile.component';
 
 @NgModule({
   declarations: [
@@ -48,7 +49,8 @@ import { FriendComponent } from './friend/friend.component';
     AuthComponent,
     HeaderComponent,
     ChannelComponent,
-    FriendComponent
+    FriendComponent,
+    TestingFakeProfileComponent
   ],
   imports: [
     BrowserModule,

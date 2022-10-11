@@ -1,4 +1,5 @@
-<app-select-user [user]="user"></app-select-user>
+<!-- <app-select-user [user]="user"></app-select-user> -->
+<app-testing-fake-profile [getUser]="user"></app-testing-fake-profile>
 <p>friend works!</p>
 <h2>Testing friend </h2>
 <p> ami depuis le {{ this.createDate }}</p>
@@ -9,5 +10,5 @@
     <button (click)="onAddLike()"> Like </button>
     nombre de click {{ like }}
 </p>
-<p> test import {{ user.name }} </p>
+<!-- <p> test import {{ user.name }} </p> -->
 <!-- <p>nombre d'ami {{ numberOfFriend }}</p> -->
