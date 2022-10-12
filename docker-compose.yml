@@ -59,8 +59,8 @@ services:
     image: nginx
     restart: always
     ports:
-      - '8080:80'
-      - '8081:443'
+      - ${PORT_HTTP_HOST}:80
+      - ${PORT_HTTPS_HOST}:443
     networks:
       - frontend_network
       - backend_network
