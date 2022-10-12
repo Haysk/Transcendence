@@ -26,8 +26,7 @@
     /* background-color: rgb(11, 138, 127); */
     width: 65%;
     height: 420px;
-    background-image: url("../../assets/imgs/Chat_fond_pacman.jpg");
-
+    background-image: url("../../assets/imgs/fond-chat2.jpg");
     background-size: cover;
     background-repeat: no-repeat;
     background-position: center; 

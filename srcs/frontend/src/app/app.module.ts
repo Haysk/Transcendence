@@ -21,6 +21,8 @@ import { AuthComponent } from './auth/auth.component';
 import { SalonComponent } from './salon/salon.component';
 import { ButtonV2Component } from './widgets/button-v2/button-v2.component';
 import { UserInSalonComponent } from './widgets/user-in-salon/user-in-salon.component';
+import { ButtonV3Component } from './widgets/button-v3/button-v3.component';
+import { CreateSalonComponent } from './widgets/create-salon/create-salon.component';
 
 @NgModule({
   declarations: [
@@ -42,7 +44,9 @@ import { UserInSalonComponent } from './widgets/user-in-salon/user-in-salon.comp
     HeaderComponent,
     SalonComponent,
     ButtonV2Component,
-    UserInSalonComponent
+    UserInSalonComponent,
+    ButtonV3Component,
+    CreateSalonComponent
   ],
   imports: [
     BrowserModule,

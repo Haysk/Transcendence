@@ -59,9 +59,19 @@ export class ChatComponent implements OnInit {
   messages: String[] = [];
   showchat:Boolean=false ;
 
+  showFormule:Boolean=false;
+
   receiveShowchat($event: Boolean) {
-    console.log("ICI :" + $event)
-    this.showchat = $event
+      this.showchat = $event
+  }
+
+  receiveSendDest($event : User) {
+      this.Dest = $event;
+  }
+
+  formuleCreate(){
+    this.showFormule=this.showFormule?false:true;
+
   }
 
   constructor(private socketService: SocketService, private apiService: ApiService)
@@ -144,5 +154,8 @@ export class ChatComponent implements OnInit {
     else
       return false
   }
+
+
+
 
 }

@@ -14,6 +14,8 @@ export class SelectUserComponent implements OnInit {
   show_hide: String = "chat";
 
   @Output() showchatEvent = new EventEmitter<Boolean>();
+  @Output() sendDestEvent = new EventEmitter<User>();
+
   constructor() { }
 
   ngOnInit(): void {
@@ -23,6 +25,7 @@ export class SelectUserComponent implements OnInit {
     console.log("Me = " + this.Me.login + " | dest : " + dest.login);
     this.show_chat = this.show_chat?false:true;
     this.show_hide = this.show_chat?"close":"chat";
-    this.showchatEvent.emit(this.show_chat); 
+    this.showchatEvent.emit(this.show_chat);
+    this.sendDestEvent.emit(this.user); 
   }
 }

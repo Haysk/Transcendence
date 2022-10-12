@@ -13,14 +13,20 @@ export class DirectChatComponent implements OnInit {
   @Input() Me!: User;
   @Input() Dest!: User;
   message: string = '';
-  messages: String[] = [];
+  messages: string[] = [];
   to_create!: Message;
+  friend: string="Add friend";
+  friendOrNot:boolean=true;
+  bloque: string="Block";
+  bloqueOrNot: boolean=true;
+
 
   constructor(private socketService: SocketService, private apiService: ApiService) {}
 
   ngOnInit(): void {
     this.socketService.getMessage().subscribe((message: any) => {
       this.messages.push(message);
+      this.message = "";
     });
   }
 
@@ -30,6 +36,20 @@ export class DirectChatComponent implements OnInit {
     this.apiService.createMessage({userId: this.Dest.id, fromUserName: this.Me.login , fromUserId: this.Me.id, content: this.message}).subscribe((result)=>{
       console.log(result);
     });
-    this.message = "";
+    // this.message = "";
   }
+
+  addDelFriend(){
+    this.friend = this.friendOrNot?"Del friend":"Add friend";
+    this.friendOrNot=this.friendOrNot?false:true;
+    
+  }
+
+  blockOrNot(){
+    this.bloque = this.bloqueOrNot?"UnBlock":"Block";
+    this.bloqueOrNot = this.bloqueOrNot?false:true;
+
+  }
+
+
 }
