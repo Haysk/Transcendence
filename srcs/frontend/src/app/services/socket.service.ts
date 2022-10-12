@@ -27,12 +27,12 @@ export class SocketService {
     this.socket.emit('msgToServer', message);
   }
 
- sendMessageTo(message: string, login: string): void {
-    this.apiService.getSocket(login).subscribe({
+ sendMessageTo(message: string, login1: string, login2: string): void {
+    this.apiService.getSocket(login1).subscribe({
         next :(result) => {
       this.sock = result.socket;
       console.log("Socket du dest2 : " + this.sock);
-      this.socket.emit('msgToClient', message, this.sock)
+      this.socket.emit('msgToServer', message, this.sock, login1, login2)
     },
     error: (err) => {},
     complete: () => {}

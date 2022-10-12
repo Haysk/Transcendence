@@ -26,7 +26,7 @@ export class AppController {
 	async addMessage(
 		@Body() messageData: {userId: number, fromUserName: string, fromUserId: number, content: string},
 	): Promise<MessageModel> {
-		console.log("@Post message dans app.controller backend");
+		// console.log("@Post message dans app.controller backend");
 		return await this.messageService.createMessage(messageData);
 	}
 

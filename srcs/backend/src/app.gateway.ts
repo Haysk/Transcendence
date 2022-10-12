@@ -22,13 +22,25 @@ export class AppGateway
 {
   constructor(private Prisma : PrismaService){}
 
+  createRoomName(login1: string, login2: string): string
+  {
+    let result: string;
+
+    if (login1 < login2)
+      result = login1 + login2;
+    else
+      result = login2 + login1;
+    return result;
+  }
+
   @WebSocketServer()
   server!: Server;
   private logger: Logger = new Logger('AppGateway');
 
   @SubscribeMessage('msgToServer')
   handleMessage(client: any, payload: any): void {
-    this.server.emit('msgToClient', payload);
+    console.log("ICI LE PAYLOAD[0] : " + payload[0] + "ICI LE PAYLOAD[1] : " + payload[1]);
+    this.server.emit('msgToClient', payload[0], payload[1]);
   }
 
   @SubscribeMessage('sendLogin')

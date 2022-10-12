@@ -56,9 +56,9 @@ export class ChatComponent implements OnInit {
 
       this.socketService.sendLogin(this.Me.login); //obtenir son socket
 
-      this.socketService.getPrivMsg().subscribe((result => {
-        this.test = result;
-      }))
+      // this.socketService.getPrivMsg().subscribe((result => {
+      //   this.test = result;
+      //}))
   }
 
   getId(): number{
