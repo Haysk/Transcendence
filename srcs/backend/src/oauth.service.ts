@@ -53,7 +53,7 @@ export class OauthService {
 				this.httpClient.post<Oauth>('https://api.intra.42.fr/oauth/token', {
 				grant_type: "authorization_code",
 				client_id: "bfeae857f60a395fd5665c74d4bedbdcd827cc466384460f5e05cb451e9e4ad0", // A METTRE EN ENVIRONNEMENT
-				client_secret: "24aabe296e1989a276ad4f144753168a4d9e37b493ecca63e524eb1b711999a0", // A METTRE EN ENVIRONNEMENT
+				client_secret: "daa68f28c0b45a2c11f8adcda2772d0630b5b82b7f8574098cbe3039e9fc4694", // A METTRE EN ENVIRONNEMENT
 				code: authCode.code,
 				redirect_uri: "https://localhost:8081",
 			}).pipe(take(1)).subscribe({
