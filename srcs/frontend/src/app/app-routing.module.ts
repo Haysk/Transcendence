@@ -2,7 +2,6 @@ import { NgModule } from '@angular/core';
 import { RouterModule, Routes } from '@angular/router';
 import { HomeComponent } from './home/home.component';
 import { PongComponent } from './pong/pong.component';
-import { AuthComponent } from './auth/auth.component';
 import { GameRoomComponent } from './game-room/game-room.component';
 import { ShowRoomComponent } from './show-room/show-room.component';
 import { VipRoomComponent } from './vip-room/vip-room.component';
@@ -23,7 +22,6 @@ const routes: Routes = [
   { path: 'pong', component: PongComponent },
   { path: 'home', component: HomeComponent },
   { path: 'chat', component: ChatComponent },
-  { path: 'auth', component: AuthComponent }
 ];
 
 @NgModule({
