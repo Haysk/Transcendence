@@ -10,6 +10,7 @@ import {
 import { PrismaClient } from '@prisma/client';
 import { PrismaService } from './prisma.service';
 import { Server, Socket } from 'socket.io';
+import { IoAdapter } from '@nestjs/platform-socket.io';
 
 @WebSocketGateway({
   cors: {
@@ -37,10 +38,17 @@ export class AppGateway
   server!: Server;
   private logger: Logger = new Logger('AppGateway');
 
-  @SubscribeMessage('msgToServer')
-  handleMessage(client: any, payload: any): void {
-    console.log("ICI LE PAYLOAD[0] : " + payload[0] + "ICI LE PAYLOAD[1] : " + payload[1]);
-    this.server.emit('msgToClient', payload[0], payload[1]);
+  //payload[0] = message
+  //payload[1] = socket dest
+  //payload[2] = login1
+  //payload[3] = login2
+  @SubscribeMessage('sendMsgTo')
+  async sendMsgTo(client: any, payload: any): Promise<void> {
+    // const dest = await this.server.in(payload[1]).fetchSockets;
+    const roomName = this.createRoomName(payload[2], payload[3]);
+    this.server.in(payload[1]).socketsJoin(roomName);
+    this.server.in(client.id).socketsJoin(roomName);
+    this.server.to(roomName).emit('PrivMsg', {msg: payload[0], channel: roomName});
   }
 
   @SubscribeMessage('sendLogin')

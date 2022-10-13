@@ -23,6 +23,8 @@ export class SocketService {
     return this.socket.id;
   }
 
+  //socket?.emit('loadprv', {n1 : login, n2 : recv}, (resp : Message[]) =>       {         setMessages(resp);       })
+
   sendMessage(message: string): void {
     this.socket.emit('msgToServer', message);
   }
@@ -31,8 +33,8 @@ export class SocketService {
     this.apiService.getSocket(login1).subscribe({
         next :(result) => {
       this.sock = result.socket;
-      console.log("Socket du dest2 : " + this.sock);
-      this.socket.emit('msgToServer', message, this.sock, login1, login2)
+      //console.log("Socket du dest2 : " + this.sock);
+      this.socket.emit('sendMsgTo', message, this.sock, login1, login2)
     },
     error: (err) => {},
     complete: () => {}
@@ -57,7 +59,7 @@ export class SocketService {
 
   getMessage(): Observable<string> {
     return new Observable<string>((observer) => {
-      this.socket.on('msgToClient', (message) => {
+      this.socket.on('PrivMsg', (message) => {
         observer.next(message);
       });
     });

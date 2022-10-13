@@ -60,7 +60,7 @@ export class ApiService {
   {
     // console.log("api service : fromUserId : " + fromUserId + " userId : " + userId);
     const data = {fromUserId, userId};
-    console.log("api service : data.fromUserId : " + data.fromUserId + " data.userId : " + data.userId);
+    //console.log("api service : data.fromUserId : " + data.fromUserId + " data.userId : " + data.userId);
     return this.httpClient.get<Message[]>(`${this.API_SERVER}/messages/${fromUserId}/${userId}`);
   }
 
