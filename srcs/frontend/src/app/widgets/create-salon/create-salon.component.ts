@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, Output, EventEmitter } from '@angular/core';
 
 @Component({
   selector: 'app-create-salon',
@@ -7,9 +7,29 @@ import { Component, OnInit } from '@angular/core';
 })
 export class CreateSalonComponent implements OnInit {
 
+  show:boolean = false;
+  show_salon: Boolean=true;
+
+  @Output() ShowSalonEvent = new EventEmitter<Boolean>();
+
   constructor() { }
 
   ngOnInit(): void {
+
   }
+
+  showform(){
+    this.show=!this.show;
+  }
+
+  hideform(){
+    this.show=false;
+  }
+
+  createSalon(){
+    this.ShowSalonEvent.emit(this.show_salon);
+    
+  }
+
 
 }

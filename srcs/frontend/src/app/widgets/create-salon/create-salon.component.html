@@ -1,5 +1,45 @@
 <div class="all_create">
 
+    <form>
+    <div class="titre_salon">
+        <label for="titre_salon">Channel's Name : </label><br>
+        <input type="text" id="titre_salon" name="titre_salon" required>
+    </div>
 
-<p>create-salon works!</p>
+    <div class="statu_salon">
+        <legend>Statut of Channel:</legend>
+        
+        <div>
+          <input type="radio" id="public" name="statut" value="public" (click)="hideform()">
+          <label for="public">Public</label>
+        </div>
+    
+        <div>
+          <input type="radio" id="private" name="statut" value="private" (click)="showform()" >
+          <label for="private">Private</label>
+        </div>
+        
+    </div>  
+  
+
+    <div class="prive_salon" *ngIf="show">
+     
+        <label for="password_salon">password : </label><br>
+        <input type="text" id="password_salon" name="password_salon" required> 
+        
+        
+    </div>
+
+    <div class="btn_create_salon">
+        <button type="submit" value="submit" (click)="createSalon()">Create</button> 
+        
+    </div>
+    </form>
+
+
+
+
+
+
+
 </div>

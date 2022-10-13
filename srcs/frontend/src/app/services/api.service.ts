@@ -85,4 +85,11 @@ export class ApiService {
     return ["chilee", "anclamar", "anton"];
   }
 
+
+    //pour la page chat - salons disponibiles
+    getSalons_dispos(){
+      return ["Super groupe", "42 Pong"];
+    }
+  
+
 }

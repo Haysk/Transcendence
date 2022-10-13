@@ -14,7 +14,12 @@
 
     /* background-color: brown; */
 }
-
+.chatwith{
+    width: 100%;
+    background-color: rgb(59, 70, 70);
+    text-align: center;
+    color: rgb(26, 147, 168);
+}
 .chat_history{
     width: 100%;
     height: auto;

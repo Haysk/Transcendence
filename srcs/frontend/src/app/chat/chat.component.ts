@@ -61,6 +61,8 @@ export class ChatComponent implements OnInit {
 
   showFormule:Boolean=false;
 
+  privatOrpublic:Boolean=false;
+
   receiveShowchat($event: Boolean) {
       this.showchat = $event
   }
@@ -68,10 +70,24 @@ export class ChatComponent implements OnInit {
   receiveSendDest($event : User) {
       this.Dest = $event;
   }
+  
+  receiveShowSalon($event: Boolean) {
+    this.privatOrpublic = $event
+  }
+
+  receiveQuitSalon($event: Boolean) {
+    this.privatOrpublic = $event
+}
+
 
   formuleCreate(){
     this.showFormule=this.showFormule?false:true;
+    this.showchat=false;
 
+  }
+
+  closeCreateSalon(){
+    this.showFormule=false;
   }
 
   constructor(private socketService: SocketService, private apiService: ApiService)

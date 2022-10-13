@@ -10,11 +10,12 @@
 <div class="all_direct">
 	
 	<div class="contenu_chat" style="overflow-y: auto; height: xyz;" #scrollMe [scrollTop]="scrollMe.scrollHeight">
+		<div class="chatwith">Chat with {{Dest.login}}</div>
 		<div class="chat_history">
 		<app-chat-history [Me]="Me" [Dest]="Dest"></app-chat-history>
 		</div>
 
-
+		<div class="">helllo</div>
 		<div class="direct_message" *ngFor="let message of messages">
 			{{ message }}
 		</div>

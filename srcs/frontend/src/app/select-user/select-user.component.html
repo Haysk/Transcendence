@@ -3,9 +3,6 @@
 <div class="chat_list_user">
 
 
-    <!-- <button class="chat_user_online" (click)="sendBtn(user)">
-        <div class="onoff" style ="background-color: aqua"></div>
-        {{user.name}} {{this.show_hide}}</button> -->
     <button class="chat_user_online" *ngIf="user.online" (click)="sendBtn(user)">
         <div class="onoff" style ="background-color: aqua"></div>
         {{user.login}} {{this.show_hide}}</button>

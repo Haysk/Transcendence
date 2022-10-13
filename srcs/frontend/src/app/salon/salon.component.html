@@ -6,7 +6,7 @@
         <div class="titre_salon_p1">Channel &nbsp;</div>
         <div class="titre_salon_p2">"Name Channel"</div>
         <div class="titre_salon_p3">
-            <button type ="exit"><span>exit</span></button>
+            <button type ="exit" (click)="quitSalon()"><span>exit</span></button>
         </div>
     </div><!-- fin de titre_salon -->
 
@@ -33,11 +33,6 @@
             </div><!-- fin de titre_guest -->
 
             <app-user-in-salon></app-user-in-salon>
-
-            <!-- <div class="user_salon" *ngFor="let guest of guests">
-                <div class="avatar_user" style="background-image:url(../../assets/adylewsk.jpg)"> </div>
-                <div class="name_user">{{guest}}</div>
-            </div>fin de user_salon -->
 
         </div><!-- fin de guest_salon -->
 

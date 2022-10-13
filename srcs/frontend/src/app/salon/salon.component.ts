@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, Output, EventEmitter } from '@angular/core';
 // import { ApiService } from '../services/api.service';
 
 
@@ -12,8 +12,10 @@ export class SalonComponent implements OnInit {
   // guests:string[] = [];
   conversation: string[] =[];
   message: string= '';
+  quit_salon:Boolean=false;
   
-
+  @Output() QuitSalonEvent = new EventEmitter<Boolean>();
+  
   constructor() {
 
    }
@@ -25,5 +27,11 @@ export class SalonComponent implements OnInit {
     console.log(this.message);
     this.conversation.push(this.message);
     this.message= '';
+  }
+
+  quitSalon(){
+    this.QuitSalonEvent.emit(this.quit_salon);
+
+
   }
 }
