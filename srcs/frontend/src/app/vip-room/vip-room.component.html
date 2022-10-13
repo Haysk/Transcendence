@@ -2,10 +2,31 @@
 <div class="all_vip">
   
     <div class="bloc_vip">
-        <div class="title_vip"></div>
-        <img class="user_photo" [src]="image_url"/>
-        <div class="user_name">{{displayname}}</div>
-        <div class="title_historique">Historique</div>
+        <div class="title_vip">adylewsk's Profile</div>
+        <div class="user_photo"  style="background-image:url(../../assets/adylewsk.jpg)" ></div>
+        <div class="user_name">adylewsk</div>
+
+        <app-button-v2 [text]="'Modify profile'" (click)="showhide()"></app-button-v2>
+        
+        <div class="bloc_modify" *ngIf="visible">
+            <app-button-v2 [text]="'Modify avatar'" (click)="showhide_avatar()"></app-button-v2>
+            <app-button-v2 [text]="'Modify nickname'" (click)="showhide_nickname()"></app-button-v2>
+            <app-button-v2 [text]="'Double authentification?'"></app-button-v2>
+        </div><!-- fin de div bloc_modify  -->
+
+        <div class="champ_avatar" *ngIf="visible_avatar">
+            <label for="file">Choose File:&nbsp;</label>
+            <input type="file" id="file">
+            <app-button-v2 [text]="'Reset'"></app-button-v2>
+            <!-- (change)="handleFileInput($event.target.files)"> -->
+        </div>
+
+        <div class="champ_nickname" *ngIf="visible_nickname">
+            New nickname:&nbsp; <input type="text" id="new_nickname" value="Your new nickname">
+            <app-button-v2 [text]="'Reset'"></app-button-v2>
+        </div>
+        
+        <div class="title_historique">Match History</div>
         <div class="bloc_vip_historique"></div>
 
 

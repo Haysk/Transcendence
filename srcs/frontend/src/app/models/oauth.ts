@@ -12,6 +12,6 @@ export interface Oauth {
 	code: string;
 	refreshToken?: string;
     userToken?: string;
-    userId?: number;
+    userId?: Number;
 	user?: User;
 }

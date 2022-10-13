@@ -5,8 +5,8 @@
         <div class="onair_show">
         <img src="../../assets/imgs/onair_pong.png" width="160px">    
         </div><!-- fin de div onair_show  -->
-        <div class="vs_show">
-            <a id="link" routerLink="/pong">chilee &nbsp; .VS. &nbsp; ade-temm </a>
+        <div class="vs_show" *ngFor="let match of matches">
+            <a id="link" routerLink="/pong">{{ match }} </a>
         </div>
     </div><!-- fin de div bloc_show  -->
 </div><!-- fin de div all_show  -->

@@ -1,3 +1,19 @@
-<div> <button (click)="sendBtn(user)">{{user.login}} online {{this.show_hide}}</button></div>
-<div> <button (click)="sendBtn(user)">{{user.login}} offline {{this.show_hide}}</button></div>
-<app-direct-chat *ngIf="this.show_chat==true" [Dest]="this.user" [Me]="this.Me"></app-direct-chat>
+
+
+<div class="chat_list_user">
+
+
+    <!-- <button class="chat_user_online" (click)="sendBtn(user)">
+        <div class="onoff" style ="background-color: aqua"></div>
+        {{user.name}} {{this.show_hide}}</button> -->
+    <button class="chat_user_online" *ngIf="user.online" (click)="sendBtn(user)">
+        <div class="onoff" style ="background-color: aqua"></div>
+        {{user.login}} {{this.show_hide}}</button>
+
+    <button class="chat_user_offline" *ngIf="user.online==false" (click)="sendBtn(user)">
+        <div class="onoff" style ="background-color: rgb(114, 113, 113)"></div>
+        {{user.login}} {{this.show_hide}}</button>
+
+</div>
+
+<!-- <app-direct-chat *ngIf="this.show_chat==true" [Dest]="this.user" [Me]="this.Me"></app-direct-chat> -->

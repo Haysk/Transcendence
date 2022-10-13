@@ -11,6 +11,26 @@ export class UserService {
 
 	INTRA_API = "https://api.intra.42.fr";
 
+  async getAllUsers(current: number) : Promise<User[]>
+  {
+    return this.prisma.user.findMany({
+      where: {
+        id: {
+			not: Number(current),
+		},
+      },
+})
+  }
+
+  async findUsertByLogin(login: string) : Promise<User>
+  {
+	return await this.prisma.user.findUnique({
+		where: {
+			login: login
+		}
+	})
+  }
+
 	async user(
 		oauthWhereInput: Prisma.OauthWhereInput,
 	): Promise<User> {
@@ -37,6 +57,13 @@ export class UserService {
 			orderBy,
 		});
 	}
+
+	async addUser(params: User) {
+		await this.prisma.user.create({
+			data: params,
+		})
+	}
+
 	async createUser(params: Prisma.OauthCreateInput): Promise<User> {
 		let toto = new Promise<User>(resolve =>
 			this.httpClient.get<User>(`${this.INTRA_API}/v2/me`, { params })
@@ -59,6 +86,7 @@ export class UserService {
 										access_token: params.access_token,
 									},
 								},
+								socket: ""
 							}
 						});
 					} catch (e) {

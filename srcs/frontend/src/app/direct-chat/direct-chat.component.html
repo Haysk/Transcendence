@@ -1,8 +1,39 @@
-<app-chat-history [Me]="Me" [Dest]="Dest"></app-chat-history>
+<!-- <app-chat-history [Me]="Me" [Dest]="Dest"></app-chat-history>
 
 <div *ngFor="let message of messages">
 	{{ message }}
 </div>
   
 <input [(ngModel)]="message" />
-<button (click)="sendMessage()">Send</button>
+<button (click)="sendMessage()">Send</button> -->
+
+<div class="all_direct">
+	
+	<div class="contenu_chat" style="overflow-y: auto; height: xyz;" #scrollMe [scrollTop]="scrollMe.scrollHeight">
+		<div class="chat_history">
+		<app-chat-history [Me]="Me" [Dest]="Dest"></app-chat-history>
+		</div>
+
+
+		<div class="direct_message" *ngFor="let message of messages">
+			{{ message }}
+		</div>
+	</div><!-- fin de contenu_chat	 -->
+	
+	<div class="input_chat">
+	<input type="text" (keydown.enter)="sendMessage()" [(ngModel)]="message">
+	</div>
+
+	<div class="relation">
+	
+		<app-button-v3 [text]= "friend" (click)="addDelFriend()" ></app-button-v3>
+		<app-button-v3 [text]="'Play Pong'" ></app-button-v3>
+		<app-button-v3 [text]="bloque" (click)="blockOrNot()"></app-button-v3>
+		
+		
+	</div><!-- fin de realtion -->
+
+
+
+
+</div><!-- fin de all_direct -->

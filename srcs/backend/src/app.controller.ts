@@ -12,7 +12,6 @@ import { TechService } from './tech.service';
 import { MessageService } from './message.service';
 import { OauthService } from './oauth.service';
 import { User as UserModel, Tech as TechModel, Oauth as OauthModel, Message as MessageModel, Prisma, PrismaClient } from '@prisma/client';
-import { delay } from 'rxjs';
 
 @Controller()
 export class AppController {
@@ -31,12 +30,18 @@ export class AppController {
 		return await this.messageService.createMessage(messageData);
 	}
 
-	@Get('messages/:fromUserId:userId')
+	@Get('getSocket/:login')
+	async getSocket(@Param('login') login: string) : Promise<UserModel>
+	{
+		return await this.userService.findUsertByLogin(login);
+	}
+
+	@Get('messages/:fromUserId/:userId')
 	async getMessages(
-		@Param('fromUserId') fromUserId: number, @Param('userId') userId: number
+		@Param('fromUserId') fromUserId: Number, @Param('userId') userId: Number
 		): Promise<MessageModel[]> {
-			const data = {fromUserId, userId};
-			//console.log("app.controller : fromUserId : " + fromUserId + " userId : " + userId);
+			let data  = {fromUserId, userId};
+			console.log("app.controller : data.fromUserId : " + data.fromUserId + " data.userId : " + data.userId);
 			return await this.messageService.getMessages(data);
 		}
 	
@@ -87,9 +92,11 @@ export class AppController {
 		//return this.userService.user(oauthData);
 	}
 
-	// @Get('user/:code')
-	// async getUserByCode(@Param('code') code: string): Promise<UserModel> {
-	// 	return await this.userService.user({code: String(code)});
-	// }
+	@Get('allusers/:current')
+	async getAllUsers(@Param('current') id: number) : Promise<UserModel[]>
+	{
+		let data = id;
+		return await this.userService.getAllUsers(data);
+	}
 }
 

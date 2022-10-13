@@ -12,14 +12,34 @@ import { Observable } from 'rxjs';
 export class ChatHistoryComponent implements OnInit {
   @Input() Me!: User;
   @Input() Dest!: User;
-  messages!: Message[];
+  tmp : Message = {fromUserId : 0, fromUserName : "", userId : 0, content : ""}
+  messages: Message[] = [this.tmp];
   constructor(private apiService: ApiService) {}
 
   //potentiellement besoin de await si on vois que les messages ne se chargent pas
   async ngOnInit(): Promise<void> {
-    await this.apiService.getMessages(this.Dest.id, this.Me.id).subscribe(
-      (result => {
+    await this.apiService.getMessages(this.Me.id, this.Dest.id,).subscribe(
+      {
+        next:(result) => {
         this.messages = result;
-      }));
+        // console.log("ici chat history : " + result[0].content)
+      },
+      error: (err) =>{},
+      complete:() => {}
+  
+  })
+      ////(result => {
+    //     .subscribe({
+    //       next :(result) => {
+    //     this.sock = result.socket;
+    //     console.log("Socket du dest2 : " + this.sock);
+    //     this.socket.emit('msgToClient', message, this.sock)
+    //   },
+    //   error: (err) => {},
+    //   complete: () => {}
+    // })
+        //// this.messages = result;
+        //// console.log("ici chat history : " + result[0])
+      ////}));
   }
 }

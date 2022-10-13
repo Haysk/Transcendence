@@ -31,13 +31,14 @@ export class MessageService {
     });
   }
 
-  async getMessages(params: { fromUserId: number, userId: number }): Promise<Message[]> {
+  async getMessages(params: { fromUserId: Number, userId: Number }): Promise<Message[]> {
+    console.log("requete prisma : params : fromUserId : " + params.fromUserId + " | userId : " + params.userId);
     return await this.prisma.message.findMany({
       where: {
         fromUserId: { in: [Number(params.fromUserId), Number(params.userId)]},
-        userId: {in: [Number(params.userId), Number(params.fromUserId)]},
+        userId: {in: [Number(params.userId), Number(params.fromUserId)]}
       }
-    })
+    });
   }
 
   async createMessage(data: Prisma.MessageCreateInput): Promise<Message> {

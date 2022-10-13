@@ -1,0 +1,14 @@
+<div class="user_salon" *ngFor="let guest of guests">
+    
+    <div class="user_p1">
+    <div class="avatar_user" style="background-image:url(../../assets/adylewsk.jpg)"> </div>
+    <div class="name_user" (click)="show_info()">{{guest}}</div>
+    </div>
+
+    <div class="user_p2" *ngIf="ifAdmin">
+    <!-- <div class="only_admin" *ngIf="ifAdmin"> -->
+        <div class="if_admin">Adminstrator</div>
+        <div class="if_muet">Muet</div>
+    </div>
+
+</div><!-- fin de user_salon -->

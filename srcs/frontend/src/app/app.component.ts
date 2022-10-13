@@ -1,5 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
+import { SocketService } from './services/socket.service';
 
 import { User } from './models/user';
 
@@ -14,13 +15,14 @@ export class AppComponent implements OnInit{
   visible:boolean = true;
 
 	constructor(public route: ActivatedRoute,
-				public router: Router){
+				public router: Router,private socketService: SocketService){
   }
   ngOnInit(): void {
   }
 
   public getLogin(): string | null{
 	var login = localStorage.getItem("login");
+  this.socketService.sendLogin(String(login)); //obtenir son socket
 	if (login == undefined) {
 		return null;
 	}

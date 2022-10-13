@@ -6,6 +6,10 @@ import { Component, OnInit } from '@angular/core';
   styleUrls: ['./vip-room.component.css']
 })
 export class VipRoomComponent implements OnInit {
+  visible:boolean = false;
+  visible_avatar:boolean = false;
+  visible_nickname:boolean = false;
+  // fileToUpload: File | null = null;
 
   displayname = localStorage.getItem("displayname");
   image_url = localStorage.getItem("image_url");
@@ -13,5 +17,26 @@ export class VipRoomComponent implements OnInit {
 
   ngOnInit(): void {
   }
+
+  showhide(){
+    this.visible = this.visible?false:true;
+    this.visible_nickname = false;
+    this.visible_avatar = false;
+  }
+
+  showhide_avatar(){
+    this.visible_avatar = this.visible_avatar?false:true;
+    this.visible_nickname = false;
+  }
+
+  showhide_nickname(){
+    this.visible_nickname = this.visible_nickname?false:true;
+    this.visible_avatar = false;
+  }
+
+//   handleFileInput(files: FileList) {
+//     this.fileToUpload = files.item(0);
+// }
+
 
 }

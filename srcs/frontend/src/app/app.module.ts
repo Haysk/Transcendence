@@ -17,6 +17,11 @@ import { ChatComponent } from './chat/chat.component';
 import { DirectChatComponent } from './direct-chat/direct-chat.component';
 import { ChatHistoryComponent } from './chat-history/chat-history.component';
 import { SelectUserComponent } from './select-user/select-user.component';
+import { SalonComponent } from './salon/salon.component';
+import { ButtonV2Component } from './widgets/button-v2/button-v2.component';
+import { UserInSalonComponent } from './widgets/user-in-salon/user-in-salon.component';
+import { ButtonV3Component } from './widgets/button-v3/button-v3.component';
+import { CreateSalonComponent } from './widgets/create-salon/create-salon.component';
 
 @NgModule({
   declarations: [
@@ -34,7 +39,11 @@ import { SelectUserComponent } from './select-user/select-user.component';
     DirectChatComponent,
     ChatHistoryComponent,
     SelectUserComponent,
-    HeaderComponent
+    SalonComponent,
+    ButtonV2Component,
+    UserInSalonComponent,
+    ButtonV3Component,
+    CreateSalonComponent
   ],
   imports: [
     BrowserModule,
@@ -42,7 +51,9 @@ import { SelectUserComponent } from './select-user/select-user.component';
     HttpClientModule,
     FormsModule
   ],
-  providers: [],
+  providers: [
+    
+  ],
   bootstrap: [AppComponent]
 })
 export class AppModule { }
