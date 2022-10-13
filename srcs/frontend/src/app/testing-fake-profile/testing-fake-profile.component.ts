@@ -1,4 +1,4 @@
-import { Component, Input, OnInit } from '@angular/core';\
+import { Component, Input, OnInit } from '@angular/core';
 import { User } from '../models/user'
 
 @Component({
@@ -9,7 +9,7 @@ import { User } from '../models/user'
 export class TestingFakeProfileComponent implements OnInit {
 
   @Input() user!: User;
-  firends_list !: User[];
+  friends_list !: User[] | undefined;
   //@Input() name!: string;
   //@Input() friend!: string;
 
@@ -20,8 +20,8 @@ export class TestingFakeProfileComponent implements OnInit {
     // this.friend = 'antoine';
   }
 
-  // fonction(){
-  //   this.user.
-  // }
+  getFriend(){
+    this.friends_list = this.user.friends;
+  }
 
 }

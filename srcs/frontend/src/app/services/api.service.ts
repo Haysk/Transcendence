@@ -73,4 +73,11 @@ export class ApiService {
 	console.log("post :" + code);
 	return this.httpClient.post<User>(`${this.API_SERVER}/auth/token/code`, {code});
   }
+
+  getUsers_dispos(){
+    return [{id:20, email:"asfd@fsd.com", first_name:"alex1", last_name: "sdfds", login: "dsfs", url: "", image_url: "", displayname: "sdffsd", online: true},
+    {id:21, email:"asssdfd@fsd.com", first_name:"ching1", last_name: "afs", login: "sdf", url: "", image_url: "", displayname: "dsffds", online: true},
+    {id:23, email:"assdfsdffd@fsd.com", first_name:"arnaud1", last_name: "dsfdsfsd", login: "dsfdsf", url: "", image_url: "", displayname: "cxvcxv", online: true}];
+  }
+
 }
