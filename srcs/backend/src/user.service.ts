@@ -86,6 +86,7 @@ export class UserService {
 										access_token: params.access_token,
 									},
 								},
+								online: true,
 							}
 						});
 					} catch (e) {
@@ -99,8 +100,8 @@ export class UserService {
 										refresh_token: params.refresh_token,
 										access_token: params.access_token,
 									}
-								}
-
+								},
+								online: true,
 							}
 						});
 					}

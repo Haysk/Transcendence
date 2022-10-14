@@ -43,7 +43,7 @@ export class AppGateway
   //payload[1] = socket dest
   //payload[2] = login1 - expediteur
   //payload[3] = login2 - Dest
-  
+
   @SubscribeMessage('sendMsgTo')
   async sendMsgTo(client: any, payload: any): Promise<void> {
     // const dest = await this.server.in(payload[1]).fetchSockets;
@@ -95,8 +95,21 @@ export class AppGateway
     this.logger.log('Init');
   }
 
-  handleDisconnect(client: Socket) {
+  async handleDisconnect(client: Socket): Promise<void> {
     this.logger.log(`Client disconnected: ${client.id}`);
+    // let tmp = await this.Prisma.user.findFirst({
+    //   where: {
+    //     socket: client.id
+    //   }
+    // });
+    // await this.Prisma.user.update({
+    //     where: {
+    //       login: tmp.login,
+    //     },
+    //     data: {
+    //      online: false,
+    //     },
+    //   });
   }
 
   handleConnection(client: Socket, ...args: any[]) {
