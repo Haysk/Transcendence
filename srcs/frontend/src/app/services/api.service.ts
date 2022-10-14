@@ -70,7 +70,7 @@ export class ApiService {
     return this.httpClient.post<Message>(`${this.API_SERVER}/message`, message);
   }
 
-  postOauthCode(code: string) {
+  postOauthCode(code: string | null) {
 	console.log("post :" + code);
 	return this.httpClient.post<User>(`${this.API_SERVER}/auth/token/code`, {code});
   }

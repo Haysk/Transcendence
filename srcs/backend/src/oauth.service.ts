@@ -48,7 +48,7 @@ export class OauthService {
 
 	async getToken(authCode: {code: string}): Promise<Oauth | null> {
 		if (!authCode.code)
-			return;
+			return null;
 		let result = new Promise<Oauth | null>(resolve => {
 				this.httpClient.post<Oauth>('https://api.intra.42.fr/oauth/token', {
 				grant_type: "authorization_code",
@@ -58,12 +58,11 @@ export class OauthService {
 				redirect_uri: "https://localhost:8081",
 			}).pipe(take(1)).subscribe({
 				next: async result => {
-					resolve(await result.data);
+					resolve(result.data);
 				},
-				error: err =>{
+				error: err => {
 					resolve(null);
 				}
-
 			})
 		}
 		);

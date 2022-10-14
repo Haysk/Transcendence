@@ -17,7 +17,6 @@ import { ChatComponent } from './chat/chat.component';
 import { DirectChatComponent } from './direct-chat/direct-chat.component';
 import { ChatHistoryComponent } from './chat-history/chat-history.component';
 import { SelectUserComponent } from './select-user/select-user.component';
-import { AuthComponent } from './auth/auth.component';
 import { SalonComponent } from './salon/salon.component';
 import { ButtonV2Component } from './widgets/button-v2/button-v2.component';
 import { UserInSalonComponent } from './widgets/user-in-salon/user-in-salon.component';
@@ -41,8 +40,6 @@ import { SalonAvailableComponent } from './widgets/salon-available/salon-availab
     DirectChatComponent,
     ChatHistoryComponent,
     SelectUserComponent,
-    AuthComponent,
-    HeaderComponent,
     SalonComponent,
     ButtonV2Component,
     UserInSalonComponent,

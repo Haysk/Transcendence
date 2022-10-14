@@ -21,23 +21,28 @@ export class LoginComponent implements OnInit {
 		private apiService: ApiService,
 		private router: Router) {
 		this.route.queryParams.subscribe((params) => {
-			this.code = params['code']
+			var code = params['code'];
+			this.getUser(code);
 		})
 	}
 
 	ngOnInit(): void {
-		this.getUser();
 	}
 
 	OAuthSignIn() {
-		localStorage.clear();
-		window.location.href = `${this.INTRA_API_AUTH}?client_id=${environment.INTRA_UID}&redirect_uri=https%3A%2F%2Flocalhost%3A8081&response_type=code`;
+		var login = localStorage.getItem("login");
+		if (login !== null && login !== undefined) {
+			this.router.navigate(["../home"], { relativeTo: this.route });
+		}
+		else
+			window.location.href = `${this.INTRA_API_AUTH}?client_id=${environment.INTRA_UID}&redirect_uri=https%3A%2F%2Flocalhost%3A8081&response_type=code`;
 	}
-	getUser() {
+	getUser(code: string) {
+		console.log(code);
 		var login = localStorage.getItem("login");
 		if (login === null || login === undefined) {
-			if (this.code) {
-				this.apiService.postOauthCode(this.code).pipe(take(1)).subscribe({
+			if (code) {
+				this.apiService.postOauthCode(code).pipe(take(1)).subscribe({
 					next: (result) => {
 						localStorage.setItem("id", result.id.toString());
 						localStorage.setItem('email', result.email);
