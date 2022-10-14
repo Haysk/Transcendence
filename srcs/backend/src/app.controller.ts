@@ -33,7 +33,7 @@ export class AppController {
 	@Get('getSocket/:login')
 	async getSocket(@Param('login') login: string) : Promise<UserModel>
 	{
-		return await this.userService.findUsertByLogin(login);
+		return await this.userService.findUserByLogin(login);
 	}
 
 	@Get('messages/:fromUserId/:userId')

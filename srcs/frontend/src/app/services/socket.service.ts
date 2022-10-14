@@ -29,21 +29,10 @@ export class SocketService {
     this.socket.emit('msgToServer', message);
   }
 
- sendMessageTo(message: string, login1: string, login2: string): void {
-    this.apiService.getSocket(login1).subscribe({
-        next :(result) => {
-      this.sock = result.socket;
-      //console.log("Socket du dest2 : " + this.sock);
-      this.socket.emit('sendMsgTo', message, this.sock, login1, login2)
-    },
-    error: (err) => {},
-    complete: () => {}
-  })
-      
-      // this.socket.emit('msgToClient', message, this.sock);
-      this.sock = "";
-    };
-    //this.socket.to(data).emit('msgToServer', message);
+  sendMessageTo(message: string, login1: string, login2: string): void
+  {
+    this.socket.emit('sendMsgTo', message, "", login1, login2)
+  };
 
   sendLogin(login: string): void {
     this.socket.emit('sendLogin', login);

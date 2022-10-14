@@ -22,9 +22,9 @@ export class DirectChatComponent implements OnInit {
   async ngOnInit(): Promise<void> {
     await this.socketService.getMessage().subscribe( {
       next:(message: any) => {
-        console.log("roomName = " + this.getRoomName(this.Me.login, this.Dest.login) + " | message.channel = " + message.channel)
+        //console.log("roomName = " + this.getRoomName(this.Me.login, this.Dest.login) + " | message.channel = " + message.channel)
         if (this.getRoomName(this.Me.login, this.Dest.login) == message.channel)
-          this.messages.push(message.msg);
+          this.messages.push(message.from + ": " + message.msg);
     },
     error: (err) =>{},
     complete:() => {}
