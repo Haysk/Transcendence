@@ -86,6 +86,7 @@ export class ChatComponent implements OnInit {
 
   }
 
+  
   closeCreateSalon(){
     this.showFormule=false;
   }
