@@ -43,6 +43,7 @@ export class AppGateway
   //payload[1] = socket dest
   //payload[2] = login1 - expediteur
   //payload[3] = login2 - Dest
+  
   @SubscribeMessage('sendMsgTo')
   async sendMsgTo(client: any, payload: any): Promise<void> {
     // const dest = await this.server.in(payload[1]).fetchSockets;
