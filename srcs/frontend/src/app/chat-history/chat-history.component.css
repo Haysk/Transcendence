@@ -5,13 +5,14 @@
 }
 
 .message_chat{
-	color: aliceblue;
-    font-size: 16px;
+	color: rgb(255, 255, 255);
+    font-size: 15px;
     max-width: 95%;
-    margin: 10px;
+    margin: 5px;
     padding-left: 5px;
     padding-right: 5px;
     background-color: rgba(110, 110, 108, 0.308);
     border-radius: 10px;
     word-wrap:break-word;
+    height: auto;
 }
