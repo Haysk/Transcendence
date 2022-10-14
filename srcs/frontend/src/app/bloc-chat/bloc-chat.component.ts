@@ -21,6 +21,7 @@ export class BlocChatComponent implements OnInit {
   visible2:boolean = true;
   color:string= "rgb(50, 53, 60)";
   lien: string = "../../assets/icons/chatroom-f.jpg"
+  
   showhide(){
     this.visible = this.visible?false:true;
     this.buttonTitle = this.visible?"Quit":"Show";
