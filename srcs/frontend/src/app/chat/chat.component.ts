@@ -100,11 +100,12 @@ export class ChatComponent implements OnInit {
         this.User_list = result;
       }));
 
-      this.socketService.sendLogin(this.Me.login); //obtenir son socket
+      // this.socketService.sendLogin(this.Me.login); //obtenir son socket
 
       // this.socketService.getPrivMsg().subscribe((result => {
       //   this.test = result;
       // }))
+      //}))
   }
 
   getId(): number{

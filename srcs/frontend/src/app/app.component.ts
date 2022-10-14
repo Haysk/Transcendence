@@ -22,7 +22,7 @@ export class AppComponent implements OnInit{
 
   public getLogin(): string | null{
 	var login = localStorage.getItem("login");
-  this.socketService.sendLogin(String(login)); //obtenir son socket
+  this.socketService.sendLogin(String(login)); //mettre son socket a jour
 	if (login == undefined) {
 		return null;
 	}

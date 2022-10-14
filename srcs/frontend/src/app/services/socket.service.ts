@@ -23,25 +23,16 @@ export class SocketService {
     return this.socket.id;
   }
 
+  //socket?.emit('loadprv', {n1 : login, n2 : recv}, (resp : Message[]) =>       {         setMessages(resp);       })
+
   sendMessage(message: string): void {
     this.socket.emit('msgToServer', message);
   }
 
- sendMessageTo(message: string, login: string): void {
-    this.apiService.getSocket(login).subscribe({
-        next :(result) => {
-      this.sock = result.socket;
-      console.log("Socket du dest2 : " + this.sock);
-      this.socket.emit('msgToClient', message, this.sock)
-    },
-    error: (err) => {},
-    complete: () => {}
-  })
-      
-      // this.socket.emit('msgToClient', message, this.sock);
-      this.sock = "";
-    };
-    //this.socket.to(data).emit('msgToServer', message);
+  sendMessageTo(message: string, login1: string, login2: string): void
+  {
+    this.socket.emit('sendMsgTo', message, "", login1, login2)
+  };
 
   sendLogin(login: string): void {
     this.socket.emit('sendLogin', login);
@@ -57,7 +48,7 @@ export class SocketService {
 
   getMessage(): Observable<string> {
     return new Observable<string>((observer) => {
-      this.socket.on('msgToClient', (message) => {
+      this.socket.on('PrivMsg', (message) => {
         observer.next(message);
       });
     });
