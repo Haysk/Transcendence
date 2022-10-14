@@ -9,11 +9,20 @@ import { ApiService } from '../services/api.service';
 })
 export class UnfriendComponent implements OnInit {
 
-  users:User[] = [];
+  @Input() users!:User;
+  @Input() Me!: User;
+  
   @Output() unfriend = new EventEmitter<User>();
+
   constructor(private apiService:ApiService) { 
-    this.users = apiService.getUsers_dispos();
+   // this.users = apiService.getUsers_dispos();
+  
+  // notify:EventEmitter<string> = new EventEmitter<User>();
   }
+  sendUserList(){
+    this.unfriend.emit(this.users);
+  }
+
 
   ngOnInit(): void {
   }
