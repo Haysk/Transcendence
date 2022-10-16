@@ -19,6 +19,7 @@ export class CreateSalonComponent implements OnInit {
   constructor(private apiService: ApiService) { }
   channel_name : string = "";
   channel_creator !: User;
+  channel_password: string = "";
   ngOnInit(): void {
     this.apiService.findUserByLogin(String(localStorage.getItem("login"))).subscribe(
       {
@@ -44,6 +45,12 @@ export class CreateSalonComponent implements OnInit {
   createSalon(){
     console.log("createSalon()");
     this.apiService.addChannel(this.channel_name, this.channel_creator.id).subscribe();
+    this.ShowSalonEvent.emit(this.show_salon);
+  }
+
+  createPrivateSalon(){
+    console.log("createPrivateSalon()");
+    this.apiService.addPrivateChannel(this.channel_name, this.channel_creator.id, this.channel_password).subscribe();
     this.ShowSalonEvent.emit(this.show_salon);
   }
 

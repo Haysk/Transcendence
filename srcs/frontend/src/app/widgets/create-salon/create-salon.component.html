@@ -25,12 +25,12 @@
     <div class="prive_salon" *ngIf="show">
      
         <label for="password_salon">password : </label><br>
-        <input type="text" id="password_salon" name="password_salon" required> 
-        
+        <input type="text" id="password_salon" [(ngModel)]="channel_password" name="password_salon" required> 
+        <button type="submit" value="submit" (click)="createPrivateSalon()">createPriv</button> 
         
     </div>
 
-    <div class="btn_create_salon">
+    <div class="btn_create_salon" *ngIf="!show">
         <button type="submit" value="submit" (click)="createSalon()">Create</button> 
         
     </div>

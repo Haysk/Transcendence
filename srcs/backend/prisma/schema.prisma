@@ -26,6 +26,7 @@ model				Channel {
 	creator			User @relation(fields: [creator_id], references: [id])
 	creator_id		Int
 	messages		Message[]
+	password		String?
 }
 
 model 				User {

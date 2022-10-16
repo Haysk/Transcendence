@@ -31,6 +31,13 @@ export class AppController {
 		return await this.channelService.addChannel(ChannelData);
 	}
 
+	@Post('addPrivateChannel')
+	async addPrivateChannel(@Body() ChannelData: {name: string, creator_id: number, password: string},): Promise<ChannelModel>
+	{
+		console.log("addPrivateChannel");
+		return await this.channelService.addChannel(ChannelData);
+	}
+
 	@Get('findChannelByName/:name')
 	async findChannelByName(@Param('name') name: string): Promise<ChannelModel>
 	{
