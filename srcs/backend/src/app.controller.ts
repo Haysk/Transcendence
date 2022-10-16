@@ -10,8 +10,9 @@ import {
 import { UserService } from './user.service';
 import { TechService } from './tech.service';
 import { MessageService } from './message.service';
+import { ChannelService } from './channel.service';
 import { OauthService } from './oauth.service';
-import { User as UserModel, Tech as TechModel, Oauth as OauthModel, Message as MessageModel, Prisma, PrismaClient } from '@prisma/client';
+import { User as UserModel, Tech as TechModel, Oauth as OauthModel, Message as MessageModel, Channel as ChannelModel, Prisma, PrismaClient } from '@prisma/client';
 
 @Controller()
 export class AppController {
@@ -20,7 +21,28 @@ export class AppController {
 		private readonly userService: UserService,
 		private readonly techService: TechService,
 		private readonly oauthService: OauthService,
+		private readonly channelService: ChannelService,
 	) { }
+
+	@Post('addChannel')
+	async addChannel(@Body() ChannelData: {name: string, creator_id: number},): Promise<ChannelModel>
+	{
+		console.log("addChannel");
+		return await this.channelService.addChannel(ChannelData);
+	}
+
+	@Get('findChannelByName/:name')
+	async findChannelByName(@Param('name') name: string): Promise<ChannelModel>
+	{
+		return await this.channelService.findChannelByName(name);
+	}
+
+	@Get('userByLogin/:login')
+	async getUserByLogin(@Param('login') login: string)
+	{
+		//console.log("getUserByLogin : " + login);
+		return await this.userService.findUserByLogin(login);
+	}
 
 	@Post('message')
 	async addMessage(
@@ -41,7 +63,7 @@ export class AppController {
 		@Param('fromUserId') fromUserId: Number, @Param('userId') userId: Number
 		): Promise<MessageModel[]> {
 			let data  = {fromUserId, userId};
-			console.log("app.controller : data.fromUserId : " + data.fromUserId + " data.userId : " + data.userId);
+			// console.log("app.controller : data.fromUserId : " + data.fromUserId + " data.userId : " + data.userId);
 			return await this.messageService.getMessages(data);
 		}
 	

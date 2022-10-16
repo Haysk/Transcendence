@@ -24,11 +24,14 @@ export class UserService {
 
   async findUserByLogin(login: string) : Promise<User>
   {
+	// let user = 
 	return await this.prisma.user.findUnique({
 		where: {
 			login: login
 		}
 	})
+	//console.log("requete BDD : " + user.login)
+	//return user
   }
 
 	async user(

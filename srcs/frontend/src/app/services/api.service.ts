@@ -3,6 +3,7 @@ import { Injectable } from '@angular/core';
 import { Tech } from '../models/technology';
 import { User } from '../models/user';
 import { Message } from '../models/message';
+import { Channel } from '../models/channel';
 import { Observable } from 'rxjs';
 import { Oauth } from '../models/oauth';
 import { UrlSerializer } from '@angular/router';
@@ -15,35 +16,31 @@ export class ApiService {
 
   constructor(private httpClient: HttpClient) { }
 
+  addChannel(name: string, creator_id: number)
+  {
+    const data = {name, creator_id};
+    console.log("API SERVICE : addChannel");
+    return this.httpClient.post<Channel>(`${this.API_SERVER}/addChannel`, data);
+  }
+
+  findChannelByName(name: string)
+  {
+    return this.httpClient.get<Channel>(`${this.API_SERVER}/findChannelByName/${name}`)
+  }
+
   getSocket(login: string)
   {
     return this.httpClient.get<User>(`${this.API_SERVER}/getSocket/${login}`)
   }
 
-  getTechs() {
-    return this.httpClient.get<Tech[]>(`${this.API_SERVER}/techs`);
-  }
-
-  getTech(id: number) {
-    return this.httpClient.get<Tech>(`${this.API_SERVER}/tech/${id}`)
-  }
-
-  createTech(techno: Tech) {
-    return this.httpClient.post<Tech>(`${this.API_SERVER}/tech`, techno);
-  }
-
-  updateTech(techno: Tech) {
-    return this.httpClient.patch<Tech>(`${this.API_SERVER}/tech/${techno.id}`, techno);
-  }
-
-  removeTech(id: number) {
-    return this.httpClient.delete(`${this.API_SERVER}/tech/${id}`);
-  }
-
   getUser(code: string)
   {
-	console.log("toto");
     return this.httpClient.get<User>(`${this.API_SERVER}/user/${code}`);
+  }
+
+  findUserByLogin(login: string)
+  {
+    return this.httpClient.get<User>(`${this.API_SERVER}/userByLogin/${login}`);
   }
 
   getAllUsers(current: number)
@@ -71,7 +68,7 @@ export class ApiService {
   }
 
   postOauthCode(code: string | null) {
-	console.log("post :" + code);
+	//console.log("post :" + code);
 	return this.httpClient.post<User>(`${this.API_SERVER}/auth/token/code`, {code});
   }
 
@@ -90,6 +87,24 @@ export class ApiService {
     getSalons_dispos(){
       return ["Super groupe", "42 Pong"];
     }
+    getTechs() {
+      return this.httpClient.get<Tech[]>(`${this.API_SERVER}/techs`);
+    }
   
+    getTech(id: number) {
+      return this.httpClient.get<Tech>(`${this.API_SERVER}/tech/${id}`)
+    }
+  
+    createTech(techno: Tech) {
+      return this.httpClient.post<Tech>(`${this.API_SERVER}/tech`, techno);
+    }
+  
+    updateTech(techno: Tech) {
+      return this.httpClient.patch<Tech>(`${this.API_SERVER}/tech/${techno.id}`, techno);
+    }
+  
+    removeTech(id: number) {
+      return this.httpClient.delete(`${this.API_SERVER}/tech/${id}`);
+    }  
 
 }

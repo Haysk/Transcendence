@@ -1,4 +1,8 @@
 import { Component, OnInit, Output, EventEmitter } from '@angular/core';
+import { User } from '../../models/user'
+import { Channel } from '../../models/channel'
+import { ApiService } from '../../services/api.service';
+import { Observable } from 'rxjs';
 
 @Component({
   selector: 'app-create-salon',
@@ -12,9 +16,20 @@ export class CreateSalonComponent implements OnInit {
 
   @Output() ShowSalonEvent = new EventEmitter<Boolean>();
 
-  constructor() { }
-
+  constructor(private apiService: ApiService) { }
+  channel_name : string = "";
+  channel_creator !: User;
   ngOnInit(): void {
+    this.apiService.findUserByLogin(String(localStorage.getItem("login"))).subscribe(
+      {
+        next:(result) => {
+          console.log("findUserByLogin response : " + result.login);
+          this.channel_creator = result;
+        },
+        error: (err) => {},
+        complete:() => {}
+      }
+    )
 
   }
 
@@ -27,8 +42,9 @@ export class CreateSalonComponent implements OnInit {
   }
 
   createSalon(){
+    console.log("createSalon()");
+    this.apiService.addChannel(this.channel_name, this.channel_creator.id).subscribe();
     this.ShowSalonEvent.emit(this.show_salon);
-    
   }
 
 

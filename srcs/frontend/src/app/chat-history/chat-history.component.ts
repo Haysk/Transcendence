@@ -19,27 +19,14 @@ export class ChatHistoryComponent implements OnInit {
   //potentiellement besoin de await si on vois que les messages ne se chargent pas
   async ngOnInit(): Promise<void> {
     await this.apiService.getMessages(this.Me.id, this.Dest.id,).subscribe(
-      {
-        next:(result) => {
-        this.messages = result;
-        // console.log("ici chat history : " + result[0].content)
+    {
+      next:(result) => {
+      this.messages = result;
+      // console.log("ici chat history : " + result[0].content)
       },
       error: (err) =>{},
       complete:() => {}
   
-  })
-      ////(result => {
-    //     .subscribe({
-    //       next :(result) => {
-    //     this.sock = result.socket;
-    //     console.log("Socket du dest2 : " + this.sock);
-    //     this.socket.emit('msgToClient', message, this.sock)
-    //   },
-    //   error: (err) => {},
-    //   complete: () => {}
-    // })
-        //// this.messages = result;
-        //// console.log("ici chat history : " + result[0])
-      ////}));
+    })
   }
 }

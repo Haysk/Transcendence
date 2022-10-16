@@ -7,6 +7,7 @@ import { TechService } from './tech.service';
 import { AppGateway } from './app.gateway';
 import { HttpModule } from '@nestjs/axios';
 import { OauthService } from './oauth.service';
+import { ChannelService } from './channel.service';
 
 @Module({
   imports: [HttpModule],
@@ -19,7 +20,8 @@ import { OauthService } from './oauth.service';
     TechService, 
     MessageService, 
     AppGateway, 
-    OauthService
+    OauthService,
+    ChannelService,
   ],
 })
 export class AppModule {}
