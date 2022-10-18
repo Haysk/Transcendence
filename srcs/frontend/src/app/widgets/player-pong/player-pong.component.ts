@@ -7,12 +7,11 @@ import { User } from '../../models/user';
   styleUrls: ['./player-pong.component.css']
 })
 export class PlayerPongComponent implements OnInit {
-@Input() Me!: User;
 @Input() user!: User;
   constructor() { }
 
   ngOnInit(): void {
-    console.log("User = " + this.user.login );
+    
      
   }
 

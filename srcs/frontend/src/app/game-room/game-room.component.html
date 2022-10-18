@@ -10,19 +10,15 @@
         <div class="game_puzzleBubble">Coming soon</div>
     </div><!-- fin de div bloc_item_games  -->
 
-    <div class="player_available" *ngIf="visible">
+    <div class="bloc_players_available" *ngIf="visible">
     
         <h2>Players available for PONG</h2>    
-      
         <div class="env_player_available">
-        <!-- <div class="user_photo"  style="background-image:url(../../assets/chilee.jpg)" ></div>
-        <div class="user_name">chilee</div>
-        <a class="playerdispo" routerLink="/pong">PLAY</a> -->
-        
-            <app-player-pong [user]="playersOnline" *ngFor=""></app-player-pong>
+            <div class="player_available" *ngFor="let playersonline of list_user"> 
+                <app-player-pong [user]="playersonline" ></app-player-pong>
+            </div>
         </div>
-
-    </div><!-- fin de div player_available  -->
-
+    </div><!-- fin de div bloc_player_available  -->
+    
     
 </div><!-- fin de div all_game  -->

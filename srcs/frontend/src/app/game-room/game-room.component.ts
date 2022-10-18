@@ -9,8 +9,10 @@ import { User } from '../models/user'
 })
 export class GameRoomComponent implements OnInit {
   visible! :boolean;
+  list_user!: User[];
+
   
-  playersOnline: User={
+  user: User={
     id: this.getId(),
     login: this.getLogin(),
     email: this.getEmail(),
@@ -25,10 +27,14 @@ export class GameRoomComponent implements OnInit {
 
   constructor(private apiService: ApiService) { }
 
-  ngOnInit(): void {
+  async ngOnInit(): Promise<void> {
+  this.apiService.getAllUsers(this.user.id).subscribe(
+      (result=>{
+        this.list_user =result;
+      }));
     this.visible=false;
-    console.log("User Online = " + this.playersOnline.login );
-    console.log("User url = " + this.playersOnline.url );
+    console.log("User Online = " + this.user.login );
+    console.log("User url = " + this.user.image_url );
   }
 
   showavailable(){
