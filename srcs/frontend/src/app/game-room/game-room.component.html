@@ -12,12 +12,14 @@
 
     <div class="player_available" *ngIf="visible">
     
-        <h2>Palyers available for PONG</h2>    
+        <h2>Players available for PONG</h2>    
       
         <div class="env_player_available">
-        <div class="user_photo"  style="background-image:url(../../assets/chilee.jpg)" ></div>
+        <!-- <div class="user_photo"  style="background-image:url(../../assets/chilee.jpg)" ></div>
         <div class="user_name">chilee</div>
-        <a class="playerdispo" routerLink="/pong">PLAY</a>
+        <a class="playerdispo" routerLink="/pong">PLAY</a> -->
+        
+            <app-player-pong [user]="playersOnline" *ngFor=""></app-player-pong>
         </div>
 
     </div><!-- fin de div player_available  -->

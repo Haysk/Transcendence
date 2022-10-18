@@ -1,0 +1,27 @@
+
+.user_photo{
+    width: 120px;
+    height:120px;
+    /* background-color: bisque; */
+    background-size: contain;
+    background-repeat: no-repeat;
+    background-position: center; 
+}
+
+.user_name{
+    background-color: rgb(0, 12, 8);
+
+}
+
+.playerdispo{
+    font-size: 16px;
+    text-decoration: none;
+}
+
+.playerdispo:visited {
+    color: rgb(144, 250, 6);
+  }
+
+.playerdispo:link {
+    color: rgb(144, 250, 6);
+  }
