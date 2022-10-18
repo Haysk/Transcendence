@@ -99,4 +99,3 @@ export class AppController {
 		return await this.userService.getAllUsers(data);
 	}
 }
-
