@@ -27,6 +27,8 @@ model				Channel {
 	creator_id		Int
 	messages		Message[]
 	password		String?
+	joined			User[] @relation("users_in_channel")
+	muted			User[] @relation("muted_in_channel")
 }
 
 model 				User {
@@ -47,6 +49,8 @@ model 				User {
 	blocked			User[] @relation("blocked")
 	blockedby		User[] @relation("blocked")
 	creatorOf		Channel[]
+	channel_joined	Channel[] @relation("users_in_channel")
+	muted			Channel[] @relation("muted_in_channel")
 }
 
 model           	Tech {

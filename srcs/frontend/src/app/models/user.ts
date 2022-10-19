@@ -1,4 +1,4 @@
-import { Socket } from '../models/socket'
+import { Channel } from '../models/channel'
 
 export interface 	User {
     id: 			number;
@@ -12,4 +12,6 @@ export interface 	User {
 	online:			boolean;
 	socket?:		string;			
 	friends?:		User[];
+	channel_joined?:Channel[];
+	muted?:			Channel[];
 }

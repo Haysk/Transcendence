@@ -7,5 +7,7 @@ export interface 	Channel {
     creator:		User;
 	creator_id:		number;
 	messages:		Message[];
-    password?:      string
+    password?:      string;
+    joined?:        User[];
+    muted?:         User[];
 }
