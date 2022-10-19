@@ -41,6 +41,7 @@ import { NgForm }   from '@angular/forms';
     // },
 ]
 })
+
 export class ChatComponent implements OnInit {
   Me: User = {
               id: this.getId(),

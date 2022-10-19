@@ -1,0 +1,8 @@
+
+<!-- <div class="all_payers" *ngIf="user.online==true"> -->
+<div class="all_payers" *ngIf="user.online==false" >
+    <div class="user_photo"  style="background-image:url({{user.image_url}})" ></div>
+    <div class="user_name">{{user.login}}</div>
+    <a class="playerdispo" routerLink="/pong">PLAY</a>
+
+</div>
