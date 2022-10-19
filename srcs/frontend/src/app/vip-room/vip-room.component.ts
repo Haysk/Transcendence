@@ -11,8 +11,10 @@ export class VipRoomComponent implements OnInit {
   visible_nickname:boolean = false;
   // fileToUpload: File | null = null;
 
+  login = localStorage.getItem("login");
   displayname = localStorage.getItem("displayname");
   image_url = localStorage.getItem("image_url");
+  
   constructor() { }
 
   ngOnInit(): void {
