@@ -1,21 +1,13 @@
-.pong-game {
+.game {
     position: relative;
-    background-color: black;
-    height: 490px;
-    width: 500px;
-    margin: auto;
-}
-
-.net {
+    text-align: center;
+  }
+  
+  .menu {
     position: absolute;
-    height: 100%;
-    width: 10px;
-    left: 50%;
-    background: repeating-linear-gradient(black, black 10px, white 10px, white 20px);
-}
-
-.score {
-    position: absolute;
+    left: 0px;
+    top: 0px;
+    margin: 10%;
     color: white;
 }
 

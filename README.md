@@ -14,9 +14,14 @@ https://en.wikipedia.org/wiki/Single-page_application
 ### FrontEnd
 - TypeScript
 
-### Build
+### Build dev
 ```
 docker-compose up --build
+```
+
+### Build prod
+```
+docker-compose -f docker-compose-prod.yml up --build
 ```
 
 Use Docker in rootless mode
