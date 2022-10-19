@@ -14,4 +14,5 @@ export interface 	User {
 	friends?:		User[];
 	channel_joined?:Channel[];
 	muted?:			Channel[];
+	admin_of?:		Channel[];
 }

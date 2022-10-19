@@ -10,4 +10,5 @@ export interface 	Channel {
     password?:      string;
     joined?:        User[];
     muted?:         User[];
+    admins?:        User[];
 }
