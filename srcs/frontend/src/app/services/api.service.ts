@@ -16,6 +16,13 @@ export class ApiService {
 
   constructor(private httpClient: HttpClient) { }
 
+  joinChannel(target: Channel, user :User)
+  {
+    const data = {target, user}
+    console.log("api service : channel name : " + target.name + " | user name : " + user.login);
+    return this.httpClient.post<Channel>(`${this.API_SERVER}/joinChannel`, data);
+  }
+
   addPrivateChannel(name: string, creator_id: number, password: string)
   {
     const data = {name, creator_id, password};

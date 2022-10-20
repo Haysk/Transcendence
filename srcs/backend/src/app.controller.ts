@@ -12,7 +12,7 @@ import { TechService } from './tech.service';
 import { MessageService } from './message.service';
 import { ChannelService } from './channel.service';
 import { OauthService } from './oauth.service';
-import { User as UserModel, Tech as TechModel, Oauth as OauthModel, Message as MessageModel, Channel as ChannelModel, Prisma, PrismaClient } from '@prisma/client';
+import { User as UserModel, Tech as TechModel, Oauth as OauthModel, Message as MessageModel, Channel as ChannelModel, Prisma, PrismaClient, User } from '@prisma/client';
 
 @Controller()
 export class AppController {
@@ -23,6 +23,13 @@ export class AppController {
 		private readonly oauthService: OauthService,
 		private readonly channelService: ChannelService,
 	) { }
+
+	@Post('joinChannel')
+	async joinChannel(@Body() data : {target: ChannelModel, user: UserModel})
+	{
+		console.log("App Controller : channel name : " + data.target.name + " | user name : " + data.user.login);
+		return await this.channelService.joinChannel(data);
+	}
 
 	@Post('addChannel')
 	async addChannel(@Body() ChannelData: {name: string, creator_id: number},): Promise<ChannelModel>

@@ -1,6 +1,7 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, Input } from '@angular/core';
 import { ApiService } from '../../services/api.service';
 import {Channel} from '../../models/channel'
+import{ User } from '../../models/user'
 
 
 @Component({
@@ -14,6 +15,7 @@ import {Channel} from '../../models/channel'
 export class SalonAvailableComponent implements OnInit {
 
   salons_dispos: Channel[] = [];
+  @Input() current_user !:User;
   
   constructor(private apiService:ApiService) {
 
@@ -30,5 +32,11 @@ export class SalonAvailableComponent implements OnInit {
       complete: () => {}
     }
     )
+  }
+
+  joinChannel(current_channel: Channel, current_user: User)
+  {
+    console.log("salon_available : channel name : " + current_channel.name + " | user name : " + current_user.login);
+    this.apiService.joinChannel(current_channel, current_user).subscribe();
   }
 }
