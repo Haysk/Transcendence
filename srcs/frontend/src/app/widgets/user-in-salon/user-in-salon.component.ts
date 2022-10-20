@@ -1,5 +1,6 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, Input } from '@angular/core';
 import { ApiService } from '../../services/api.service';
+import { Channel } from 'src/app/models/channel';
 
 @Component({
   selector: 'app-user-in-salon',
@@ -8,10 +9,12 @@ import { ApiService } from '../../services/api.service';
 })
 export class UserInSalonComponent implements OnInit {
 
-  guests:string[] = [];
+  @Input() guest!:Channel;
+ 
+ 
   ifAdmin: boolean=false;
-  constructor(private apiService:ApiService) {
-    this.guests = apiService.getGuests();
+  constructor() {
+   
    }
 
 
