@@ -1,8 +1,8 @@
 import { Component, OnInit, Input } from '@angular/core';
-import { empty } from 'rxjs';
 import { Friend } from '../models/friend.model';
 import { User } from '../models/user';
 import { TestingFakeProfileComponent } from '../testing-fake-profile/testing-fake-profile.component';
+import { ApiService } from '../services/api.service';
 
 @Component({
   selector: 'app-friend',
@@ -19,9 +19,10 @@ export class FriendComponent implements OnInit {
   numberOfFriend!: number;
   mode1: any;
   ami!: string;
+  userList!: User[];
   // user.friends;
 
-  constructor() { }
+  constructor(private apiService: ApiService) { }
 
   ngOnInit(): void {
     this.ami = 'friend';
@@ -32,6 +33,11 @@ export class FriendComponent implements OnInit {
     this.user.friends = [{id:1, email:"asfd@fsd.com", first_name:"alex", last_name: "sdfds", login: "dsfs", url: "", image_url: "", displayname: "sdffsd", online: true},
     {id:2, email:"asssdfd@fsd.com", first_name:"ching", last_name: "afs", login: "sdf", url: "", image_url: "", displayname: "dsffds", online: true},
     {id:3, email:"assdfsdffd@fsd.com", first_name:"arnaud", last_name: "dsfdsfsd", login: "dsfdsf", url: "", image_url: "", displayname: "cxvcxv", online: true}];
+  
+    this.apiService.getAllUsers(this.user.id).subscribe(
+      (result => {
+        this.userList = result;
+      }));
   }
 
   onAddLike(){
