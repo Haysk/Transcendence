@@ -35,6 +35,11 @@ export class ApiService {
     return this.httpClient.get<Channel>(`${this.API_SERVER}/findChannelByName/${name}`)
   }
 
+  getAllChannels()
+  {
+    return this.httpClient.get<Channel[]>(`${this.API_SERVER}/getAllChannels`)
+  }
+
   getSocket(login: string)
   {
     return this.httpClient.get<User>(`${this.API_SERVER}/getSocket/${login}`)

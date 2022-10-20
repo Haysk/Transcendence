@@ -1,4 +1,4 @@
-import { Component, OnInit, Output, EventEmitter } from '@angular/core';
+import { Component, OnInit, Input, Output, EventEmitter } from '@angular/core';
 // import { ApiService } from '../services/api.service';
 
 
@@ -15,7 +15,7 @@ export class SalonComponent implements OnInit {
   quit_salon:Boolean=false;
   
   @Output() QuitSalonEvent = new EventEmitter<Boolean>();
-  
+  @Input() channel_name!:string;
   constructor() {
 
    }

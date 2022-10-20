@@ -15,6 +15,8 @@ export class CreateSalonComponent implements OnInit {
   show_salon: Boolean=true;
 
   @Output() ShowSalonEvent = new EventEmitter<Boolean>();
+  @Output() SendChannelNameEvent = new EventEmitter<string>();
+  
 
   constructor(private apiService: ApiService) { }
   channel_name : string = "";
@@ -46,12 +48,14 @@ export class CreateSalonComponent implements OnInit {
     console.log("createSalon()");
     this.apiService.addChannel(this.channel_name, this.channel_creator.id).subscribe();
     this.ShowSalonEvent.emit(this.show_salon);
+    this.SendChannelNameEvent.emit(this.channel_name);
   }
 
   createPrivateSalon(){
     console.log("createPrivateSalon()");
     this.apiService.addPrivateChannel(this.channel_name, this.channel_creator.id, this.channel_password).subscribe();
     this.ShowSalonEvent.emit(this.show_salon);
+    
   }
 
 

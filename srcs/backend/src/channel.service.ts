@@ -28,4 +28,12 @@ export class ChannelService {
 			}
 		});
 	}
+
+
+	async getAllChannels() : Promise<Channel[]>
+	{
+	  return await this.prisma.channel.findMany();
+	}
+
 }
+

@@ -59,13 +59,13 @@ export class ChatComponent implements OnInit {
   message: string = '';
   messages: String[] = [];
   showchat:Boolean=false ;
-
   showFormule:Boolean=false;
-
   privatOrpublic:Boolean=false;
 
+  channel_name: string = "";
+
   receiveShowchat($event: Boolean) {
-      this.showchat = $event
+      this.showchat = $event;
   }
 
   receiveSendDest($event : User) {
@@ -73,18 +73,21 @@ export class ChatComponent implements OnInit {
   }
   
   receiveShowSalon($event: Boolean) {
-    this.privatOrpublic = $event
+    this.privatOrpublic = $event;
   }
 
   receiveQuitSalon($event: Boolean) {
-    this.privatOrpublic = $event
+    this.privatOrpublic = $event;
 }
-
 
   formuleCreate(){
     this.showFormule=this.showFormule?false:true;
     this.showchat=false;
 
+  }
+
+  receiveChannelName($event: string){
+    this.channel_name= $event;
   }
 
   closeCreateSalon(){

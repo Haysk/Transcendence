@@ -38,6 +38,12 @@ export class AppController {
 		return await this.channelService.addChannel(ChannelData);
 	}
 
+	@Get('getAllChannels')
+	async getAllChannels() : Promise<ChannelModel[]>
+	{
+		return await this.channelService.getAllChannels();
+	}
+
 	@Get('findChannelByName/:name')
 	async findChannelByName(@Param('name') name: string): Promise<ChannelModel>
 	{

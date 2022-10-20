@@ -17,7 +17,7 @@
 			<app-direct-chat [Dest]="Dest" [Me]="Me" *ngIf="this.showchat==true"> </app-direct-chat>
 
 			<!-- <div class="" *ngIf="showFormule" >Hello</div> -->
-			<app-create-salon *ngIf="showFormule" (ShowSalonEvent)="receiveShowSalon($event)"></app-create-salon>
+			<app-create-salon *ngIf="showFormule" (ShowSalonEvent)="receiveShowSalon($event)" (SendChannelNameEvent)="receiveChannelName($event)"></app-create-salon>
 
 
 		</div><!-- fin de div part2_left -->
@@ -60,7 +60,7 @@
 </div> <!-- fin de div chat -->
 
 <div class="salon" *ngIf="privatOrpublic==true">
-	<app-salon (QuitSalonEvent)="receiveQuitSalon($event)" ></app-salon>
+	<app-salon [channel_name]="channel_name" (QuitSalonEvent)="receiveQuitSalon($event)" ></app-salon>
 </div>
 
 </div><!-- fin de div all-chat -->
