@@ -53,6 +53,7 @@ export class ChatComponent implements OnInit {
               displayname: this.getDisplayName(),
               image_url: this.getImageUrl(),
               online: this.getOnline(),
+              oauth_id: 118218,
             };
   Dest: User = {id: 0, login: "", email: "", first_name: "", last_name: "", url: "", displayname: "", image_url: "", online: false};
   User_list!: User[];

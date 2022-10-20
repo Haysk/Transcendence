@@ -37,6 +37,7 @@ export class SalonAvailableComponent implements OnInit {
   joinChannel(current_channel: Channel, current_user: User)
   {
     console.log("salon_available : channel name : " + current_channel.name + " | user name : " + current_user.login);
+    console.log(current_user);
     this.apiService.joinChannel(current_channel, current_user).subscribe();
   }
 }

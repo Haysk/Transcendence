@@ -10,9 +10,10 @@ export interface 	User {
 	displayname:	string;
 	image_url:		string;
 	online:			boolean;
-	socket?:		string;			
+	socket?:		string;
 	friends?:		User[];
 	channel_joined?:Channel[];
 	muted?:			Channel[];
 	admin_of?:		Channel[];
+	oauth_id?:		number;
 }

@@ -4,11 +4,13 @@ import { catchError, take } from 'rxjs';
 import { PrismaService } from './prisma.service';
 import { Channel, User, Prisma } from '@prisma/client';
 import { userInfo } from 'os';
+import { UserService } from './user.service';
 
 @Injectable()
 export class ChannelService {
 	constructor(private prisma: PrismaService,
-		private httpClient: HttpService) { }
+				private httpClient: HttpService,
+				private userService: UserService) { }
 
 		
 	INTRA_API = "https://api.intra.42.fr";
@@ -16,13 +18,15 @@ export class ChannelService {
 	async	joinChannel(param : {target: Channel, user: User}) : Promise<Channel>
 	{
 		console.log("Channel Service : channel name : " + param.target.name + " | user name : " + param.user.login);
+		const data = {id: param.user.id};
+		var toto = await this.userService.user(param.user);
 		return await this.prisma.channel.update({
 			where: {
 				name: param.target.name
 			},
 			data: {
 				joined: {
-					set: [{id: param.user.id}],
+					connect: [{id: toto.id}],
 				}
 			},
 		})

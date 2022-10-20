@@ -35,11 +35,11 @@ export class UserService {
   }
 
 	async user(
-		oauthWhereInput: Prisma.OauthWhereInput,
+		userWhereInput: Prisma.UserWhereInput,
 	): Promise<User> {
 		return this.prisma.user.findFirst({
 			where: {
-				oauth: oauthWhereInput
+				id: userWhereInput.id
 			}
 		});
 	}
