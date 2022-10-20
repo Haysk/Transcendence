@@ -14,6 +14,7 @@ import {Channel} from '../../models/channel'
 export class SalonAvailableComponent implements OnInit {
 
   salons_dispos: Channel[] = [];
+  // guest:string="ouioui";
   
   constructor(private apiService:ApiService) {
 

@@ -1,5 +1,8 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, Input } from '@angular/core';
 import { ApiService } from '../../services/api.service';
+
+
+// @Input(): guest!:string;
 
 @Component({
   selector: 'app-user-in-salon',
@@ -8,10 +11,12 @@ import { ApiService } from '../../services/api.service';
 })
 export class UserInSalonComponent implements OnInit {
 
-  guests:string[] = [];
+  guest:string="ouioui";
   ifAdmin: boolean=false;
-  constructor(private apiService:ApiService) {
-    this.guests = apiService.getGuests();
+ 
+ 
+  constructor() {
+    
    }
 
 
