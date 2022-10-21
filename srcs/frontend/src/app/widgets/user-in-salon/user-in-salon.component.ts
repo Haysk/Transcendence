@@ -11,8 +11,13 @@ export class UserInSalonComponent implements OnInit {
 
   @Input() guest!:Channel;
  
- 
-  ifAdmin: boolean=false;
+  ifAdmin:boolean=false;
+  ifMuet:boolean=false;
+  val_admin:string="Be Admin";
+  val_muet:string="Muet"
+  showOption: boolean=false;
+  color1:string="rgb(44, 136, 125)";
+  color2:string="rgb(44, 136, 125)";
   constructor() {
    
    }
@@ -24,9 +29,21 @@ export class UserInSalonComponent implements OnInit {
 
   show_info(){
 
-    this.ifAdmin = this.ifAdmin?false:true;
-
-
+    this.showOption = this.showOption?false:true;
   }
+   
+  beAdmin(){
+    this.ifAdmin=!this.ifAdmin;
+    this.val_admin=this.ifAdmin?"Be Admin":"Del Admin";
+    this.color1=this.ifAdmin?"rgb(44, 136, 125)":"rgb(76, 80, 79)";
+   
+  }
+  
+  beMuet(){
+    this.ifMuet=!this.ifMuet;
+    this.val_muet=this.ifMuet?"Muet":"Not Muet";
+    this.color2=this.ifMuet?"rgb(44, 136, 125)":"rgb(76, 80, 79)";
+  }
+
 
 }

@@ -39,7 +39,7 @@ export class GameRoomComponent implements OnInit {
 
   showavailable(){
     this.visible= this.visible?false:true;
-    console.log(this.visible);
+    console.log("playeronline:" + this.visible);
 
   }
 

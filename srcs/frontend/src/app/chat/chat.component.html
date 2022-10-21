@@ -41,7 +41,7 @@
 			<div class="part2_salon_available">List of Salon</div>
 			<div class="part2_list_salon">
 				
-				<app-salon-available [current_user]="this.Me"></app-salon-available>
+				<app-salon-available [current_user]="this.Me" (ShowChannelPublicEvent)="receiveChannelPublic($event)"  (SendJoinChannelNameEvent)="receiveJoinChannelName($event)"></app-salon-available>
 				
 			</div>
 

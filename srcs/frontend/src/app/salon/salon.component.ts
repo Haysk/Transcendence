@@ -28,7 +28,7 @@ export class SalonComponent implements OnInit {
     await this.apiService.findChannelByName(this.channel_name).subscribe({
       next: (result) => {
         this.guest = result;
-        console.log("guest :" + this.guest);
+        console.log("guest :" + this.guest.name);
       },
       
       error: (err) => {},

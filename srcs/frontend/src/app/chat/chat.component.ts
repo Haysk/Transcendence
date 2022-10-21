@@ -63,7 +63,8 @@ export class ChatComponent implements OnInit {
   showFormule:Boolean=false;
   privatOrpublic:Boolean=false;
 
-  channel_name: string = "";
+  channel_name!: string ;
+  
 
   receiveShowchat($event: Boolean) {
       this.showchat = $event;
@@ -79,7 +80,15 @@ export class ChatComponent implements OnInit {
 
   receiveQuitSalon($event: Boolean) {
     this.privatOrpublic = $event;
-}
+  }
+
+  receiveChannelPublic($event:Boolean){
+    this.privatOrpublic= $event;
+  }
+
+  receiveJoinChannelName($event:string){
+    this.channel_name= $event;
+  }
 
   formuleCreate(){
     this.showFormule=this.showFormule?false:true;
