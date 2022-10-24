@@ -25,6 +25,26 @@ export class SocketService {
 
   //socket?.emit('loadprv', {n1 : login, n2 : recv}, (resp : Message[]) =>       {         setMessages(resp);       })
 
+  joinChannel(channel_name: string)
+  {
+    console.log("channel : " + channel_name + " room joined");
+    this.socket.emit('joinChannel', channel_name);
+  }
+
+  sendMsgToChannel(channel_name: string, message: string, from: string) : void
+  {
+    this.socket.emit('MsgInChannel', channel_name, from, message);
+  }
+
+  getMsgFromChannel() : Observable<string>
+  {
+    return new Observable<string>((observer) => {
+      this.socket.on('msginchannel', (msg) => {
+        observer.next(msg)
+      });
+    });
+  }
+
   sendMessage(message: string): void {
     this.socket.emit('msgToServer', message);
   }

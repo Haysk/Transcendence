@@ -60,7 +60,7 @@
 </div> <!-- fin de div chat -->
 
 <div class="salon" *ngIf="privatOrpublic==true">
-	<app-salon [channel_name]="channel_name" (QuitSalonEvent)="receiveQuitSalon($event)" ></app-salon>
+	<app-salon [channel_name]="channel_name" [current_user]="Me" (QuitSalonEvent)="receiveQuitSalon($event)" ></app-salon>
 </div>
 
 </div><!-- fin de div all-chat -->

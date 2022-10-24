@@ -54,6 +54,23 @@ export class AppGateway
     this.server.to(roomName).emit('PrivMsg', {msg: payload[0], channel: roomName, from: payload[2]});
   }
 
+//payload[0] = channel name
+  @SubscribeMessage('joinChannel')
+  async joinChannel(client: Socket, payload: any)
+  {
+    console.log("join channel received on : " + payload + "_channel");
+    this.server.in(client.id).socketsJoin(payload + "_channel");
+  }
+
+//payload[0] = channel name
+//payload[1] = expediteur name
+//payload[2] = message content
+  @SubscribeMessage('MsgInChannel')
+  async MsgInChannel(client: Socket, payload: any)
+  {
+    this.server.to(payload[0] + "_channel").emit('msginchannel', {msg: payload[2], channel: payload[0], from: payload[1]});
+  }
+
   @SubscribeMessage('sendLogin')
   async setupLogin(client: Socket, payload: any): Promise<void>
   {
