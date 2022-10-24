@@ -45,6 +45,13 @@ export class ChannelService {
 		return await this.prisma.channel.findFirst({
 			where: {
 				name: params
+			},
+			include: {
+				joined: true,
+				muted: true,
+				admins: true,
+				messages: true,
+				creator: true
 			}
 		});
 	}

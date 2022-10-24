@@ -29,7 +29,8 @@ export class SalonComponent implements OnInit {
       next: (result) => {
         this.guest = result;
         console.log("guest :" + this.guest.name);
-        console.log('guest.joined : ' + this.guest.joined)
+        if (this.guest.joined)
+        console.log('guest.joined : ' + this.guest.joined[0].login)
       },
       
       error: (err) => {},
