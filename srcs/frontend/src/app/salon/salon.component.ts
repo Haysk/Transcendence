@@ -1,6 +1,7 @@
 import { Component, OnInit, Input, Output, EventEmitter } from '@angular/core';
 import { ApiService } from '../services/api.service';
 import {Channel} from '../models/channel';
+import { User } from '../models/user';
 
 
 @Component({
@@ -17,6 +18,9 @@ export class SalonComponent implements OnInit {
   
   
   guest!:Channel;
+  usersInGuest!: User[];
+ 
+ 
   
   @Output() QuitSalonEvent = new EventEmitter<Boolean>();
   @Input() channel_name!:string;
@@ -28,9 +32,10 @@ export class SalonComponent implements OnInit {
     await this.apiService.findChannelByName(this.channel_name).subscribe({
       next: (result) => {
         this.guest = result;
-        console.log("guest :" + this.guest.name);
-        if (this.guest.joined)
-        console.log('guest.joined : ' + this.guest.joined[0].login)
+      
+        if (this.guest.joined){
+        this.usersInGuest=this.guest.joined  }
+        
       },
       
       error: (err) => {},
