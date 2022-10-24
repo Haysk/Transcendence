@@ -24,7 +24,7 @@ export class UserInSalonComponent implements OnInit {
 
 
   ngOnInit(): void {
-
+    console.log("lolilol : " + this.guest.name)
   }
 
   show_info(){
@@ -34,15 +34,15 @@ export class UserInSalonComponent implements OnInit {
    
   beAdmin(){
     this.ifAdmin=!this.ifAdmin;
-    this.val_admin=this.ifAdmin?"Be Admin":"Del Admin";
-    this.color1=this.ifAdmin?"rgb(44, 136, 125)":"rgb(76, 80, 79)";
+    this.val_admin=this.ifAdmin?"Del Admin":"Be Admin";
+    this.color1=this.ifAdmin?"rgb(76, 80, 79)":"rgb(44, 136, 125)";
    
   }
   
   beMuet(){
     this.ifMuet=!this.ifMuet;
-    this.val_muet=this.ifMuet?"Muet":"Not Muet";
-    this.color2=this.ifMuet?"rgb(44, 136, 125)":"rgb(76, 80, 79)";
+    this.val_muet=this.ifMuet?"Not Muet":"Muet";
+    this.color2=this.ifMuet?"rgb(76, 80, 79)":"rgb(44, 136, 125)";
   }
 
 
