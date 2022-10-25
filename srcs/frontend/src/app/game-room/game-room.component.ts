@@ -8,7 +8,7 @@ import { User } from '../models/user'
   styleUrls: ['./game-room.component.css']
 })
 export class GameRoomComponent implements OnInit {
-  visible! :boolean;
+  visible:boolean =false;
   list_user!: User[];
 
   
@@ -32,13 +32,13 @@ export class GameRoomComponent implements OnInit {
       (result=>{
         this.list_user =result;
       }));
-    this.visible=false;
+    
     console.log("User Online = " + this.user.login );
     console.log("User url = " + this.user.image_url );
   }
 
   showavailable(){
-    this.visible= this.visible?false:true;
+    this.visible= !this.visible;
     console.log("playeronline:" + this.visible);
 
   }
