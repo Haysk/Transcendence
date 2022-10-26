@@ -18,10 +18,14 @@ export class CreateSalonComponent implements OnInit {
   @Output() SendChannelNameEvent = new EventEmitter<string>();
   
 
+
   constructor(private apiService: ApiService) { }
+
   channel_name : string = "";
   channel_creator !: User;
   channel_password: string = "";
+  current_channel !: Channel;
+
   ngOnInit(): void {
     this.apiService.findUserByLogin(String(localStorage.getItem("login"))).subscribe(
       {
@@ -45,10 +49,26 @@ export class CreateSalonComponent implements OnInit {
   }
 
   createSalon(){
-    console.log("createSalon()");
+    
     this.apiService.addChannel(this.channel_name, this.channel_creator.id).subscribe();
+
+    this.apiService.findChannelByName(this.channel_name).subscribe(
+      {
+        next: (result) => {
+          this.current_channel = result;
+          console.log("current_channel : " + this.current_channel.name);
+        },
+        error: (err) => {},
+        complete: () => {}
+      }
+    );
+
+    
+    this.apiService.joinChannel(this.current_channel, this.channel_creator).subscribe();
+
     this.ShowSalonEvent.emit(this.show_salon);
     this.SendChannelNameEvent.emit(this.channel_name);
+
   }
 
   createPrivateSalon(){

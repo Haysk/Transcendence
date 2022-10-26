@@ -34,9 +34,12 @@ export class ChannelService {
 
 	async	addChannel(params : {name: string, creator_id: number}): Promise<Channel>
 	{
+		
 		console.log("addChannel ChannelService params : creator_id : " + params.creator_id + " | Channel_name : " + params.name);
 		return await this.prisma.channel.create({
 			data: params,
+				
+				
 		})
 	}
 
