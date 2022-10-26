@@ -19,21 +19,21 @@ export class ApiService {
   joinChannel(target: Channel, user :User)
   {
     const data = {target, user}
-    console.log("api service : channel name : " + target.name + " | user name : " + user.login);
+    //console.log("api service : channel name : " + target.name + " | user name : " + user.login);
     return this.httpClient.post<Channel>(`${this.API_SERVER}/joinChannel`, data);
   }
 
   addPrivateChannel(name: string, creator_id: number, password: string)
   {
     const data = {name, creator_id, password};
-    console.log("API SERVICE : addPrivateChannel");
+    //console.log("API SERVICE : addPrivateChannel");
     return this.httpClient.post<Channel>(`${this.API_SERVER}/addPrivateChannel`, data);
   }
 
   addChannel(name: string, creator_id: number)
   {
     const data = {name, creator_id};
-    console.log("API SERVICE : addChannel");
+    //console.log("API SERVICE : addChannel");
     return this.httpClient.post<Channel>(`${this.API_SERVER}/addChannel`, data);
   }
 
@@ -78,6 +78,16 @@ export class ApiService {
     const data = {fromUserId, userId};
     //console.log("api service : data.fromUserId : " + data.fromUserId + " data.userId : " + data.userId);
     return this.httpClient.get<Message[]>(`${this.API_SERVER}/messages/${fromUserId}/${userId}`);
+  }
+
+  getChannelMessages(channelName: string)
+  {
+    return this.httpClient.get<Message[]>(`${this.API_SERVER}/channelMessages/${channelName}`);
+  }
+
+  createChannelMessage(message: Message)
+  {
+    return this.httpClient.post<Message>(`${this.API_SERVER}/channelMessage`, message);
   }
 
   createMessage(message: Message)

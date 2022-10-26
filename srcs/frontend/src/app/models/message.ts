@@ -1,6 +1,7 @@
 export interface 	Message {
     id?: 			number;
-	userId:			Number;
+    channelName?:   string;
+	userId?:		Number;
     fromUserName:	string;
     fromUserId:		Number;
 	content:		string;

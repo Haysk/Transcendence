@@ -68,10 +68,17 @@ export class AppController {
 	async addMessage(
 		@Body() messageData: {userId: number, fromUserName: string, fromUserId: number, content: string},
 	): Promise<MessageModel> {
-		// console.log("@Post message dans app.controller backend");
+		console.log("@Post message dans app.controller backend");
 		return await this.messageService.createMessage(messageData);
 	}
 
+	@Post('channelMessage')
+	async channelMessage(
+		@Body() messageData: {channel_name: string, fromUserName: string, fromUserId: number, content: string}) : Promise<MessageModel> {
+		console.log("addChannelMessage is okay");
+		return await this.messageService.createChannelMessage(messageData);
+	}
+	
 	@Get('getSocket/:login')
 	async getSocket(@Param('login') login: string) : Promise<UserModel>
 	{
@@ -87,6 +94,14 @@ export class AppController {
 			return await this.messageService.getMessages(data);
 		}
 	
+	@Get('channelMessages/:channelName')
+	async getChannelMessages(
+		@Param('channelName') channelName: string
+	): Promise<MessageModel[]> {
+		let data = {channelName};
+		return await this.messageService.getChannelMessages(data);
+	}
+
 	@Get('techs')
 	async getTechs(): Promise<TechModel[]> {
 		return this.techService.techs({});

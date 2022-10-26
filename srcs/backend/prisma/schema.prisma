@@ -12,7 +12,8 @@ datasource    		db {
 
 model           	Message {
   id            	Int @default(autoincrement()) @id
-  userId        	Int
+  channelName		String?
+  userId        	Int?
   fromUserName  	String
   fromUserId    	Int
   content       	String

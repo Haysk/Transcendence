@@ -41,7 +41,23 @@ export class MessageService {
     });
   }
 
+  async getChannelMessages(params: {channelName: string}): Promise<Message[]> {
+    return await this.prisma.message.findMany({
+      where: {
+        channelName: params.channelName
+      }
+    })
+  }
+
   async createMessage(data: Prisma.MessageCreateInput): Promise<Message> {
+    return await this.prisma.message.create({
+      data,
+    });
+  }
+
+  async createChannelMessage(data: Prisma.MessageCreateInput): Promise<Message>
+  {
+    console.log("createChannelMessage : channel_name : " + data.channelName + " | content : " + data.content + " | fromUserName : " + data.fromUserName);
     return await this.prisma.message.create({
       data,
     });
