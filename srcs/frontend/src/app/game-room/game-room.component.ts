@@ -20,6 +20,7 @@ export class GameRoomComponent implements OnInit {
     last_name: this.getLastName(),
     url: this.getUrl(),
     displayname: this.getDisplayName(),
+    nickname: this.getNickname(),
     image_url: this.getImageUrl(),
     online: this.getOnline(),
   }
@@ -90,6 +91,13 @@ export class GameRoomComponent implements OnInit {
     if (display_name === null || display_name === undefined)
       return "";
     return  display_name;
+  }
+
+  getNickname(): string{
+    let nickname = localStorage.getItem("nickname");
+    if (nickname === null || nickname === undefined)
+      return "";
+    return  nickname;
   }
 
   getImageUrl(): string{

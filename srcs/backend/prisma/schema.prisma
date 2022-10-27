@@ -40,7 +40,9 @@ model 				User {
 	last_name		String?
 	url				String?
 	displayname		String?
+	nickname		String?
 	image_url		String?
+	avatar_url		String?
 	online			Boolean @default(false)
 	oauth_id		Int @unique
 	oauth 			Oauth? @relation(fields: [oauth_id], references: [id])
@@ -53,6 +55,7 @@ model 				User {
 	channel_joined	Channel[] @relation("users_in_channel")
 	muted			Channel[] @relation("muted_in_channel")
 	admin_of		Channel[] @relation("admin_of")
+	
 }
 
 model           	Tech {

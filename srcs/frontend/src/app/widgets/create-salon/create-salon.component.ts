@@ -52,20 +52,7 @@ export class CreateSalonComponent implements OnInit {
     
     this.apiService.addChannel(this.channel_name, this.channel_creator.id).subscribe();
 
-    this.apiService.findChannelByName(this.channel_name).subscribe(
-      {
-        next: (result) => {
-          this.current_channel = result;
-          console.log("current_channel : " + this.current_channel.name);
-        },
-        error: (err) => {},
-        complete: () => {}
-      }
-    );
-
-    
-    this.apiService.joinChannel(this.current_channel, this.channel_creator).subscribe();
-
+  
     this.ShowSalonEvent.emit(this.show_salon);
     this.SendChannelNameEvent.emit(this.channel_name);
 

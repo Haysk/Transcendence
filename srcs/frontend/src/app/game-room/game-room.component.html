@@ -10,15 +10,29 @@
         <div class="game_puzzleBubble">Coming soon</div>
     </div><!-- fin de div bloc_item_games  -->
 
-    <div class="bloc_players_available" *ngIf="visible==true">
-    
-        <h2>Players available for PONG</h2>    
-        <div class="env_player_available">
-            <div class="player_available" *ngFor="let playersonline of list_user"> 
-                <app-player-pong [user]="playersonline" ></app-player-pong>
+    <div class="pong_jouers">
+        <div class="bloc_players_available" *ngIf="visible==true">
+        
+            <h2>Players available for PONG</h2>    
+            <div class="env_player_available">
+                <div class="player_available" *ngFor="let playersonline of list_user"> 
+                    <app-player-pong [user]="playersonline" ></app-player-pong>
+                </div>
             </div>
-        </div>
-    </div><!-- fin de div bloc_player_available  -->
-    
+        </div><!-- fin de div bloc_player_available  -->
+
+        <div class="bloc_players_anonyme">
+            <div class="bloc_just_play" *ngIf="visible==true">
+        
+                <h2>Just Play</h2>    
+                <div class="env_just_play">
+                    <div class="just_play_photo"> </div>
+                    <div class="just_play_name">Faceless Men</div>
+                    <div class="just_play_play>">PLAY</div>
+                </div>
+            </div><!-- fin de div bloc_player_available  -->
+
+        </div><!-- fin de div bloc_players_anonyme  -->
+    </div><!-- fin de div pong_jouers  -->
     
 </div><!-- fin de div all_game  -->

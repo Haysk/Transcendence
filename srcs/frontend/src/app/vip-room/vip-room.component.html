@@ -4,7 +4,8 @@
     <div class="bloc_vip">
         <div class="title_vip">{{login}}'s Profile</div>
         <div class="user_photo"  style="background-image:url({{image_url}})" ></div>
-        <div class="user_name">{{displayname}}</div>
+        <div class="user_name" >{{nickname}}</div>
+        
 
         <app-button-v2 [text]="'Modify profile'" (click)="showhide()"></app-button-v2>
         
@@ -22,8 +23,8 @@
         </div>
 
         <div class="champ_nickname" *ngIf="visible_nickname">
-            New nickname:&nbsp; <input type="text" id="new_nickname" value="Your new nickname">
-            <app-button-v2 [text]="'Reset'"></app-button-v2>
+            New nickname:&nbsp; <input type="text" id="new_nickname" value="Your new nickname" [(ngModel)]="newNickName">
+            <app-button-v2 [text]="'Reset'" (click)="changeNickname()"></app-button-v2>
         </div>
         
         <div class="title_historique">Match History</div>

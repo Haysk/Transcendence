@@ -19,7 +19,7 @@ export class ApiService {
   joinChannel(target: Channel, user :User)
   {
     const data = {target, user}
-    console.log("api service : channel name : " + target.name + " | user name : " + user.login);
+  //  console.log("api service : channel name : " + target.name + " | user name : " + user.login);
     return this.httpClient.post<Channel>(`${this.API_SERVER}/joinChannel`, data);
   }
 

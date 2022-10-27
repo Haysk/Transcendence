@@ -18,7 +18,7 @@ export class SalonComponent implements OnInit {
   
   
   guest!:Channel;
-  usersInGuest!: User[];
+  usersInGuest: User[] | undefined;
  
  
   
@@ -32,16 +32,16 @@ export class SalonComponent implements OnInit {
     await this.apiService.findChannelByName(this.channel_name).subscribe({
       next: (result) => {
         this.guest = result;
-      
-        if (this.guest.joined){
-        this.usersInGuest=this.guest.joined  }
-        
+        // if (undefined != this.guest.joined)
+        console.log(result);
+        this.usersInGuest=this.guest.joined;
       },
       
       error: (err) => {},
       complete: () => {}
     }
     )
+  
   }
   
 
