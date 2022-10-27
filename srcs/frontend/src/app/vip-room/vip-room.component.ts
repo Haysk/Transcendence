@@ -16,6 +16,7 @@ export class VipRoomComponent implements OnInit {
   displayname = localStorage.getItem("displayname");
   image_url = localStorage.getItem("image_url");
   nickname = localStorage.getItem("nickname");
+  id = localStorage.getItem("id");
   newNickName!:string;
 
   
@@ -43,13 +44,11 @@ export class VipRoomComponent implements OnInit {
   }
 
   changeNickname(){
-
-
+    this.apiService.updateNickName(Number(this.id), this.newNickName).subscribe();
+    localStorage.setItem('nickname', this.newNickName)
+    this.newNickName = "";
 
   }
-//   handleFileInput(files: FileList) {
-//     this.fileToUpload = files.item(0);
-// }
 
 
 }

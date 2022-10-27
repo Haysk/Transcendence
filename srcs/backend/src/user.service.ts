@@ -30,8 +30,21 @@ export class UserService {
 			login: login
 		}
 	})
-	//console.log("requete BDD : " + user.login)
-	//return user
+  }
+
+
+  async updateNickName(params: {id:number, nickname:string}) : Promise<User>
+  {
+
+	return await this.prisma.user.update({
+		where: {
+			id: params.id,
+		},
+		data: {
+			nickname: params.nickname,
+		},
+
+	})
   }
 
 	async user(

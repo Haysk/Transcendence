@@ -45,6 +45,12 @@ export class AppController {
 		return await this.channelService.addChannel(ChannelData);
 	}
 
+	@Post('updateNickName')
+	async updateNickName(@Body() UserData:{id:number, nickname:string},): Promise<UserModel>
+	{
+		return await this.userService.updateNickName(UserData);
+	}
+
 	@Get('getAllChannels')
 	async getAllChannels() : Promise<ChannelModel[]>
 	{
@@ -63,6 +69,8 @@ export class AppController {
 		//console.log("getUserByLogin : " + login);
 		return await this.userService.findUserByLogin(login);
 	}
+
+	// @Post('updateNickName/:')
 
 	@Post('message')
 	async addMessage(
