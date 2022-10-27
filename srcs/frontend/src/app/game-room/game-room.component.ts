@@ -8,7 +8,7 @@ import { User } from '../models/user'
   styleUrls: ['./game-room.component.css']
 })
 export class GameRoomComponent implements OnInit {
-  visible! :boolean;
+  visible:boolean =false;
   list_user!: User[];
 
   
@@ -20,6 +20,7 @@ export class GameRoomComponent implements OnInit {
     last_name: this.getLastName(),
     url: this.getUrl(),
     displayname: this.getDisplayName(),
+    nickname: this.getNickname(),
     image_url: this.getImageUrl(),
     online: this.getOnline(),
   }
@@ -32,13 +33,13 @@ export class GameRoomComponent implements OnInit {
       (result=>{
         this.list_user =result;
       }));
-    this.visible=false;
+    
     console.log("User Online = " + this.user.login );
     console.log("User url = " + this.user.image_url );
   }
 
   showavailable(){
-    this.visible= this.visible?false:true;
+    this.visible= !this.visible;
     console.log("playeronline:" + this.visible);
 
   }
@@ -90,6 +91,13 @@ export class GameRoomComponent implements OnInit {
     if (display_name === null || display_name === undefined)
       return "";
     return  display_name;
+  }
+
+  getNickname(): string{
+    let nickname = localStorage.getItem("nickname");
+    if (nickname === null || nickname === undefined)
+      return "";
+    return  nickname;
   }
 
   getImageUrl(): string{

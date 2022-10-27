@@ -1,6 +1,8 @@
 import { Component, OnInit, Input } from '@angular/core';
 import { ApiService } from '../../services/api.service';
 import { Channel } from 'src/app/models/channel';
+import { User } from 'src/app/models/user';
+
 
 @Component({
   selector: 'app-user-in-salon',
@@ -9,7 +11,7 @@ import { Channel } from 'src/app/models/channel';
 })
 export class UserInSalonComponent implements OnInit {
 
-  @Input() guest!:Channel;
+  @Input() guest!: User;
  
   ifAdmin:boolean=false;
   ifMuet:boolean=false;
@@ -21,6 +23,10 @@ export class UserInSalonComponent implements OnInit {
   constructor() {
    
    }
+
+   
+
+
 
 
   ngOnInit(): void {

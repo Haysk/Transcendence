@@ -22,6 +22,9 @@ export class SalonComponent implements OnInit {
   
   
   guest!:Channel;
+  usersInGuest: User[] | undefined;
+ 
+ 
   
   @Output() QuitSalonEvent = new EventEmitter<Boolean>();
   @Input() channel_name!:string;
@@ -34,9 +37,9 @@ export class SalonComponent implements OnInit {
     await this.apiService.findChannelByName(this.channel_name).subscribe({
       next: (result) => {
         this.guest = result;
-        // console.log("guest :" + this.guest.name);
-        // if (this.guest.joined)
-        // console.log('guest.joined : ' + this.guest.joined[0].login)
+        // if (undefined != this.guest.joined)
+        console.log(result);
+        this.usersInGuest=this.guest.joined;
       },
       error: (err) => {},
       complete: () => {}

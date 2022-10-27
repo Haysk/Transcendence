@@ -83,6 +83,7 @@ export class UserService {
 								url: result.data.url,
 								displayname: result.data.displayname,
 								image_url: result.data.image_url,
+								nickname: result.data.displayname,
 								oauth: {
 									create: {
 										refresh_token: params.refresh_token,

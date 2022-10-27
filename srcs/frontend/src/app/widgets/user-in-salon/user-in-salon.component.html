@@ -1,8 +1,10 @@
 <div class="user_salon" >
     
-    <div class="user_p1">
-    <div class="avatar_user" style="background-image:url()"> </div>
-    <div class="name_user" (click)="show_info()">{{guest}}</div>
+    <div class="user_p1" >
+    <div class="avatar_user" style="background-image:url({{guest.image_url}})"> </div>
+    
+    <div class="name_user" (click)="show_info()" >{{guest.login}}</div>
+   
     </div>
 
     <div class="user_p2" *ngIf="showOption">

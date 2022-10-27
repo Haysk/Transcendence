@@ -1,4 +1,5 @@
 import { Component, OnInit } from '@angular/core';
+import { ApiService } from '../services/api.service';
 
 @Component({
   selector: 'app-vip-room',
@@ -14,10 +15,15 @@ export class VipRoomComponent implements OnInit {
   login = localStorage.getItem("login");
   displayname = localStorage.getItem("displayname");
   image_url = localStorage.getItem("image_url");
+  nickname = localStorage.getItem("nickname");
+  newNickName!:string;
+
   
-  constructor() { }
+  constructor(private apiService: ApiService) { }
 
   ngOnInit(): void {
+   
+
   }
 
   showhide(){
@@ -36,6 +42,11 @@ export class VipRoomComponent implements OnInit {
     this.visible_avatar = false;
   }
 
+  changeNickname(){
+
+
+
+  }
 //   handleFileInput(files: FileList) {
 //     this.fileToUpload = files.item(0);
 // }

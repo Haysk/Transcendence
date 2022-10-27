@@ -3,6 +3,7 @@ import { SocketService } from '../services/socket.service';
 import { ApiService } from '../services/api.service';
 import { User } from '../models/user'
 import { NgForm }   from '@angular/forms';
+import { Injectable } from '@angular/core';
 
 
 @Component({
@@ -41,7 +42,9 @@ import { NgForm }   from '@angular/forms';
     // },
 ]
 })
-
+@Injectable({
+  providedIn: 'root'
+})
 export class ChatComponent implements OnInit {
   Me: User = {
               id: this.getId(),
@@ -51,11 +54,12 @@ export class ChatComponent implements OnInit {
               last_name: this.getLastName(),
               url: this.getUrl(),
               displayname: this.getDisplayName(),
+              nickname: this.getNickname(),
               image_url: this.getImageUrl(),
               online: this.getOnline(),
               oauth_id: 118218,
             };
-  Dest: User = {id: 0, login: "", email: "", first_name: "", last_name: "", url: "", displayname: "", image_url: "", online: false};
+  Dest: User = {id: 0, login: "", email: "", first_name: "", last_name: "", url: "", displayname: "", nickname:"", image_url: "", online: false};
   User_list!: User[];
   message: string = '';
   messages: String[] = [];
@@ -169,6 +173,13 @@ export class ChatComponent implements OnInit {
     if (display_name === null || display_name === undefined)
       return "";
     return  display_name;
+  }
+
+  getNickname(): string{
+    let nickname = localStorage.getItem("nickname");
+    if (nickname === null || nickname === undefined)
+      return "";
+    return  nickname;
   }
 
   getImageUrl(): string{

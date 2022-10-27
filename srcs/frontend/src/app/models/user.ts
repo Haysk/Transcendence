@@ -8,6 +8,7 @@ export interface 	User {
 	last_name:		string;
 	url:			string;
 	displayname:	string;
+	nickname:		string;
 	image_url:		string;
 	online:			boolean;
 	socket?:		string;

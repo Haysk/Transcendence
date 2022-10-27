@@ -51,6 +51,7 @@ export class LoginComponent implements OnInit {
 						localStorage.setItem('last_name', result.last_name);
 						localStorage.setItem('url', result.url);
 						localStorage.setItem('displayname', result.displayname);
+						localStorage.setItem('nickname', result.nickname);
 						localStorage.setItem('image_url', result.image_url);
 					},
 					error: err => {

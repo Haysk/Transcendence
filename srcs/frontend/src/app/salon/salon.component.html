@@ -26,14 +26,14 @@
             <div class="titre_administrator">
                 administrator
             </div>
-            <app-user-in-salon [guest]="guest"></app-user-in-salon>
+            <!-- <app-user-in-salon [guest]="guest"></app-user-in-salon> -->
             
 
             <div class="titre_guest">
                 Guests in Salon
             </div><!-- fin de titre_guest -->
-            <div class="userInSalon">
-            <app-user-in-salon [guest]="guest"></app-user-in-salon>
+            <div class="userInSalon" *ngFor ="let userInSalon of usersInGuest">
+            <app-user-in-salon [guest]=userInSalon></app-user-in-salon>
                 </div>
         </div><!-- fin de guest_salon -->
 

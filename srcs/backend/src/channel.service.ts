@@ -34,13 +34,24 @@ export class ChannelService {
 
 	async	addChannel(params : {name: string, creator_id: number}): Promise<Channel>
 	{
+		
 		console.log("addChannel ChannelService params : creator_id : " + params.creator_id + " | Channel_name : " + params.name);
-		return await this.prisma.channel.create({
+		await this.prisma.channel.create({
 			data: params,
+		})
+		return await this.prisma.channel.update({
+			where: {
+				name: params.name,
+			},
+			data: {
+				joined: {
+					connect: [{id: params.creator_id}],
+				}
+			},
 		})
 	}
 
-	async	findChannelByName(params: string)
+	async	findChannelByName(params: string) : Promise<Channel>
 	{
 		return await this.prisma.channel.findFirst({
 			where: {
