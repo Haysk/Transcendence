@@ -28,7 +28,18 @@ export class UserService {
 	return await this.prisma.user.findUnique({
 		where: {
 			login: login
+		},
+		include:{
+			friends: true,
+			friendsof: true,
+			blocked: true,
+			blockedby: true,
+			creatorOf: true,
+			channel_joined: true,
+			muted: true,
+			admin_of: true
 		}
+
 	})
 	//console.log("requete BDD : " + user.login)
 	//return user
@@ -133,4 +144,37 @@ export class UserService {
 			where,
 		});
 	}
+
+	async getFriends(param: number): Promise<User>
+	{
+		return this.prisma.user.findFirst({
+			where: {
+				id: Number(param),
+			},
+			include: {
+				friends: true,
+			}
+		});
+	}
+
+	async getUser(param: number): Promise<User>
+	{
+		return this.prisma.user.findFirst({
+			where: {}
+		})
+	}
+
+	async addFriend(params : {id: number, id1: number}) : Promise<User>
+    {
+        return await this.prisma.user.update({
+			where: {
+				id: params.id,
+			},
+			data: {
+				friends: {
+					connect: [{id: params.id1}],
+				}
+			}
+		})
+    }
 }

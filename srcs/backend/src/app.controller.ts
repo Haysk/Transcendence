@@ -12,7 +12,7 @@ import { TechService } from './tech.service';
 import { MessageService } from './message.service';
 import { ChannelService } from './channel.service';
 import { OauthService } from './oauth.service';
-import { User as UserModel, Tech as TechModel, Oauth as OauthModel, Message as MessageModel, Channel as ChannelModel, Prisma, PrismaClient, User } from '@prisma/client';
+import { User as UserModel, Tech as TechModel, Oauth as OauthModel, Message as MessageModel, Channel as ChannelModel, Prisma, PrismaClient, User, prisma } from '@prisma/client';
 
 @Controller()
 export class AppController {
@@ -140,5 +140,18 @@ export class AppController {
 		let data = id;
 		return await this.userService.getAllUsers(data);
 	}
-}
 
+	@Get('user/friends/:current')
+	async getUserFriends(@Param('current') id: number): Promise<UserModel>
+	{
+		let data = id;
+		return this.userService.getFriends(data);
+	}
+
+	@Post('addFriend')
+	async addFriend(@Body() UserData:{id:number, id1:number},): Promise<UserModel>
+	{
+		console.log("456789");
+		return await this.userService.addFriend(UserData);
+	}
+}

@@ -1,18 +1,14 @@
 import { Component, OnInit } from '@angular/core';
-import { ApiService } from '../services/api.service';
-import { User } from '../models/user'
+import { User } from '../models/user';
 
 @Component({
-  selector: 'app-game-room',
-  templateUrl: './game-room.component.html',
-  styleUrls: ['./game-room.component.css']
+  selector: 'app-user-link',
+  templateUrl: './user-link.component.html',
+  styleUrls: ['./user-link.component.css']
 })
-export class GameRoomComponent implements OnInit {
-  visible! :boolean;
-  list_user!: User[];
+export class UserLinkComponent implements OnInit {
 
-  
-  user: User={
+  Me: User = {
     id: this.getId(),
     login: this.getLogin(),
     email: this.getEmail(),
@@ -23,25 +19,11 @@ export class GameRoomComponent implements OnInit {
     image_url: this.getImageUrl(),
     online: this.getOnline(),
     friend_list: false,
-  }
+  };
 
+  constructor() { }
 
-  constructor(private apiService: ApiService) { }
-
-  async ngOnInit(): Promise<void> {
-  this.apiService.getAllUsers(this.user.id).subscribe(
-      (result=>{
-        this.list_user =result;
-      }));
-    this.visible=false;
-    console.log("User Online = " + this.user.login );
-    console.log("User url = " + this.user.image_url );
-  }
-
-  showavailable(){
-    this.visible= this.visible?false:true;
-    console.log(this.visible);
-
+  ngOnInit(): void {
   }
 
   getId(): number{
@@ -107,5 +89,4 @@ export class GameRoomComponent implements OnInit {
     else
       return false
   }
-
 }

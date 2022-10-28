@@ -16,4 +16,5 @@ export interface 	User {
 	muted?:			Channel[];
 	admin_of?:		Channel[];
 	oauth_id?:		number;
+	friend_list:	boolean;
 }

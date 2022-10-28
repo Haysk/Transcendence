@@ -24,6 +24,9 @@ import { ButtonV3Component } from './widgets/button-v3/button-v3.component';
 import { CreateSalonComponent } from './widgets/create-salon/create-salon.component';
 import { SalonAvailableComponent } from './widgets/salon-available/salon-available.component';
 import { PlayerPongComponent } from './widgets/player-pong/player-pong.component';
+import { FriendUserComponent } from './friend-user/friend-user.component';
+import { UserLinkComponent } from './user-link/user-link.component';
+import { UserUnfriendComponent } from './user-unfriend/user-unfriend.component';
 
 @NgModule({
   declarations: [
@@ -47,7 +50,10 @@ import { PlayerPongComponent } from './widgets/player-pong/player-pong.component
     ButtonV3Component,
     CreateSalonComponent,
     SalonAvailableComponent,
-    PlayerPongComponent
+    PlayerPongComponent,
+    FriendUserComponent,
+    UserLinkComponent,
+    UserUnfriendComponent
   ],
   imports: [
     BrowserModule,

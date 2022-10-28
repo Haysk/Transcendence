@@ -60,7 +60,10 @@ export class DirectChatComponent implements OnInit {
   addDelFriend(){
     this.friend = this.friendOrNot?"Del friend":"Add friend";
     this.friendOrNot=this.friendOrNot?false:true;
-    
+    if (this.friendOrNot == false)
+      this.apiService.addFriend(this.Me.id, this.Dest.id).subscribe();
+    // else
+      // this.apiService.removeFriend(this.Me.id, this.Dest.id).subscribe();
   }
 
   blockOrNot(){
