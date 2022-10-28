@@ -4,6 +4,7 @@ import { io } from 'socket.io-client';
 import { HttpClient } from '@angular/common/http';
 import { ApiService } from '../services/api.service';
 import { User } from '../models/user';
+import { Channel } from '../models/channel'
 
 @Injectable({
   providedIn: 'root',
@@ -15,7 +16,7 @@ export class SocketService {
   target !: User;
   sock :string | undefined = "";
 
-  constructor(private apiService: ApiService) {
+  constructor() {
     this.socket = io(this.url);
   }
 
@@ -25,10 +26,27 @@ export class SocketService {
 
   //socket?.emit('loadprv', {n1 : login, n2 : recv}, (resp : Message[]) =>       {         setMessages(resp);       })
 
-  joinChannel(channel_name: string)
+  getUserInChannel(name: string)
+  {
+    return new Observable<User[]>((observer) => {
+      this.socket.on('channelJoined', (payload) => {
+        observer.next(payload.joined)
+      });
+    });
+  }
+
+  addChannel(channel_name: string, creator_id: number)
+  {
+    this.socket.emit('createChannel', channel_name, creator_id);
+    this.socket.on('channelCreated', (payload) => {
+      this.socket.emit('needToJoin', payload);
+    })
+  }
+
+  joinChannel(channel_name: string, current_user: User)
   {
     console.log("channel : " + channel_name + " room joined");
-    this.socket.emit('joinChannel', channel_name);
+    this.socket.emit('joinChannel', channel_name, current_user);
   }
 
   sendMsgToChannel(channel_name: string, message: string, from: string) : void

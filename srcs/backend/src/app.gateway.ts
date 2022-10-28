@@ -12,6 +12,7 @@ import { PrismaService } from './prisma.service';
 import { Server, Socket } from 'socket.io';
 import { IoAdapter } from '@nestjs/platform-socket.io';
 import { UserService } from './user.service';
+import { subscribeOn } from 'rxjs';
 
 @WebSocketGateway({
   cors: {
@@ -44,6 +45,26 @@ export class AppGateway
   //payload[2] = login1 - expediteur
   //payload[3] = login2 - Dest
 
+  @SubscribeMessage('createChannel')
+  async createChannel(client: any, payload: any)
+  {
+    let data2 = {name: payload[0], creator_id: payload[1]}
+    await this.Prisma.channel.create({
+      data: data2
+    })
+    await this.Prisma.channel.update({
+      where: {
+        name: data2.name
+      },
+      data: {
+        joined: {
+          connect: [{id: data2.creator_id}],
+        }
+      },
+    })
+    this.server.emit('channelCreated', payload);
+  }
+
   @SubscribeMessage('sendMsgTo')
   async sendMsgTo(client: any, payload: any): Promise<void> {
     // const dest = await this.server.in(payload[1]).fetchSockets;
@@ -54,17 +75,62 @@ export class AppGateway
     this.server.to(roomName).emit('PrivMsg', {msg: payload[0], channel: roomName, from: payload[2]});
   }
 
+  @SubscribeMessage('getUserInChannel')
+  async getUserInChannel(client: Socket, payload: any)
+  {
+    this.server.in(client.id).socketsJoin(client.id);
+    let data = await this.Prisma.channel.findFirst({
+			where: {
+				name: payload[0]
+			},
+      select: {
+        joined: true,
+      }
+		});
+    this.server.to(client.id).emit('userInChannel', data)
+  }
+
+  @SubscribeMessage('needToJoin')
+  async bridgeFunction(client: Socket, payload: any)
+  {
+    this.joinChannel(payload[0], payload[1]);
+  }
+
 //payload[0] = channel name
   @SubscribeMessage('joinChannel')
   async joinChannel(client: Socket, payload: any)
   {
-    console.log("join channel received on : " + payload + "_channel");
-    this.server.in(client.id).socketsJoin(payload + "_channel");
+    console.log("join channel received on : " + payload[0] + "_channel");
+    this.server.in(client.id).socketsJoin(payload[0] + "_channel");
+    await this.Prisma.channel.update({
+      where: {
+        name: payload[0]
+      },
+      data: {
+        joined: {
+          connect: [{id: Number(payload[1].id)}],
+        }
+      },
+    })
+    let data = await this.Prisma.channel.findFirst({
+			where: {
+				name: payload[0]
+			},
+      select: {
+        joined: true,
+      }
+		})
+    if (data != null && data != undefined)
+        this.server.in(payload[0] + "_channel").emit("channelJoined", data);
+    // console.log("data : ")
+    // console.log(data)
+    // this.server.in(payload + "_channel").emit("channelJoined", data);
   }
 
 //payload[0] = channel name
 //payload[1] = expediteur name
 //payload[2] = message content
+
   @SubscribeMessage('MsgInChannel')
   async MsgInChannel(client: Socket, payload: any)
   {

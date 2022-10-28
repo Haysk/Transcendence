@@ -16,7 +16,6 @@
     <div class="contenu_salon"> 
 
         <div class="env_conversation" style="overflow-y: auto; height: xyz;" #scrollMe [scrollTop]="scrollMe.scrollHeight">
-            <div class="conversation_salon" *ngFor="let histoMsg of historiqueConv"> {{histoMsg.fromUserName}}: {{histoMsg.content}} </div>
             <div class="conversation_salon" *ngFor="let userMessage of conversation"> {{ userMessage }}
             </div><!-- fin de conversation_salon -->
         </div><!-- fin de env_conversation -->

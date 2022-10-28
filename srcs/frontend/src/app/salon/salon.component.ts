@@ -34,18 +34,14 @@ export class SalonComponent implements OnInit {
    }
 
    async ngOnInit(): Promise<void> {
-    await this.apiService.findChannelByName(this.channel_name).subscribe({
+    this.socketService.joinChannel(this.channel_name, this.current_user);
+    this.socketService.getUserInChannel(this.channel_name).subscribe({
       next: (result) => {
-        this.guest = result;
-        // if (undefined != this.guest.joined)
-        console.log(result);
-        this.usersInGuest=this.guest.joined;
+        this.usersInGuest = result;
       },
-      error: (err) => {},
-      complete: () => {}
-    })
-    console.log("findChannelByName finished");
-    this.socketService.joinChannel(this.channel_name);
+      error: (err) =>{},
+      complete:() => {}
+    });
     this.apiService.getChannelMessages(this.channel_name).subscribe({
       next:(result) => {
         this.historiqueConv = result;
@@ -62,7 +58,7 @@ export class SalonComponent implements OnInit {
       error: (err) =>{},
       complete:() => {}
     })
-    console.log("getMsgFromChannel finished");
+    //console.log("getMsgFromChannel finished");
   }
   
 

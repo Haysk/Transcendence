@@ -27,14 +27,14 @@ export class AppController {
 	@Post('joinChannel')
 	async joinChannel(@Body() data : {target: ChannelModel, user: UserModel})
 	{
-		console.log("App Controller : channel name : " + data.target.name + " | user name : " + data.user.login);
+		//console.log("App Controller : channel name : " + data.target.name + " | user name : " + data.user.login);
 		return await this.channelService.joinChannel(data);
 	}
 
 	@Post('addChannel')
 	async addChannel(@Body() ChannelData: {name: string, creator_id: number},): Promise<ChannelModel>
 	{
-		console.log("addChannel");
+		//console.log("addChannel");
 		return await this.channelService.addChannel(ChannelData);
 	}
 
