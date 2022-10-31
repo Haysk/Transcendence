@@ -47,6 +47,20 @@ export class UserService {
 	})
   }
 
+  async updateAvatar(params: {id:number, avatar_url:string}) : Promise<User>
+  {
+
+	return await this.prisma.user.update({
+		where: {
+			id: params.id,
+		},
+		data: {
+			avatar_url: params.avatar_url,
+		},
+
+	})
+  }
+
 	async user(
 		userWhereInput: Prisma.UserWhereInput,
 	): Promise<User> {
@@ -97,6 +111,7 @@ export class UserService {
 								displayname: result.data.displayname,
 								image_url: result.data.image_url,
 								nickname: result.data.displayname,
+								avatar_url: result.data.image_url,
 								oauth: {
 									create: {
 										refresh_token: params.refresh_token,

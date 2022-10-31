@@ -6,6 +6,7 @@ import {
 	Body,
 	Put,
 	Delete,
+	ConsoleLogger,
 } from '@nestjs/common';
 import { UserService } from './user.service';
 import { TechService } from './tech.service';
@@ -49,6 +50,12 @@ export class AppController {
 	async updateNickName(@Body() UserData:{id:number, nickname:string},): Promise<UserModel>
 	{
 		return await this.userService.updateNickName(UserData);
+	}
+
+	@Post('updateAvatar')
+	async updateAvatar(@Body() UserData:{id:number, avatar_url:string},): Promise<UserModel>
+	{
+		return await this.userService.updateAvatar(UserData);
 	}
 
 	@Get('getAllChannels')
@@ -163,5 +170,12 @@ export class AppController {
 		let data = id;
 		return await this.userService.getAllUsers(data);
 	}
+
+	// @Post('upload/')
+	// async uploadAvatar(
+		// @Body() param: {name: string}
+	// ) {
+		// console.log(param.name);
+	// }
 }
 

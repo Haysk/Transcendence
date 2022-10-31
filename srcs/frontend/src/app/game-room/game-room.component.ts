@@ -22,6 +22,7 @@ export class GameRoomComponent implements OnInit {
     displayname: this.getDisplayName(),
     nickname: this.getNickname(),
     image_url: this.getImageUrl(),
+    avatar_url: this.getAvatarUrl(),
     online: this.getOnline(),
   }
 
@@ -106,6 +107,14 @@ export class GameRoomComponent implements OnInit {
       return "";
     return  image_url;
   }
+
+  getAvatarUrl(): string{
+    let avatar_url = localStorage.getItem("avatar_url");
+    if (avatar_url === null || avatar_url === undefined)
+      return "";
+    return  avatar_url;
+  }
+
 
   getOnline(): boolean{
     let online = localStorage.getItem("online");
