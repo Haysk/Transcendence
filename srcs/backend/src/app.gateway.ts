@@ -54,12 +54,86 @@ export class AppGateway
     this.server.to(roomName).emit('PrivMsg', {msg: payload[0], channel: roomName, from: payload[2]});
   }
 
+  @SubscribeMessage('createChannel')
+  async createChannel(client: Socket, payload: any)
+  {
+    console.log("PAYLOAD => ");
+    console.log(payload);
+    
+    
+    await this.Prisma.channel.create({
+			data: {name: payload[0], creator_id: Number(payload[1])},
+		})
+		await this.Prisma.channel.update({
+			where: {
+				name: payload[0],
+			},
+			data: {
+				joined: {
+					connect: [{id: Number(payload[1])}],
+				}
+			},
+		})
+    var data = await this.Prisma.channel.findMany({
+      include: {joined: true},
+    })
+    console.log("DATA => ");
+    
+    console.log(data);
+    if (data != null && data != undefined)
+      this.server.emit('aChannelHasBeenCreated', data);
+    if (data != null && data != undefined)
+      return data
+  }
+
 //payload[0] = channel name
+//payload[1] = creator id
   @SubscribeMessage('joinChannel')
   async joinChannel(client: Socket, payload: any)
   {
-    console.log("join channel received on : " + payload + "_channel");
-    this.server.in(client.id).socketsJoin(payload + "_channel");
+    console.log("join channel received on : " + payload[0] + "_channel");
+    this.server.in(client.id).socketsJoin(payload[0] + "_channel");
+    var data = await this.Prisma.channel.update({
+      where: {
+        name: payload[0]
+      },
+      data: {
+        joined: {
+          connect: [{id: Number(payload[1])}]
+        }
+      },
+      include: {
+        joined: true,
+      }
+    })
+    if (data != null && data != undefined)
+      //console.log(payload[0] + "_channel")
+      this.server.to(payload[0] + "_channel").emit('someoneJoinedTheChannel', data)
+    if (data != null && data != undefined)
+      return data;
+  }
+
+  @SubscribeMessage('leaveChannel')
+  async leaveChannel(client: Socket, payload: any)
+  {
+    this.server.in(client.id).socketsLeave(payload[0] + "_channel");
+    var data = await this.Prisma.channel.update({
+      where: {
+        name: payload[0]
+      },
+      data: {
+        joined: {
+          disconnect: [{id: Number(payload[1])}]
+        }
+      },
+      include: {
+        joined: true,
+      }
+    })    
+    if (data != null && data != undefined)
+      this.server.to(payload[0] + "_channel").emit('someoneJoinedTheChannel', data)
+    if (data != null && data != undefined)
+      return data;
   }
 
 //payload[0] = channel name

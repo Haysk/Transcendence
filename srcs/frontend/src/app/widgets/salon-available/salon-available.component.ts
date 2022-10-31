@@ -2,6 +2,7 @@ import { Component, OnInit, Input, Output, EventEmitter } from '@angular/core';
 import { ApiService } from '../../services/api.service';
 import {Channel} from '../../models/channel'
 import{ User } from '../../models/user'
+import { SocketService } from '../../services/socket.service';
 
 
 @Component({
@@ -24,7 +25,7 @@ export class SalonAvailableComponent implements OnInit {
   salons_dispos: Channel[] = [];
   @Input() current_user !:User;
   
-  constructor(private apiService:ApiService) {
+  constructor(private apiService:ApiService, private socketService: SocketService) {
 
     
 
@@ -39,13 +40,23 @@ export class SalonAvailableComponent implements OnInit {
       complete: () => {}
     }
     )
+
+    this.socketService.updateChannelList().subscribe({
+      next: (result) => {
+        console.log("ICI LE RESULT => ");
+        console.log(result);
+        
+        this.salons_dispos = result;
+      }
+    })
   }
 
   joinChannel(current_channel: Channel, current_user: User)
   {
     console.log("salon_available : channel name : " + current_channel.name + " | user name : " + current_user.login);
     console.log(current_user);
-    this.apiService.joinChannel(current_channel, current_user).subscribe();
+    this.socketService.joinChannel(current_channel.name, this.current_user.id);
+    //this.apiService.joinChannel(current_channel, current_user).subscribe();
     this.ShowChannelPublicEvent.emit(this.show_salon);
     this.SendJoinChannelNameEvent.emit(current_channel.name);
   }

@@ -4,6 +4,7 @@ import { io } from 'socket.io-client';
 import { HttpClient } from '@angular/common/http';
 import { ApiService } from '../services/api.service';
 import { User } from '../models/user';
+import { Channel } from '../models/channel'
 
 @Injectable({
   providedIn: 'root',
@@ -25,10 +26,41 @@ export class SocketService {
 
   //socket?.emit('loadprv', {n1 : login, n2 : recv}, (resp : Message[]) =>       {         setMessages(resp);       })
 
-  joinChannel(channel_name: string)
+  createChannel(channel_name: string, creator_id: number, password?: string)
+  {
+    this.socket.emit('createChannel', channel_name, creator_id, password);
+  }
+
+  updateChannelList() : Observable<Channel[]>
+  {
+    return new Observable<Channel[]>((observer) => {
+      this.socket.on('aChannelHasBeenCreated', (data) => {
+        observer.next(data);
+      })
+    })
+  }
+
+  updateUserList() : Observable<User[]>
+  {
+    // console.log("wististyle");
+    return new Observable<User[]>((observer) => {
+        this.socket.on('someoneJoinedTheChannel', (data) => {
+          // console.log("SOMEONE JOINED THE CHANNEL")
+          observer.next(data.joined);
+        });
+  
+      });
+  };
+
+  joinChannel(channel_name: string, id: number)
   {
     console.log("channel : " + channel_name + " room joined");
-    this.socket.emit('joinChannel', channel_name);
+    this.socket.emit('joinChannel', channel_name, id);
+  }
+
+  leaveChannel(channel_name: string, id: number)
+  {
+    this.socket.emit('leaveChannel', channel_name, id);
   }
 
   sendMsgToChannel(channel_name: string, message: string, from: string) : void
@@ -56,14 +88,6 @@ export class SocketService {
 
   sendLogin(login: string): void {
     this.socket.emit('sendLogin', login);
-  }
-
-  getPrivMsg() : Observable<string> {
-    return new Observable<string>((observer) => {
-      this.socket.on('msgToClient', (message) => {
-        observer.next(message)
-      });
-    });
   }
 
   getMessage(): Observable<string> {

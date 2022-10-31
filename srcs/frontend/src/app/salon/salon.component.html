@@ -7,6 +7,7 @@
         <div class="titre_salon_p2">"{{channel_name}}"</div>
         <div class="titre_salon_p3">
             <button type ="exit" (click)="quitSalon()"><span>exit</span></button>
+            <button type ="show" (click)="debug()"><span>show</span></button>
         </div>
     </div><!-- fin de titre_salon -->
 
@@ -33,8 +34,8 @@
                 Guests in Salon
             </div><!-- fin de titre_guest -->
             <div class="userInSalon" *ngFor ="let userInSalon of usersInGuest">
-            <app-user-in-salon [guest]=userInSalon></app-user-in-salon>
-                </div>
+                <app-user-in-salon [guest]=userInSalon></app-user-in-salon>
+            </div>
         </div><!-- fin de guest_salon -->
 
     </div><!-- fin de contenu_salon -->
@@ -43,6 +44,7 @@
 
 
     <div class="input_salon">
+    <!-- <input type="text" (keydown.enter)="sendMessage()" [(ngModel)]="message"> -->
     <input type="text" (keydown.enter)="sendMessage()" [(ngModel)]="message">
     </div><!-- fin de input_salon -->
 

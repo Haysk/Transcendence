@@ -3,6 +3,7 @@ import { User } from '../../models/user'
 import { Channel } from '../../models/channel'
 import { ApiService } from '../../services/api.service';
 import { Observable } from 'rxjs';
+import { SocketService } from '../../services/socket.service';
 
 @Component({
   selector: 'app-create-salon',
@@ -19,7 +20,7 @@ export class CreateSalonComponent implements OnInit {
   
 
 
-  constructor(private apiService: ApiService) { }
+  constructor(private socketService: SocketService, private apiService: ApiService) { }
 
   channel_name : string = "";
   channel_creator !: User;
@@ -50,9 +51,10 @@ export class CreateSalonComponent implements OnInit {
 
   createSalon(){
     
-    this.apiService.addChannel(this.channel_name, this.channel_creator.id).subscribe();
-
-  
+    //this.apiService.addChannel(this.channel_name, this.channel_creator.id).subscribe();
+    this.socketService.createChannel(this.channel_name, this.channel_creator.id);
+    this.socketService.joinChannel(this.channel_name, this.channel_creator.id);
+    
     this.ShowSalonEvent.emit(this.show_salon);
     this.SendChannelNameEvent.emit(this.channel_name);
 
@@ -61,6 +63,9 @@ export class CreateSalonComponent implements OnInit {
   createPrivateSalon(){
     console.log("createPrivateSalon()");
     this.apiService.addPrivateChannel(this.channel_name, this.channel_creator.id, this.channel_password).subscribe();
+    this.socketService.createChannel(this.channel_name, this.channel_creator.id, this.channel_password)
+    this.socketService.joinChannel(this.channel_name, this.channel_creator.id)
+    
     this.ShowSalonEvent.emit(this.show_salon);
     
   }

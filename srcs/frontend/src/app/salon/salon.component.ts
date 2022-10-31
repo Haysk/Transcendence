@@ -22,7 +22,7 @@ export class SalonComponent implements OnInit {
   
   
   guest!:Channel;
-  usersInGuest: User[] | undefined;
+  usersInGuest: User[] = [];
  
  
   
@@ -39,13 +39,20 @@ export class SalonComponent implements OnInit {
         this.guest = result;
         // if (undefined != this.guest.joined)
         console.log(result);
-        this.usersInGuest=this.guest.joined;
+        if (this.guest != null && this.guest.joined !== undefined)
+          this.usersInGuest=this.guest.joined;
       },
       error: (err) => {},
       complete: () => {}
     })
-    console.log("findChannelByName finished");
-    this.socketService.joinChannel(this.channel_name);
+    //console.log("findChannelByName finished");
+    //this.socketService.joinChannel(this.channel_name, this.current_user.id);
+    await this.socketService.updateUserList().subscribe({
+      next: (result) => {
+        this.usersInGuest = result;
+      }
+    });
+
     this.apiService.getChannelMessages(this.channel_name).subscribe({
       next:(result) => {
         this.historiqueConv = result;
@@ -62,7 +69,7 @@ export class SalonComponent implements OnInit {
       error: (err) =>{},
       complete:() => {}
     })
-    console.log("getMsgFromChannel finished");
+    //console.log("getMsgFromChannel finished");
   }
   
 
@@ -85,6 +92,12 @@ export class SalonComponent implements OnInit {
   }
 
   quitSalon(){
+    this.socketService.leaveChannel(this.channel_name, this.current_user.id);
     this.QuitSalonEvent.emit(this.quit_salon);
+  }
+
+  debug() {
+    console.log(this.usersInGuest);
+    
   }
 }
