@@ -173,9 +173,19 @@ export class AppController {
 
 	// @Post('upload/')
 	// async uploadAvatar(
-		// @Body() param: {name: string}
+	// 	@Body() param: {name: Blob}
 	// ) {
-		// console.log(param.name);
+		
+	// 	const fs = require('fs');
+	// 	let filePath= './upload/${Date.now()_$test}';
+	// 	console.log("nom:" + param.name);
+	// 	// let buffer=Buffer.from(param.name.split(',')[1],"base64");
+	// 	// console.log("hello" + buffer);
+	// 	fs.writeFiles(filePath, param.name);
+		
+
+
+
 	// }
 }
 

@@ -69,6 +69,9 @@ export class VipRoomComponent implements OnInit {
     
 
     // this.http.post('https://localhost:8081/api/upload/', this.selectedFile).subscribe();
+
+     
+
     //   this.http.post('https://localhost:8081/api/upload/', {name: this.url}).subscribe(
     // );
   }
