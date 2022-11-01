@@ -38,7 +38,7 @@ export class SalonComponent implements OnInit {
       next: (result) => {
         this.guest = result;
         // if (undefined != this.guest.joined)
-        console.log(result);
+        // console.log(result);
         if (this.guest != null && this.guest.joined !== undefined)
           this.usersInGuest=this.guest.joined;
       },
