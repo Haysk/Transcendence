@@ -14,6 +14,7 @@ import { SalonComponent } from './salon/salon.component';
 
 
 
+
 const routes: Routes = [
   { path: '', component: LoginComponent },
   { path: 'game-room', component: GameRoomComponent },

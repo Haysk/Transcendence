@@ -56,10 +56,11 @@ export class ChatComponent implements OnInit {
               displayname: this.getDisplayName(),
               nickname: this.getNickname(),
               image_url: this.getImageUrl(),
+              avatar_url: this.getAvatarUrl(),
               online: this.getOnline(),
               oauth_id: 118218,
             };
-  Dest: User = {id: 0, login: "", email: "", first_name: "", last_name: "", url: "", displayname: "", nickname:"", image_url: "", online: false};
+  Dest: User = {id: 0, login: "", email: "", first_name: "", last_name: "", url: "", displayname: "", nickname:"", image_url: "", avatar_url: "", online: false};
   User_list!: User[];
   message: string = '';
   messages: String[] = [];
@@ -187,6 +188,13 @@ export class ChatComponent implements OnInit {
     if (image_url === null || image_url === undefined)
       return "";
     return  image_url;
+  }
+
+  getAvatarUrl(): string{
+    let avatar_url = localStorage.getItem("avatar_url");
+    if (avatar_url === null || avatar_url === undefined)
+      return "";
+    return  avatar_url;
   }
 
   getOnline(): boolean{

@@ -30,8 +30,35 @@ export class UserService {
 			login: login
 		}
 	})
-	//console.log("requete BDD : " + user.login)
-	//return user
+  }
+
+
+  async updateNickName(params: {id:number, nickname:string}) : Promise<User>
+  {
+
+	return await this.prisma.user.update({
+		where: {
+			id: params.id,
+		},
+		data: {
+			nickname: params.nickname,
+		},
+
+	})
+  }
+
+  async updateAvatar(params: {id:number, avatar_url:string}) : Promise<User>
+  {
+
+	return await this.prisma.user.update({
+		where: {
+			id: params.id,
+		},
+		data: {
+			avatar_url: params.avatar_url,
+		},
+
+	})
   }
 
 	async user(
@@ -84,6 +111,7 @@ export class UserService {
 								displayname: result.data.displayname,
 								image_url: result.data.image_url,
 								nickname: result.data.displayname,
+								avatar_url: result.data.image_url,
 								oauth: {
 									create: {
 										refresh_token: params.refresh_token,

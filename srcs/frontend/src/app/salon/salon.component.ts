@@ -78,14 +78,14 @@ export class SalonComponent implements OnInit {
     this.content.channelName = this.channel_name;
     this.content.content = this.message;
     this.content.fromUserId = this.current_user.id;
-    this.content.fromUserName = this.current_user.login;
+    this.content.fromUserName = this.current_user.nickname;
   }
 
   sendMessage(){
     console.log(this.message);
     this.setUpContent();
     this.apiService.createChannelMessage(this.content).subscribe();
-    this.socketService.sendMsgToChannel(this.channel_name, this.message, this.current_user.login)
+    this.socketService.sendMsgToChannel(this.channel_name, this.message, this.current_user.nickname)
     // this.conversation.push(this.message);
     this.message= '';
     this.content = {content: "", fromUserId: 0, fromUserName: ""};
