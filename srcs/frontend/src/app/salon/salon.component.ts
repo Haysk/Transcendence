@@ -46,8 +46,8 @@ export class SalonComponent implements OnInit {
       complete: () => {}
     })
     //console.log("findChannelByName finished");
-    //this.socketService.joinChannel(this.channel_name, this.current_user.id);
-    await this.socketService.updateUserList().subscribe({
+    this.socketService.joinChannel(this.channel_name, this.current_user.id);
+    this.socketService.updateUserList().subscribe({
       next: (result) => {
         this.usersInGuest = result;
       }

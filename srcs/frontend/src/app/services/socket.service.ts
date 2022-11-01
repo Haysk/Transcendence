@@ -26,9 +26,27 @@ export class SocketService {
 
   //socket?.emit('loadprv', {n1 : login, n2 : recv}, (resp : Message[]) =>       {         setMessages(resp);       })
 
-  createChannel(channel_name: string, creator_id: number, password?: string)
+  async createChannel(channel_name: string, creator_id: number)
   {
-    this.socket.emit('createChannel', channel_name, creator_id, password);
+    this.socket.emit('createChannel', channel_name, creator_id, () => { 
+      this.socket.emit('joinChannel', channel_name, creator_id);
+    });
+  }
+
+  createPrivChannel(channel_name: string, creator_id: number, password?: string)
+  {
+    this.socket.emit('createChannel', channel_name, creator_id, password, () => { 
+      this.socket.emit('joinChannel', channel_name, creator_id);
+    });
+  }
+
+  iAmReady()
+  {
+    return new Observable(obs => {
+      this.socket.on('youAreReady', () => {
+        obs.next()
+      })
+    })
   }
 
   updateChannelList() : Observable<Channel[]>

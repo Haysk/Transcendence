@@ -62,28 +62,23 @@ export class AppGateway
     
     
     await this.Prisma.channel.create({
-			data: {name: payload[0], creator_id: Number(payload[1])},
-		})
-		await this.Prisma.channel.update({
-			where: {
-				name: payload[0],
-			},
 			data: {
-				joined: {
-					connect: [{id: Number(payload[1])}],
-				}
-			},
+        name: String(payload[0]), 
+        creator_id: Number(payload[1]),
+        joined: {
+          connect: [{id: Number(payload[1])}],
+        }
+      },
 		})
-    var data = await this.Prisma.channel.findMany({
+    //var data =
+    const data = await this.Prisma.channel.findMany({
       include: {joined: true},
     })
-    console.log("DATA => ");
-    
-    console.log(data);
     if (data != null && data != undefined)
+    {
       this.server.emit('aChannelHasBeenCreated', data);
-    if (data != null && data != undefined)
-      return data
+      this.server.to(client.id).emit('youAreReady');
+    }
   }
 
 //payload[0] = channel name
@@ -91,11 +86,12 @@ export class AppGateway
   @SubscribeMessage('joinChannel')
   async joinChannel(client: Socket, payload: any)
   {
-    console.log("join channel received on : " + payload[0] + "_channel");
+    console.log("join channel received on : " + payload[0] + "_channel with ID : " + Number(payload[1]));
     this.server.in(client.id).socketsJoin(payload[0] + "_channel");
-    var data = await this.Prisma.channel.update({
+    try{
+    let data = await this.Prisma.channel.update({
       where: {
-        name: payload[0]
+        name: String(payload[0])
       },
       data: {
         joined: {
@@ -107,17 +103,19 @@ export class AppGateway
       }
     })
     if (data != null && data != undefined)
-      //console.log(payload[0] + "_channel")
-      this.server.to(payload[0] + "_channel").emit('someoneJoinedTheChannel', data)
-    if (data != null && data != undefined)
-      return data;
+    this.server.to(payload[0] + "_channel").emit('someoneJoinedTheChannel', data)
+  if (data != null && data != undefined)
+    return data;
+  }catch(error){
+    console.log(error);
+  }
   }
 
   @SubscribeMessage('leaveChannel')
   async leaveChannel(client: Socket, payload: any)
   {
     this.server.in(client.id).socketsLeave(payload[0] + "_channel");
-    var data = await this.Prisma.channel.update({
+    let data = await this.Prisma.channel.update({
       where: {
         name: payload[0]
       },
