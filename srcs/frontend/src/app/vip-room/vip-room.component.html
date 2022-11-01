@@ -16,22 +16,25 @@
         </div><!-- fin de div bloc_modify  -->
 
         <!--UpLoad avatar-->
-        <!-- <div class="champ_avatar" *ngIf="visible_avatar">
-            <label for="file">Choose File:&nbsp;</label>
+        <div class="champ_avatar" *ngIf="visible_avatar">
+            <!-- <label for="file">Choose File:&nbsp;</label>
             <input type="file" id="file" (change)="onFileSelected($event)">
-            <app-button-v2 [text]="'Upload'" (click)="onUpload()"></app-button-v2>
+            <app-button-v2 [text]="'Upload'" (click)="onUpload()"></app-button-v2> -->
+            <div class="container">
+                <!-- <img [src]="url" title="Profile Picture" height="150px" width="150px" /> -->
+                <input
+                  type="file"
+                  id="img"
+                  accept="image/*"
+                  (change)="onSelect($event)"
+                />
+                <app-button-v2 [text]="'Upload'" (click)="onUpload()"></app-button-v2>
+              </div> 
+
             
-        </div> -->
-     <div class="container">
-            <!-- <img [src]="url" title="Profile Picture" height="150px" width="150px" /> -->
-            <input
-              type="file"
-              id="img"
-              accept="image/*"
-              (change)="onSelect($event)"
-            />
-            <app-button-v2 [text]="'Upload'" (click)="onUpload()"></app-button-v2>
-          </div> 
+            
+        </div>
+    
         
         <!--Change nickname-->
         <div class="champ_nickname" *ngIf="visible_nickname">
