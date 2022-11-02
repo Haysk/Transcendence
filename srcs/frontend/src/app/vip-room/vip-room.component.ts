@@ -64,6 +64,7 @@ export class VipRoomComponent implements OnInit {
   onUpload(){
     
       this.apiService.updateAvatar(Number(this.id), String(this.url)).subscribe();
+      console.log("this.url")
       localStorage.setItem('avatar_url', String(this.url));
       window.alert('***Update down***');
     
@@ -80,6 +81,10 @@ export class VipRoomComponent implements OnInit {
   constructor(private apiService: ApiService, private http: HttpClient) { }
 
   ngOnInit(): void {
+    
+    
+    
+    
    
 
   }
