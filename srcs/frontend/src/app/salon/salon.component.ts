@@ -96,8 +96,8 @@ export class SalonComponent implements OnInit {
     this.QuitSalonEvent.emit(this.quit_salon);
   }
 
-  debug() {
-    console.log(this.usersInGuest);
+  pauseSalon() {
+    this.QuitSalonEvent.emit(this.quit_salon);
     
   }
 }

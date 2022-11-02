@@ -63,10 +63,16 @@ export class VipRoomComponent implements OnInit {
 
   onUpload(){
     
+      if (this.selectedFile.size < 75000){
       this.apiService.updateAvatar(Number(this.id), String(this.url)).subscribe();
       console.log("this.url")
       localStorage.setItem('avatar_url', String(this.url));
       window.alert('***Update down***');
+      }
+      else{
+        window.alert('***image too large only < 75kb ***');
+      }
+
     
 
     // this.http.post('https://localhost:8081/api/upload/', this.selectedFile).subscribe();

@@ -44,6 +44,9 @@
 
 .titre_salon_p3{
     width: 30%;
+    align-items: center;
+    display: flex;
+    flex-direction: center;
     /* background-color: rgb(11, 63, 63); */
 }
 
@@ -148,6 +151,39 @@ button[type="exit"] span::before{
     border-radius: 20px;
 
 }
+
+button[type="pause"]{
+    color: aliceblue;
+
+    width: 20px;
+    height: 20px;
+    text-align: center;
+    background-color: rgb(62, 65, 66);
+    font-size: 14px;
+    border: none;
+    border-radius: 20px;
+    cursor: pointer;
+    margin-right: 10px;
+    
+    transform: rotate(90deg);
+}
+
+button[type="pause"]:hover{
+    color: rgb(240, 255, 254);
+    width: 20px;
+    height: 20px;
+    text-align: center;
+    background-color: rgb(18, 161, 125);
+    font-size: 14px;
+    border: none;
+    border-radius: 20px;
+    cursor: pointer;
+    margin-right: 10px;
+    text-transform: uppercase;
+    transform: rotate(135deg);
+
+}
+
 
 
 .contenu_salon{
