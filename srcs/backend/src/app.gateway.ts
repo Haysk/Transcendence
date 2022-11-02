@@ -57,10 +57,8 @@ export class AppGateway
   @SubscribeMessage('createChannel')
   async createChannel(client: Socket, payload: any)
   {
-    console.log("PAYLOAD => ");
-    console.log(payload);
-    
-    
+    // console.log("PAYLOAD => ");
+    // console.log(payload);
     await this.Prisma.channel.create({
 			data: {
         name: String(payload[0]), 
@@ -86,7 +84,7 @@ export class AppGateway
   @SubscribeMessage('joinChannel')
   async joinChannel(client: Socket, payload: any)
   {
-    console.log("join channel received on : " + payload[0] + "_channel with ID : " + Number(payload[1]));
+    // console.log("join channel received on : " + payload[0] + "_channel with ID : " + Number(payload[1]));
     this.server.in(client.id).socketsJoin(payload[0] + "_channel");
     try{
     let data = await this.Prisma.channel.update({

@@ -72,7 +72,7 @@ export class SocketService {
 
   joinChannel(channel_name: string, id: number)
   {
-    console.log("channel : " + channel_name + " room joined");
+    // console.log("channel : " + channel_name + " room joined");
     this.socket.emit('joinChannel', channel_name, id);
   }
 
