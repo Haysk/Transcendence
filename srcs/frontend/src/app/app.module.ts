@@ -26,6 +26,7 @@ import { SalonAvailableComponent } from './widgets/salon-available/salon-availab
 import { PongPlayerComponent } from './pong-player/pong-player.component';
 import { PongBallComponent } from './pong-ball/pong-ball.component';
 import { PongGameComponent } from './pong-game/pong-game.component';
+import { PlayerPongComponent } from './widgets/player-pong/player-pong.component';
 
 @NgModule({
   declarations: [
@@ -51,7 +52,8 @@ import { PongGameComponent } from './pong-game/pong-game.component';
     SalonAvailableComponent,
     PongPlayerComponent,
     PongBallComponent,
-    PongGameComponent
+    PongGameComponent,
+    PlayerPongComponent,
   ],
   imports: [
     BrowserModule,

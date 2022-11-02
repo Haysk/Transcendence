@@ -15,8 +15,8 @@
         
             <h2>Players available for PONG</h2>    
             <div class="env_player_available">
-                <div class="player_available" *ngFor="let playersonline of list_user"> 
-                    <app-player-pong [user]="playersonline" ></app-player-pong>
+                <div class="player_available" *ngFor="let user of list_user"> 
+                    <app-player-pong [user]="user" ></app-player-pong>
                 </div>
             </div>
         </div><!-- fin de div bloc_player_available  -->
