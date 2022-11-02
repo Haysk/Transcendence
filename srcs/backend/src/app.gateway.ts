@@ -15,7 +15,7 @@ import { UserService } from './user.service';
 
 @WebSocketGateway({
   cors: {
-    origin: 'https://localhost:8081',
+    origin: 'https://' + process.env.IP_HOST,
     credential:true,
   },
 })

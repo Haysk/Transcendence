@@ -7,12 +7,13 @@ import { Channel } from '../models/channel';
 import { Observable } from 'rxjs';
 import { Oauth } from '../models/oauth';
 import { UrlSerializer } from '@angular/router';
+import { environment } from 'src/environments/environment';
 
 @Injectable({
   providedIn: 'root'
 })
 export class ApiService {
-  API_SERVER = "https://localhost:8081/api";
+  API_SERVER = "https://" + environment.IP_HOST + "/api";
 
   constructor(private httpClient: HttpClient) { }
 

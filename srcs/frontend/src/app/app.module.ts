@@ -1,5 +1,5 @@
 import { NgModule } from '@angular/core';
-import { HttpClientModule } from '@angular/common/http';
+import { HttpClient, HttpClientModule } from '@angular/common/http';
 import { FormsModule } from '@angular/forms';
 import { BrowserModule } from '@angular/platform-browser';
 import { AppRoutingModule } from './app-routing.module';
@@ -23,7 +23,9 @@ import { UserInSalonComponent } from './widgets/user-in-salon/user-in-salon.comp
 import { ButtonV3Component } from './widgets/button-v3/button-v3.component';
 import { CreateSalonComponent } from './widgets/create-salon/create-salon.component';
 import { SalonAvailableComponent } from './widgets/salon-available/salon-available.component';
-import { PlayerPongComponent } from './widgets/player-pong/player-pong.component';
+import { PongPlayerComponent } from './pong-player/pong-player.component';
+import { PongBallComponent } from './pong-ball/pong-ball.component';
+import { PongGameComponent } from './pong-game/pong-game.component';
 
 @NgModule({
   declarations: [
@@ -47,7 +49,9 @@ import { PlayerPongComponent } from './widgets/player-pong/player-pong.component
     ButtonV3Component,
     CreateSalonComponent,
     SalonAvailableComponent,
-    PlayerPongComponent
+    PongPlayerComponent,
+    PongBallComponent,
+    PongGameComponent
   ],
   imports: [
     BrowserModule,
@@ -56,8 +60,7 @@ import { PlayerPongComponent } from './widgets/player-pong/player-pong.component
     FormsModule
   ],
   providers: [
-   
-    
+    HttpClient
   ],
   bootstrap: [AppComponent]
 })

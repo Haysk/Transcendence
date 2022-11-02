@@ -25,6 +25,7 @@ services:
     restart: always
     environment:
       DATABASE_URL: ${DATABASE_URL}
+      IP_HOST: ${IP_HOST}
     expose:
       - 3000
     ports:
@@ -44,8 +45,7 @@ services:
     image: frontend
     restart: always
     environment:
-      API_PORT: ${API_PORT}
-      API_HOST: ${API_HOST}
+      IP_HOST: ${IP_HOST}
     expose:
       - 4200
     networks:
@@ -61,8 +61,8 @@ services:
     image: nginx
     restart: always
     ports:
-      - '8080:80'
-      - '8081:443'
+      - ${PORT_HTTP_HOST}:80
+      - ${PORT_HTTPS_HOST}:443
     networks:
       - frontend_network
       - backend_network

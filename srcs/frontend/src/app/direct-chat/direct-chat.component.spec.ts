@@ -1,3 +1,4 @@
+import { HttpClientTestingModule } from '@angular/common/http/testing';
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 
 import { DirectChatComponent } from './direct-chat.component';
@@ -8,7 +9,8 @@ describe('DirectChatComponent', () => {
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      declarations: [ DirectChatComponent ]
+      declarations: [ DirectChatComponent ],
+      imports: [ HttpClientTestingModule ]
     })
     .compileComponents();
 

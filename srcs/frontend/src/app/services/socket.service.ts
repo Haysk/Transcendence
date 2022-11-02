@@ -5,14 +5,17 @@ import { HttpClient } from '@angular/common/http';
 import { ApiService } from '../services/api.service';
 import { User } from '../models/user';
 import { Channel } from '../models/channel'
+import { environment } from 'src/environments/environment';
+import { IGameStates } from '../pong/game/interfaces/game-states.interface';
+import { IInput } from '../pong/game/interfaces/input.interface';
 
 @Injectable({
-  providedIn: 'root',
+  providedIn: 'root'
 })
 export class SocketService {
-  private url = 'https://localhost:8081';
+  private url = 'https://' + environment.IP_HOST;
   private socket;
-  API_SERVER = "https://localhost:8081/api";
+  API_SERVER = 'https://' + environment.IP_HOST + '/api';
   target !: User;
   sock :string | undefined = "";
 
@@ -111,6 +114,30 @@ export class SocketService {
   getMessage(): Observable<string> {
     return new Observable<string>((observer) => {
       this.socket.on('PrivMsg', (message) => {
+        observer.next(message);
+      });
+    });
+  }
+
+  sendMove(move: IInput): void {
+    this.socket.emit('moveToServer', move);
+  }
+
+  getMove(): Observable<IInput> {
+    return new Observable<IInput>((observer) => {
+      this.socket.on('moveToClient', (message) => {
+        observer.next(message);
+      });
+    });
+  }
+
+  sendGameStates(gameStates: IGameStates): void {
+    this.socket.emit('gameStatesToServer', gameStates);
+  }
+
+  getGameStates(): Observable<IGameStates> {
+    return new Observable<IGameStates>((observer) => {
+      this.socket.on('gameStatesToClient', (message) => {
         observer.next(message);
       });
     });
