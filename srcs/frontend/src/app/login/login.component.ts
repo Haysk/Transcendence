@@ -6,6 +6,7 @@ import { Oauth } from '../models/oauth';
 import { User } from '../models/oauth';
 import { waitForAsync } from '@angular/core/testing';
 import { first, mergeMap, take } from 'rxjs';
+import { SocketService } from '../services/socket.service';
 
 @Component({
   selector: 'app-root',
@@ -17,7 +18,8 @@ export class LoginComponent implements OnInit {
 	INTRA_API_AUTH = "https://api.intra.42.fr/oauth/authorize";
 	code: string = "";
 
-	constructor(private route: ActivatedRoute,
+	constructor(private socketService: SocketService,
+		private route: ActivatedRoute,
 		private apiService: ApiService,
 		private router: Router) {
 		this.route.queryParams.subscribe((params) => {
@@ -62,6 +64,7 @@ export class LoginComponent implements OnInit {
 						this.router.navigate(["../"], { relativeTo: this.route });
 					},
 					complete: () => {
+						this.socketService.imConnected();
 						this.router.navigate(["../home"], { relativeTo: this.route });
 					}
 				});

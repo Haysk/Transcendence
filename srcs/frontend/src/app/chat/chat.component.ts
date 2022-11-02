@@ -23,23 +23,8 @@ import { Injectable } from '@angular/core';
     },
     {
       provide: 'whoAmI',
-      //useValue : {id: 2, name: "Antoine", online: true}
       useValue: {id: 1, name: "Alexandre", email: "someEmail", online: true}
     },
-    // {
-    //   provide: 'user_list',
-    //   useValue: [
-    //     {id: 1, login: "Alexandre", online: true},
-    //     {id: 2, login: "Antoine", online: true},
-    //     {id: 3, login: "Arnaud", online: false},
-    //     {id: 4, login: "Ching", online: true}
-    //   ]
-    // },
-    // {
-    //   provide: 'whoAmI',
-    //   //useValue : {id: 2, login: "Antoine", online: true}
-    //   useValue: {id: 1, login: "Alexandre", email: "someEmail", online: true}
-    // },
 ]
 })
 @Injectable({
@@ -114,17 +99,16 @@ export class ChatComponent implements OnInit {
   }
 
   async ngOnInit(): Promise<void> {
-    await this.apiService.getAllUsers(this.Me.id).subscribe(
-      (result => {
+    // await this.apiService.getAllUsers(this.Me.id).subscribe(
+    //   (result => {
+    //     this.User_list = result;
+    //   }));
+
+      this.socketService.askForUserList(this.Me.id);
+      this.socketService.getConnectionSignal(this.Me.id).subscribe();
+      this.socketService.getAllUser().subscribe((result) => {
         this.User_list = result;
-      }));
-
-      // this.socketService.sendLogin(this.Me.login); //obtenir son socket
-
-      // this.socketService.getPrivMsg().subscribe((result => {
-      //   this.test = result;
-      // }))
-      //}))
+      })
   }
 
   getId(): number{

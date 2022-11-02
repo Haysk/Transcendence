@@ -8,6 +8,7 @@ import { Channel } from '../models/channel'
 import { environment } from 'src/environments/environment';
 import { IGameStates } from '../pong/game/interfaces/game-states.interface';
 import { IInput } from '../pong/game/interfaces/input.interface';
+import { observable } from 'rxjs';
 
 @Injectable({
   providedIn: 'root'
@@ -23,6 +24,11 @@ export class SocketService {
     this.socket = io(this.url);
   }
 
+  imConnected()
+  {
+    this.socket.emit('imConnected');
+  }
+
   getId(): String{
     return this.socket.id;
   }
@@ -36,6 +42,33 @@ export class SocketService {
     });
   }
 
+  askForUserList(current_id: number)
+  {
+    this.socket.emit('userListPlz', current_id);
+  }
+
+  getConnectionSignal(current_id: number)
+  {
+    return new Observable((obs) => {
+      this.socket.on('userListUpdated', () => {
+      this.socket.emit('userListPlz', current_id);
+      obs.next();
+      })
+    })
+  }
+
+  getAllUser()
+  {
+    return new Observable<User[]>((obs) => {
+      this.socket.on('hereIsTheUserList', (res: User[]) => {
+        // console.log("HEREISTHEUSERLIST OK =>")
+        console.log(res);
+
+        obs.next(res);
+      })
+  })
+  }
+
   createPrivChannel(channel_name: string, creator_id: number, password?: string)
   {
     this.socket.emit('createChannel', channel_name, creator_id, password, () => { 
@@ -47,7 +80,7 @@ export class SocketService {
   {
     return new Observable(obs => {
       this.socket.on('youAreReady', () => {
-        obs.next()
+        obs.next();
       })
     })
   }

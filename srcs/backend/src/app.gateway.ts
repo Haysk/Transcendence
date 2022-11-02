@@ -39,11 +39,48 @@ export class AppGateway
   server!: Server;
   private logger: Logger = new Logger('AppGateway');
 
+  @SubscribeMessage('imConnected')
+  async connectionNotification()
+  {
+    this.server.emit('userListUpdated');
+  }
+
+  @SubscribeMessage('userListPlz')
+  async sendUserList(client: any, payload: any)
+  {
+    // console.log("SENDUSERLIST en cours");
+    
+    try{
+    let data = await this.Prisma.user.findMany({
+      where: {
+        id: {
+          not: Number(payload),
+        }
+      }
+      // include: {
+      //   channel_joined: true,
+      //   blocked:        true,
+      //   blockedby:      true,
+      //   friends:        true,
+      //   friendsof:      true,
+      // }
+    })
+    if(data != null && data != undefined)
+    {
+      // console.log("TUTTO BENE ")
+      this.server.to(client.id).emit('hereIsTheUserList', data);
+    }
+  }
+  catch(err) {
+    console.log("error SEND USER LIST : ");
+    console.log(err); 
+  }
+}
+
   //payload[0] = message
   //payload[1] = socket dest
   //payload[2] = login1 - expediteur
   //payload[3] = login2 - Dest
-
   @SubscribeMessage('sendMsgTo')
   async sendMsgTo(client: any, payload: any): Promise<void> {
     // const dest = await this.server.in(payload[1]).fetchSockets;
@@ -68,7 +105,6 @@ export class AppGateway
         }
       },
 		})
-    //var data =
     const data = await this.Prisma.channel.findMany({
       include: {joined: true},
     })
@@ -144,8 +180,9 @@ export class AppGateway
   @SubscribeMessage('sendLogin')
   async setupLogin(client: Socket, payload: any): Promise<void>
   {
-    //console.log("LOGIN :" + payload + " | mysocket : " + client.id)
-    await this.Prisma.user.update({
+    console.log("LOGIN :" + payload + " | mysocket : " + client.id)
+    try{
+      await this.Prisma.user.update({
       where: {
         login: payload,
       },
@@ -153,6 +190,12 @@ export class AppGateway
         socket: client.id,
       },
     });
+  }
+  catch(err){
+    console.log("erreur dans setuplogin : ");
+    console.log(err);
+    
+  }
   }
 
   @SubscribeMessage('msgToMe')
@@ -201,5 +244,6 @@ export class AppGateway
 
   handleConnection(client: Socket, ...args: any[]) {
     this.logger.log(`Client connected: ${client.id}`);
+    this.server.emit('userListUpdated');
   }
 }
