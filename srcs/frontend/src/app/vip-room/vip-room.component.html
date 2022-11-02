@@ -3,7 +3,7 @@
   
     <div class="bloc_vip">
         <div class="title_vip">{{login}}'s Profile</div>
-        <div class="user_photo"  style="background-image:url({{image_url}})" ></div>
+        <div class="user_photo"  style="background-image:url({{url}})" ></div>
         <div class="user_name" >{{nickname}}</div>
         
 
@@ -15,13 +15,28 @@
             <app-button-v2 [text]="'Double authentification?'"></app-button-v2>
         </div><!-- fin de div bloc_modify  -->
 
+        <!--UpLoad avatar-->
         <div class="champ_avatar" *ngIf="visible_avatar">
-            <label for="file">Choose File:&nbsp;</label>
-            <input type="file" id="file">
-            <app-button-v2 [text]="'Reset'"></app-button-v2>
-            <!-- (change)="handleFileInput($event.target.files)"> -->
-        </div>
+            <!-- <label for="file">Choose File:&nbsp;</label>
+            <input type="file" id="file" (change)="onFileSelected($event)">
+            <app-button-v2 [text]="'Upload'" (click)="onUpload()"></app-button-v2> -->
+            <div class="container">
+                <!-- <img [src]="url" title="Profile Picture" height="150px" width="150px" /> -->
+                <input
+                  type="file"
+                  id="img"
+                  accept="image/*"
+                  (change)="onSelect($event)"
+                />
+                <app-button-v2 [text]="'Upload'" (click)="onUpload()"></app-button-v2>
+              </div> 
 
+            
+            
+        </div>
+    
+        
+        <!--Change nickname-->
         <div class="champ_nickname" *ngIf="visible_nickname">
             New nickname:&nbsp; <input type="text" id="new_nickname" value="Your new nickname" [(ngModel)]="newNickName">
             <app-button-v2 [text]="'Reset'" (click)="changeNickname()"></app-button-v2>

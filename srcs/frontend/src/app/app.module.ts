@@ -56,6 +56,7 @@ import { PlayerPongComponent } from './widgets/player-pong/player-pong.component
     FormsModule
   ],
   providers: [
+   
     
   ],
   bootstrap: [AppComponent]

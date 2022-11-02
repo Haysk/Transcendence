@@ -6,6 +6,7 @@ import {
 	Body,
 	Put,
 	Delete,
+	ConsoleLogger,
 } from '@nestjs/common';
 import { UserService } from './user.service';
 import { TechService } from './tech.service';
@@ -45,6 +46,18 @@ export class AppController {
 		return await this.channelService.addChannel(ChannelData);
 	}
 
+	@Post('updateNickName')
+	async updateNickName(@Body() UserData:{id:number, nickname:string},): Promise<UserModel>
+	{
+		return await this.userService.updateNickName(UserData);
+	}
+
+	@Post('updateAvatar')
+	async updateAvatar(@Body() UserData:{id:number, avatar_url:string},): Promise<UserModel>
+	{
+		return await this.userService.updateAvatar(UserData);
+	}
+
 	@Get('getAllChannels')
 	async getAllChannels() : Promise<ChannelModel[]>
 	{
@@ -63,6 +76,8 @@ export class AppController {
 		//console.log("getUserByLogin : " + login);
 		return await this.userService.findUserByLogin(login);
 	}
+
+	// @Post('updateNickName/:')
 
 	@Post('message')
 	async addMessage(
@@ -155,5 +170,22 @@ export class AppController {
 		let data = id;
 		return await this.userService.getAllUsers(data);
 	}
+
+	// @Post('upload/')
+	// async uploadAvatar(
+	// 	@Body() param: {name: Blob}
+	// ) {
+		
+	// 	const fs = require('fs');
+	// 	let filePath= './upload/${Date.now()_$test}';
+	// 	console.log("nom:" + param.name);
+	// 	// let buffer=Buffer.from(param.name.split(',')[1],"base64");
+	// 	// console.log("hello" + buffer);
+	// 	fs.writeFiles(filePath, param.name);
+		
+
+
+
+	// }
 }
 

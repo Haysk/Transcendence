@@ -10,6 +10,7 @@ export interface 	User {
 	displayname:	string;
 	nickname:		string;
 	image_url:		string;
+	avatar_url:		string;
 	online:			boolean;
 	socket?:		string;
 	friends?:		User[];
