@@ -24,8 +24,16 @@ export class SocketService {
     this.socket = io(this.url);
   }
 
-  imConnected()
+  imDisconnected(login: string)
   {
+    this.socket.emit('isOffline', login);
+    this.socket.emit('imDisconnected');
+    this.socket.disconnect();
+  }
+
+  imConnected(login: string)
+  {
+    this.socket.emit('isOnline', login);
     this.socket.emit('imConnected');
   }
 
@@ -62,8 +70,7 @@ export class SocketService {
     return new Observable<User[]>((obs) => {
       this.socket.on('hereIsTheUserList', (res: User[]) => {
         // console.log("HEREISTHEUSERLIST OK =>")
-        console.log(res);
-
+        // console.log(res);
         obs.next(res);
       })
   })

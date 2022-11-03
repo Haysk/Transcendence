@@ -64,7 +64,7 @@ export class LoginComponent implements OnInit {
 						this.router.navigate(["../"], { relativeTo: this.route });
 					},
 					complete: () => {
-						this.socketService.imConnected();
+						this.socketService.imConnected(String(localStorage.getItem('login')));
 						this.router.navigate(["../home"], { relativeTo: this.route });
 					}
 				});
