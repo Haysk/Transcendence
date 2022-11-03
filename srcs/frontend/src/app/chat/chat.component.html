@@ -19,6 +19,10 @@
 			<!-- <div class="" *ngIf="showFormule" >Hello</div> -->
 			<app-create-salon *ngIf="showFormule" (ShowSalonEvent)="receiveShowSalon($event)" (SendChannelNameEvent)="receiveChannelName($event)"></app-create-salon>
 
+			<app-password *ngIf="showFormulePassword==true" [channel]="privateChannel" 
+			
+			(ShowChannelPrivateEvent)="receiveShowchannelPrivate($event)"></app-password>
+
 
 		</div><!-- fin de div part2_left -->
 	
@@ -41,7 +45,13 @@
 			<div class="part2_salon_available">List of Salon</div>
 			<div class="part2_list_salon">
 				
-				<app-salon-available [current_user]="this.Me" (ShowChannelPublicEvent)="receiveChannelPublic($event)"  (SendJoinChannelNameEvent)="receiveJoinChannelName($event)"></app-salon-available>
+				<app-salon-available [current_user]="this.Me" (ShowChannelPublicEvent)="receiveChannelPublic($event)"  (SendJoinChannelNameEvent)="receiveJoinChannelName($event)"
+				(ShowFormulePasswordEvent)="receiveShowFormulePassword($event)"	
+				(showchatEvent)="receiveShowchat($event)"
+				(showFormuleEvent)="receveShowformule($event)"
+				(SendChannelEvent)="receivePrivateChannel($event)"
+				>
+				</app-salon-available>
 				
 			</div>
 
@@ -53,14 +63,21 @@
 <!-- ///////////////////////////////////////////////////////// -->
 
 	<div class="part3">
-
+	<!-- <app-salon-pause></app-salon-pause> -->
+	<!-- <app-salon-available></app-salon-available> -->
+	
 
 
 	</div><!-- fin de div part3 -->
+
 </div> <!-- fin de div chat -->
 
+
+<!-- ///////////////////////////////////////////////////////// -->
+<!-- salon visible ou pas-->
 <div class="salon" *ngIf="privatOrpublic==true">
 	<app-salon [channel_name]="channel_name" [current_user]="Me" (QuitSalonEvent)="receiveQuitSalon($event)" ></app-salon>
 </div>
+
 
 </div><!-- fin de div all-chat -->

@@ -16,9 +16,16 @@ import { SocketService } from '../../services/socket.service';
 export class SalonAvailableComponent implements OnInit {
 
   show_salon: Boolean=true;
+  show_formulePassword: Boolean=false;
+
+ 
  
   @Output() ShowChannelPublicEvent= new EventEmitter<Boolean>();
   @Output() SendJoinChannelNameEvent = new EventEmitter<string>();
+  @Output() ShowFormulePasswordEvent = new EventEmitter<Boolean>();
+  @Output() showchatEvent = new EventEmitter<Boolean>();
+  @Output() showFormuleEvent = new EventEmitter<Boolean>();
+  @Output() SendChannelEvent = new EventEmitter<Channel>();
   
 
 
@@ -40,7 +47,7 @@ export class SalonAvailableComponent implements OnInit {
       complete: () => {}
     }
     )
-
+    
     this.socketService.updateChannelList().subscribe({
       next: (result) => {
         console.log("ICI LE RESULT => ");
@@ -59,5 +66,22 @@ export class SalonAvailableComponent implements OnInit {
     //this.apiService.joinChannel(current_channel, current_user).subscribe();
     this.ShowChannelPublicEvent.emit(this.show_salon);
     this.SendJoinChannelNameEvent.emit(current_channel.name);
+    this.show_formulePassword=false;
+    this.ShowFormulePasswordEvent.emit(this.show_formulePassword);
+   
+
+
   }
+
+  showFormulePassword(current_channel: Channel){
+    this.show_formulePassword= !this.show_formulePassword
+    this.SendChannelEvent.emit(current_channel);
+    this.SendJoinChannelNameEvent.emit(current_channel.name);
+    this.ShowFormulePasswordEvent.emit(this.show_formulePassword);
+    this.showchatEvent.emit(false);
+    this.showFormuleEvent.emit(false);
+    
+    
+  }
+  
 }

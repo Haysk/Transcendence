@@ -4,6 +4,7 @@ import { ApiService } from '../services/api.service';
 import { User } from '../models/user'
 import { NgForm }   from '@angular/forms';
 import { Injectable } from '@angular/core';
+import { Channel } from '../models/channel';
 
 
 @Component({
@@ -67,8 +68,10 @@ export class ChatComponent implements OnInit {
   showchat:Boolean=false ;
   showFormule:Boolean=false;
   privatOrpublic:Boolean=false;
+  showFormulePassword:Boolean=false;
 
   channel_name!: string ;
+  privateChannel!: Channel;
   
 
   receiveShowchat($event: Boolean) {
@@ -78,7 +81,23 @@ export class ChatComponent implements OnInit {
   receiveSendDest($event : User) {
       this.Dest = $event;
   }
+
+  receivePrivateChannel($event:Channel){
+    this.privateChannel= $event;
+  }
   
+  receveShowformule($event:Boolean){
+    this.showFormule= $event;
+  }
+
+  receiveShowchannelPrivate($event:Boolean){
+    this.privatOrpublic= $event;
+  }
+
+  receiveShowFormulePassword($event:Boolean){
+    this.showFormulePassword= $event;
+  }
+
   receiveShowSalon($event: Boolean) {
     this.privatOrpublic = $event;
   }
@@ -98,6 +117,7 @@ export class ChatComponent implements OnInit {
   formuleCreate(){
     this.showFormule=this.showFormule?false:true;
     this.showchat=false;
+    this.showFormulePassword=false;
 
   }
 
@@ -107,6 +127,7 @@ export class ChatComponent implements OnInit {
 
   closeCreateSalon(){
     this.showFormule=false;
+    this.showFormulePassword=false;
   }
 
   constructor(private socketService: SocketService, private apiService: ApiService)

@@ -8,18 +8,25 @@
 .salon_unique{
     width: 100%;
     background-color: rgb(27, 31, 2);
-    color: rgb(1, 179, 81);
-    font-size: 13px;
     border:0px;
     margin-top: 1px;
     cursor: pointer;
+    display: flex;
+    justify-content: center;
+   
+}
+.titre{
+    color: rgb(1, 179, 81);
+    font-size: 13px;
+    margin-left: 5px;
+
+
 }
 
-.salon_unique:hover{
-    width: 100%;
-    margin-top: 1px;
-    background-color: rgb(24, 145, 70);
-    border: 0px;
-    color: rgb(255, 255, 255);
-    font-size: 13px;
+.icon{
+  
+    font-size: 10px;
+    margin-top: 3px;
+
+
 }
