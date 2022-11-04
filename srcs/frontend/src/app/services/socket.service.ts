@@ -78,7 +78,7 @@ export class SocketService {
 
   createPrivChannel(channel_name: string, creator_id: number, password?: string)
   {
-    this.socket.emit('createChannel', channel_name, creator_id, password, () => { 
+    this.socket.emit('createPrivChannel', channel_name, creator_id, password, () => { 
       this.socket.emit('joinChannel', channel_name, creator_id);
     });
   }
