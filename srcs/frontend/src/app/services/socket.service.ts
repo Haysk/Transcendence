@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { Observable } from 'rxjs';
+import { observable, Observable } from 'rxjs';
 import { io } from 'socket.io-client';
 import { HttpClient } from '@angular/common/http';
 import { ApiService } from '../services/api.service';
@@ -62,6 +62,43 @@ export class SocketService {
     return new Observable<void>((observer) => {
       this.socket.on('startToClient', (payload) => {
         observer.next(payload);
+      });
+    });
+  }
+
+  getAddFriend(id: number, id1: number){
+    //this.socket.on('getAddFriend');
+    this.socket.emit('getAddFriend', id, id1);
+  }
+
+  getFriend(): Observable<User[]> {
+    return new Observable<User[]>((observer) => {
+      this.socket.on('addFriend', (tab: User[]) => {
+        observer.next(tab);
+      });
+    });
+  }
+
+  getRemoveFriend(id: number, id1: number){
+    this.socket.emit('getRemoveFriend', id, id1);
+  }
+
+  removeFriend(): Observable<User[]> {
+    return new Observable<User[]>((obs) => {
+      this.socket.on('removeFriend', (tab: User[]) => {
+        obs.next(tab);
+      });
+    });
+  }
+
+  getFriendList(id: number){
+    this.socket.emit('getFriendList', id);
+  }
+
+  listFriend(): Observable<User[]> {
+    return new Observable<User[]>((obs) => {
+      this.socket.on('listFriends', (tab: User[]) => {
+        obs.next(tab);
       });
     });
   }

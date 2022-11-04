@@ -136,8 +136,37 @@ export class ApiService {
 
   addFriend(id: number, id1: number){
     const data = {id, id1};
-    console.log("123456");
+    //console.log("add friend hoho");
     return this.httpClient.post<User>(`${this.API_SERVER}/addFriend`, data);
   }
 
+  //remove friend
+  
+  removeFriend(id: number, id1: number){
+    const data = {id, id1};
+    //console.log("remove friend hoho");
+    return this.httpClient.post<User>(`${this.API_SERVER}/removeFriend`, data);
+  }
+
+  //check if friend
+
+  checkIfFriend(id: number, id1: number){
+    const data = {id, id1};
+    console.log ("check if friend or not");
+    return this.httpClient.get<User>(`${this.API_SERVER}/checkIfFriend/${data}`);
+  }
+
+  //block user
+
+  blockUser(id: number, id1: number){
+    const data = {id, id1};
+    console.log("block user hoho");
+    return this.httpClient.post<User>(`${this.API_SERVER}/blockUser`, data);
+  }
+  
+  unblockUser(id: number, id1: number){
+    const data = {id, id1};
+    //console.log("unblock hoho");
+    return this.httpClient.post<User>(`${this.API_SERVER}/unblockUser`, data);
+  }
 }

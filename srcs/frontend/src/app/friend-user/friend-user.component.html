@@ -1,24 +1,23 @@
 <!-- <app-select-user [user]="user"></app-select-user> -->
 <!-- <app-testing-fake-profile [user]="user"></app-testing-fake-profile> -->
-<p>friend works!</p>
+<!-- <p>friend works!</p>
 <h2>Testing friend </h2>
 <p> ami depuis le {{ this.createDate }}</p>
 <p>
     <button (click)="onAddLike()"> Like </button>
     nombre de click {{ like }}
-</p>
-
-<div *ngFor="let friend of userList" >
-   ici le login friend:  {{friend.login}}
+</p> -->
+<div class="firendonline" *ngFor="let friends of userList" >
+   {{friends.login}}
 </div>
 
-<p> nombre d'ami {{ userList?.length }} </p>
+<!-- <p> nombre d'ami {{ userList?.length }} </p>
 
-<div *ngFor="let user of allUsers">
+<div *ngFor="let user of allUsers"> -->
     <!-- <div *ngIf="user == friend"></div> -->
-    ici le login of the others users: {{user.login}}
-     <button (click)="onNewFriend()" > {{ ami }}</button>
-</div>
+    <!-- ici le login of the others users: {{user.login}} -->
+     <!-- <button (click)="onNewFriend()" > {{ ami }}</button> -->
+<!-- </div> -->
 
 <!-- <p> nombre d'utilistateur non ami {{ allUsers?.length }} </p> -->
  <!-- <table border="1" align="centre">  -->

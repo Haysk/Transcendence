@@ -78,6 +78,14 @@ export class AppController {
 		return await this.userService.findUserByLogin(login);
 	}
 
+	@Get('checkIfFriend/:data')
+	async checkIfFriend(@Param('data') id: {id: number, id1: number} ) : Promise<number>
+	{
+		console.log("123456");
+//		return await this.userService.checkIfFriend(id);
+		return 1;
+	}
+
 	@Get('messages/:fromUserId/:userId')
 	async getMessages(
 		@Param('fromUserId') fromUserId: Number, @Param('userId') userId: Number
@@ -151,7 +159,28 @@ export class AppController {
 	@Post('addFriend')
 	async addFriend(@Body() UserData:{id:number, id1:number},): Promise<UserModel>
 	{
-		console.log("456789");
+		//console.log("add friend");
 		return await this.userService.addFriend(UserData);
+	}
+
+	@Post('removeFriend')
+	async removeFriend(@Body() UserData:{id:number, id1:number},): Promise<UserModel>
+	{
+		//console.log("remove friend12");
+		return await this.userService.removeFriend(UserData);
+	}
+
+	@Post('blockUser')
+	async blockUser(@Body() UserData:{id:number, id1:number},): Promise<UserModel>
+	{
+		//console.log("block user 12");
+		return await this.userService.blockUser(UserData);
+	}
+
+	@Post('unblockUser')
+	async unblockUser(@Body() UserData:{id:number, id1:number},): Promise<UserModel>
+	{
+		//console.log("unblock 12");
+		return await this.userService.unblockUser(UserData);
 	}
 }

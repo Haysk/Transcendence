@@ -1,6 +1,7 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, Input, OnInit } from '@angular/core';
 import { User } from '../models/user';
 import { ApiService } from '../services/api.service';
+import { SocketService } from '../services/socket.service';
 
 @Component({
   selector: 'app-friend-user',
@@ -9,20 +10,21 @@ import { ApiService } from '../services/api.service';
 })
 export class FriendUserComponent implements OnInit {
 
-  user: User = {
-    id: this.getId(),
-    login: this.getLogin(),
-    email: this.getEmail(),
-    first_name: this.getFirstName(),
-    last_name: this.getLastName(),
-    url: this.getUrl(),
-    displayname: this.getDisplayName(),
-    image_url: this.getImageUrl(),
-    online: this.getOnline(),
-    friend_list: false,
-  };
-  users!: User[];
-  allUsers!: User[];
+  @Input() Me!: User;
+  // user: User = {
+  //   id: this.getId(),
+  //   login: this.getLogin(),
+  //   email: this.getEmail(),
+  //   first_name: this.getFirstName(),
+  //   last_name: this.getLastName(),
+  //   url: this.getUrl(),
+  //   displayname: this.getDisplayName(),
+  //   image_url: this.getImageUrl(),
+  //   online: this.getOnline(),
+  //   friend_list: false,
+  // };
+  // users!: User[];
+  // allUsers!: User[];
   // getUser!: User;
   createDate!: Date;
   like!: number;
@@ -32,7 +34,7 @@ export class FriendUserComponent implements OnInit {
   userList!: User[];
   userfound!: User;
   // user.friends;
-  constructor(private apiService:ApiService) {
+  constructor(private apiService:ApiService, private socketService: SocketService) {
     this.createDate = new Date();
     this.like = 0;
     this.numberOfFriend = 0;
@@ -46,27 +48,34 @@ export class FriendUserComponent implements OnInit {
   ngOnInit(): void {
     
     
-    this.apiService.findUserByLogin(this.user.login).subscribe(
-      (result => {
-        // if (result.friends)
-        // console.log(result.friends)
-        this.userfound = result;
-        console.log ("user = " + this.userfound.friends);
-        if (this.userfound.friends){
-        this.userList=this.userfound.friends;
-        console.log ("user = " + this.userfound.login);
-        console.log ("userList = " + this.userList);
-        }
-      }));
+    // this.apiService.findUserByLogin(this.user.login).subscribe(
+    //   (result => {
+    //     // if (result.friends)
+    //     // console.log(result.friends)
+    //     this.userfound = result;
+    //     console.log ("user = " + this.userfound.friends);
+    //     if (this.userfound.friends){
+    //     this.userList=this.userfound.friends;
+    //     console.log ("user = " + this.userfound.login);
+    //     console.log ("userList = " + this.userList);
+    //     }
+    //   }));
 
-    this.apiService.getAllUsers(this.user.id).subscribe(
-      (result => {
-        this.allUsers = result;
-        console.log("users found = " + this.allUsers);
-        if (this.allUsers){
-          this.allUsers = this.allUsers;
-        }
-    }));
+    // this.apiService.getAllUsers(this.user.id).subscribe(
+    //   (result => {
+    //     this.allUsers = result;
+    //     console.log("users found = " + this.allUsers);
+    //     if (this.allUsers){
+    //       this.allUsers = this.allUsers;
+    //     }
+    // }));
+
+    this.socketService.getFriendList(this.Me.id);
+    this.socketService.listFriend().subscribe((result) => {
+      this.userList = result;
+      console.log("hello" + result);
+    })
+
     // this.apiService.addFriend(this.user.id).subscribe (
     //   (result => {
     //     this.user = result;
@@ -74,6 +83,10 @@ export class FriendUserComponent implements OnInit {
     // }));
 
   }
+
+  // getFriend(){
+  //   this.socketService.getFriendList(this.Me.id);
+  // }
 
   onAddLike(){
     this.like++;

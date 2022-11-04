@@ -12,6 +12,7 @@ import { PrismaService } from './prisma.service';
 import { Server, Socket } from 'socket.io';
 import { IoAdapter } from '@nestjs/platform-socket.io';
 import { UserService } from './user.service';
+import { async } from 'rxjs';
 
 @WebSocketGateway({
   cors: {
@@ -114,5 +115,86 @@ export class AppGateway
 
   handleConnection(client: Socket, ...args: any[]) {
     this.logger.log(`Client connected: ${client.id}`);
+  }
+
+  @SubscribeMessage('getAddFriend')
+  async addingFriend(client: Socket, payload: any){
+    console.log("test " + payload);
+    try{
+      let data = await this.Prisma.user.update({
+        where: {
+          id: Number(payload[0]),
+        },
+        data:{
+          friends: {
+            connect: [{id: Number(payload[1])}]
+          },
+      },
+      include: {
+        friends: true,
+      }
+      })
+      if (data != null && data != undefined)
+      {
+        this.server.to(client.id).emit('addFriend', data.friends);
+      }
+    }
+    catch(err){
+      console.log("issue dans getAddFriend");
+      console.log(err);
+    }
+  }
+
+  @SubscribeMessage('getRemoveFriend')
+  async removingFriend(client: Socket, payload: any){
+    console.log("test remove " + payload);
+    try{
+      let data = await this.Prisma.user.update({
+        where: {
+          id: Number(payload[0]),
+        },
+        data:{
+          friends: {
+            disconnect: [{id: Number(payload[1])}]
+          }
+        },
+        include: {
+          friends: true,
+        }
+      })
+      if (data != null && data != undefined)
+      {
+        this.server.to(client.id).emit('removeFriend', data.friends);
+      }
+    }
+    catch(err){
+      console.log("issue dans le remove friend");
+      console.log(err);
+    }
+  }
+
+  @SubscribeMessage('getFriendList')
+  async getFriendList(client: any, payload : any)
+  {
+    console.log("test get Friend list" + payload);
+    try{
+      let data = await this.Prisma.user.findFirst({
+        where: {
+          id: Number(payload),
+        },
+        include: {
+          friends: true,
+        },
+      })
+      if (data != null && data != undefined)
+      {
+        console.log(data);
+        this.server.to(client.id).emit('listFriends', data.friends);
+      }
+    }
+    catch(err){
+      console.log("issue dans le get friend list");
+      console.log(err);
+    }
   }
 }
