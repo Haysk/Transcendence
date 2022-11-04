@@ -57,7 +57,8 @@ export class AppGateway
     console.log("PAYLOAD =>");
     console.log(payload);
     
-    let data = await this.Prisma.user.update({
+    try {
+      let data = await this.Prisma.user.update({
       where: {
         login: payload,
       },
@@ -68,10 +69,16 @@ export class AppGateway
     if(data != null && data != undefined)
       this.server.emit('userListUpdated')
   }
+  catch(err) {
+    console.log("error dans isOnline");
+    console.log(err)
+  }
+}
 
   @SubscribeMessage('isOffline')
   async isOffline(client:any, payload: any)
   {
+    try {
     let data = await this.Prisma.user.update({
       where: {
         login: payload
@@ -83,6 +90,12 @@ export class AppGateway
     if (data != null && data != undefined)
       this.server.emit('userListUpdated');
   }
+  catch(err)
+  {
+    console.log("error dans isOffline");
+    console.log(err);
+  }
+}
 
   @SubscribeMessage('userListPlz')
   async sendUserList(client: any, payload: any)
@@ -139,6 +152,31 @@ export class AppGateway
 			data: {
         name: String(payload[0]), 
         creator_id: Number(payload[1]),
+        joined: {
+          connect: [{id: Number(payload[1])}],
+        }
+      },
+		})
+    const data = await this.Prisma.channel.findMany({
+      include: {joined: true},
+    })
+    if (data != null && data != undefined)
+    {
+      this.server.emit('aChannelHasBeenCreated', data);
+      this.server.to(client.id).emit('youAreReady');
+    }
+  }
+
+  @SubscribeMessage('createPrivChannel')
+  async createPrivChannel(client: Socket, payload: any)
+  {
+    // console.log("PAYLOAD => ");
+    // console.log(payload);
+    await this.Prisma.channel.create({
+			data: {
+        name: String(payload[0]), 
+        creator_id: Number(payload[1]),
+        password: String(payload[2]),
         joined: {
           connect: [{id: Number(payload[1])}],
         }

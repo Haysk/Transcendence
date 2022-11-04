@@ -8,13 +8,20 @@ import { AppGateway } from './app.gateway';
 import { HttpModule } from '@nestjs/axios';
 import { OauthService } from './oauth.service';
 import { ChannelService } from './channel.service';
+import { ScheduleModule } from '@nestjs/schedule';
 
 @Module({
-  imports: [HttpModule],
-  controllers: [
+  imports: 
+  [
+    HttpModule,
+    ScheduleModule.forRoot()
+  ],
+  controllers: 
+  [
     AppController
   ],
-  providers: [
+  providers: 
+  [
     PrismaService, 
     UserService, 
     TechService, 
