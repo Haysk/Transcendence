@@ -11,12 +11,14 @@ export class UserService {
 
 	INTRA_API = "https://api.intra.42.fr";
 
-  async getAllUsers(current: number) : Promise<User[]>
+  async getAllUsers(code: string) : Promise<User[]>
   {
     return this.prisma.user.findMany({
       where: {
-        id: {
-			not: Number(current),
+        oauth: {
+			code: {
+				not: code,
+			}
 		},
       },
 })
@@ -64,8 +66,8 @@ export class UserService {
 		})
 	}
 
-	async createUser(params: Prisma.OauthCreateInput): Promise<User> {
-		let toto = new Promise<User>(resolve =>
+	async createUser(params: Prisma.OauthCreateInput, code: string): Promise<User> {
+		let result = new Promise<User>(resolve =>
 			this.httpClient.get<User>(`${this.INTRA_API}/v2/me`, { params })
 				.pipe(take(1))
 				.subscribe(async (result) => {
@@ -82,11 +84,15 @@ export class UserService {
 								image_url: result.data.image_url,
 								oauth: {
 									create: {
+										code: code,
 										refresh_token: params.refresh_token,
 										access_token: params.access_token,
+										tfa:{
+											create: {}
+										}
 									},
 								},
-							}
+							},
 						});
 					} catch (e) {
 						await this.prisma.user.update({
@@ -96,21 +102,34 @@ export class UserService {
 							data: {
 								oauth: {
 									update: {
+										code: code,
 										refresh_token: params.refresh_token,
 										access_token: params.access_token,
 									}
 								}
-
 							}
 						});
 					}
 					resolve(await this.prisma.user.findFirst({
 						where: {
 							id: result.data.id,
-						}
+						},
+							include: {
+								oauth: {
+									select: {
+										tfa: {
+											select: {
+												id: true,
+												tfa_activated: true,
+												tfa_qr: true
+											}
+										}
+									}
+								},
+							}
 					}));
 				}));
-		return (await toto);
+		return (await result);
 	}
 
 	async updateUser(params: {

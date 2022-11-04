@@ -21,7 +21,7 @@
 		<div class="part2_left">
 			<!-- <app-select-user [Me]="User_list[0]" [user]="User_list[1]" (showchatEvent)="receiveShowchat($event)"></app-select-user> -->
 
-			<app-direct-chat [Dest]="Dest" [Me]="Me" *ngIf="this.showchat==true"> </app-direct-chat>
+			<app-direct-chat [Dest]="Dest" *ngIf="this.showchat==true"> </app-direct-chat>
 
 			<!-- <div class="" *ngIf="showFormule" >Hello</div> -->
 			<app-create-salon *ngIf="showFormule"></app-create-salon>
@@ -33,7 +33,7 @@
 			<div class="part2_titre_online">Users list</div>
 			<div class="part2_users_online">
 				<div *ngFor="let user of User_list">
-					<app-select-user [user]="user" [Me]="Me" (showchatEvent)="receiveShowchat($event)" (sendDestEvent)="receiveSendDest($event)"></app-select-user>
+					<app-select-user [user]="user" (showchatEvent)="receiveShowchat($event)" (sendDestEvent)="receiveSendDest($event)"></app-select-user>
 				</div>
 				
 			</div>

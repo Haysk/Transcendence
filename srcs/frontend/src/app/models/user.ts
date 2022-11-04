@@ -1,4 +1,5 @@
-import { Socket } from '../models/socket'
+import { Oauth } from './oauth';
+import { Socket } from './socket'
 
 export interface 	User {
     id: 			number;
@@ -10,6 +11,8 @@ export interface 	User {
 	displayname:	string;
 	image_url:		string;
 	online:			boolean;
-	socket?:		string;			
+	oauth?:			Oauth;
+	socket?:		string;
 	friends?:		User[];
+	
 }

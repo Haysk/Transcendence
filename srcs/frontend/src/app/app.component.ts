@@ -10,23 +10,10 @@ import { User } from './models/user';
   styleUrls: ['./app.component.css']
 })
 export class AppComponent implements OnInit{
-  user!: User;
-  title = 'todo-app';
-  visible:boolean = true;
-
 	constructor(public route: ActivatedRoute,
 				public router: Router,private socketService: SocketService){
   }
   ngOnInit(): void {
-  }
-
-  public getLogin(): string | null{
-	var login = localStorage.getItem("login");
-  this.socketService.sendLogin(String(login)); //obtenir son socket
-	if (login == undefined) {
-		return null;
-	}
-	return login;
   }
 
   public getRoute() {

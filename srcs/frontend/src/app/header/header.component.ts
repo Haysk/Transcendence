@@ -1,6 +1,8 @@
 import { Component, OnInit, Input, Injectable } from '@angular/core';
 import { User } from '../models/user';
+import { StorageService } from '../services/storage.service';
 import { Router, ActivatedRoute } from '@angular/router';
+import { share } from 'rxjs';
 
 @Injectable()
 @Component({
@@ -9,18 +11,23 @@ import { Router, ActivatedRoute } from '@angular/router';
   styleUrls: ['./header.component.css']
 })
 export class HeaderComponent implements OnInit {
-  @Input() user!: User;
-  login = localStorage.getItem("login");
 
-  constructor(private route: ActivatedRoute, private router: Router) { }
+	constructor(private route: ActivatedRoute,
+				private router: Router,
+				private storage: StorageService) { }
 
-  ngOnInit(): void {
-  }
+	login = this.storage.getLogin();
 
-  async logout() {
-	localStorage.clear();
-	this.router.navigate(["../"], {relativeTo: this.route});
-  }
-  
+	ngOnInit(): void {
+		console.log(this.storage.getCode());
+		console.log(this.storage.getLogin());
+		if (this.storage.getCode().length === 0 || this.storage.getLogin().length === 0) {
+			this.router.navigate(["../"], { relativeTo: this.route });
+		}
+	}
 
+	async logout() {
+		this.storage.clear();
+		this.router.navigate(["../"], {relativeTo: this.route}); 
+	}
 }

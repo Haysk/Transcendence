@@ -5,6 +5,7 @@ import { User } from '../models/user';
 import { Message } from '../models/message';
 import { Observable } from 'rxjs';
 import { Oauth } from '../models/oauth';
+import { Tfa } from '../models/tfa'
 import { UrlSerializer } from '@angular/router';
 
 @Injectable({
@@ -13,7 +14,9 @@ import { UrlSerializer } from '@angular/router';
 export class ApiService {
   API_SERVER = "https://localhost:8081/api";
 
-  constructor(private httpClient: HttpClient) { }
+	constructor(private httpClient: HttpClient,) {
+
+  }
 
   getSocket(login: string)
   {
@@ -42,18 +45,16 @@ export class ApiService {
 
   getUser(code: string)
   {
-	console.log("toto");
     return this.httpClient.get<User>(`${this.API_SERVER}/user/${code}`);
   }
 
-  getAllUsers(current: number)
+  getUsers(code: string)
   {
-    return this.httpClient.get<User[]>(`${this.API_SERVER}/allusers/${current}`);
+    return this.httpClient.get<User[]>(`${this.API_SERVER}/users/${code}`);
   }
 
-  createUser(data: User)
-  {
-    return this.httpClient.post<User>(`${this.API_SERVER}/createUser`, data);
+  updateUser(user: User) {
+    return this.httpClient.patch<User>(`${this.API_SERVER}/user/${user.id}`, user);
   }
 
   getMessages(fromUserId: Number, userId: Number)
@@ -84,5 +85,18 @@ export class ApiService {
   getGuests(){
     return ["chilee", "anclamar", "anton"];
   }
+
+  updateTfa(data: {code: string, tfa: boolean}) {
+	return this.httpClient.patch<Tfa>(`${this.API_SERVER}/tfa`, data);
+  }
+
+  signupTfa(data: {code: string}) {
+	return this.httpClient.post<Tfa>(`${this.API_SERVER}/tfa/signup`, data);
+  }
+
+  verifyTfa(data: {code: string, verify_tfa_key: string}) {
+	return this.httpClient.post<Tfa>(`${this.API_SERVER}/tfa/verify`, data);
+  }
+
 
 }

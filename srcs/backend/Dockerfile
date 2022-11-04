@@ -1,5 +1,8 @@
 FROM node:18-alpine
 
+ENV TZ=Europe/Paris
+
+RUN apk add --update tzdata
 RUN npm install -g npm
 
 # Create app directory
@@ -12,6 +15,7 @@ WORKDIR /usr/src/app
 # RUN npm install
 
 COPY entrypoint.sh /entrypoint.sh
+COPY .env /.env
 
 RUN chmod +x /entrypoint.sh
 

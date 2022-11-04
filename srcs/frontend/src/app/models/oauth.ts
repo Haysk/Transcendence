@@ -7,11 +7,16 @@ export interface User {
 
 }
 
+export interface Tfa {
+    tfa_activated?: boolean;
+	tfa_qr?: string;
+}
+
 export interface Oauth {
     id?: number;
 	code: string;
-	refreshToken?: string;
-    userToken?: string;
-    userId?: Number;
+	refresh_token?: string;
+    access_token?: string;
+    tfa?: Tfa;
 	user?: User;
 }

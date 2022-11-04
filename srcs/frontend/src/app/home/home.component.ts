@@ -1,6 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { Router, ActivatedRoute } from '@angular/router';
 import { ApiService } from '../services/api.service';
+import { StorageService } from '../services/storage.service'; 
 
 @Component({
 	selector: 'app-home',
@@ -11,7 +12,8 @@ export class HomeComponent implements OnInit {
 	login: string = "";
 	constructor(private route: ActivatedRoute,
 				private apiService: ApiService,
-				private router: Router) { }
+				private router: Router,
+				private storage: StorageService) { }
 
 	ngOnInit(): void {
 		this.login = localStorage["login"];

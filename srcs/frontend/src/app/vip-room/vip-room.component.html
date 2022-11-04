@@ -11,9 +11,14 @@
         <div class="bloc_modify" *ngIf="visible">
             <app-button-v2 [text]="'Modify avatar'" (click)="showhide_avatar()"></app-button-v2>
             <app-button-v2 [text]="'Modify nickname'" (click)="showhide_nickname()"></app-button-v2>
-            <app-button-v2 [text]="'Double authentification?'"></app-button-v2>
+            <!-- <app-button-v2 [text]="'Modify 2FA: ' + (two_factor_auth | async)" (click)="toggle_two_factor_auth(false)"></app-button-v2> -->
+            <app-button-v2 *ngIf="two_factor_auth" [text]="'Modify 2FA: Enabled'" (click)="toggle_two_factor_auth(false)"></app-button-v2>
+            <app-button-v2 *ngIf="!two_factor_auth" [text]="'Modify 2FA: Disabled'" (click)="toggle_two_factor_auth(true)"></app-button-v2>
         </div><!-- fin de div bloc_modify  -->
-
+		<div *ngIf="two_factor_auth && visible">
+			<div class="qr_code"  style="background-image:url({{qrCode}})"></div>
+			<input class="tfa_input" placeholder="Two-Factor Authentication Key" (keydown.enter)="tfa_verify()" [(ngModel)]="verify_tfa_key">
+		</div>
         <div class="champ_avatar" *ngIf="visible_avatar">
             <label for="file">Choose File:&nbsp;</label>
             <input type="file" id="file">
