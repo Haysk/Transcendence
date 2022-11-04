@@ -133,8 +133,8 @@ export class AppGateway
   @SubscribeMessage('createChannel')
   async createChannel(client: Socket, payload: any)
   {
-    // console.log("PAYLOAD => ");
-    // console.log(payload);
+    console.log("PAYLOAD => ");
+    console.log(payload);
     await this.Prisma.channel.create({
 			data: {
         name: String(payload[0]), 
