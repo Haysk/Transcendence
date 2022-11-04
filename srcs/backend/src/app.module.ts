@@ -9,6 +9,7 @@ import { HttpModule } from '@nestjs/axios';
 import { OauthService } from './oauth.service';
 import { ChannelService } from './channel.service';
 import { ScheduleModule } from '@nestjs/schedule';
+import { BanAndMuteService } from './banAndMute.service';
 
 @Module({
   imports: 
@@ -29,6 +30,7 @@ import { ScheduleModule } from '@nestjs/schedule';
     AppGateway, 
     OauthService,
     ChannelService,
+    BanAndMuteService,
   ],
 })
 export class AppModule {}
