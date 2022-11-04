@@ -54,10 +54,10 @@ export class ChatComponent implements OnInit {
   showFormule:Boolean=false;
   privatOrpublic:Boolean=false;
   showFormulePassword:Boolean=false;
+  delay:number = 0;
 
   channel_name!: string ;
   privateChannel!: Channel;
-  
 
   receiveShowchat($event: Boolean) {
       this.showchat = $event;

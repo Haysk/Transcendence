@@ -24,6 +24,42 @@ export class SocketService {
     this.socket = io(this.url);
   }
 
+  //MUTE
+
+  muteUserByTime(userToMute: number, channelConcerned: number, timeToMute: number)
+  {
+    this.socket.emit('muteUserByTime', userToMute, channelConcerned, timeToMute);
+  }
+
+  muteUser(userToMute: number, channelConcerned: number)
+  {
+    this.socket.emit('muteUser', userToMute, channelConcerned);
+  }
+
+  unmuteUser(userToMute: number, channelConcerned: number)
+  {
+    this.socket.emit('unmuteUser', userToMute, channelConcerned);
+  }
+
+//BAN
+
+banUserByTime(userToBan: number, channelConcerned: number, timeToMute: number)
+{
+  this.socket.emit('banUserByTime', userToBan, channelConcerned, timeToMute);
+}
+
+banUser(userToBan: number, channelConcerned: number)
+{
+  this.socket.emit('banUser', userToBan, channelConcerned);
+}
+
+unbanUser(userToBan: number, channelConcerned: number)
+{
+  this.socket.emit('unbanUser', userToBan, channelConcerned);
+}
+
+//CONNECTION
+
   imDisconnected(login: string)
   {
     this.socket.emit('isOffline', login);
@@ -41,7 +77,11 @@ export class SocketService {
     return this.socket.id;
   }
 
-  //socket?.emit('loadprv', {n1 : login, n2 : recv}, (resp : Message[]) =>       {         setMessages(resp);       })
+  sendLogin(login: string): void {
+    this.socket.emit('sendLogin', login);
+  }
+
+  //CHANNEL
 
   async createChannel(channel_name: string, creator_id: number)
   {
@@ -50,46 +90,13 @@ export class SocketService {
     });
   }
 
-  askForUserList(current_id: number)
+  createPrivChannel(channel_name: string, creator_id: number, password: string)
   {
-    this.socket.emit('userListPlz', current_id);
-  }
-
-  getConnectionSignal(current_id: number)
-  {
-    return new Observable((obs) => {
-      this.socket.on('userListUpdated', () => {
-      this.socket.emit('userListPlz', current_id);
-      obs.next();
-      })
-    })
-  }
-
-  getAllUser()
-  {
-    return new Observable<User[]>((obs) => {
-      this.socket.on('hereIsTheUserList', (res: User[]) => {
-        // console.log("HEREISTHEUSERLIST OK =>")
-        // console.log(res);
-        obs.next(res);
-      })
-  })
-  }
-
-  createPrivChannel(channel_name: string, creator_id: number, password?: string)
-  {
-    this.socket.emit('createChannel', channel_name, creator_id, password, () => { 
+    console.log("MDP => " + password);
+    
+    this.socket.emit('createPrivChannel', channel_name, creator_id, password, () => { 
       this.socket.emit('joinChannel', channel_name, creator_id);
     });
-  }
-
-  iAmReady()
-  {
-    return new Observable(obs => {
-      this.socket.on('youAreReady', () => {
-        obs.next();
-      })
-    })
   }
 
   updateChannelList() : Observable<Channel[]>
@@ -101,21 +108,8 @@ export class SocketService {
     })
   }
 
-  updateUserList() : Observable<User[]>
-  {
-    // console.log("wististyle");
-    return new Observable<User[]>((observer) => {
-        this.socket.on('someoneJoinedTheChannel', (data) => {
-          // console.log("SOMEONE JOINED THE CHANNEL")
-          observer.next(data.joined);
-        });
-  
-      });
-  };
-
   joinChannel(channel_name: string, id: number)
   {
-    // console.log("channel : " + channel_name + " room joined");
     this.socket.emit('joinChannel', channel_name, id);
   }
 
@@ -138,6 +132,57 @@ export class SocketService {
     });
   }
 
+  //USER
+
+  askForUserList(current_id: number)
+  {
+    this.socket.emit('userListPlz', current_id);
+  }
+
+  getConnectionSignal(current_id: number)
+  {
+    return new Observable((obs) => {
+      this.socket.on('userListUpdated', () => {
+      this.socket.emit('userListPlz', current_id);
+      obs.next();
+      })
+    })
+  }
+
+  getAllUser()
+  {
+    return new Observable<User[]>((obs) => {
+      this.socket.on('hereIsTheUserList', (res: User[]) => {
+        obs.next(res);
+      })
+  })
+  }
+
+  updateUserList() : Observable<User[]>
+  {
+    // console.log("wististyle");
+    return new Observable<User[]>((observer) => {
+        this.socket.on('someoneJoinedTheChannel', (data) => {
+          // console.log("SOMEONE JOINED THE CHANNEL")
+          observer.next(data.joined);
+        });
+  
+      });
+  };
+
+//START COMPONENT
+
+  iAmReady()
+  {
+    return new Observable(obs => {
+      this.socket.on('youAreReady', () => {
+        obs.next();
+      })
+    })
+  }
+
+  //PRIV MESSAGE
+
   sendMessage(message: string): void {
     this.socket.emit('msgToServer', message);
   }
@@ -147,10 +192,6 @@ export class SocketService {
     this.socket.emit('sendMsgTo', message, "", login1, login2)
   };
 
-  sendLogin(login: string): void {
-    this.socket.emit('sendLogin', login);
-  }
-
   getMessage(): Observable<string> {
     return new Observable<string>((observer) => {
       this.socket.on('PrivMsg', (message) => {
@@ -158,6 +199,8 @@ export class SocketService {
       });
     });
   }
+
+  //PONG GAME
 
   sendMove(move: IInput): void {
     this.socket.emit('moveToServer', move);
@@ -182,6 +225,8 @@ export class SocketService {
       });
     });
   }
+
+//INIT
 
   sendStart(): void {
     this.socket.emit('startToServer');
