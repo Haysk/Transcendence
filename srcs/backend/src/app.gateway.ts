@@ -39,11 +39,87 @@ export class AppGateway
   server!: Server;
   private logger: Logger = new Logger('AppGateway');
 
+  @SubscribeMessage('imConnected')
+  async connectionNotification(client:any, payload:any)
+  {
+      //this.server.emit('userListUpdated');
+  }
+
+  @SubscribeMessage('imDisconnected')
+  async deconnectionNotification(client:any, payload:any)
+  {
+    this.server.emit('userListUpdated');
+  }
+
+  @SubscribeMessage('isOnline')
+  async isOnline(client:any, payload: any)
+  {
+    console.log("PAYLOAD =>");
+    console.log(payload);
+    
+    let data = await this.Prisma.user.update({
+      where: {
+        login: payload,
+      },
+      data: {
+        online: true,
+      }
+    })
+    if(data != null && data != undefined)
+      this.server.emit('userListUpdated')
+  }
+
+  @SubscribeMessage('isOffline')
+  async isOffline(client:any, payload: any)
+  {
+    let data = await this.Prisma.user.update({
+      where: {
+        login: payload
+      },
+      data: {
+        online: false
+      }
+    })
+    if (data != null && data != undefined)
+      this.server.emit('userListUpdated');
+  }
+
+  @SubscribeMessage('userListPlz')
+  async sendUserList(client: any, payload: any)
+  {
+    // console.log("SENDUSERLIST en cours");
+    
+    try{
+    let data = await this.Prisma.user.findMany({
+      where: {
+        id: {
+          not: Number(payload),
+        }
+      }
+      // include: {
+      //   channel_joined: true,
+      //   blocked:        true,
+      //   blockedby:      true,
+      //   friends:        true,
+      //   friendsof:      true,
+      // }
+    })
+    if(data != null && data != undefined)
+    {
+      // console.log("TUTTO BENE ")
+      this.server.to(client.id).emit('hereIsTheUserList', data);
+    }
+  }
+  catch(err) {
+    console.log("error SEND USER LIST : ");
+    console.log(err); 
+  }
+}
+
   //payload[0] = message
   //payload[1] = socket dest
   //payload[2] = login1 - expediteur
   //payload[3] = login2 - Dest
-
   @SubscribeMessage('sendMsgTo')
   async sendMsgTo(client: any, payload: any): Promise<void> {
     // const dest = await this.server.in(payload[1]).fetchSockets;
@@ -68,7 +144,6 @@ export class AppGateway
         }
       },
 		})
-    //var data =
     const data = await this.Prisma.channel.findMany({
       include: {joined: true},
     })
@@ -144,8 +219,9 @@ export class AppGateway
   @SubscribeMessage('sendLogin')
   async setupLogin(client: Socket, payload: any): Promise<void>
   {
-    //console.log("LOGIN :" + payload + " | mysocket : " + client.id)
-    await this.Prisma.user.update({
+    console.log("LOGIN :" + payload + " | mysocket : " + client.id)
+    try{
+      let data = await this.Prisma.user.update({
       where: {
         login: payload,
       },
@@ -153,6 +229,14 @@ export class AppGateway
         socket: client.id,
       },
     });
+    if (data != null && data != undefined)
+      this.server.emit('userListUpdated');
+  }
+  catch(err){
+    console.log("erreur dans setuplogin : ");
+    console.log(err);
+    
+  }
   }
 
   @SubscribeMessage('msgToMe')
@@ -184,22 +268,64 @@ export class AppGateway
 
   async handleDisconnect(client: Socket): Promise<void> {
     this.logger.log(`Client disconnected: ${client.id}`);
-    // let tmp = await this.Prisma.user.findFirst({
+    let data = await this.Prisma.user.findFirst({
+      where: {
+        socket: client.id
+      }
+    })
+    if (data != null && data != undefined)
+    {
+      console.log("DECONNEXION =>");
+      
+      console.log(data)
+    this.isOffline(client, data.login);
+    // let data2 = await this.Prisma.user.update({
+    //   where: {
+    //     login: data.login,
+    //   },
+    //   data: {
+    //     online: false,
+    //   }
+    // })
+    // if(data2 != null && data2 != undefined)
+    // {
+    //   this.server.emit('isOffline');
+      this.server.emit('userListUpdated');
+    // }
+    }
+  }
+
+  async handleConnection(client: Socket, ...args: any[]) {
+    
+    // let data = await this.Prisma.user.findFirst({
     //   where: {
     //     socket: client.id
     //   }
-    // });
-    // await this.Prisma.user.update({
-    //     where: {
-    //       login: tmp.login,
-    //     },
-    //     data: {
-    //      online: false,
-    //     },
-    //   });
-  }
+    // })
+    // if (data != null && data != undefined)
+    // {
+    //   console.log("CONNEXION =>");
+      
+    //   console.log(data)
+    // this.isOnline(client, data.login);
 
-  handleConnection(client: Socket, ...args: any[]) {
-    this.logger.log(`Client connected: ${client.id}`);
+      this.server.emit('userListUpdated');
+    // }
+    // }
+    // if (data != null && data != undefined)
+    // {
+    // let data2 = await this.Prisma.user.update({
+    //   where: {
+    //     login: data.login,
+    //   },
+    //   data: {
+    //     online: true,
+    //   }
+    // })
+    // if(data2 != null && data2 != undefined)
+    // {
+      this.logger.log(`Client connected: ${client.id}`);
+    // }
+    // }
   }
 }

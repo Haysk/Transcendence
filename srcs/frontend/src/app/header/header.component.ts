@@ -17,11 +17,13 @@ export class HeaderComponent implements OnInit {
 
   ngOnInit(): void {
     this.socketService.sendLogin(String(this.login)); //obtenir son socket
+    this.socketService.imConnected(String(this.login));
   }
 
   async logout() {
-	localStorage.clear();
-	this.router.navigate(["../"], {relativeTo: this.route});
+    this.socketService.imDisconnected(String(this.login));
+    localStorage.clear();
+	  this.router.navigate(["../"], {relativeTo: this.route});
   }
   
 
