@@ -21,11 +21,12 @@ export class SalonComponent implements OnInit {
   content: Message = {content: "", fromUserId: 0, fromUserName: ""};
   
   
-  guest!:Channel;
+  current_channel!:Channel;
   usersInGuest: User[] = [];
- 
- 
+  usersAdmin:User[] =[];
+  AdminOrNot:boolean=true;
   
+
   @Output() QuitSalonEvent = new EventEmitter<Boolean>();
   @Input() channel_name!:string;
   @Input() current_user!: User;
@@ -36,15 +37,23 @@ export class SalonComponent implements OnInit {
    async ngOnInit(): Promise<void> {
     await this.apiService.findChannelByName(this.channel_name).subscribe({
       next: (result) => {
-        this.guest = result;
+        this.current_channel = result;
         // if (undefined != this.guest.joined)
         // console.log(result);
-        if (this.guest != null && this.guest.joined !== undefined)
-          this.usersInGuest=this.guest.joined;
+        if (this.current_channel != null && this.current_channel.joined !== undefined)
+          this.usersInGuest=this.current_channel.joined;
+        if (this.current_channel != null && this.current_channel.admins !== undefined)
+        {
+          this.usersAdmin=this.current_channel.admins;
+          //this.usersInGuest.pop()
+        }
       },
       error: (err) => {},
       complete: () => {}
     })
+
+    
+
     //console.log("findChannelByName finished");
     this.socketService.joinChannel(this.channel_name, this.current_user.id);
     this.socketService.updateUserList().subscribe({
@@ -70,8 +79,23 @@ export class SalonComponent implements OnInit {
       complete:() => {}
     })
     //console.log("getMsgFromChannel finished");
+
+    
   }
   
+  isAdmin(current: User)
+  {
+    let i = 0;
+    while (this.usersAdmin[i] != null && this.usersAdmin[i] != undefined)
+    {
+      if (this.usersAdmin[i].id == current.id)
+        return 1
+     
+      i++;
+    }
+    return 0
+    
+  }
 
   setUpContent()
   {

@@ -1,17 +1,21 @@
 .user_salon{
     width: 100%;
     height: auto;
-    padding-top: 5px;
+    
     display: flex;
     flex-direction: column;
     align-items: center;
+    background-color: rgb(41, 43, 42);
+    margin-top: 1px;
+    margin-bottom: 1px;
    
 }
 
 .user_p1{
     width: 100%;
     /* background-color: aqua;     */
-    padding-top: 5px;
+    padding-top: 2px;
+    padding-bottom: 2px;
     display: flex;
     justify-content: flex-start;
     padding-left: 5px;
@@ -24,11 +28,12 @@
     display: flex;
     flex-direction: column;
     align-items: center;
+    margin-bottom: 5px;
 }
 
 .avatar_user{
-    width: 30px;
-    height: 30px;
+    width: 25px;
+    height: 25px;
     border-radius: 50%;
     background-color: rgb(129, 221, 152);
     background-size: cover;
@@ -39,8 +44,9 @@
 .name_user{
     width: 100px;
     padding-left: 5px;
-    font-size: 16px;
-    color: rgb(212, 255, 211);
+    font-size: 14px;
+    color: rgb(98, 165, 132);
+    align-items: center;
    
 
 }

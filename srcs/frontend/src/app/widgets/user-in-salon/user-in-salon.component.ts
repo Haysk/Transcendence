@@ -20,7 +20,12 @@ export class UserInSalonComponent implements OnInit {
   showOption: boolean=false;
   color1:string="rgb(44, 136, 125)";
   color2:string="rgb(44, 136, 125)";
+
+ 
+
+  AdminOrNot:boolean=true;
   constructor() {
+  
    
    }
 
@@ -30,7 +35,8 @@ export class UserInSalonComponent implements OnInit {
 
 
   ngOnInit(): void {
-    
+   
+
   }
 
   show_info(){

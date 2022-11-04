@@ -40,6 +40,7 @@
     font-size: 20px;
     width: 60%;
     /* background-color: rgb(17, 114, 114); */
+    padding-top: 6px;
 }
 
 .titre_salon_p3{
@@ -232,18 +233,25 @@ button[type="pause"]:hover{
 }
 
 .titre_administrator{
-    color:rgb(107, 179, 155);
+    font-size: 14px;
+    color:rgb(131, 129, 125);
     text-align: center;
-    background-color: rgb(32, 43, 39);
+    background-color: rgb(0, 0, 0);
+    margin-top: 2px;
 
 }
 
 .titre_guest{
-    color:rgb(107, 179, 155);
+    
+    font-size: 14px;
+    color:rgb(131, 129, 125);
     text-align: center;
-    background-color: rgb(32, 43, 39);
+    background-color: rgb(0, 0, 0);
+    margin-top: 2px;
+
 
 }
+
 
 /* .user_salon{
     width: 100%;
