@@ -13,6 +13,7 @@ export class PasswordComponent implements OnInit {
   channel_password!:string;
   
   @Output() ShowChannelPrivateEvent= new EventEmitter<Boolean>();
+  @Output() ShowFormulePasswordEvent = new EventEmitter<Boolean>();
 
   @Input() current_user !:User;
   @Input() channel!:Channel;
@@ -30,6 +31,7 @@ export class PasswordComponent implements OnInit {
     if (this.channel_password==this.channel.password){ 
 
         this.ShowChannelPrivateEvent.emit(true);
+        this.ShowFormulePasswordEvent.emit(false);
     
     }
 

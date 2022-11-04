@@ -14,7 +14,7 @@
 
 
 
-
+<!-- ###### contenu Chat #####-->
     <div class="contenu_salon"> 
 
         <div class="env_conversation" style="overflow-y: auto; height: xyz;" #scrollMe [scrollTop]="scrollMe.scrollHeight">
@@ -22,18 +22,24 @@
             <div class="conversation_salon" *ngFor="let userMessage of conversation"> {{ userMessage }}
             </div><!-- fin de conversation_salon -->
         </div><!-- fin de env_conversation -->
-        
 
+        
+        
+<!-- ######users in salon #####-->
         <div class="guest_salon">
             <div class="titre_administrator">
-                administrator
+                Administrator
             </div>
-            <!-- <app-user-in-salon [guest]="guest"></app-user-in-salon> -->
+
+            <div class="userInSalon" *ngFor ="let userInSalon of usersInGuest">
+                <app-user-in-salon [guest]=userInSalon></app-user-in-salon>
+            </div>
             
 
             <div class="titre_guest">
                 Guests in Salon
             </div><!-- fin de titre_guest -->
+
             <div class="userInSalon" *ngFor ="let userInSalon of usersInGuest">
                 <app-user-in-salon [guest]=userInSalon></app-user-in-salon>
             </div>
@@ -42,7 +48,7 @@
     </div><!-- fin de contenu_salon -->
 
 
-
+<!-- ######Partie Input message #####-->
 
     <div class="input_salon">
     <!-- <input type="text" (keydown.enter)="sendMessage()" [(ngModel)]="message"> -->

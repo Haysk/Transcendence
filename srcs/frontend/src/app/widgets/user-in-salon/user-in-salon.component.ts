@@ -30,7 +30,7 @@ export class UserInSalonComponent implements OnInit {
 
 
   ngOnInit(): void {
-    // console.log("lolilol : " + this.guest.name)
+    
   }
 
   show_info(){
