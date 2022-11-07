@@ -2,6 +2,7 @@ import { Component, OnInit, Input } from '@angular/core';
 import { ApiService } from '../../services/api.service';
 import { Channel } from 'src/app/models/channel';
 import { User } from 'src/app/models/user';
+import { SocketService } from '../../services/socket.service';
 
 
 @Component({
@@ -12,6 +13,7 @@ import { User } from 'src/app/models/user';
 export class UserInSalonComponent implements OnInit {
 
   @Input() guest!: User;
+  @Input() current_channel !: Channel;
  
   ifAdmin:boolean=false;
   ifMuet:boolean=false;
@@ -23,29 +25,18 @@ export class UserInSalonComponent implements OnInit {
   color1:string="rgb(44, 136, 125)";
   color2:string="rgb(44, 136, 125)";
   color3:string="rgb(44, 136, 125)";
-  time_ban!:number;
+  time_ban:number = 0;
   countTimeMuet:boolean= true;
   countTimeBan:boolean=true;
-  time_muet!:number;
+  time_muet:number = 0;
   
 
  
   @Input() usersAdmin:User[] =[];
   @Input() AdminOrNot:boolean=false;
-  constructor() {
-  
-   
-   }
+  constructor(private socketService: SocketService) {}
 
-   
-
-
-
-
-  ngOnInit(): void {
-   
-
-  }
+  ngOnInit(): void {}
 
   isAdmin2()
   {
@@ -77,6 +68,18 @@ export class UserInSalonComponent implements OnInit {
     this.val_muet=this.ifMuet?"Not Muet":"Muet(secondes)";
     this.color2=this.ifMuet?"rgb(76, 80, 79)":"rgb(44, 136, 125)";
     this.countTimeMuet=!this.countTimeMuet;
+    if (this.val_muet == "Not Muet")
+    {
+      if (this.time_muet != 0)
+        this.socketService.muteUserByTime(this.guest.id, Number(this.current_channel.id), this.time_muet);
+      else
+        this.socketService.muteUser(this.guest.id, Number(this.current_channel.id));
+      this.socketService.updateChannel();
+    }
+    else{
+      this.socketService.unmuteUser(this.guest.id, Number(this.current_channel.id));
+      this.socketService.updateChannel();
+    }
   }
 
   beBanne(){
@@ -84,9 +87,11 @@ export class UserInSalonComponent implements OnInit {
     this.val_banne=this.ifBanne?"Unban":"Ban(Secondes)";
     this.color3=this.ifBanne?"rgb(76, 80, 79)":"rgb(44, 136, 125)";
     this.countTimeBan=!this.countTimeBan;
-
-
-   
+    if (this.time_ban != 0)
+      this.socketService.banUserByTime(this.guest.id, Number(this.current_channel.id), this.time_ban);
+    else
+      this.socketService.banUser(this.guest.id, Number(this.current_channel.id));  
+    this.socketService.updateChannel();
   }
 
 }

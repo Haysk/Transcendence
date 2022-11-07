@@ -12,6 +12,7 @@ import { User } from 'src/app/models/user';
 export class AdminInSalonComponent implements OnInit {
 
   @Input() guest!: User;
+  @Input() current_channel!: Channel;
  
   ifAdmin:boolean=false;
   ifMuet:boolean=false;

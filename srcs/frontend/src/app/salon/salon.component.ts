@@ -46,19 +46,16 @@ export class SalonComponent implements OnInit {
         if (this.current_channel != null && this.current_channel.admins !== undefined)
         {
           this.usersAdmin=this.current_channel.admins;
-         //this.usersInGuest.pop()
-      
         }
-
-
-
       },
       error: (err) => {},
       complete: () => {}
     })
-
-     
-
+    ;
+    (await this.socketService.getUpdateChannel()).subscribe((res) => {
+      console.log("CHANNEL UPDATED")
+      this.current_channel = res;
+    })
     //console.log("findChannelByName finished");
     this.socketService.joinChannel(this.channel_name, this.current_user.id);
     this.socketService.updateUserList().subscribe({
@@ -98,8 +95,20 @@ export class SalonComponent implements OnInit {
         return 1;
       i++;
     }
-
     return 0
+  }
+
+  isMuted(current: User)
+  {
+    let i = 0
+    while(this.current_channel.muted != null && this.current_channel.muted != undefined
+      && this.current_channel.muted[i] != null && this.current_channel.muted[i] != undefined)
+      {
+        if (this.current_channel.muted[i].id == current.id)
+          return 1
+        i++;
+      }
+      return 0
   }
 
   setUpContent()
@@ -111,13 +120,21 @@ export class SalonComponent implements OnInit {
   }
 
   sendMessage(){
-    console.log(this.message);
-    this.setUpContent();
-    this.apiService.createChannelMessage(this.content).subscribe();
-    this.socketService.sendMsgToChannel(this.channel_name, this.message, this.current_user.nickname)
-    // this.conversation.push(this.message);
-    this.message= '';
-    this.content = {content: "", fromUserId: 0, fromUserName: ""};
+    console.log("SEND MESSAGE()");
+    if(this.isMuted(this.current_user) != 1)
+    {
+      console.log("USER IS NOT MUTED");
+      console.log(this.message);
+      this.setUpContent();
+      this.apiService.createChannelMessage(this.content).subscribe();
+      this.socketService.sendMsgToChannel(this.channel_name, this.message, this.current_user.nickname)
+      // this.conversation.push(this.message);
+      this.message= '';
+      this.content = {content: "", fromUserId: 0, fromUserName: ""};
+    }
+    else{
+      window.alert("You are muted at the moment");
+    }
   }
 
   quitSalon(){

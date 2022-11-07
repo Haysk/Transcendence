@@ -13,6 +13,7 @@ import { Server, Socket } from 'socket.io';
 import { IoAdapter } from '@nestjs/platform-socket.io';
 import { UserService } from './user.service';
 import { BanAndMuteService } from './banAndMute.service'
+import { truncateSync } from 'fs';
 
 @WebSocketGateway({
   cors: {
@@ -43,21 +44,27 @@ export class AppGateway
   /* MUTE */
 
   @SubscribeMessage('muteUserByTime')
-  muteUserByTime(client: any, payload: any)
+  async muteUserByTime(client: any, payload: any)
   {
-    this.BaM.muteUserDuringDelay(payload[0], payload[1], payload[2]);
+    let data = await this.BaM.muteUserDuringDelay(payload[0], payload[1], payload[2]);
+    if(data != null && data != undefined)
+      this.server.emit('channelIsUpdated', data)
   }
 
   @SubscribeMessage('muteUser')
-  muteUser(client: any, payload: any)
+  async muteUser(client: any, payload: any)
   {
-    this.BaM.muteUserFromChannel(payload[0], payload[1]);
+    let data = await this.BaM.muteUserFromChannel(payload[0], payload[1]);
+    if(data != null && data != undefined)
+      this.server.emit('channelIsUpdated', data)
   }
   
   @SubscribeMessage('unmuteUser')
-  unmuteUser(client: any, payload: any)
+  async unmuteUser(client: any, payload: any)
   {
-    this.BaM.unmuteUserFromChannel(payload[0], payload[1]);
+    let data = await this.BaM.unmuteUserFromChannel(payload[0], payload[1]);
+    if(data != null && data != undefined)
+      this.server.emit('channelIsUpdated', data)
   }
 
   /* BAN */
@@ -228,11 +235,17 @@ catch(err){
   @SubscribeMessage('sendMsgTo')
   async sendMsgTo(client: any, payload: any): Promise<void> {
     // const dest = await this.server.in(payload[1]).fetchSockets;
-    payload[1] = (await this.userService.findUserByLogin(payload[3])).socket;
-    const roomName = this.createRoomName(payload[2], payload[3]);
-    this.server.in(payload[1]).socketsJoin(roomName);
-    this.server.in(client.id).socketsJoin(roomName);
-    this.server.to(roomName).emit('PrivMsg', {msg: payload[0], channel: roomName, from: payload[2]});
+    try{
+      payload[1] = (await this.userService.findUserByLogin(payload[3])).socket;
+      const roomName = this.createRoomName(payload[2], payload[3]);
+      this.server.in(payload[1]).socketsJoin(roomName);
+      this.server.in(client.id).socketsJoin(roomName);
+      this.server.to(roomName).emit('PrivMsg', {msg: payload[0], channel: roomName, from: payload[2]});
+    }
+    catch(err){
+      console.log("error dans sendMsgTo");
+      console.log(err);
+    }
   }
 
   @SubscribeMessage('MsgInChannel')
@@ -266,7 +279,12 @@ catch(err){
         },
 		  })
       const data = await this.Prisma.channel.findMany({
-        include: {joined: true},
+        include: {
+          joined: true,
+          muted: true,
+          banned: true,
+          admins: true,
+        },
       })
       if (data != null && data != undefined)
       {
@@ -298,7 +316,12 @@ catch(err){
         },
 		  })
       const data = await this.Prisma.channel.findMany({
-        include: {joined: true},
+        include: {
+          joined: true,
+          muted: true,
+          banned: true,
+          admins: true
+        },
       })
       if (data != null && data != undefined)
       {
@@ -308,6 +331,32 @@ catch(err){
     }
     catch(err){
       console.log("error dans create priv chann");
+      console.log(err);
+    }
+  }
+
+  @SubscribeMessage('channelToUpdate')
+  async updateChannel(client: Socket, payload: any)
+  {
+    try{
+      const data = await this.Prisma.channel.findFirst({
+        where: {
+          id: payload,
+        },
+        include: {
+          joined: true,
+          muted: true,
+          banned: true,
+          admins: true,
+        }
+      })
+      if (data != null && data != undefined)
+      {
+        this.server.to(data.name + "_channel").emit('channelIsUpdated');
+      }
+    }
+    catch(err){
+      console.log("error dans updateChannel :");
       console.log(err);
     }
   }
@@ -330,6 +379,9 @@ catch(err){
         },
         include: {
           joined: true,
+          muted: true,
+          banned: true,
+          admins: true,
         }
       })
       if (data != null && data != undefined)
@@ -359,6 +411,9 @@ catch(err){
         },
         include: {
           joined: true,
+          muted: true,
+          banned: true,
+          admins: true,
         }
       })    
       if (data != null && data != undefined)

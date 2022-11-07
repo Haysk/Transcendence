@@ -32,7 +32,7 @@
             </div>
             
             <div class="userInSalon" *ngFor ="let userAdmin of usersAdmin" > 
-                <app-admin-in-salon  [usersAdmin]="usersAdmin" [guest]=userAdmin></app-admin-in-salon>
+                <app-admin-in-salon  [usersAdmin]="usersAdmin" [current_channel]="current_channel" [guest]=userAdmin></app-admin-in-salon>
             </div>
             
             
@@ -42,7 +42,7 @@
             </div><!-- fin de titre_guest -->
             
             <div class="userInSalon" *ngFor ="let userInSalon of usersInGuest">
-                <app-user-in-salon  [usersAdmin]="usersAdmin"  *ngIf="isAdmin(userInSalon)==0" [guest]=userInSalon></app-user-in-salon>
+                <app-user-in-salon  [usersAdmin]="usersAdmin"  [current_channel]="current_channel" *ngIf="isAdmin(userInSalon)==0" [guest]=userInSalon></app-user-in-salon>
             </div>
             
         </div><!-- fin de guest_salon -->

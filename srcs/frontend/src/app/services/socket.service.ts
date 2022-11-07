@@ -9,6 +9,7 @@ import { environment } from 'src/environments/environment';
 import { IGameStates } from '../pong/game/interfaces/game-states.interface';
 import { IInput } from '../pong/game/interfaces/input.interface';
 import { observable } from 'rxjs';
+import { observeNotification } from 'rxjs/internal/Notification';
 
 @Injectable({
   providedIn: 'root'
@@ -97,6 +98,22 @@ unbanUser(userToBan: number, channelConcerned: number)
       obs.next();
       })
     })
+  }
+
+//UPDATE CHANNEL
+
+  async updateChannel()
+  {
+    this.socket.emit('channelToUpdate');
+  }
+
+  async getUpdateChannel()
+  {
+    return new Observable<Channel>((obs)=>{
+    this.socket.on('channelIsUpdated', (data: Channel) => {
+      obs.next(data);
+    })
+  })
   }
 
   getAllUser()
