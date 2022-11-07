@@ -18,12 +18,12 @@ export class UserInSalonComponent implements OnInit {
   ifBanne:boolean=false;
   val_admin:string="Be Admin";
   val_muet:string="Muet (Minutes?)";
-  val_banne:string="Banne";
+  val_banne:string="Ban";
   showOption: boolean=false;
   color1:string="rgb(44, 136, 125)";
   color2:string="rgb(44, 136, 125)";
   color3:string="rgb(44, 136, 125)";
-  time_banne!:number;
+  time_ban!:number;
   countTime:boolean= true;
   
 
@@ -79,7 +79,7 @@ export class UserInSalonComponent implements OnInit {
 
   beBanne(){
     this.ifBanne=!this.ifBanne;
-    this.val_banne=this.ifBanne?"Not Banne":"Banne";
+    this.val_banne=this.ifBanne?"Unban":"Ban";
     this.color3=this.ifBanne?"rgb(76, 80, 79)":"rgb(44, 136, 125)";
 
 
