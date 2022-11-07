@@ -10,10 +10,6 @@ import { User } from './models/user';
   styleUrls: ['./app.component.css']
 })
 export class AppComponent implements OnInit{
-  user!: User;
-  title = 'todo-app';
-  visible:boolean = true;
-
 	constructor(public route: ActivatedRoute,
 				public router: Router,private socketService: SocketService){
   }

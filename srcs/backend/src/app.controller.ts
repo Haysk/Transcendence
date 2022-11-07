@@ -7,13 +7,22 @@ import {
 	Put,
 	Delete,
 	ConsoleLogger,
+	Patch,
 } from '@nestjs/common';
 import { UserService } from './user.service';
 import { TechService } from './tech.service';
 import { MessageService } from './message.service';
 import { ChannelService } from './channel.service';
 import { OauthService } from './oauth.service';
-import { User as UserModel, Tech as TechModel, Oauth as OauthModel, Message as MessageModel, Channel as ChannelModel, Prisma, PrismaClient, User } from '@prisma/client';
+import { TfaService } from './tfa.service';
+import {
+	User as UserModel, Tech as TechModel,
+	Oauth as OauthModel,
+	Tfa as TfaModel,
+	Message as MessageModel,
+	Channel as ChannelModel,
+	Prisma, PrismaClient
+} from '@prisma/client';
 
 @Controller()
 export class AppController {
@@ -23,6 +32,7 @@ export class AppController {
 		private readonly techService: TechService,
 		private readonly oauthService: OauthService,
 		private readonly channelService: ChannelService,
+		private readonly tfaService: TfaService
 	) { }
 
 	@Post('joinChannel')
@@ -81,7 +91,7 @@ export class AppController {
 
 	@Post('message')
 	async addMessage(
-		@Body() messageData: {userId: number, fromUserName: string, fromUserId: number, content: string},
+		@Body() messageData: { userId: number, fromUserName: string, fromUserId: number, content: string },
 	): Promise<MessageModel> {
 		console.log("@Post message dans app.controller backend");
 		return await this.messageService.createMessage(messageData);
@@ -95,8 +105,7 @@ export class AppController {
 	}
 	
 	@Get('getSocket/:login')
-	async getSocket(@Param('login') login: string) : Promise<UserModel>
-	{
+	async getSocket(@Param('login') login: string) : Promise<UserModel> {
 		return await this.userService.findUserByLogin(login);
 	}
 
@@ -117,58 +126,63 @@ export class AppController {
 		return await this.messageService.getChannelMessages(data);
 	}
 
-	@Get('techs')
-	async getTechs(): Promise<TechModel[]> {
-		return this.techService.techs({});
+	@Get('users/:code')
+	async getUsers(@Param('code') code: string): Promise<UserModel[]> {
+		let data = code;
+		return await this.userService.getAllUsers(data);
 	}
 
-	@Get('tech/:id')
-	async getTech(@Param('id') id: string): Promise<TechModel> {
-		return this.techService.tech({id: Number(id)});
-	}
-
-	@Post('tech')
-	async addTech(
-		@Body() techData: {name: string, categorie?: string, details?: string},
-	) : Promise<TechModel> {
-		return this.techService.createTech(techData);
-	}
-
-	@Post('tech/:id')
-	async updateTech(@Param('id') id: string,
-		@Body() techData: {name?: string, categorie?: string, details?: string}
-	): Promise<TechModel> {
-		return this.techService.updateTech({
-			where: {id: Number(id) },
-			data: techData
+	@Patch('user/:id')
+	async patchUser(@Param('id') id: number,
+		@Body() userData: { online?: boolean, two_factor_auth?: boolean }): Promise<UserModel> {
+		return this.userService.updateUser({
+			where: { id: id },
+			data: userData
 		});
 	}
 
-	@Delete('tech/:id')
-	async deleteTech(@Param('id') id: string): Promise<TechModel> {
-		return this.techService.deleteTech({ id: Number(id) });
+	@Get('user/:code')
+	async getUser(
+		@Param('code') code: string) {
+		this.userService.user({ code: code });
 	}
 
-	@Post('auth/token/code')
-	async postInitOauth(
-		@Body() oauthCode: {code: string}
-	): Promise<UserModel> {
-		var oauth = await this.oauthService.getToken(oauthCode);
-		if (oauth != null) {
-			var user = await this.userService.createUser(oauth);
-			return user;
+	@Post('auth/')
+	async signup(
+		@Body() auth: { code: string }): Promise<UserModel | boolean> {
+		try {
+			var oauth = await this.oauthService.getToken(auth.code);
+			if (oauth != null)
+				return await this.userService.createUser(oauth, auth.code);
+			else
+				throw Prisma.PrismaClientKnownRequestError
+		} catch (e) {
+			console.log("User Init fail");
 		}
-		else {
-			throw Prisma.PrismaClientKnownRequestError
-		}
-		//return this.userService.user(oauthData);
 	}
 
-	@Get('allusers/:current')
-	async getAllUsers(@Param('current') id: number) : Promise<UserModel[]>
-	{
-		let data = id;
-		return await this.userService.getAllUsers(data);
+	@Patch('tfa/disable')
+	async patchTfa(
+		@Body() code: string) {
+		this.tfaService.disableTfa(code);
+	}
+
+	@Post('tfa/signup')
+	async postSignup(
+		@Body() code: string): Promise<TfaModel> {
+		return (this.tfaService.createTfa(code));
+	}
+
+	@Post('tfa/verify')
+	async postVerify(
+		@Body() param: { code: string, tfa_key: string }) {
+		return (await this.tfaService.verifyTfa(param))
+	}
+
+	@Post('tfa/validate')
+	async postValidate(
+		@Body() param: { code: string, tfa_key: string }): Promise<UserModel | boolean> {
+		return (await this.tfaService.validateTfa(param));
 	}
 
 	// @Post('upload/')

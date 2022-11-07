@@ -10,13 +10,15 @@ import { OauthService } from './oauth.service';
 import { ChannelService } from './channel.service';
 import { ScheduleModule } from '@nestjs/schedule';
 import { BanAndMuteService } from './banAndMute.service';
-
+import { TfaService } from './tfa.service';
+import { ConfigModule } from '@nestjs/config';
 @Module({
   imports: 
   [
     HttpModule,
-    ScheduleModule.forRoot()
-  ],
+    ScheduleModule.forRoot(),
+	ConfigModule.forRoot({envFilePath: "../.env", isGlobal: true})
+	],
   controllers: 
   [
     AppController
@@ -29,8 +31,13 @@ import { BanAndMuteService } from './banAndMute.service';
     MessageService, 
     AppGateway, 
     OauthService,
+<<<<<<< HEAD
     ChannelService,
     BanAndMuteService,
+	TfaService
+=======
+
+>>>>>>> 2FA
   ],
 })
 export class AppModule {}

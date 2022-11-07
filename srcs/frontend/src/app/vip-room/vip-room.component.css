@@ -52,6 +52,33 @@
 
 }
 
+.qr_code{
+    height:200px;
+    /* background-color: bisque; */
+    background-size: contain;
+    background-repeat: no-repeat;
+    background-position: center; 
+    margin-top: 20px;
+
+}
+
+.tfa_input{
+    /* background-color: bisque; */
+    width: 200px;
+    background-size: contain;
+    background-repeat: no-repeat;
+    background-position: center; 
+    margin-top: 20px;
+
+}
+
+.tfa_count{
+	color:white;
+    text-align: center;
+	font-size: large;
+	font-weight: bold;
+}
+
 .user_name{
     width: 200px;
     height:auto;
@@ -62,6 +89,7 @@
     padding-top: 5px;
     padding-bottom: 5px;
 }
+
 .champ_avatar{
     color: rgb(184, 142, 7);
     font-size: 18px;

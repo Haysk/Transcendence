@@ -68,9 +68,22 @@ model           	Tech {
 	details       	String?
 }
 
-model 				Oauth {
-	id 				Int @default(autoincrement()) @id
-	refresh_token 	String? @unique
-	access_token 	String? @unique
+
+model Oauth {
+	id Int @default(autoincrement()) @id
+	code String? @unique
+	refresh_token String? @unique
+	access_token String? @unique
+	tfa_id Int @unique
 	user User?
+	tfa Tfa? @relation(fields: [tfa_id], references: [id])
+}
+
+model Tfa {
+	id Int @default(autoincrement()) @id
+	tfa_activated	Boolean @default(false)
+	tfa_temp_secret String? @unique
+	tfa_secret String? @unique
+	tfa_qr String? @unique
+	oauth Oauth?
 }

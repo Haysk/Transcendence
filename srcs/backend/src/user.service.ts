@@ -1,6 +1,6 @@
 import { Injectable } from '@nestjs/common';
 import { PrismaService } from './prisma.service';
-import { User, Prisma } from '@prisma/client';
+import { User, Prisma, Tfa } from '@prisma/client';
 import { HttpService } from '@nestjs/axios';
 import { catchError, take } from 'rxjs';
 
@@ -11,12 +11,14 @@ export class UserService {
 
 	INTRA_API = "https://api.intra.42.fr";
 
-  async getAllUsers(current: number) : Promise<User[]>
+  async getAllUsers(code: string) : Promise<User[]>
   {
     return this.prisma.user.findMany({
       where: {
-        id: {
-			not: Number(current),
+        oauth: {
+			code: {
+				not: code,
+			}
 		},
       },
 })
@@ -94,56 +96,71 @@ export class UserService {
 		})
 	}
 
-	async createUser(params: Prisma.OauthCreateInput): Promise<User> {
-		let toto = new Promise<User>(resolve =>
-			this.httpClient.get<User>(`${this.INTRA_API}/v2/me`, { params })
-				.pipe(take(1))
-				.subscribe(async (result) => {
-					try {
-						await this.prisma.user.create({
-							data: {
-								id: result.data.id,
-								email: result.data.email,
-								login: result.data.login,
-								first_name: result.data.first_name,
-								last_name: result.data.last_name,
-								url: result.data.url,
-								displayname: result.data.displayname,
-								image_url: result.data.image_url,
-								nickname: result.data.displayname,
-								avatar_url: result.data.image_url,
-								oauth: {
-									create: {
-										refresh_token: params.refresh_token,
-										access_token: params.access_token,
-									},
-								},
-								online: true,
-							}
-						});
-					} catch (e) {
-						await this.prisma.user.update({
-							where: {
-								id: result.data.id
-							},
-							data: {
-								oauth: {
-									update: {
-										refresh_token: params.refresh_token,
-										access_token: params.access_token,
+
+	async createUser(params: Prisma.OauthCreateInput, code: string): Promise<User | boolean> {
+		return new Promise<User | boolean>((resolve) => { this.httpClient.get<User>(`${this.INTRA_API}/v2/me`, { params })
+			.pipe(take(1))
+			.subscribe(async (result) => {
+				try {
+					await this.prisma.user.create({
+						data: {
+							id: result.data.id,
+							email: result.data.email,
+							login: result.data.login,
+							first_name: result.data.first_name,
+							last_name: result.data.last_name,
+							url: result.data.url,
+							displayname: result.data.displayname,
+							image_url: result.data.image_url,
+							nickname: result.data.displayname,
+							avatar_url: result.data.image_url,
+							oauth: {
+								create: {
+									code: code,
+									refresh_token: params.refresh_token,
+									access_token: params.access_token,
+									tfa: {
+										create: {}
 									}
 								},
-								online: true,
-							}
-						});
-					}
-					resolve(await this.prisma.user.findFirst({
+							},
+							online: true,
+						},
+					});
+				} catch (e) {
+					await this.prisma.user.update({
 						where: {
-							id: result.data.id,
+							id: result.data.id
+						},
+						data: {
+							oauth: {
+								update: {
+									code: code,
+									refresh_token: params.refresh_token,
+									access_token: params.access_token,
+								}
+							},
+							online: true,
 						}
-					}));
-				}));
-		return (await toto);
+					});
+				}
+				const tmp = await this.prisma.user.findFirst({
+					where: {
+						id: result.data.id
+					},
+					include: {
+						oauth: {
+							select: {
+								tfa: {
+								}
+							}
+						}
+					}
+				});
+				if (tmp.oauth.tfa.tfa_activated)
+					resolve(tmp.oauth.tfa.tfa_activated);
+				resolve(tmp);
+			})})
 	}
 
 	async updateUser(params: {

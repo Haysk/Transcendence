@@ -8,17 +8,17 @@ import { Channel } from '../models/channel';
 
 
 @Component({
-  selector: 'app-chat',
-  templateUrl: './chat.component.html',
-  styleUrls: ['./chat.component.css'],
-  providers: [
-    {
-      provide: 'user_list',
-      useValue: [
-        {id: 1, name: "Alex", online: true},
-        {id: 2, name: "Antoine", online: true},
-        {id: 3, name: "Arnaud", online: true},
-        {id: 4, name: "Ching", online: false},
+	selector: 'app-chat',
+	templateUrl: './chat.component.html',
+	styleUrls: ['./chat.component.css'],
+	providers: [
+		{
+			provide: 'user_list',
+			useValue: [
+				{ id: 1, name: "Alex", online: true },
+				{ id: 2, name: "Antoine", online: true },
+				{ id: 3, name: "Arnaud", online: true },
+				{ id: 4, name: "Ching", online: false },
 
       ]
     },
@@ -59,13 +59,9 @@ export class ChatComponent implements OnInit {
   channel_name!: string ;
   privateChannel!: Channel;
 
-  receiveShowchat($event: Boolean) {
-      this.showchat = $event;
-  }
-
-  receiveSendDest($event : User) {
-      this.Dest = $event;
-  }
+	receiveShowchat($event: Boolean) {
+		this.showchat = $event
+	}
 
   receivePrivateChannel($event:Channel){
     this.privateChannel= $event;
@@ -103,7 +99,6 @@ export class ChatComponent implements OnInit {
     this.showFormule=this.showFormule?false:true;
     this.showchat=false;
     this.showFormulePassword=false;
-
   }
 
   receiveChannelName($event: string){
@@ -131,85 +126,6 @@ export class ChatComponent implements OnInit {
         this.User_list = result;
       })
   }
-
-  getId(): number{
-    let id = localStorage.getItem("id");
-    if (id === null || id === undefined)
-      return 0;
-    return  Number(id);
-  }
-
-  getLogin(): string{
-    let login = localStorage.getItem("login");
-    if (login === null || login === undefined)
-      return "";
-    return  login;
-  }
-
-  getEmail(): string{
-    let email = localStorage.getItem("email");
-    if (email === null || email === undefined)
-      return "";
-    return  email;
-  }
-
-  getFirstName(): string{
-    let first_name = localStorage.getItem("first_name");
-    if (first_name === null || first_name === undefined)
-      return "";
-    return  first_name;
-  }
-
-  getLastName(): string{
-    let last_name = localStorage.getItem("last_name");
-    if (last_name === null || last_name === undefined)
-      return "";
-    return  last_name;
-  }
-
-  getUrl(): string{
-    let url = localStorage.getItem("url");
-    if (url === null || url === undefined)
-      return "";
-    return  url;
-  }
-
-  getDisplayName(): string{
-    let display_name = localStorage.getItem("display_name");
-    if (display_name === null || display_name === undefined)
-      return "";
-    return  display_name;
-  }
-
-  getNickname(): string{
-    let nickname = localStorage.getItem("nickname");
-    if (nickname === null || nickname === undefined)
-      return "";
-    return  nickname;
-  }
-
-  getImageUrl(): string{
-    let image_url = localStorage.getItem("image_url");
-    if (image_url === null || image_url === undefined)
-      return "";
-    return  image_url;
-  }
-
-  getAvatarUrl(): string{
-    let avatar_url = localStorage.getItem("avatar_url");
-    if (avatar_url === null || avatar_url === undefined)
-      return "";
-    return  avatar_url;
-  }
-
-  getOnline(): boolean{
-    let online = localStorage.getItem("online");
-    if (online === "true")
-      return true
-    else
-      return false
-  }
-
 
 
 }

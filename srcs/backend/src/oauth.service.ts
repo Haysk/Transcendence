@@ -58,16 +58,15 @@ export class OauthService {
 		}
 	}
 
-	async getToken(authCode: {code: string}): Promise<Oauth | null> {
-		try{
-			if (!authCode.code)
-				return null;
-			let result = new Promise<Oauth | null>(resolve => {
+	async getToken(code: string | null): Promise<Oauth | null> {
+		if (code === null || code === undefined)
+			return null;
+		let result = new Promise<Oauth | null>(resolve => {
 				this.httpClient.post<Oauth>('https://api.intra.42.fr/oauth/token', {
 				grant_type: "authorization_code",
-				client_id: "bfeae857f60a395fd5665c74d4bedbdcd827cc466384460f5e05cb451e9e4ad0", // A METTRE EN ENVIRONNEMENT
-				client_secret: "daa68f28c0b45a2c11f8adcda2772d0630b5b82b7f8574098cbe3039e9fc4694", // A METTRE EN ENVIRONNEMENT
-				code: authCode.code,
+				client_id: process.env.CLIENT_ID,
+				client_secret: process.env.CLIENT_SECRET,
+				code,
 				redirect_uri: "https://localhost:8081",
 				}).pipe(take(1)).subscribe({
 					next: async result => {
@@ -79,29 +78,21 @@ export class OauthService {
 				})
 			}
 			);
-			return (await result);
-		}
-		catch(err){
-			console.log("error dans getToken : ");
-			console.log(err);
-		}
+		return (await result);
 	}
 
 
 	async updateOauth(params: {
 		where: Prisma.OauthWhereUniqueInput;
 		data: Prisma.OauthUpdateInput;
+		include: Prisma.OauthInclude
 	}): Promise<Oauth> {
-		try{
-			const {where, data } = params;
-			return this.prisma.oauth.update({
-				data,
-				where,
-			});
-		}
-		catch(err){
-			console.log("error dans update Oauth :");
-			console.log(err);
-		}
+		const {where, data, include} = params;
+		return await this.prisma.oauth.update({
+			data,
+			where,
+			include
+		});
 	}
+
 }
