@@ -11,15 +11,23 @@
     <div class="user_p2" *ngIf="showOption" >
         <button class="if_admin" (click)="beAdmin()" style="background-color:{{color1}}" > {{val_admin}}</button>
         
+        <form>
         <button class="if_muet" (click)="beMuet()" style="background-color:{{color2}}"> {{val_muet}}</button>
-        <div class="countTime" *ngIf="countTime">
-        Time: <input type="text" id="time_ban" name="time_ban"  [(ngModel)]="time_ban"  required /></div>
+        <div class="countTime" *ngIf="countTimeMuet">
+        Time: <input type="text" id="time_muet" name="time_muet"  [(ngModel)]="time_muet"  required /></div>
+        </form>
 
        
+        <form>
+        <button class="if_muet" (click)="beBanne()" style="background-color:{{color3}}"> {{val_banne}}</button>
+        <div class="countTime" *ngIf="countTimeBan">
+        Time: <input type="text" id="time_ban" name="time_ba"  [(ngModel)]="time_ban"  required /></div>
+        </form>
+    
+        </div>
         
-        <button class="if_admin" (click)="beBanne()" style="background-color:{{color3}}"> {{val_banne}}</button>
     </div>
-    </div>
+   
   
 
 </div><!-- fin de user_salon -->

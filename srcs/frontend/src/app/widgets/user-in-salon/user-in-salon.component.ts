@@ -18,13 +18,15 @@ export class UserInSalonComponent implements OnInit {
   ifBanne:boolean=false;
   val_admin:string="Be Admin";
   val_muet:string="Muet (Minutes?)";
-  val_banne:string="Ban";
+  val_banne:string="Ban(Munutes)";
   showOption: boolean=false;
   color1:string="rgb(44, 136, 125)";
   color2:string="rgb(44, 136, 125)";
   color3:string="rgb(44, 136, 125)";
   time_ban!:number;
-  countTime:boolean= true;
+  countTimeMuet:boolean= true;
+  countTimeBan:boolean=true;
+  time_muet!:number;
   
 
  
@@ -74,13 +76,14 @@ export class UserInSalonComponent implements OnInit {
     this.ifMuet=!this.ifMuet;
     this.val_muet=this.ifMuet?"Not Muet":"Muet(Minutes?)";
     this.color2=this.ifMuet?"rgb(76, 80, 79)":"rgb(44, 136, 125)";
-    this.countTime=!this.countTime;
+    this.countTimeMuet=!this.countTimeMuet;
   }
 
   beBanne(){
     this.ifBanne=!this.ifBanne;
-    this.val_banne=this.ifBanne?"Unban":"Ban";
+    this.val_banne=this.ifBanne?"Unban":"Ban(Minutes)";
     this.color3=this.ifBanne?"rgb(76, 80, 79)":"rgb(44, 136, 125)";
+    this.countTimeBan=!this.countTimeBan;
 
 
    
