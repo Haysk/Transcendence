@@ -89,11 +89,29 @@ unbanUser(userToBan: number, channelConcerned: number)
       this.socket.emit('joinChannel', channel_name, creator_id);
     });
   }
-
-  createPrivChannel(channel_name: string, creator_id: number, password: string)
+  getConnectionSignal(current_id: number)
   {
-    console.log("MDP => " + password);
-    
+    return new Observable((obs) => {
+      this.socket.on('userListUpdated', () => {
+      this.socket.emit('userListPlz', current_id);
+      obs.next();
+      })
+    })
+  }
+
+  getAllUser()
+  {
+    return new Observable<User[]>((obs) => {
+      this.socket.on('hereIsTheUserList', (res: User[]) => {
+        // console.log("HEREISTHEUSERLIST OK =>")
+        // console.log(res);
+        obs.next(res);
+      })
+  })
+  }
+
+  createPrivChannel(channel_name: string, creator_id: number, password?: string)
+  {
     this.socket.emit('createPrivChannel', channel_name, creator_id, password, () => { 
       this.socket.emit('joinChannel', channel_name, creator_id);
     });
@@ -137,25 +155,6 @@ unbanUser(userToBan: number, channelConcerned: number)
   askForUserList(current_id: number)
   {
     this.socket.emit('userListPlz', current_id);
-  }
-
-  getConnectionSignal(current_id: number)
-  {
-    return new Observable((obs) => {
-      this.socket.on('userListUpdated', () => {
-      this.socket.emit('userListPlz', current_id);
-      obs.next();
-      })
-    })
-  }
-
-  getAllUser()
-  {
-    return new Observable<User[]>((obs) => {
-      this.socket.on('hereIsTheUserList', (res: User[]) => {
-        obs.next(res);
-      })
-  })
   }
 
   updateUserList() : Observable<User[]>

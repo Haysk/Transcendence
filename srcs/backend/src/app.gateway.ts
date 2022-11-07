@@ -227,17 +227,12 @@ catch(err){
 
   @SubscribeMessage('sendMsgTo')
   async sendMsgTo(client: any, payload: any): Promise<void> {
-    try{
-      payload[1] = (await this.userService.findUserByLogin(payload[3])).socket;
-      const roomName = this.createRoomName(payload[2], payload[3]);
-      this.server.in(payload[1]).socketsJoin(roomName);
-      this.server.in(client.id).socketsJoin(roomName);
-      this.server.to(roomName).emit('PrivMsg', {msg: payload[0], channel: roomName, from: payload[2]});
-    }
-    catch(err){
-      console.log("error dans sendMsgTo :");
-      console.log(err);
-    }
+    // const dest = await this.server.in(payload[1]).fetchSockets;
+    payload[1] = (await this.userService.findUserByLogin(payload[3])).socket;
+    const roomName = this.createRoomName(payload[2], payload[3]);
+    this.server.in(payload[1]).socketsJoin(roomName);
+    this.server.in(client.id).socketsJoin(roomName);
+    this.server.to(roomName).emit('PrivMsg', {msg: payload[0], channel: roomName, from: payload[2]});
   }
 
   @SubscribeMessage('MsgInChannel')
@@ -263,6 +258,9 @@ catch(err){
           name: String(payload[0]), 
           creator_id: Number(payload[1]),
           joined: {
+            connect: [{id: Number(payload[1])}],
+          },
+          admins: {
             connect: [{id: Number(payload[1])}],
           }
         },
@@ -292,6 +290,9 @@ catch(err){
           creator_id: Number(payload[1]),
           password: String(payload[2]),
           joined: {
+            connect: [{id: Number(payload[1])}],
+          },
+          admins: {
             connect: [{id: Number(payload[1])}],
           }
         },

@@ -4,7 +4,7 @@
 
     <div class="titre_salon">
         <div class="titre_salon_p1"></div>
-        <div class="titre_salon_p2">"{{channel_name}}"</div>
+        <div class="titre_salon_p2">" {{channel_name}} "</div>
         <div class="titre_salon_p3">
             <button type ="pause" (click)="pauseSalon()"><span>></span></button>
             <button type ="exit" (click)="quitSalon()"><span>exit</span></button>
@@ -30,19 +30,21 @@
             <div class="titre_administrator">
                 Administrator
             </div>
-
-            <div class="userInSalon" *ngFor ="let userInSalon of usersInGuest">
-                <app-user-in-salon [guest]=userInSalon></app-user-in-salon>
+            
+            <div class="userInSalon" *ngFor ="let userAdmin of usersAdmin" > 
+                <app-admin-in-salon  [usersAdmin]="usersAdmin" [guest]=userAdmin></app-admin-in-salon>
             </div>
+            
             
 
             <div class="titre_guest">
                 Guests in Salon
             </div><!-- fin de titre_guest -->
-
+            
             <div class="userInSalon" *ngFor ="let userInSalon of usersInGuest">
-                <app-user-in-salon [guest]=userInSalon></app-user-in-salon>
+                <app-user-in-salon  [usersAdmin]="usersAdmin"  *ngIf="isAdmin(userInSalon)==0" [guest]=userInSalon></app-user-in-salon>
             </div>
+            
         </div><!-- fin de guest_salon -->
 
     </div><!-- fin de contenu_salon -->

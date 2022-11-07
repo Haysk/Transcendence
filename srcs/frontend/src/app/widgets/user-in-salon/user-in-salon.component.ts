@@ -15,12 +15,25 @@ export class UserInSalonComponent implements OnInit {
  
   ifAdmin:boolean=false;
   ifMuet:boolean=false;
+  ifBanne:boolean=false;
   val_admin:string="Be Admin";
-  val_muet:string="Muet"
+  val_muet:string="Muet(Secondes)";
+  val_banne:string="Ban(Secondes)";
   showOption: boolean=false;
   color1:string="rgb(44, 136, 125)";
   color2:string="rgb(44, 136, 125)";
+  color3:string="rgb(44, 136, 125)";
+  time_ban!:number;
+  countTimeMuet:boolean= true;
+  countTimeBan:boolean=true;
+  time_muet!:number;
+  
+
+ 
+  @Input() usersAdmin:User[] =[];
+  @Input() AdminOrNot:boolean=false;
   constructor() {
+  
    
    }
 
@@ -30,7 +43,21 @@ export class UserInSalonComponent implements OnInit {
 
 
   ngOnInit(): void {
-    
+   
+
+  }
+
+  isAdmin2()
+  {
+    let i = 0;
+    while (this.usersAdmin[i] != null && this.usersAdmin[i] != undefined)
+    {
+      if (this.usersAdmin[i].id == Number(localStorage.getItem('id')))
+        return 1;
+      i++;
+    }
+
+    return 0
   }
 
   show_info(){
@@ -47,9 +74,19 @@ export class UserInSalonComponent implements OnInit {
   
   beMuet(){
     this.ifMuet=!this.ifMuet;
-    this.val_muet=this.ifMuet?"Not Muet":"Muet";
+    this.val_muet=this.ifMuet?"Not Muet":"Muet(secondes)";
     this.color2=this.ifMuet?"rgb(76, 80, 79)":"rgb(44, 136, 125)";
+    this.countTimeMuet=!this.countTimeMuet;
   }
 
+  beBanne(){
+    this.ifBanne=!this.ifBanne;
+    this.val_banne=this.ifBanne?"Unban":"Ban(Secondes)";
+    this.color3=this.ifBanne?"rgb(76, 80, 79)":"rgb(44, 136, 125)";
+    this.countTimeBan=!this.countTimeBan;
+
+
+   
+  }
 
 }

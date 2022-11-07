@@ -23,9 +23,9 @@ export class CreateSalonComponent implements OnInit {
 
   constructor(private socketService: SocketService, private apiService: ApiService) { }
 
-  channel_name : string = "";
+  channel_name! : string ;
   channel_creator !: User;
-  channel_password: string = "";
+  channel_password!: string;
   current_channel !: Channel;
 
   ngOnInit(): void {
@@ -51,18 +51,28 @@ export class CreateSalonComponent implements OnInit {
   }
 
   async createSalon(){
+    if (this.channel_name!== undefined){
     await this.socketService.createChannel(this.channel_name, this.channel_creator.id);
     this.socketService.iAmReady().subscribe(() => {
       this.ShowSalonEvent.emit(this.show_salon);
       this.SendChannelNameEvent.emit(this.channel_name);
     })
+    }else{
+      window.alert('Channel Name Please!!');
+    }
   }
 
   async createPrivateSalon(){
+    if (this.channel_password!== undefined && this.channel_name!== undefined){
     await this.socketService.createPrivChannel(this.channel_name, this.channel_creator.id, this.channel_password)    
     this.socketService.iAmReady().subscribe(() => {
       this.ShowSalonEvent.emit(this.show_salon);
       this.SendChannelNameEvent.emit(this.channel_name);
     })
+    }else{
+      window.alert('Channel Name or Password Please !!');
+    }
+    
+
   }
 }

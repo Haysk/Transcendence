@@ -34,6 +34,10 @@ export class PasswordComponent implements OnInit {
         this.ShowFormulePasswordEvent.emit(false);
     
     }
+    if (this.channel_password==null || this.channel_password!==this.channel.password){
+      window.alert('Wrong Password or No Password');
+    }
+  
 
   }
 
