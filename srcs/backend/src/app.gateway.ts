@@ -352,12 +352,38 @@ catch(err){
       })
       if (data != null && data != undefined)
       {
-        this.server.to(data.name + "_channel").emit('channelIsUpdated');
+        this.server.to(data.name + "_channel").emit('channelIsUpdated', data);
         //this.server.emit('channelIsUpdated');
       }
     }
     catch(err){
       console.log("error dans updateChannel :");
+      console.log(err);
+    }
+  }
+
+  @SubscribeMessage('channelsToUpdate')
+  async updateChannels(client: Socket, payload: any)
+  {
+    try{
+      const data = await this.Prisma.channel.findMany({
+        include: {
+          joined: true,
+          muted: true,
+          banned: true,
+          admins: true
+        },
+      })
+      if (data != null && data != undefined)
+      {
+        this.server.emit('aChannelHasBeenCreated', data);
+        this.server.emit('channelsAreUpdated', data);
+        this.server.to(client.id).emit('youAreReady');
+      }
+    }
+    catch(err)
+    {
+      console.log("error dans updateChannels :");
       console.log(err);
     }
   }

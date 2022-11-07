@@ -107,6 +107,11 @@ unbanUser(userToBan: number, channelConcerned: number)
     this.socket.emit('channelToUpdate');
   }
 
+  async updateChannels()
+  {
+    this.socket.emit('channelsToUpdate');
+  }
+
   async getUpdateChannel()
   {
     return new Observable<Channel>((obs)=>{
@@ -114,6 +119,15 @@ unbanUser(userToBan: number, channelConcerned: number)
       obs.next(data);
     })
   })
+  }
+
+  async getUpdateChannels()
+  {
+    return new Observable<Channel[]>((obs)=>{
+      this.socket.on('channelsAreUpdated', (data: Channel[]) => {
+        obs.next(data);
+      })
+    }) 
   }
 
   getAllUser()
