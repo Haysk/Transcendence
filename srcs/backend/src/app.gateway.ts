@@ -154,6 +154,9 @@ export class AppGateway
         creator_id: Number(payload[1]),
         joined: {
           connect: [{id: Number(payload[1])}],
+        },
+        admins: {
+          connect: [{id: Number(payload[1])}],
         }
       },
 		})
@@ -178,6 +181,9 @@ export class AppGateway
         creator_id: Number(payload[1]),
         password: String(payload[2]),
         joined: {
+          connect: [{id: Number(payload[1])}],
+        },
+        admins: {
           connect: [{id: Number(payload[1])}],
         }
       },

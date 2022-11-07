@@ -24,7 +24,8 @@ export class SalonComponent implements OnInit {
   current_channel!:Channel;
   usersInGuest: User[] = [];
   usersAdmin:User[] =[];
-  AdminOrNot:boolean=true;
+  AdminOrNot!:boolean;
+
   
 
   @Output() QuitSalonEvent = new EventEmitter<Boolean>();
@@ -45,14 +46,18 @@ export class SalonComponent implements OnInit {
         if (this.current_channel != null && this.current_channel.admins !== undefined)
         {
           this.usersAdmin=this.current_channel.admins;
-          //this.usersInGuest.pop()
+         //this.usersInGuest.pop()
+      
         }
+
+
+
       },
       error: (err) => {},
       complete: () => {}
     })
 
-    
+     
 
     //console.log("findChannelByName finished");
     this.socketService.joinChannel(this.channel_name, this.current_user.id);
@@ -70,6 +75,7 @@ export class SalonComponent implements OnInit {
         error: (err) =>{},
         complete:() => {}
       })
+
     this.socketService.getMsgFromChannel().subscribe({
       next: (message: any) => {
         if (message.channel == this.channel_name)
@@ -78,7 +84,7 @@ export class SalonComponent implements OnInit {
       error: (err) =>{},
       complete:() => {}
     })
-    //console.log("getMsgFromChannel finished");
+    
 
     
   }
@@ -89,12 +95,11 @@ export class SalonComponent implements OnInit {
     while (this.usersAdmin[i] != null && this.usersAdmin[i] != undefined)
     {
       if (this.usersAdmin[i].id == current.id)
-        return 1
-     
+        return 1;
       i++;
     }
+
     return 0
-    
   }
 
   setUpContent()

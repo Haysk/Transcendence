@@ -5,26 +5,21 @@ import { User } from 'src/app/models/user';
 
 
 @Component({
-  selector: 'app-user-in-salon',
-  templateUrl: './user-in-salon.component.html',
-  styleUrls: ['./user-in-salon.component.css']
+  selector: 'app-admin-in-salon',
+  templateUrl: './admin-in-salon.component.html',
+  styleUrls: ['./admin-in-salon.component.css']
 })
-export class UserInSalonComponent implements OnInit {
+export class AdminInSalonComponent implements OnInit {
 
   @Input() guest!: User;
  
   ifAdmin:boolean=false;
   ifMuet:boolean=false;
-  ifBanne:boolean=false;
   val_admin:string="Be Admin";
-  val_muet:string="Muet (Minutes?)";
-  val_banne:string="Banne";
+  val_muet:string="Muet"
   showOption: boolean=false;
   color1:string="rgb(44, 136, 125)";
   color2:string="rgb(44, 136, 125)";
-  color3:string="rgb(44, 136, 125)";
-  time_banne!:number;
-  countTime:boolean= true;
   
 
  
@@ -45,19 +40,6 @@ export class UserInSalonComponent implements OnInit {
 
   }
 
-  isAdmin2()
-  {
-    let i = 0;
-    while (this.usersAdmin[i] != null && this.usersAdmin[i] != undefined)
-    {
-      if (this.usersAdmin[i].id == Number(localStorage.getItem('id')))
-        return 1;
-      i++;
-    }
-
-    return 0
-  }
-
   show_info(){
 
     this.showOption = this.showOption?false:true;
@@ -72,18 +54,9 @@ export class UserInSalonComponent implements OnInit {
   
   beMuet(){
     this.ifMuet=!this.ifMuet;
-    this.val_muet=this.ifMuet?"Not Muet":"Muet(Minutes?)";
+    this.val_muet=this.ifMuet?"Not Muet":"Muet";
     this.color2=this.ifMuet?"rgb(76, 80, 79)":"rgb(44, 136, 125)";
-    this.countTime=!this.countTime;
   }
 
-  beBanne(){
-    this.ifBanne=!this.ifBanne;
-    this.val_banne=this.ifBanne?"Not Banne":"Banne";
-    this.color3=this.ifBanne?"rgb(76, 80, 79)":"rgb(44, 136, 125)";
-
-
-   
-  }
 
 }

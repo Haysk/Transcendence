@@ -7,11 +7,18 @@
     </div>
    
    
+    <div  *ngIf="isAdmin2()==1" >
+    <div class="user_p2" *ngIf="showOption" >
+        <button class="if_admin" (click)="beAdmin()" style="background-color:{{color1}}" > {{val_admin}}</button>
+        
+        <button class="if_muet" (click)="beMuet()" style="background-color:{{color2}}"> {{val_muet}}</button>
+        <div class="countTime" *ngIf="countTime">
+        Time: <input type="text" id="time_banne" name="time_banne"  [(ngModel)]="time_banne"  required /></div>
 
-    <div *ngIf="AdminOrNot==true">
-    <div class="user_p2" *ngIf="showOption">
-          <button class="if_admin" (click)="beAdmin()" style="background-color:{{color1}}" > {{val_admin}}</button>
-        <button class="if_muet" (click)="beMuet()" style="background-color:{{color2}}"> {{val_muet}}</button></div>
+       
+        
+        <button class="if_admin" (click)="beBanne()" style="background-color:{{color3}}"> {{val_banne}}</button>
+    </div>
     </div>
   
 

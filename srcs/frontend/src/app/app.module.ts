@@ -28,6 +28,7 @@ import { PongBallComponent } from './pong-ball/pong-ball.component';
 import { PongGameComponent } from './pong-game/pong-game.component';
 import { PlayerPongComponent } from './widgets/player-pong/player-pong.component';
 import { PasswordComponent } from './widgets/password/password.component';
+import { AdminInSalonComponent } from './widgets/admin-in-salon/admin-in-salon.component';
 
 @NgModule({
   declarations: [
@@ -56,6 +57,7 @@ import { PasswordComponent } from './widgets/password/password.component';
     PongGameComponent,
     PlayerPongComponent,
     PasswordComponent,
+    AdminInSalonComponent,
    
   ],
   imports: [
