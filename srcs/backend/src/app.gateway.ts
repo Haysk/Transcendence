@@ -97,9 +97,8 @@ export class AppGateway
   @SubscribeMessage('isOnline')
   async isOnline(client:any, payload: any)
   {
-    console.log("PAYLOAD =>");
-    console.log(payload);
-    
+    // console.log("PAYLOAD =>");
+    // console.log(payload);
     try {
       let data = await this.Prisma.user.update({
       where: {
@@ -142,19 +141,24 @@ export class AppGateway
 
 async handleDisconnect(client: Socket): Promise<void> {
   this.logger.log(`Client disconnected: ${client.id}`);
-  let data = await this.Prisma.user.findFirst({
+  try{
+    let data = await this.Prisma.user.findFirst({
     where: {
       socket: client.id
     }
-  })
-  if (data != null && data != undefined)
-  {
-    console.log("DECONNEXION =>");
-    
-    console.log(data)
-  this.isOffline(client, data.login);
-    this.server.emit('userListUpdated');
+    })
+    if (data != null && data != undefined)
+    {
+      //console.log("DECONNEXION =>");
+      console.log(data)
+      this.isOffline(client, data.login);
+      this.server.emit('userListUpdated');
+    }
   }
+  catch(err){
+  console.log("error dans handle disconnect : ");
+  console.log(err);
+}
 }
 
 async handleConnection(client: Socket, ...args: any[]) {
@@ -166,7 +170,7 @@ async handleConnection(client: Socket, ...args: any[]) {
 @SubscribeMessage('sendLogin')
 async setupLogin(client: Socket, payload: any): Promise<void>
 {
-  console.log("LOGIN :" + payload + " | mysocket : " + client.id)
+  //console.log("LOGIN :" + payload + " | mysocket : " + client.id)
   try{
     let data = await this.Prisma.user.update({
     where: {
@@ -199,14 +203,14 @@ catch(err){
         id: {
           not: Number(payload),
         }
+      },
+      include: {
+        channel_joined: true,
+        blocked:        true,
+        blockedby:      true,
+        friends:        true,
+        friendsof:      true,
       }
-      // include: {
-      //   channel_joined: true,
-      //   blocked:        true,
-      //   blockedby:      true,
-      //   friends:        true,
-      //   friendsof:      true,
-      // }
     })
     if(data != null && data != undefined)
     {
@@ -223,11 +227,17 @@ catch(err){
 
   @SubscribeMessage('sendMsgTo')
   async sendMsgTo(client: any, payload: any): Promise<void> {
-    payload[1] = (await this.userService.findUserByLogin(payload[3])).socket;
-    const roomName = this.createRoomName(payload[2], payload[3]);
-    this.server.in(payload[1]).socketsJoin(roomName);
-    this.server.in(client.id).socketsJoin(roomName);
-    this.server.to(roomName).emit('PrivMsg', {msg: payload[0], channel: roomName, from: payload[2]});
+    try{
+      payload[1] = (await this.userService.findUserByLogin(payload[3])).socket;
+      const roomName = this.createRoomName(payload[2], payload[3]);
+      this.server.in(payload[1]).socketsJoin(roomName);
+      this.server.in(client.id).socketsJoin(roomName);
+      this.server.to(roomName).emit('PrivMsg', {msg: payload[0], channel: roomName, from: payload[2]});
+    }
+    catch(err){
+      console.log("error dans sendMsgTo :");
+      console.log(err);
+    }
   }
 
   @SubscribeMessage('MsgInChannel')
@@ -247,45 +257,57 @@ catch(err){
   @SubscribeMessage('createChannel')
   async createChannel(client: Socket, payload: any)
   {
-    await this.Prisma.channel.create({
-			data: {
-        name: String(payload[0]), 
-        creator_id: Number(payload[1]),
-        joined: {
-          connect: [{id: Number(payload[1])}],
-        }
-      },
-		})
-    const data = await this.Prisma.channel.findMany({
-      include: {joined: true},
-    })
-    if (data != null && data != undefined)
-    {
-      this.server.emit('aChannelHasBeenCreated', data);
-      this.server.to(client.id).emit('youAreReady');
+    try{
+      await this.Prisma.channel.create({
+			  data: {
+          name: String(payload[0]), 
+          creator_id: Number(payload[1]),
+          joined: {
+            connect: [{id: Number(payload[1])}],
+          }
+        },
+		  })
+      const data = await this.Prisma.channel.findMany({
+        include: {joined: true},
+      })
+      if (data != null && data != undefined)
+      {
+        this.server.emit('aChannelHasBeenCreated', data);
+        this.server.to(client.id).emit('youAreReady');
+      }
+    }
+    catch(err){
+      console.log("error dans create Channel :");
+      console.log(err);
     }
   }
 
   @SubscribeMessage('createPrivChannel')
   async createPrivChannel(client: Socket, payload: any)
   {
-    await this.Prisma.channel.create({
-			data: {
-        name: String(payload[0]), 
-        creator_id: Number(payload[1]),
-        password: String(payload[2]),
-        joined: {
-          connect: [{id: Number(payload[1])}],
-        }
-      },
-		})
-    const data = await this.Prisma.channel.findMany({
-      include: {joined: true},
-    })
-    if (data != null && data != undefined)
-    {
-      this.server.emit('aChannelHasBeenCreated', data);
-      this.server.to(client.id).emit('youAreReady');
+    try{
+      await this.Prisma.channel.create({
+			  data: {
+          name: String(payload[0]), 
+          creator_id: Number(payload[1]),
+          password: String(payload[2]),
+          joined: {
+            connect: [{id: Number(payload[1])}],
+          }
+        },
+		  })
+      const data = await this.Prisma.channel.findMany({
+        include: {joined: true},
+      })
+      if (data != null && data != undefined)
+      {
+        this.server.emit('aChannelHasBeenCreated', data);
+        this.server.to(client.id).emit('youAreReady');
+      }
+    }
+    catch(err){
+      console.log("error dans create priv chann");
+      console.log(err);
     }
   }
 
@@ -294,51 +316,61 @@ catch(err){
   @SubscribeMessage('joinChannel')
   async joinChannel(client: Socket, payload: any)
   {
-    this.server.in(client.id).socketsJoin(payload[0] + "_channel");
     try{
-    let data = await this.Prisma.channel.update({
-      where: {
-        name: String(payload[0])
-      },
-      data: {
-        joined: {
-          connect: [{id: Number(payload[1])}]
+      this.server.in(client.id).socketsJoin(payload[0] + "_channel");
+      let data = await this.Prisma.channel.update({
+        where: {
+          name: String(payload[0])
+        },
+        data: {
+          joined: {
+            connect: [{id: Number(payload[1])}]
+          }
+        },
+        include: {
+          joined: true,
         }
-      },
-      include: {
-        joined: true,
+      })
+      if (data != null && data != undefined)
+      {
+        this.server.to(payload[0] + "_channel").emit('someoneJoinedTheChannel', data)
+        return data;
       }
-    })
-    if (data != null && data != undefined)
-    this.server.to(payload[0] + "_channel").emit('someoneJoinedTheChannel', data)
-  if (data != null && data != undefined)
-    return data;
-  }catch(error){
-    console.log(error);
-  }
+    }
+    catch(error){
+      console.log(error);
+    }
   }
 
   @SubscribeMessage('leaveChannel')
   async leaveChannel(client: Socket, payload: any)
   {
-    this.server.in(client.id).socketsLeave(payload[0] + "_channel");
-    let data = await this.Prisma.channel.update({
-      where: {
-        name: payload[0]
-      },
-      data: {
-        joined: {
-          disconnect: [{id: Number(payload[1])}]
+    try{
+      this.server.in(client.id).socketsLeave(payload[0] + "_channel");
+      let data = await this.Prisma.channel.update({
+        where: {
+          name: payload[0]
+        },
+        data: {
+          joined: {
+            disconnect: [{id: Number(payload[1])}]
+          }
+        },
+        include: {
+          joined: true,
         }
-      },
-      include: {
-        joined: true,
+      })    
+      if (data != null && data != undefined)
+      {
+        this.server.to(payload[0] + "_channel").emit('someoneJoinedTheChannel', data)
+        return data;
       }
-    })    
-    if (data != null && data != undefined)
-      this.server.to(payload[0] + "_channel").emit('someoneJoinedTheChannel', data)
-    if (data != null && data != undefined)
-      return data;
+    }
+    catch(err)
+    {
+      console.log("error dans leaveChannel :");
+      console.log(err);
+    }
   }
 
 /* PONG GAME */

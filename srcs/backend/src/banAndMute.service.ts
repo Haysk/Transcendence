@@ -36,34 +36,48 @@ export class BanAndMuteService {
 
 	async muteUserFromChannel(userToMute: number, channelToMute: number)
 	{
-		let data = await this.prisma.channel.update({
-			where: {
-				id: channelToMute
-			},
-			data: {
-				muted: {
-					connect: [{id: Number(userToMute)}],
+		try{
+			let data = await this.prisma.channel.update({
+				where: {
+					id: channelToMute
+				},
+				data: {
+					muted: {
+						connect: [{id: Number(userToMute)}],
+					}
 				}
+			})
+			if (data != null && data != undefined)
+				return data
 			}
-		})
-		if (data != null && data != undefined)
-			return data
+		catch(err)
+		{
+			console.log("error dans muteUserFromChannel :");
+			console.log(err);
+		}
 	}
 
 	async unmuteUserFromChannel(userToMute: number, channelToMute: number)
 	{
-		let data = await this.prisma.channel.update({
-			where: {
-				id: channelToMute
-			},
-			data: {
-				muted: {
-					disconnect: [{id: Number(userToMute)}],
+		try{
+			let data = await this.prisma.channel.update({
+				where: {
+					id: channelToMute
+				},
+				data: {
+					muted: {
+						disconnect: [{id: Number(userToMute)}],
+					}
 				}
-			}
-		})
-		if (data != null && data != undefined)
-			return data
+			})
+			if (data != null && data != undefined)
+				return data
+		}
+		catch(err)
+		{
+			console.log("error dans unmuteUserFromChannel :");
+			console.log(err);
+		}
 	}
 
 	/*
@@ -80,33 +94,45 @@ export class BanAndMuteService {
 
 	async banUserFromChannel(userToBan: number, channelToBan: number)
 	{
-		let data = await this.prisma.channel.update({
-			where: {
-				id: channelToBan
-			},
-			data: {
-				muted: {
-					connect: [{id: Number(userToBan)}],
+		try{
+			let data = await this.prisma.channel.update({
+				where: {
+					id: channelToBan
+				},
+				data: {
+					muted: {
+						connect: [{id: Number(userToBan)}],
+					}
 				}
-			}
-		})
-		if (data != null && data != undefined)
-			return data
+			})
+			if (data != null && data != undefined)
+				return data
+		}
+		catch(err){
+			console.log("error dans banUserFromChannel :");
+			console.log(err);
+		}
 	}
 
 	async unbanUserFromChannel(userToBan: number, channelToBan: number)
 	{
-		let data = await this.prisma.channel.update({
-			where: {
-				id: channelToBan
-			},
-			data: {
-				muted: {
-					disconnect: [{id: Number(userToBan)}],
+		try{
+			let data = await this.prisma.channel.update({
+				where: {
+					id: channelToBan
+				},
+				data: {
+					muted: {
+						disconnect: [{id: Number(userToBan)}],
+					}
 				}
-			}
-		})
-		if (data != null && data != undefined)
-			return data
+			})
+			if (data != null && data != undefined)
+				return data
+		}
+		catch(err){
+			console.log("error dans unbanUserFromChannel :");
+			console.log(err);
+		}
 	}
 }
