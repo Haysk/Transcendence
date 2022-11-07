@@ -160,15 +160,6 @@ export class StorageService {
 
 	}
 
-	updateTfa(tfa: boolean) {
-		this.apiService.updateTfa({code: this.getCode(), tfa: tfa}).subscribe({
-			next: (result) => {
-				this.setTfa(result.tfa_activated);
-				this.setQrCode(result.tfa_qr);
-			}
-		});
-	}
-
 	clear() {
 		localStorage.clear();
 		this.cookieService.delete('code');

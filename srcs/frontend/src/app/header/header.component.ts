@@ -19,8 +19,6 @@ export class HeaderComponent implements OnInit {
 	login = this.storage.getLogin();
 
 	ngOnInit(): void {
-		console.log(this.storage.getCode());
-		console.log(this.storage.getLogin());
 		if (this.storage.getCode().length === 0 || this.storage.getLogin().length === 0) {
 			this.router.navigate(["../"], { relativeTo: this.route });
 		}

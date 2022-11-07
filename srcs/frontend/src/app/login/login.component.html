@@ -5,8 +5,8 @@
    
     <a *ngIf="!tfa" (click)="OAuthSignIn()"><span>Login 42</span></a>
 	<div *ngIf="tfa">
-	<p class="tfa_count">{{tfaCount}} TRIES LEFT</p>
-	<input type="text" (keydown.enter)="sendTfaCode()" [(ngModel)]="tfaCode">
+	<p class="tfa_count">{{tfa_count}} TRIES LEFT</p>
+	<input type="text" (keydown.enter)="tfaLogin()" [(ngModel)]="tfa_key">
    </div>
   
 

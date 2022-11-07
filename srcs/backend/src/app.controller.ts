@@ -52,52 +52,6 @@ export class AppController {
 		return await this.messageService.getMessages(data);
 	}
 
-	@Get('techs')
-	async getTechs(): Promise<TechModel[]> {
-		return this.techService.techs({});
-	}
-
-	@Get('tech/:id')
-	async getTech(@Param('id') id: string): Promise<TechModel> {
-		return this.techService.tech({ id: Number(id) });
-	}
-
-	@Post('tech')
-	async addTech(
-		@Body() techData: { name: string, categorie?: string, details?: string },
-	): Promise<TechModel> {
-		return this.techService.createTech(techData);
-	}
-
-	@Post('tech/:id')
-	async updateTech(@Param('id') id: string,
-		@Body() techData: { name?: string, categorie?: string, details?: string }
-	): Promise<TechModel> {
-		return this.techService.updateTech({
-			where: { id: Number(id) },
-			data: techData
-		});
-	}
-
-	@Delete('tech/:id')
-	async deleteTech(@Param('id') id: string): Promise<TechModel> {
-		return this.techService.deleteTech({ id: Number(id) });
-	}
-
-	@Post('auth/token/code')
-	async postInitOauth(
-		@Body() oauthCode: { code: string | null }
-	): Promise<UserModel> {
-		var oauth = await this.oauthService.getToken(oauthCode);
-		if (oauth != null) {
-			var user = await this.userService.createUser(oauth, oauthCode.code);
-			return user;
-		}
-		else {
-			throw Prisma.PrismaClientKnownRequestError
-		}
-	}
-
 	@Get('users/:code')
 	async getUsers(@Param('code') code: string): Promise<UserModel[]> {
 		let data = code;
@@ -113,32 +67,47 @@ export class AppController {
 		});
 	}
 
-	// @Get('tfa/')
-	// async getTfa(){}
+	@Get('user/:code')
+	async getUser(
+		@Param('code') code: string) {
+		this.userService.user({ code: code });
+	}
 
-	@Patch('tfa/')
+	@Post('auth/')
+	async signup(
+		@Body() auth: { code: string }): Promise<UserModel | boolean> {
+		try {
+			var oauth = await this.oauthService.getToken(auth.code);
+			if (oauth != null)
+				return await this.userService.createUser(oauth, auth.code);
+			else
+				throw Prisma.PrismaClientKnownRequestError
+		} catch (e) {
+			console.log("User Init fail");
+		}
+	}
+
+	@Patch('tfa/disable')
 	async patchTfa(
-		@Body() data: { code: string, tfa: boolean }): Promise<TfaModel> {
-		return this.tfaService.updateTfa(data);
+		@Body() code: string) {
+		this.tfaService.disableTfa(code);
 	}
 
 	@Post('tfa/signup')
 	async postSignup(
-		@Body() data: { code: string }): Promise<TfaModel> {
-		console.log("signup");
-		return (this.tfaService.createTfa(data));
+		@Body() code: string): Promise<TfaModel> {
+		return (this.tfaService.createTfa(code));
 	}
-	//si tfa secret n'existe pas lors du login
 
 	@Post('tfa/verify')
 	async postVerify(
-		@Body() param: { code: string, verify_tfa_key: string }) {
-		return this.tfaService.verifyTfa(param);
+		@Body() param: { code: string, tfa_key: string }) {
+		return (await this.tfaService.verifyTfa(param))
 	}
 
 	@Post('tfa/validate')
 	async postValidate(
-		@Body() data: { code: string }) {
-
+		@Body() param: { code: string, tfa_key: string }): Promise<UserModel | boolean> {
+		return (await this.tfaService.validateTfa(param));
 	}
 }

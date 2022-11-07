@@ -23,26 +23,6 @@ export class ApiService {
     return this.httpClient.get<User>(`${this.API_SERVER}/getSocket/${login}`)
   }
 
-  getTechs() {
-    return this.httpClient.get<Tech[]>(`${this.API_SERVER}/techs`);
-  }
-
-  getTech(id: number) {
-    return this.httpClient.get<Tech>(`${this.API_SERVER}/tech/${id}`)
-  }
-
-  createTech(techno: Tech) {
-    return this.httpClient.post<Tech>(`${this.API_SERVER}/tech`, techno);
-  }
-
-  updateTech(techno: Tech) {
-    return this.httpClient.patch<Tech>(`${this.API_SERVER}/tech/${techno.id}`, techno);
-  }
-
-  removeTech(id: number) {
-    return this.httpClient.delete(`${this.API_SERVER}/tech/${id}`);
-  }
-
   getUser(code: string)
   {
     return this.httpClient.get<User>(`${this.API_SERVER}/user/${code}`);
@@ -71,11 +51,6 @@ export class ApiService {
     return this.httpClient.post<Message>(`${this.API_SERVER}/message`, message);
   }
 
-  postOauthCode(code: string | null) {
-	console.log("post :" + code);
-	return this.httpClient.post<User>(`${this.API_SERVER}/auth/token/code`, {code});
-  }
-
   //pour la page Show-room-affiche les matches en cours
   getMatches(){
     return ["chilee vs ade-temm", "anclarmat vs antton-t", "hello kitty vs snoppy"];
@@ -86,16 +61,24 @@ export class ApiService {
     return ["chilee", "anclamar", "anton"];
   }
 
-  updateTfa(data: {code: string, tfa: boolean}) {
-	return this.httpClient.patch<Tfa>(`${this.API_SERVER}/tfa`, data);
+  signup(code: string) {
+	return this.httpClient.post<User | boolean>(`${this.API_SERVER}/auth/`, {code});
   }
 
-  signupTfa(data: {code: string}) {
-	return this.httpClient.post<Tfa>(`${this.API_SERVER}/tfa/signup`, data);
+  signupTfa(code: string) {
+	return this.httpClient.post<Tfa>(`${this.API_SERVER}/tfa/signup`, code);
   }
 
-  verifyTfa(data: {code: string, verify_tfa_key: string}) {
-	return this.httpClient.post<Tfa>(`${this.API_SERVER}/tfa/verify`, data);
+  disableTfa(code: string) {
+	return this.httpClient.patch(`${this.API_SERVER}/tfa/disable`, code);
+  }
+
+  verifyTfa(data: {code: string, tfa_key: string}) {
+	return this.httpClient.post(`${this.API_SERVER}/tfa/verify`, data);
+  }
+
+  validateTfa(data: {code: string, tfa_key: string}) {
+	return this.httpClient.post<User | boolean>(`${this.API_SERVER}/tfa/validate`, data);
   }
 
 

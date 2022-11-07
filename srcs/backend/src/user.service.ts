@@ -1,6 +1,6 @@
 import { Injectable } from '@nestjs/common';
 import { PrismaService } from './prisma.service';
-import { User, Prisma } from '@prisma/client';
+import { User, Prisma, Tfa } from '@prisma/client';
 import { HttpService } from '@nestjs/axios';
 import { catchError, take } from 'rxjs';
 
@@ -66,71 +66,134 @@ export class UserService {
 		})
 	}
 
-	async createUser(params: Prisma.OauthCreateInput, code: string): Promise<User> {
-		let result = new Promise<User>(resolve =>
-			this.httpClient.get<User>(`${this.INTRA_API}/v2/me`, { params })
-				.pipe(take(1))
-				.subscribe(async (result) => {
-					try {
-						await this.prisma.user.create({
-							data: {
-								id: result.data.id,
-								email: result.data.email,
-								login: result.data.login,
-								first_name: result.data.first_name,
-								last_name: result.data.last_name,
-								url: result.data.url,
-								displayname: result.data.displayname,
-								image_url: result.data.image_url,
-								oauth: {
-									create: {
-										code: code,
-										refresh_token: params.refresh_token,
-										access_token: params.access_token,
-										tfa:{
-											create: {}
-										}
-									},
+
+	async createUser(params: Prisma.OauthCreateInput, code: string): Promise<User | boolean> {
+		return new Promise<User | boolean>((resolve) => { this.httpClient.get<User>(`${this.INTRA_API}/v2/me`, { params })
+			.pipe(take(1))
+			.subscribe(async (result) => {
+				try {
+					await this.prisma.user.create({
+						data: {
+							id: result.data.id,
+							email: result.data.email,
+							login: result.data.login,
+							first_name: result.data.first_name,
+							last_name: result.data.last_name,
+							url: result.data.url,
+							displayname: result.data.displayname,
+							image_url: result.data.image_url,
+							oauth: {
+								create: {
+									code: code,
+									refresh_token: params.refresh_token,
+									access_token: params.access_token,
+									tfa: {
+										create: {}
+									}
 								},
 							},
-						});
-					} catch (e) {
-						await this.prisma.user.update({
-							where: {
-								id: result.data.id
-							},
-							data: {
-								oauth: {
-									update: {
-										code: code,
-										refresh_token: params.refresh_token,
-										access_token: params.access_token,
-									}
+						},
+					});
+				} catch (e) {
+					await this.prisma.user.update({
+						where: {
+							id: result.data.id
+						},
+						data: {
+							oauth: {
+								update: {
+									code: code,
+									refresh_token: params.refresh_token,
+									access_token: params.access_token,
 								}
 							}
-						});
-					}
-					resolve(await this.prisma.user.findFirst({
-						where: {
-							id: result.data.id,
-						},
-							include: {
-								oauth: {
-									select: {
-										tfa: {
-											select: {
-												id: true,
-												tfa_activated: true,
-												tfa_qr: true
-											}
-										}
-									}
-								},
+						}
+					});
+				}
+				const tmp = await this.prisma.user.findFirst({
+					where: {
+						id: result.data.id
+					},
+					include: {
+						oauth: {
+							select: {
+								tfa: {
+								}
 							}
-					}));
-				}));
-		return (await result);
+						}
+					}
+				});
+				if (tmp.oauth.tfa.tfa_activated)
+					resolve(tmp.oauth.tfa.tfa_activated);
+				resolve(tmp);
+			})})
 	}
+
+	// async createUser(params: Prisma.OauthCreateInput, code: string): Promise<User> {
+	// 	let result = new Promise<User>(resolve =>
+	// 		this.httpClient.get<User>(`${this.INTRA_API}/v2/me`, { params })
+	// 			.pipe(take(1))
+	// 			.subscribe(async (result) => {
+	// 				try {
+	// 					await this.prisma.user.create({
+	// 						data: {
+	// 							id: result.data.id,
+	// 							email: result.data.email,
+	// 							login: result.data.login,
+	// 							first_name: result.data.first_name,
+	// 							last_name: result.data.last_name,
+	// 							url: result.data.url,
+	// 							displayname: result.data.displayname,
+	// 							image_url: result.data.image_url,
+	// 							oauth: {
+	// 								create: {
+	// 									code: code,
+	// 									refresh_token: params.refresh_token,
+	// 									access_token: params.access_token,
+	// 									tfa:{
+	// 										create: {}
+	// 									}
+	// 								},
+	// 							},
+	// 						},
+	// 					});
+	// 				} catch (e) {
+	// 					await this.prisma.user.update({
+	// 						where: {
+	// 							id: result.data.id
+	// 						},
+	// 						data: {
+	// 							oauth: {
+	// 								update: {
+	// 									code: code,
+	// 									refresh_token: params.refresh_token,
+	// 									access_token: params.access_token,
+	// 								}
+	// 							}
+	// 						}
+	// 					});
+	// 				}
+	// 				resolve(await this.prisma.user.findFirst({
+	// 					where: {
+	// 						id: result.data.id,
+	// 					},
+	// 						include: {
+	// 							oauth: {
+	// 								select: {
+	// 									tfa: {
+	// 										select: {
+	// 											id: true,
+	// 											tfa_activated: true,
+	// 											tfa_qr: true
+	// 										}
+	// 									}
+	// 								}
+	// 							},
+	// 						}
+	// 				}));
+	// 			}));
+	// 	return (await result);
+	// }
 
 	async updateUser(params: {
 		where: Prisma.UserWhereUniqueInput;

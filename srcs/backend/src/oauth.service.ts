@@ -46,15 +46,15 @@ export class OauthService {
 		});
 	}
 
-	async getToken(authCode: {code: string | null}): Promise<Oauth | null> {
-		if (authCode.code === null || authCode.code === undefined)
+	async getToken(code: string | null): Promise<Oauth | null> {
+		if (code === null || code === undefined)
 			return null;
 		let result = new Promise<Oauth | null>(resolve => {
 				this.httpClient.post<Oauth>('https://api.intra.42.fr/oauth/token', {
 				grant_type: "authorization_code",
-				client_id: process.env.CLIENT_ID, // A METTRE EN ENVIRONNEMENT
-				client_secret: process.env.CLIENT_SECRET, // A METTRE EN ENVIRONNEMENT
-				code: authCode.code,
+				client_id: process.env.CLIENT_ID,
+				client_secret: process.env.CLIENT_SECRET,
+				code,
 				redirect_uri: "https://localhost:8081",
 			}).pipe(take(1)).subscribe({
 				next: async result => {

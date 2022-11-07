@@ -14,10 +14,29 @@ export class TfaService {
 	constructor(private oauthService: OauthService,
 				private prisma: PrismaService) {}
 
-	async updateTfa(data: { code: string, tfa: boolean }): Promise<TfaModel> {
+	async status(code: string) {
+		console.log(code);
+		
 		const result = await this.prisma.oauth.findFirst({
 			where: {
-				code: data.code
+				code: code,
+			},
+			include: {
+				tfa: {
+					select: {
+						tfa_activated: true
+					}
+				}
+			}
+		});
+		console.log(result.tfa.tfa_activated);
+		return (result);
+	}
+
+	async disableTfa(code: string) {
+		const result = await this.prisma.oauth.findFirst({
+			where: {
+				code: code
 			},
 			select: {
 				tfa: true
@@ -28,16 +47,15 @@ export class TfaService {
 					id: result.tfa.id
 				},
 				data: {
-					tfa_qr: data.tfa === false ? null : result.tfa.tfa_qr,
-					tfa_activated: data.tfa
+					tfa_qr: null,
+					tfa_activated: false,
+					tfa_secret: null,
+					tfa_temp_secret: null
 				}
 			});
-		delete tmp.tfa_secret;
-		delete tmp.tfa_temp_secret;
-		return tmp
 	}
 
-	async createTfa(params: Prisma.OauthCreateInput): Promise<TfaModel> {
+	async createTfa(code: string): Promise<TfaModel> {
 		const secret = this.speakeasy.generateSecret({
 			name: "Transcendence",
 			length: 20
@@ -45,7 +63,7 @@ export class TfaService {
 		const qrCode = await this.qrcode.toDataURL(secret.otpauth_url);
 		const result = await this.prisma.oauth.findFirst({
 			where: {
-				code: params.code
+				code: code
 			},
 			select: {
 				tfa: true
@@ -65,7 +83,7 @@ export class TfaService {
 		return tmp;
 	}
 
-	async verifyTfa(params: {code: string, verify_tfa_key: string}) {
+	async verifyTfa(params: {code: string, tfa_key: string}) {
 		const tmp = await this.prisma.oauth.findUnique({
 			where: {
 				code: params.code
@@ -73,22 +91,76 @@ export class TfaService {
 			select: {
 				tfa: {
 					select: {
-						tfa_temp_secret: true
+						tfa_temp_secret: true,
+						id: true
+						
 					}
 				}
 			}
 		});
 		const verify = this.speakeasy.totp.verify({
-			token: params.verify_tfa_key,
+			token: params.tfa_key,
 			secret: tmp.tfa.tfa_temp_secret,
 			encoding: 'base32',
-			window: 10,
+			window: 2,
 		});
-		console.log(verify);
+		if (verify) {
+			await this.prisma.tfa.update({
+				where: {
+					id: tmp.tfa.id
+				},
+				data: {
+					tfa_temp_secret: null,
+					tfa_secret: tmp.tfa.tfa_temp_secret,
+					tfa_activated: true
+				}
+			});
+		}
+			return (verify)
 	}
 
-	validateTfa(params: Prisma.OauthCreateInput) {
-
+	async validateTfa(params: {code: string, tfa_key: string}) {
+		console.log(params);
+		const tmp = await this.prisma.oauth.findUnique({
+			where: {
+				code: params.code
+			},
+			select: {
+				tfa: {
+					select: {
+						tfa_secret: true,
+						id: true
+					}
+				}
+			}
+		});
+		const verify = this.speakeasy.totp.verify({
+			token: params.tfa_key,
+			secret: tmp.tfa.tfa_secret,
+			encoding: 'base32',
+			window: 2,
+		});
+			if (verify)
+				return (this.prisma.user.findFirst({
+					where: {
+						oauth: {
+							code: params.code
+						}
+					},
+					include: {
+						oauth: {
+							include: {
+								tfa: {
+									select: {
+										tfa_activated: true,
+										tfa_qr: true
+									}
+								}
+							}
+						}
+					}
+				}));
+		return (verify);
 	}
 
 }
