@@ -102,4 +102,8 @@ export class SocketService {
       });
     });
   }
+
+  updateListFriend(id: number){
+    this.socket.emit('getFriendList', id);
+  }
 }

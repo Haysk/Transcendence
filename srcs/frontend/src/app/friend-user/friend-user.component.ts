@@ -69,11 +69,16 @@ export class FriendUserComponent implements OnInit {
     //       this.allUsers = this.allUsers;
     //     }
     // }));
-
+    this.socketService.getFriend().subscribe((result) => {
+      this.userList = result;
+    })
+    this.socketService.removeFriend().subscribe((result) => {
+      this.userList = result;
+    })
     this.socketService.getFriendList(this.Me.id);
     this.socketService.listFriend().subscribe((result) => {
-      this.userList = result;
       console.log("hello" + result);
+      this.userList = result;
     })
 
     // this.apiService.addFriend(this.user.id).subscribe (
@@ -107,73 +112,5 @@ export class FriendUserComponent implements OnInit {
 
   onFriend(){
   }
-
-  getId(): number{
-    let id = localStorage.getItem("id");
-    if (id === null || id === undefined)
-      return 0;
-    return  Number(id);
-  }
-
-  getLogin(): string{
-    let login = localStorage.getItem("login");
-    if (login === null || login === undefined)
-      return "";
-    return  login;
-  }
-
-  getEmail(): string{
-    let email = localStorage.getItem("email");
-    if (email === null || email === undefined)
-      return "";
-    return  email;
-  }
-
-  getFirstName(): string{
-    let first_name = localStorage.getItem("first_name");
-    if (first_name === null || first_name === undefined)
-      return "";
-    return  first_name;
-  }
-
-  getLastName(): string{
-    let last_name = localStorage.getItem("last_name");
-    if (last_name === null || last_name === undefined)
-      return "";
-    return  last_name;
-  }
-
-  getUrl(): string{
-    let url = localStorage.getItem("url");
-    if (url === null || url === undefined)
-      return "";
-    return  url;
-  }
-
-  getDisplayName(): string{
-    let display_name = localStorage.getItem("display_name");
-    if (display_name === null || display_name === undefined)
-      return "";
-    return  display_name;
-  }
-
-  getImageUrl(): string{
-    let image_url = localStorage.getItem("image_url");
-    if (image_url === null || image_url === undefined)
-      return "";
-    return  image_url;
-  }
-
-  getOnline(): boolean{
-    let online = localStorage.getItem("online");
-    if (online === "true")
-      return true
-    else
-      return false
-  }
-
-  // friendUnfriend(id:number, user:any): number{
-  //    return user.id;
-  // }
 
 }

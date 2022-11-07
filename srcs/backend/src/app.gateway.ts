@@ -119,7 +119,7 @@ export class AppGateway
 
   @SubscribeMessage('getAddFriend')
   async addingFriend(client: Socket, payload: any){
-    console.log("test " + payload);
+    console.log("test add " + payload);
     try{
       let data = await this.Prisma.user.update({
         where: {
@@ -137,6 +137,7 @@ export class AppGateway
       if (data != null && data != undefined)
       {
         this.server.to(client.id).emit('addFriend', data.friends);
+        // this.server.to(client.id).emit('updateListFriend',data.friends);
       }
     }
     catch(err){
