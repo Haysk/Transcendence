@@ -20,10 +20,10 @@ export class StorageService {
 		return code;
 	}
 
-	getId(): number | null {
+	getId(): number {
 		let id = localStorage.getItem("id");
 		if (id === null || id == undefined)
-			return null;
+			return 0;
 		return Number(id);
 	}
 
@@ -69,11 +69,27 @@ export class StorageService {
 		return display_name;
 	}
 
+	getNickName(): string {
+		let nickname = localStorage.getItem("nickname");
+		if (nickname === null || nickname === undefined)
+			return "";
+		return nickname;
+		
+	}
+
 	getImageUrl(): string {
 		let image_url = localStorage.getItem("image_url");
 		if (image_url === null || image_url === undefined)
 			return "";
 		return image_url;
+	}
+
+	getAvatarUrl(): string {
+		let avatar_url = localStorage.getItem("display_name");
+		if (avatar_url === null || avatar_url === undefined)
+			return "";
+		return avatar_url;
+
 	}
 
 	getOnline(): boolean {
@@ -137,8 +153,16 @@ export class StorageService {
 		localStorage.setItem("display_name", display_name);
 	}
 
+	setNickName(nickname: string) {
+		localStorage.setItem("nickname", nickname);
+	}
+
 	setImageUrl(image_url: string) {
 		localStorage.setItem("image_url", image_url);
+	}
+
+	setAvatarUrl(avatar_url: string) {
+		localStorage.setItem("avatar_url", avatar_url);
 	}
 
 	setOnline(online: boolean) {

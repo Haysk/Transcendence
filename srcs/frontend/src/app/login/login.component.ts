@@ -122,7 +122,9 @@ export class LoginComponent implements OnInit {
 		this.storageService.setLastName(user.last_name);
 		this.storageService.setUrl(user.url);
 		this.storageService.setDisplayName(user.displayname);
+		this.storageService.setNickName(user.nickname);
 		this.storageService.setImageUrl(user.image_url);
+		this.storageService.setAvatarUrl(user.avatar_url);
 		if (user.oauth !== undefined) {
 			this.storageService.setTfa(user.oauth.tfa?.tfa_activated);
 		}

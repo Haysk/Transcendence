@@ -20,12 +20,12 @@ export class ApiService {
 
   }
 
-  joinChannel(target: Channel, user :User)
-  {
-    const data = {target, user}
-    //console.log("api service : channel name : " + target.name + " | user name : " + user.login);
-    return this.httpClient.post<Channel>(`${this.API_SERVER}/joinChannel`, data);
-  }
+//   joinChannel(target: Channel, user :User)
+//   {
+//     const data = {target, user}
+//     //console.log("api service : channel name : " + target.name + " | user name : " + user.login);
+//     return this.httpClient.post<Channel>(`${this.API_SERVER}/joinChannel`, data);
+//   }
 
   addPrivateChannel(name: string, creator_id: number, password: string)
   {
@@ -83,8 +83,8 @@ export class ApiService {
     return this.httpClient.get<User[]>(`${this.API_SERVER}/users/${code}`);
   }
 
-  updateUser(user: User) {
-    return this.httpClient.patch<User>(`${this.API_SERVER}/user/${user.id}`, user);
+  updateUser(code: string, user: User) {
+    return this.httpClient.patch<User>(`${this.API_SERVER}/user/${code}`, user);
   }
 
   getMessages(fromUserId: Number, userId: Number)
@@ -111,20 +111,6 @@ export class ApiService {
     return this.httpClient.post<Message>(`${this.API_SERVER}/message`, message);
   }
 
-  //pour la page Show-room-affiche les matches en cours
-  getMatches(){
-    return ["chilee vs ade-temm", "anclarmat vs antton-t", "hello kitty vs snoppy"];
-  }
-
-  //pour la page salon - palyers in salon
-  getGuests(){
-    return ["chilee", "anclamar", "anton"];
-  }
-
-    //pour la page chat - salons disponibiles
-    getSalons_dispos(){
-      return ["Super groupe", "42 Pong"];
-    }
   signup(code: string) {
 	return this.httpClient.post<User | boolean>(`${this.API_SERVER}/auth/`, {code});
   }

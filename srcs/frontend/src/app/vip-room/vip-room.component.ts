@@ -74,7 +74,7 @@ export class VipRoomComponent implements OnInit {
 		if (this.selectedFile.size < 75000) {
 			this.apiService.updateAvatar(Number(this.id), String(this.url)).subscribe();
 			console.log("this.url")
-			localStorage.setItem('avatar_url', String(this.url));
+			this.storage.setAvatarUrl(String(this.url));
 			window.alert('***Update down***');
 		}
 		else {
@@ -120,6 +120,11 @@ export class VipRoomComponent implements OnInit {
 	showhide_nickname() {
 		this.visible_nickname = this.visible_nickname ? false : true;
 		this.visible_avatar = false;
+	}
+
+	showhide_avatar() {
+		this.visible_avatar = this.visible_avatar ? false : true;
+		this.visible_nickname = false;
 	}
 
 	tfa_signup() {

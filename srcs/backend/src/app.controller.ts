@@ -35,12 +35,12 @@ export class AppController {
 		private readonly tfaService: TfaService
 	) { }
 
-	@Post('joinChannel')
-	async joinChannel(@Body() data : {target: ChannelModel, user: UserModel})
-	{
-		console.log("App Controller : channel name : " + data.target.name + " | user name : " + data.user.login);
-		return await this.channelService.joinChannel(data);
-	}
+	// @Post('joinChannel')
+	// async joinChannel(@Body() data : {target: ChannelModel, user: UserModel})
+	// {
+	// 	console.log("App Controller : channel name : " + data.target.name + " | user name : " + data.user.login);
+	// 	return await this.channelService.joinChannel(data);
+	// }
 
 	@Post('addChannel')
 	async addChannel(@Body() ChannelData: {name: string, creator_id: number},): Promise<ChannelModel>
@@ -132,11 +132,11 @@ export class AppController {
 		return await this.userService.getAllUsers(data);
 	}
 
-	@Patch('user/:id')
-	async patchUser(@Param('id') id: number,
+	@Patch('user/:code')
+	async patchUser(@Param('code') code: string,
 		@Body() userData: { online?: boolean, two_factor_auth?: boolean }): Promise<UserModel> {
 		return this.userService.updateUser({
-			where: { id: id },
+			where: { code },
 			data: userData
 		});
 	}
@@ -144,7 +144,7 @@ export class AppController {
 	@Get('user/:code')
 	async getUser(
 		@Param('code') code: string) {
-		this.userService.user({ code: code });
+		this.userService.user(code);
 	}
 
 	@Post('auth/')

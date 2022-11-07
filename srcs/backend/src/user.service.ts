@@ -63,12 +63,12 @@ export class UserService {
 	})
   }
 
-	async user(
-		userWhereInput: Prisma.UserWhereInput,
-	): Promise<User> {
+	async user(code: string): Promise<User> {
 		return this.prisma.user.findFirst({
 			where: {
-				id: userWhereInput.id
+				oauth: {
+					code
+				}
 			}
 		});
 	}
@@ -164,13 +164,19 @@ export class UserService {
 	}
 
 	async updateUser(params: {
-		where: Prisma.UserWhereUniqueInput;
+		where: Prisma.OauthWhereUniqueInput;
 		data: Prisma.UserUpdateInput;
 	}): Promise<User> {
 		const { where, data } = params;
+		const user = await this.prisma.user.findFirst({
+			where,
+		});
+
 		return this.prisma.user.update({
 			data,
-			where,
+			where: {
+				id: user.id,
+			},
 		});
 	}
 

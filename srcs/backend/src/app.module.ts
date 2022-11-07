@@ -31,13 +31,9 @@ import { ConfigModule } from '@nestjs/config';
     MessageService, 
     AppGateway, 
     OauthService,
-<<<<<<< HEAD
     ChannelService,
     BanAndMuteService,
 	TfaService
-=======
-
->>>>>>> 2FA
   ],
 })
 export class AppModule {}

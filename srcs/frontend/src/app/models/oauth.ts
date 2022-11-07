@@ -6,11 +6,13 @@ export interface User {
 	last_name:		string;
 	url:			string;
 	displayname:	string;
+	nickname:		string;
 	image_url:		string;
+	avatar_url:		string;
 	online:			boolean;
+	oauth_id?:		number;
 	oauth?:			Oauth;
 	socket?:		string;
-	friends?:		User[];
 }
 
 export interface Tfa {
