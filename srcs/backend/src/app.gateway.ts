@@ -353,6 +353,7 @@ catch(err){
       if (data != null && data != undefined)
       {
         this.server.to(data.name + "_channel").emit('channelIsUpdated');
+        //this.server.emit('channelIsUpdated');
       }
     }
     catch(err){

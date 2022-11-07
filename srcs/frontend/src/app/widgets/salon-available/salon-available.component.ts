@@ -50,25 +50,46 @@ export class SalonAvailableComponent implements OnInit {
     
     this.socketService.updateChannelList().subscribe({
       next: (result) => {
-        console.log("ICI LE RESULT => ");
-        console.log(result);
-        
         this.salons_dispos = result;
       }
     })
+    this.socketService.updateChannel();
+  }
+
+  isBanned(banList: Channel, current_user: User)
+  {
+    let i = 0;
+    console.log("banList => ");
+    console.log(banList.banned);
+    while(banList.banned != null && banList.banned != undefined
+      && banList.banned[i] != null && banList.banned[i] != undefined)
+      {
+        console.log("banned[i] = " + banList.banned[i] + " | user = " + current_user);
+        if (banList.banned[i].id == current_user.id)
+          return 1
+        i++;
+      }
+      return 0
   }
 
   joinChannel(current_channel: Channel, current_user: User)
   {
-    console.log("salon_available : channel name : " + current_channel.name + " | user name : " + current_user.login);
-    console.log(current_user);
-    this.socketService.joinChannel(current_channel.name, this.current_user.id);
-    //this.apiService.joinChannel(current_channel, current_user).subscribe();
-    this.ShowChannelPublicEvent.emit(this.show_salon);
-    this.SendJoinChannelNameEvent.emit(current_channel.name);
-    this.show_formulePassword=false;
-    this.ShowFormulePasswordEvent.emit(this.show_formulePassword);
-   
+    //console.log("salon_available : channel name : " + current_channel.name + " | user name : " + current_user.login);
+    //console.log(current_user);
+    console.log("VALEUR DE IS BANNED");
+    console.log(this.isBanned(current_channel, current_user));
+    if(this.isBanned(current_channel, current_user) != 1)
+    {
+      this.socketService.joinChannel(current_channel.name, this.current_user.id);
+      //this.apiService.joinChannel(current_channel, current_user).subscribe();
+      this.ShowChannelPublicEvent.emit(this.show_salon);
+      this.SendJoinChannelNameEvent.emit(current_channel.name);
+      this.show_formulePassword=false;
+      this.ShowFormulePasswordEvent.emit(this.show_formulePassword);
+    }
+    else{
+      window.alert("Your are banned from this channel.")
+    }
 
 
   }

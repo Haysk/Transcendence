@@ -53,7 +53,6 @@ export class SalonComponent implements OnInit {
     })
     ;
     (await this.socketService.getUpdateChannel()).subscribe((res) => {
-      console.log("CHANNEL UPDATED")
       this.current_channel = res;
     })
     //console.log("findChannelByName finished");
@@ -120,10 +119,8 @@ export class SalonComponent implements OnInit {
   }
 
   sendMessage(){
-    console.log("SEND MESSAGE()");
     if(this.isMuted(this.current_user) != 1)
     {
-      console.log("USER IS NOT MUTED");
       console.log(this.message);
       this.setUpContent();
       this.apiService.createChannelMessage(this.content).subscribe();
@@ -133,6 +130,7 @@ export class SalonComponent implements OnInit {
       this.content = {content: "", fromUserId: 0, fromUserName: ""};
     }
     else{
+      this.message= '';
       window.alert("You are muted at the moment");
     }
   }

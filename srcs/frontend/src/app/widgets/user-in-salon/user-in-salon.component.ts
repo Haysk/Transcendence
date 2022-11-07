@@ -87,11 +87,17 @@ export class UserInSalonComponent implements OnInit {
     this.val_banne=this.ifBanne?"Unban":"Ban(Secondes)";
     this.color3=this.ifBanne?"rgb(76, 80, 79)":"rgb(44, 136, 125)";
     this.countTimeBan=!this.countTimeBan;
-    if (this.time_ban != 0)
-      this.socketService.banUserByTime(this.guest.id, Number(this.current_channel.id), this.time_ban);
-    else
-      this.socketService.banUser(this.guest.id, Number(this.current_channel.id));  
-    this.socketService.updateChannel();
+    if(this.val_banne == "Unban"){
+      if (this.time_ban != 0)
+        this.socketService.banUserByTime(this.guest.id, Number(this.current_channel.id), this.time_ban);
+      else
+        this.socketService.banUser(this.guest.id, Number(this.current_channel.id));  
+      this.socketService.updateChannel();
+    }
+    else{
+      this.socketService.unbanUser(this.guest.id, Number(this.current_channel.id));
+      this.socketService.updateChannel();
+    }
   }
 
 }
