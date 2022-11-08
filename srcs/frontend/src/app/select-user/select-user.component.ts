@@ -13,12 +13,23 @@ export class SelectUserComponent implements OnInit {
   show_chat: Boolean = false;
   show_hide: String = "chat";
 
+  you_got_message:boolean=true;
+  icon_message!:string;
+
   @Output() showchatEvent = new EventEmitter<Boolean>();
   @Output() sendDestEvent = new EventEmitter<User>();
 
   constructor() { }
 
   ngOnInit(): void {
+    
+    if (this.you_got_message==true){
+        this.icon_message="📨";
+    }
+    else{
+      this.icon_message="";
+    }
+    
   }
 
   sendBtn(dest : User): void {

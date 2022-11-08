@@ -25,6 +25,9 @@ export class SalonComponent implements OnInit {
   usersInGuest: User[] = [];
   usersAdmin:User[] =[];
   AdminOrNot!:boolean;
+  CreatorId!:number;
+  // CreatorId:number=this.current_channel.creator_id;
+
 
   
 
@@ -47,10 +50,14 @@ export class SalonComponent implements OnInit {
         {
           this.usersAdmin=this.current_channel.admins;
          //this.usersInGuest.pop()
-      
+        }  
+        if (this.current_channel != null && this.current_channel.creator_id !== undefined)
+        {
+          this.CreatorId=this.current_channel.creator_id;
+          
+         //this.usersInGuest.pop()
         }
-
-
+        
 
       },
       error: (err) => {},
@@ -89,6 +96,12 @@ export class SalonComponent implements OnInit {
     
   }
   
+  isCreator(current:User){
+    if (this.current_channel.creator_id==current.id)
+      return 1;
+    return 0;
+  }
+
   isAdmin(current: User)
   {
     let i = 0;

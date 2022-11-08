@@ -15,16 +15,24 @@ export class AdminInSalonComponent implements OnInit {
  
   ifAdmin:boolean=false;
   ifMuet:boolean=false;
-  val_admin:string="Be Admin";
-  val_muet:string="Muet"
+   ifBanne:boolean=false;
+  val_admin:string="Del Admin";
+  val_muet:string="Muet(Secondes)";
+  val_banne:string="Ban(Secondes)";
   showOption: boolean=false;
-  color1:string="rgb(44, 136, 125)";
+  color1:string="rgb(76, 80, 79)";
   color2:string="rgb(44, 136, 125)";
+  color3:string="rgb(44, 136, 125)";
+  time_ban!:number;
+  countTimeMuet:boolean= true;
+  countTimeBan:boolean=true;
+  time_muet!:number;
   
 
- 
+  @Input() CreatorId!:number;
   @Input() usersAdmin:User[] =[];
   @Input() AdminOrNot:boolean=false;
+
   constructor() {
   
    
@@ -40,23 +48,41 @@ export class AdminInSalonComponent implements OnInit {
 
   }
 
+  isCreator(){
+     
+      
+    
+      if(Number(localStorage.getItem('id'))== this.CreatorId)
+         return 1;     
+      return 0;
+  }
+
   show_info(){
 
     this.showOption = this.showOption?false:true;
   }
    
   beAdmin(){
-    this.ifAdmin=!this.ifAdmin;
-    this.val_admin=this.ifAdmin?"Del Admin":"Be Admin";
-    this.color1=this.ifAdmin?"rgb(76, 80, 79)":"rgb(44, 136, 125)";
+   
+
    
   }
   
   beMuet(){
     this.ifMuet=!this.ifMuet;
-    this.val_muet=this.ifMuet?"Not Muet":"Muet";
+    this.val_muet=this.ifMuet?"Not Muet":"Muet(secondes)";
     this.color2=this.ifMuet?"rgb(76, 80, 79)":"rgb(44, 136, 125)";
+    this.countTimeMuet=!this.countTimeMuet;
   }
 
+  beBanne(){
+    this.ifBanne=!this.ifBanne;
+    this.val_banne=this.ifBanne?"Unban":"Ban(Secondes)";
+    this.color3=this.ifBanne?"rgb(76, 80, 79)":"rgb(44, 136, 125)";
+    this.countTimeBan=!this.countTimeBan;
+
+
+   
+  }
 
 }

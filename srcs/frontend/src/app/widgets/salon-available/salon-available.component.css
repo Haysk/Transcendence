@@ -10,7 +10,7 @@
     background-color: rgb(27, 31, 2);
     border:0px;
     margin-top: 1px;
-    cursor: pointer;
+   
     display: flex;
     justify-content: center;
    
@@ -18,7 +18,8 @@
 .titre{
     color: rgb(1, 179, 81);
     font-size: 13px;
-    margin-left: 5px;
+    margin-left: 5px; 
+    cursor: pointer;
 
 
 }

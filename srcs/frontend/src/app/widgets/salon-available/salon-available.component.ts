@@ -17,6 +17,8 @@ export class SalonAvailableComponent implements OnInit {
 
   show_salon: Boolean=true;
   show_formulePassword: Boolean=false;
+  you_got_message:boolean=true;
+  icon_message!:string;
 
  
  
@@ -47,6 +49,13 @@ export class SalonAvailableComponent implements OnInit {
       complete: () => {}
     }
     )
+
+    if (this.you_got_message==true){
+      this.icon_message="📨";
+   }
+    else{
+      this.icon_message="";
+    }
     
     this.socketService.updateChannelList().subscribe({
       next: (result) => {

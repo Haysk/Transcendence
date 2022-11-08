@@ -115,6 +115,7 @@ export class VipRoomComponent implements OnInit {
     this.apiService.updateNickName(Number(this.id), this.newNickName).subscribe();
     localStorage.setItem('nickname', this.newNickName)
     this.newNickName = "";
+    window.alert('***Nickname changed. Reload page ***');
 
   }
 
