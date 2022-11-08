@@ -73,12 +73,14 @@ export class AppGateway
   banUserByTime(client: any, payload: any)
   {
     this.BaM.banUserDuringDelay(payload[0], payload[1], payload[2]);
+    this.server.emit('youAreBanned', payload[0]);
   }
 
   @SubscribeMessage('banUser')
   banUser(client: any, payload: any)
   {
     this.BaM.banUserFromChannel(payload[0], payload[1]);
+    this.server.emit('youAreBanned', payload[0]);
   }
   
   @SubscribeMessage('unbanUser')

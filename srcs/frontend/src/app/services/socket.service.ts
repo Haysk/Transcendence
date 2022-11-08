@@ -59,6 +59,15 @@ unbanUser(userToBan: number, channelConcerned: number)
   this.socket.emit('unbanUser', userToBan, channelConcerned);
 }
 
+amIBanned()
+{
+  return new Observable<number>((obs) => {
+    this.socket.on('youAreBanned', (res) => {
+      obs.next(res)
+    })
+  })
+}
+
 //CONNECTION
 
   imDisconnected(login: string)

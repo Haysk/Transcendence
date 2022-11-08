@@ -81,8 +81,18 @@ export class SalonComponent implements OnInit {
       complete:() => {}
     })
     
-
-    
+    this.socketService.amIBanned().subscribe({
+      next: (res) => {
+        if (res == Number(localStorage.getItem("id")))
+        {
+          this.quitSalon()
+          window.alert("You just got banned from this channel.")
+        }
+        else{
+          
+        }
+      }
+    })
   }
   
   isAdmin(current: User)
