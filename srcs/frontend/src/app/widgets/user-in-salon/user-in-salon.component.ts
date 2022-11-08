@@ -74,14 +74,12 @@ export class UserInSalonComponent implements OnInit {
         this.socketService.muteUserByTime(this.guest.id, Number(this.current_channel.id), this.time_muet);
       else
         this.socketService.muteUser(this.guest.id, Number(this.current_channel.id));
-      this.socketService.updateChannel();
-      this.socketService.updateChannels();
     }
     else{
       this.socketService.unmuteUser(this.guest.id, Number(this.current_channel.id));
-      this.socketService.updateChannel();
-      this.socketService.updateChannels();
     }
+    this.socketService.updateChannel();
+    this.socketService.updateChannels();
   }
 
   beBanne(){
@@ -95,14 +93,13 @@ export class UserInSalonComponent implements OnInit {
       else
         this.socketService.banUser(this.guest.id, Number(this.current_channel.id));
       this.socketService.leaveChannel(this.current_channel.name, this.guest.id);
-      this.socketService.updateChannel();
-      this.socketService.updateChannels();
     }
     else{
       this.socketService.unbanUser(this.guest.id, Number(this.current_channel.id));
-      this.socketService.updateChannel();
-      this.socketService.updateChannels();
     }
+    this.socketService.updateChannel();
+    this.socketService.updateChannels();
+    this.socketService.updateUserInSalonList(this.current_channel.name);
   }
 
 }

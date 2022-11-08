@@ -424,6 +424,32 @@ catch(err){
     }
   }
 
+  @SubscribeMessage('userInChannelListPlz')
+  async updateUserInChannelList(client: Socket, payload: any)
+  {
+    try{
+      let data = await this.Prisma.channel.findFirst({
+        where: {
+          name: payload
+        },
+        include: {
+          joined: true,
+          muted: true,
+          banned: true,
+          admins: true,
+        }
+      })
+      if (data != null && data != undefined)
+      {
+        this.server.to(payload + "_channel").emit('someoneJoinedTheChannel', data)
+        return data;
+      }
+    }
+    catch(error){
+      console.log(error);
+    }
+  }
+
   @SubscribeMessage('leaveChannel')
   async leaveChannel(client: Socket, payload: any)
   {

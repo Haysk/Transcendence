@@ -88,9 +88,6 @@ export class SalonComponent implements OnInit {
           this.quitSalon()
           window.alert("You just got banned from this channel.")
         }
-        else{
-          
-        }
       }
     })
   }

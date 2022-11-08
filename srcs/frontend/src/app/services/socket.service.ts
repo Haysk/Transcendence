@@ -190,6 +190,11 @@ amIBanned()
     });
   }
 
+  updateUserInSalonList(current_channel_name: string)
+  {
+    this.socket.emit('userInChannelListPlz', current_channel_name);
+  }
+
   //USER
 
   askForUserList(current_id: number)
@@ -199,10 +204,10 @@ amIBanned()
 
   updateUserList() : Observable<User[]>
   {
-    // console.log("wististyle");
     return new Observable<User[]>((observer) => {
         this.socket.on('someoneJoinedTheChannel', (data) => {
-          // console.log("SOMEONE JOINED THE CHANNEL")
+          console.log("SOMEONEJOINEDTHECHANNEL");
+          
           observer.next(data.joined);
         });
   
