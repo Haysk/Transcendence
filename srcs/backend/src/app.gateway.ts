@@ -41,6 +41,29 @@ export class AppGateway
   server!: Server;
   private logger: Logger = new Logger('AppGateway');
 
+  /* SEARCH USER */
+
+  @SubscribeMessage('SearchForThisUser')
+  async searchForThisUser(client: any, payload: any)
+  {
+    let data = await this.Prisma.user.findFirst({
+      where: {
+        login: payload,
+      },
+      include: {
+        channel_joined: true,
+        banned: true,
+        friends: true,
+        friendsof: true,
+        muted: true,
+      }
+    })
+    if (data != null && data != undefined)
+    {
+      this.server.to(client.id).emit('hereIsTheUserYouAskedFor', data);
+    }
+  }
+
   /* MUTE */
 
   @SubscribeMessage('muteUserByTime')

@@ -213,6 +213,20 @@ amIBanned()
       });
   };
 
+  searchForAUser(login:string)
+  {
+    this.socket.emit('SearchForThisUser', login);
+  }
+
+  waitForAUser()
+  {
+    return new Observable<User>((obs) => {
+      this.socket.on('hereIsTheUserYouAskedFor', (res) => {
+        obs.next(res);
+      })
+    })
+  }
+
 //START COMPONENT
 
   iAmReady()
