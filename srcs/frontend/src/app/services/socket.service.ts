@@ -106,4 +106,17 @@ export class SocketService {
   updateListFriend(id: number){
     this.socket.emit('getFriendList', id);
   }
+
+  checkIfFriend(id: number, id1: number){
+    this.socket.emit('checkIfFriend', id, id1);
+  }
+
+  findFriendsOrNot(): Observable<number> {
+    return new Observable<number>((obs) => {
+      this.socket.on('findFriendsOrNot', (index: number) => {
+        obs.next(index);
+        console.log(`find friend or not ${index}`);
+      })
+    })
+  }
 }

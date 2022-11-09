@@ -13,6 +13,7 @@ import { Server, Socket } from 'socket.io';
 import { IoAdapter } from '@nestjs/platform-socket.io';
 import { UserService } from './user.service';
 import { async } from 'rxjs';
+import { emit } from 'process';
 
 @WebSocketGateway({
   cors: {
@@ -119,7 +120,7 @@ export class AppGateway
 
   @SubscribeMessage('getAddFriend')
   async addingFriend(client: Socket, payload: any){
-    console.log("test add " + payload);
+    // console.log("test add " + payload);
     try{
       let data = await this.Prisma.user.update({
         where: {
@@ -148,7 +149,7 @@ export class AppGateway
 
   @SubscribeMessage('getRemoveFriend')
   async removingFriend(client: Socket, payload: any){
-    console.log("test remove " + payload);
+    // console.log("test remove " + payload);
     try{
       let data = await this.Prisma.user.update({
         where: {
@@ -177,7 +178,7 @@ export class AppGateway
   @SubscribeMessage('getFriendList')
   async getFriendList(client: any, payload : any)
   {
-    console.log("test get Friend list" + payload);
+    //console.log("test get Friend list" + payload);
     try{
       let data = await this.Prisma.user.findFirst({
         where: {
@@ -198,4 +199,53 @@ export class AppGateway
       console.log(err);
     }
   }
+
+  @SubscribeMessage('checkIfFriend')
+  async checkIfFriend(client: any, payload: any)
+  {
+    // console.log("check if friend app gateway");
+    // console.log(payload[0]);
+    // console.log(payload[1]);
+    // console.log("hello youuuuuuuu");
+    try{
+      let data = await this.Prisma.user.findUnique({
+        where: {
+          id: Number(payload[0]),
+        },
+        include: {
+          friends: true,
+        }
+      })
+    
+      
+      if (data !== null && data !== undefined){
+        const value = data.friends.find((element) => payload[1] === element.id);
+        // console.log("111515150000000000000");
+        if (value !== undefined){
+          this.server.to(client.id).emit('findFriendsOrNot', 1);
+          // console.log("11111111111111");
+        }
+        else{
+          this.server.to(client.id).emit('findFriendsOrNot', 0);
+          // console.log("00000000000000sdffdsfsddsffds00000");
+        }}
+      }
+    catch(err){
+    console.log("issue dans le get friend list");
+    console.log(err);
+    }
+  }
+
+    // const found = payload[0].find(element => element.id === payload[1]);
+    // console.log(found);
+    
+    // try{
+    //   let data = await this.      
+    // }
+    // if (data == 1)
+    // {
+    //   console.log(data);
+    //   this.server.to(client.id).emit('friendOrNot', data)
+    // }
+    
 }

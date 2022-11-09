@@ -150,23 +150,9 @@ export class ApiService {
 
   //check if friend
 
-  checkIfFriend(id: number, id1: number){
-    const data = {id, id1};
+  checkIfFriend(user: User[], id1: number){
+    const data = {user, id1};
     console.log ("check if friend or not");
     return this.httpClient.get<User>(`${this.API_SERVER}/checkIfFriend/${data}`);
-  }
-
-  //block user
-
-  blockUser(id: number, id1: number){
-    const data = {id, id1};
-    console.log("block user hoho");
-    return this.httpClient.post<User>(`${this.API_SERVER}/blockUser`, data);
-  }
-  
-  unblockUser(id: number, id1: number){
-    const data = {id, id1};
-    //console.log("unblock hoho");
-    return this.httpClient.post<User>(`${this.API_SERVER}/unblockUser`, data);
   }
 }

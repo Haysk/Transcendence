@@ -11,6 +11,7 @@ import { SocketService } from '../services/socket.service';
 export class FriendUserComponent implements OnInit {
 
   @Input() Me!: User;
+  @Input() friendOrNot:boolean=true; 
   // user: User = {
   //   id: this.getId(),
   //   login: this.getLogin(),
@@ -77,9 +78,9 @@ export class FriendUserComponent implements OnInit {
     })
     this.socketService.getFriendList(this.Me.id);
     this.socketService.listFriend().subscribe((result) => {
-      console.log("hello" + result);
+      //console.log("hello" + result);
       this.userList = result;
-    })
+    })    
 
     // this.apiService.addFriend(this.user.id).subscribe (
     //   (result => {

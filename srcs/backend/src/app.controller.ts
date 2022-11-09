@@ -170,17 +170,9 @@ export class AppController {
 		return await this.userService.removeFriend(UserData);
 	}
 
-	@Post('blockUser')
-	async blockUser(@Body() UserData:{id:number, id1:number},): Promise<UserModel>
-	{
-		//console.log("block user 12");
-		return await this.userService.blockUser(UserData);
-	}
+	// @Post('checkIfFriend')
+	// async checkIfFriend(@Body() UserData:{user:User[], id1: number},): Promise<void>
+	// {
 
-	@Post('unblockUser')
-	async unblockUser(@Body() UserData:{id:number, id1:number},): Promise<UserModel>
-	{
-		//console.log("unblock 12");
-		return await this.userService.unblockUser(UserData);
-	}
+	// }
 }
