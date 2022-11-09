@@ -22,7 +22,7 @@ export class SalonComponent implements OnInit {
   
   
   current_channel!:Channel;
-  usersInGuest: User[] = [];
+  usersInGuest: User[] | undefined = [];
   usersAdmin:User[] =[];
   AdminOrNot!:boolean;
 
@@ -82,12 +82,17 @@ export class SalonComponent implements OnInit {
     })
     
     this.socketService.amIBanned().subscribe({
-      next: (res) => {
-        if (res == Number(localStorage.getItem("id")))
+      next: (data: {res : Number, res2 : Channel;}) => {
+        if (Number(data.res) == Number(localStorage.getItem("id")))
         {
+          //this.socketService.updateUserInSalonList(this.channel_name);
           this.quitSalon()
           window.alert("You just got banned from this channel.")
         }
+        else{
+          this.usersInGuest = data.res2.joined;
+        }
+        //this.socketService.updateUserInSalonList(this.channel_name);
       }
     })
   }

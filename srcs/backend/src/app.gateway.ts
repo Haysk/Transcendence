@@ -70,17 +70,19 @@ export class AppGateway
   /* BAN */
 
   @SubscribeMessage('banUserByTime')
-  banUserByTime(client: any, payload: any)
+  async banUserByTime(client: any, payload: any)
   {
-    this.BaM.banUserDuringDelay(payload[0], payload[1], payload[2]);
-    this.server.emit('youAreBanned', payload[0]);
+    let data = await this.BaM.banUserDuringDelay(payload[0], payload[1], payload[2]);
+    if (data != null && data != undefined)
+      this.server.emit('youAreBanned', payload[0], data);
   }
 
   @SubscribeMessage('banUser')
-  banUser(client: any, payload: any)
+  async banUser(client: any, payload: any)
   {
-    this.BaM.banUserFromChannel(payload[0], payload[1]);
-    this.server.emit('youAreBanned', payload[0]);
+    let data = await this.BaM.banUserFromChannel(payload[0], payload[1]);
+    if (data != null && data != undefined)
+      this.server.emit('youAreBanned', payload[0], data);
   }
   
   @SubscribeMessage('unbanUser')
@@ -441,7 +443,8 @@ catch(err){
       })
       if (data != null && data != undefined)
       {
-        this.server.to(payload + "_channel").emit('someoneJoinedTheChannel', data)
+        //this.server.to(payload + "_channel").emit('someoneJoinedTheChannel', data.joined)
+        this.server.emit('someoneJoinedTheChannel', data.joined)
         return data;
       }
     }
