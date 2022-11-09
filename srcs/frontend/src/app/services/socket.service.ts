@@ -24,6 +24,10 @@ export class SocketService {
     this.socket = io(this.url);
   }
 
+
+
+
+
   //MUTE
 
   muteUserByTime(userToMute: number, channelConcerned: number, timeToMute: number)
@@ -39,6 +43,12 @@ export class SocketService {
   unmuteUser(userToMute: number, channelConcerned: number)
   {
     this.socket.emit('unmuteUser', userToMute, channelConcerned);
+  }
+
+
+  //Be Admin
+  BeAdminSalon(guestToBeAdmin: number, channelConcerned: number){
+      this.socket.emit('beAdminSalon', guestToBeAdmin, channelConcerned)
   }
 
 //BAN

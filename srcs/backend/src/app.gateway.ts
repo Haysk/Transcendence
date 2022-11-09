@@ -60,6 +60,32 @@ export class AppGateway
     this.BaM.unmuteUserFromChannel(payload[0], payload[1]);
   }
 
+
+  // /* Be Admin*/
+  // @SubscribeMessage('beAdminSalon')
+  // async beAdminSalon(client: any, payload: any)
+  // {
+  //   try {
+  //     let data = await this.Prisma.user.update({
+  //     where: {
+  //       id: payload[1],
+  //     },
+  //     data: {
+  //       admin_of: payload[0],
+  //     }
+  //   })
+  //   if(data != null && data != undefined)
+  //     this.server.emit('channelIsUpdated')
+  // }
+  // catch(err) {
+  //   console.log("error dans isOnline");
+  //   console.log(err)
+  // }
+  // }
+  
+
+
+
   /* BAN */
 
   @SubscribeMessage('banUserByTime')

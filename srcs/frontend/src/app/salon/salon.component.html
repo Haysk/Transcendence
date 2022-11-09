@@ -50,7 +50,7 @@
             </div><!-- fin de titre_guest -->
             
             <div class="userInSalon" *ngFor ="let userInSalon of usersInGuest">
-                <app-user-in-salon  [usersAdmin]="usersAdmin"  *ngIf="isAdmin(userInSalon)==0" [guest]=userInSalon></app-user-in-salon>
+                <app-user-in-salon [current_channel]="current_channel"  [usersAdmin]="usersAdmin"  *ngIf="isAdmin(userInSalon)==0" [guest]=userInSalon></app-user-in-salon>
             </div>
             
         </div><!-- fin de guest_salon -->
