@@ -257,6 +257,44 @@ amIBanned()
     });
   }
 
+  //INVITATION GAME
+
+  initSessionToPlay(player1: User, player2: User){
+    this.socket.emit('CreateRoomToPlay', player1, player2);
+  }
+
+  isGameReady(){
+    return new Observable<boolean>((obs) => {
+      this.socket.on('GameIsReady', () => {
+        obs.next(true);
+      })
+    })
+  }
+
+  displayInvitation(target: User){
+    this.socket.emit('initDisplayInvitation', target);
+  }
+
+  doIHaveToDisplay(){
+    return new Observable<boolean>((obs) => {
+      this.socket.on('DisplayInvitation', () => {
+        obs.next(true);
+      })
+    })
+  }
+
+  acceptInvitation(target: User){
+    this.socket.emit('invitationIsAccepted', target);
+  }
+
+  isGameAccepted(){
+    return new Observable<boolean>((obs) => {
+      this.socket.on('invitationAccepted', () => {
+        obs.next(true);
+      })
+    })
+  }
+
   //PONG GAME
 
   sendMove(move: IInput): void {
