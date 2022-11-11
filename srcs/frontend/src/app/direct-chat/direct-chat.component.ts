@@ -41,32 +41,18 @@ export class DirectChatComponent implements OnInit {
     complete:() => {}
       // console.log("message[0] = " + message.msg + " | message[1] = " + message.channel);
     });
-    // this.socketService.getFriendList(this.Me.id);
-    // this.socketService.listFriend().subscribe((result) => {
-    //   this.friendListCheck = result;
-    //   console.log(`test ===> ${this.friendListCheck.length}`);
-    //   if (this.isFriend(this.Dest)== 1){
-    //     // console.log("Del Friend");
-    //     this.friendOrNot=false;
-    //     this.friend="Del friend";
-    //     // this.socketService.getFriendList(this.Me.id);
-    //   }
-    //   else{
-    //     // console.log("sdfdsfsfdfssfd");
-    //     this.friendOrNot=true;
-    //     this.friend="Add friend";
-    //     // this.socketService.getFriendList(this.Me.id);
-    //   }
-    // });
-    // this.socketService.checkIfFriend(this.Me.id, this.Dest.id);
-console.log('sdffdsfdsfsdfsddsfsdf1213');
+    
     this.socketService.findFriendsOrNot().subscribe((result) => {
       this.num = result;
       console.log(this.num);
       if (this.num == 1)
       {
         this.friendOrNot=false;
-        this.friend="Del friend";
+        this.friend = "Del friend";
+      }
+      else{
+        this.friendOrNot=true;
+        this.friend = "Add friend";
       }
     })
   }
@@ -91,41 +77,11 @@ console.log('sdffdsfdsfsdfsddsfsdf1213');
     // this.message = "";
   }
 
-  // isFriend(current: User): number
-  // {
-  //   let i = 0;
-  //   while (this.friendListCheck != null && this.friendListCheck[i] != null && this.friendListCheck != undefined && this.friendListCheck != undefined)
-  //   {
-  //     // console.log("=====> user    " + this.friendListCheck[i].id);
-  //     if (this.friendListCheck[i].id == current.id){
-  //       return 1
-  //     }
-  //     console.log("i =======> " + i);
-  //     i++;
-  //   }
-  //   console.log("i =======> " + i);
-  //   return 0
-  // }
-
-  // checkIfFriend(){
-  //   this.socketService.listFriend().subscribe((result) => {
-  //     this.friendListCheck = result;
-  //   })
-  //   this.num = this.isFriend(this.Dest);
-  //   console.log("num ==> " + this.num);
-  //   if (this.num == 1)
-  //     this.friendOrNot == false;
-  // }
-
   addDelFriend(){
-    // this.apiService.checkIfFriend(this.friendListCheck, this.Dest.id);
+
     this.friend = this.friendOrNot?"Del friend":"Add friend";
-    //this.friendOrNot=this.friendOrNot?false:true;
     if (this.friendOrNot == true)
     {
-      //this.apiService.addFriend(this.Me.id, this.Dest.id).subscribe();
-      //console.log("test");
-      //let result: User[]
       this.socketService.getAddFriend(this.Me.id, this.Dest.id);
       //console.log("id ==>" + this.Me.id + "|| id dest ==> " + this.Dest.id);
       this.socketService.getFriend().subscribe((result) => {
@@ -135,31 +91,32 @@ console.log('sdffdsfdsfsdfsddsfsdf1213');
     }
     else
     {
-    //  this.apiService.removeFriend(this.Me.id, this.Dest.id).subscribe();
       this.socketService.getRemoveFriend(this.Me.id, this.Dest.id);
       this.socketService.removeFriend().subscribe((result) => {
         this.friendList = result;
       })
       this.friendOrNot = true;
-      //console.log("tete456");
     }
   }
 
   blockOrNot(){
     this.bloque = this.bloqueOrNot?"UnBlock":"Block";
     //this.bloqueOrNot = this.bloqueOrNot?false:true;
-    // if (this.bloqueOrNot == true)
-    // {
-    //   this.apiService.blockUser(this.Me.id, this.Dest.id).subscribe();
-    //   console.log("test block");
-    //   this.bloqueOrNot = false;
-    // }
-    // else
-    // {
-    //   this.apiService.unblockUser(this.Me.id, this.Dest.id).subscribe();
-    //   this.bloqueOrNot = true;
-    //   console.log("unblock456");
-    // }
+    if (this.bloqueOrNot == true)
+    {
+      this.socketService.getBlockUser(this.Me.id, this.Dest.id);
+      this.socketService.blockedUser().subscribe((result) => {
+        this.friendList = result;
+      })
+      console.log("test block");
+      this.bloqueOrNot = false;
+    }
+    else
+    {
+      this.socketService.getUnblockUser(this.Me.id, this.Dest.id);
+      this.bloqueOrNot = true;
+      console.log("unblock456");
+    }
 
   }
 

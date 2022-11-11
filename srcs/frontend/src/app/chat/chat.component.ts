@@ -54,9 +54,8 @@ export class ChatComponent implements OnInit {
               image_url: this.getImageUrl(),
               online: this.getOnline(),
               oauth_id: 118218,
-              friend_list: false,
             };
-  Dest: User = {id: 0, login: "", email: "", first_name: "", last_name: "", url: "", displayname: "", image_url: "", online: false, friend_list: false};
+  Dest: User = {id: 0, login: "", email: "", first_name: "", last_name: "", url: "", displayname: "", image_url: "", online: false};
   User_list!: User[];
   message: string = '';
   messages: String[] = [];

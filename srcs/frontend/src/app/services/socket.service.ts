@@ -119,4 +119,29 @@ export class SocketService {
       })
     })
   }
+
+  getBlockUser(id: number, id1: number){
+    //this.socket.on('get Block User');
+    this.socket.emit('getBlockUser', id, id1);
+  }
+
+  blockedUser(): Observable<User[]> {
+    return new Observable<User[]>((obs) => {
+      this.socket.on('blockedUser', (tab: User[]) => {
+        obs.next(tab);
+      });
+    });
+  }
+
+  getUnblockUser(id: number, id1: number){
+    this.socket.emit('getUnblockUser', id, id1);
+  }
+
+  unblockedUser(): Observable<User[]> {
+    return new Observable<User[]>((obs) => {
+      this.socket.on('unblockedUser', (tab: User[]) => {
+        obs.next(tab);
+      });
+    });
+  }
 }

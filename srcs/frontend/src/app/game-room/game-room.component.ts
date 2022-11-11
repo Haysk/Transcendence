@@ -22,7 +22,6 @@ export class GameRoomComponent implements OnInit {
     displayname: this.getDisplayName(),
     image_url: this.getImageUrl(),
     online: this.getOnline(),
-    friend_list: false,
   }
 
 

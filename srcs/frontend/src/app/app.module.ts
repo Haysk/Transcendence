@@ -25,8 +25,7 @@ import { CreateSalonComponent } from './widgets/create-salon/create-salon.compon
 import { SalonAvailableComponent } from './widgets/salon-available/salon-available.component';
 import { PlayerPongComponent } from './widgets/player-pong/player-pong.component';
 import { FriendUserComponent } from './friend-user/friend-user.component';
-import { UserLinkComponent } from './user-link/user-link.component';
-import { UserUnfriendComponent } from './user-unfriend/user-unfriend.component';
+import { BlockUserComponent } from './block-user/block-user.component';
 
 @NgModule({
   declarations: [
@@ -52,8 +51,7 @@ import { UserUnfriendComponent } from './user-unfriend/user-unfriend.component';
     SalonAvailableComponent,
     PlayerPongComponent,
     FriendUserComponent,
-    UserLinkComponent,
-    UserUnfriendComponent
+    BlockUserComponent
   ],
   imports: [
     BrowserModule,

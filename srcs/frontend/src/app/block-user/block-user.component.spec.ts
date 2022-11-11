@@ -1,18 +1,18 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 
-import { UserLinkComponent } from './user-link.component';
+import { BlockUserComponent } from './block-user.component';
 
-describe('UserLinkComponent', () => {
-  let component: UserLinkComponent;
-  let fixture: ComponentFixture<UserLinkComponent>;
+describe('BlockUserComponent', () => {
+  let component: BlockUserComponent;
+  let fixture: ComponentFixture<BlockUserComponent>;
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      declarations: [ UserLinkComponent ]
+      declarations: [ BlockUserComponent ]
     })
     .compileComponents();
 
-    fixture = TestBed.createComponent(UserLinkComponent);
+    fixture = TestBed.createComponent(BlockUserComponent);
     component = fixture.componentInstance;
     fixture.detectChanges();
   });
