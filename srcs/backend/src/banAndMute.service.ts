@@ -45,6 +45,12 @@ export class BanAndMuteService {
 					muted: {
 						connect: [{id: Number(userToMute)}],
 					}
+				},
+				include: {
+					joined: true,
+					muted: true,
+					banned: true,
+					admins: true
 				}
 			})
 			if (data != null && data != undefined)
@@ -68,6 +74,12 @@ export class BanAndMuteService {
 					muted: {
 						disconnect: [{id: Number(userToMute)}],
 					}
+				},
+				include: {
+					joined: true,
+					muted: true,
+					banned: true,
+					admins: true
 				}
 			})
 			if (data != null && data != undefined)
@@ -100,9 +112,15 @@ export class BanAndMuteService {
 					id: channelToBan
 				},
 				data: {
-					muted: {
+					banned: {
 						connect: [{id: Number(userToBan)}],
 					}
+				},
+				include: {
+					joined: true,
+					muted: true,
+					banned: true,
+					admins: true
 				}
 			})
 			if (data != null && data != undefined)
@@ -122,9 +140,15 @@ export class BanAndMuteService {
 					id: channelToBan
 				},
 				data: {
-					muted: {
+					banned: {
 						disconnect: [{id: Number(userToBan)}],
 					}
+				},
+				include: {
+					joined: true,
+					muted: true,
+					banned: true,
+					admins: true
 				}
 			})
 			if (data != null && data != undefined)

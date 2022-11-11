@@ -63,16 +63,27 @@ export class SalonComponent implements OnInit {
       error: (err) => {},
       complete: () => {}
     })
-
-     
-
+    ;
+    (await this.socketService.getUpdateChannel()).subscribe((res) => {
+      this.current_channel = res;
+    })
     //console.log("findChannelByName finished");
     this.socketService.joinChannel(this.channel_name, this.current_user.id);
+   
     this.socketService.updateUserList().subscribe({
       next: (result) => {
         this.usersInGuest = result;
       }
     });
+
+    this.socketService.updateAdminList().subscribe({
+      next: (result) => {
+        this.usersAdmin = result;
+      }
+    })
+
+   
+
 
     this.apiService.getChannelMessages(this.channel_name).subscribe({
       next:(result) => {
@@ -92,8 +103,15 @@ export class SalonComponent implements OnInit {
       complete:() => {}
     })
     
-
-    
+    this.socketService.amIBanned().subscribe({
+      next: (res) => {
+        if (res == Number(localStorage.getItem("id")))
+        {
+          this.quitSalon()
+          window.alert("You just got banned from this channel.")
+        }
+      }
+    })
   }
   
   isCreator(current:User){
@@ -111,8 +129,20 @@ export class SalonComponent implements OnInit {
         return 1;
       i++;
     }
-
     return 0
+  }
+
+  isMuted(current: User)
+  {
+    let i = 0
+    while(this.current_channel.muted != null && this.current_channel.muted != undefined
+      && this.current_channel.muted[i] != null && this.current_channel.muted[i] != undefined)
+      {
+        if (this.current_channel.muted[i].id == current.id)
+          return 1
+        i++;
+      }
+      return 0
   }
 
   setUpContent()
@@ -124,13 +154,20 @@ export class SalonComponent implements OnInit {
   }
 
   sendMessage(){
-    console.log(this.message);
-    this.setUpContent();
-    this.apiService.createChannelMessage(this.content).subscribe();
-    this.socketService.sendMsgToChannel(this.channel_name, this.message, this.current_user.nickname)
-    // this.conversation.push(this.message);
-    this.message= '';
-    this.content = {content: "", fromUserId: 0, fromUserName: ""};
+    if(this.isMuted(this.current_user) != 1)
+    {
+      console.log(this.message);
+      this.setUpContent();
+      this.apiService.createChannelMessage(this.content).subscribe();
+      this.socketService.sendMsgToChannel(this.channel_name, this.message, this.current_user.nickname)
+      // this.conversation.push(this.message);
+      this.message= '';
+      this.content = {content: "", fromUserId: 0, fromUserName: ""};
+    }
+    else{
+      this.message= '';
+      window.alert("You are muted at the moment");
+    }
   }
 
   quitSalon(){

@@ -9,6 +9,7 @@ import { environment } from 'src/environments/environment';
 import { IGameStates } from '../pong/game/interfaces/game-states.interface';
 import { IInput } from '../pong/game/interfaces/input.interface';
 import { observable } from 'rxjs';
+import { observeNotification } from 'rxjs/internal/Notification';
 
 @Injectable({
   providedIn: 'root'
@@ -49,7 +50,14 @@ export class SocketService {
   //Be Admin
   BeAdminSalon(guestToBeAdmin: number, channelConcerned: number){
       this.socket.emit('beAdminSalon', guestToBeAdmin, channelConcerned)
+      console.log(2)
   }
+
+  delAdminSalon(guestToDelAdmin: number, channelConcerned: number){
+    this.socket.emit('delAdminSalon', guestToDelAdmin, channelConcerned)
+    console.log(2)
+}
+  
 
 //BAN
 
@@ -66,6 +74,15 @@ banUser(userToBan: number, channelConcerned: number)
 unbanUser(userToBan: number, channelConcerned: number)
 {
   this.socket.emit('unbanUser', userToBan, channelConcerned);
+}
+
+amIBanned()
+{
+  return new Observable<number>((obs) => {
+    this.socket.on('youAreBanned', (res) => {
+      obs.next(res)
+    })
+  })
 }
 
 //CONNECTION
@@ -107,6 +124,36 @@ unbanUser(userToBan: number, channelConcerned: number)
       obs.next();
       })
     })
+  }
+
+//UPDATE CHANNEL
+
+  async updateChannel()
+  {
+    this.socket.emit('channelToUpdate');
+  }
+
+  async updateChannels()
+  {
+    this.socket.emit('channelsToUpdate');
+  }
+
+  async getUpdateChannel()
+  {
+    return new Observable<Channel>((obs)=>{
+    this.socket.on('channelIsUpdated', (data: Channel) => {
+      obs.next(data);
+    })
+  })
+  }
+
+  async getUpdateChannels()
+  {
+    return new Observable<Channel[]>((obs)=>{
+      this.socket.on('channelsAreUpdated', (data: Channel[]) => {
+        obs.next(data);
+      })
+    }) 
   }
 
   getAllUser()
@@ -160,6 +207,11 @@ unbanUser(userToBan: number, channelConcerned: number)
     });
   }
 
+  updateUserInSalonList(current_channel_name: string)
+  {
+    this.socket.emit('userInChannelListPlz', current_channel_name);
+  }
+
   //USER
 
   askForUserList(current_id: number)
@@ -169,15 +221,24 @@ unbanUser(userToBan: number, channelConcerned: number)
 
   updateUserList() : Observable<User[]>
   {
-    // console.log("wististyle");
     return new Observable<User[]>((observer) => {
         this.socket.on('someoneJoinedTheChannel', (data) => {
-          // console.log("SOMEONE JOINED THE CHANNEL")
+          //console.log("SOMEONEJOINEDTHECHANNEL");
+          
           observer.next(data.joined);
         });
   
       });
   };
+
+  updateAdminList() : Observable<User[]>
+  {
+    return new Observable<User[]>((obs) => {
+      this.socket.on('newAdminInChannel', (res) => {
+        obs.next(res);
+      })
+    })
+  }
 
 //START COMPONENT
 

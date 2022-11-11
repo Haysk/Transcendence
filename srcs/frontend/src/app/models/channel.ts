@@ -11,4 +11,5 @@ export interface 	Channel {
     joined?:        User[];
     muted?:         User[];
     admins?:        User[];
+    banned?:        User[];
 }

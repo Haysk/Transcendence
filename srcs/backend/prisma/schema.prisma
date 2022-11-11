@@ -30,6 +30,7 @@ model				Channel {
 	password		String?
 	joined			User[] @relation("users_in_channel")
 	muted			User[] @relation("muted_in_channel")
+	banned			User[] @relation("banned_in_channel")
 	admins			User[] @relation("admin_of")
 }
 
@@ -55,6 +56,7 @@ model 				User {
 	creatorOf		Channel[]
 	channel_joined	Channel[] @relation("users_in_channel")
 	muted			Channel[] @relation("muted_in_channel")
+	banned			Channel[] @relation("banned_in_channel")
 	admin_of		Channel[] @relation("admin_of")
 	
 }
