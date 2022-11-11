@@ -16,7 +16,7 @@
 		<div class="part2_left">
 			
 
-			<app-direct-chat [Dest]="Dest" [Me]="Me" *ngIf="this.showchat==true"> </app-direct-chat>
+			<app-direct-chat [Dest]="Dest" [Me]="Me" [friendOrNot]="friendOrNot" *ngIf="this.showchat==true"> </app-direct-chat>
 
 			<app-create-salon *ngIf="showFormule" (ShowSalonEvent)="receiveShowSalon($event)" (SendChannelNameEvent)="receiveChannelName($event)"></app-create-salon>
 
@@ -38,6 +38,7 @@
 
 			<div class="part2_titre_friends">Friends Online</div>
 			<div class="part2_friends_online">
+				<app-friend-user [Me]="Me" [friendOrNot]="friendOrNot"></app-friend-user>
 			</div>
 		
 			<div class="part2_titre_create" (click)="formuleCreate()">Create Salon</div>

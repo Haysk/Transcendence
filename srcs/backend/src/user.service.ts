@@ -3,6 +3,8 @@ import { PrismaService } from './prisma.service';
 import { User, Prisma } from '@prisma/client';
 import { HttpService } from '@nestjs/axios';
 import { catchError, take } from 'rxjs';
+import { Socket } from 'socket.io';
+import { IoAdapter } from '@nestjs/platform-socket.io';
 
 @Injectable()
 export class UserService {
@@ -28,7 +30,18 @@ export class UserService {
 	return await this.prisma.user.findUnique({
 		where: {
 			login: login
+		},
+		include:{
+			friends: true,
+			friendsof: true,
+			blocked: true,
+			blockedby: true,
+			creatorOf: true,
+			channel_joined: true,
+			muted: true,
+			admin_of: true
 		}
+
 	})
   }
 
@@ -162,4 +175,87 @@ export class UserService {
 			where,
 		});
 	}
+
+	async getFriends(param: number): Promise<User>
+	{
+		return this.prisma.user.findFirst({
+			where: {
+				id: Number(param),
+			},
+			include: {
+				friends: true,
+			}
+		});
+	}
+
+	async getUser(param: number): Promise<User>
+	{
+		return this.prisma.user.findFirst({
+			where: {}
+		})
+	}
+
+	async addFriend(params : {id: number, id1: number}) : Promise<User>
+    {
+        return await this.prisma.user.update({
+			where: {
+				id: params.id,
+			},
+			data: {
+				friends: {
+					connect: [{id: params.id1}],
+				}
+			}
+		})
+    }
+
+	async removeFriend(params : {id: number, id1: number}) : Promise<User>
+    {
+        return await this.prisma.user.update({
+			where: {
+				id: params.id,
+			},
+			data: {
+				friends: {
+					disconnect: [{id: params.id1}],
+				}
+			}
+		})
+    }
+
+	// async checkIfFriend(params : {id: number, id1: number}) : Promise<boolean>
+	// {
+	// 	return await Boolean({
+
+	// 	})
+	// }
+
+	async blockUser(params : {id: number, id1: number}) : Promise<User>
+    {
+        return await this.prisma.user.update({
+			where: {
+				id: params.id,
+			},
+			data: {
+				blocked: {
+					connect: [{id: params.id1}],
+				}
+			}
+			
+		})
+    }
+
+	async unblockUser(params : {id: number, id1: number}) : Promise<User>
+    {
+        return await this.prisma.user.update({
+			where: {
+				id: params.id,
+			},
+			data: {
+				blocked: {
+					disconnect: [{id: params.id1}],
+				}
+			}
+		})
+    }
 }

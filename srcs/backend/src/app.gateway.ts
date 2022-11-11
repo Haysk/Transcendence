@@ -12,8 +12,13 @@ import { PrismaService } from './prisma.service';
 import { Server, Socket } from 'socket.io';
 import { IoAdapter } from '@nestjs/platform-socket.io';
 import { UserService } from './user.service';
+<<<<<<< HEAD
 import { BanAndMuteService } from './banAndMute.service'
 import { truncateSync } from 'fs';
+=======
+import { async } from 'rxjs';
+import { emit } from 'process';
+>>>>>>> a8bff5cc95f33a6c7906713ef010bb99fbf2fe86
 
 @WebSocketGateway({
   cors: {
@@ -603,4 +608,160 @@ catch(err){
   afterInit(server: Server) {
     this.logger.log('Init');
   }
+<<<<<<< HEAD
 }
+=======
+
+  async handleDisconnect(client: Socket): Promise<void> {
+    this.logger.log(`Client disconnected: ${client.id}`);
+    // let tmp = await this.Prisma.user.findFirst({
+    //   where: {
+    //     socket: client.id
+    //   }
+    // });
+    // await this.Prisma.user.update({
+    //     where: {
+    //       login: tmp.login,
+    //     },
+    //     data: {
+    //      online: false,
+    //     },
+    //   });
+  }
+
+  handleConnection(client: Socket, ...args: any[]) {
+    this.logger.log(`Client connected: ${client.id}`);
+  }
+
+  @SubscribeMessage('getAddFriend')
+  async addingFriend(client: Socket, payload: any){
+    // console.log("test add " + payload);
+    try{
+      let data = await this.Prisma.user.update({
+        where: {
+          id: Number(payload[0]),
+        },
+        data:{
+          friends: {
+            connect: [{id: Number(payload[1])}]
+          },
+      },
+      include: {
+        friends: true,
+      }
+      })
+      if (data != null && data != undefined)
+      {
+        this.server.to(client.id).emit('addFriend', data.friends);
+        // this.server.to(client.id).emit('updateListFriend',data.friends);
+      }
+    }
+    catch(err){
+      console.log("issue dans getAddFriend");
+      console.log(err);
+    }
+  }
+
+  @SubscribeMessage('getRemoveFriend')
+  async removingFriend(client: Socket, payload: any){
+    // console.log("test remove " + payload);
+    try{
+      let data = await this.Prisma.user.update({
+        where: {
+          id: Number(payload[0]),
+        },
+        data:{
+          friends: {
+            disconnect: [{id: Number(payload[1])}]
+          }
+        },
+        include: {
+          friends: true,
+        }
+      })
+      if (data != null && data != undefined)
+      {
+        this.server.to(client.id).emit('removeFriend', data.friends);
+      }
+    }
+    catch(err){
+      console.log("issue dans le remove friend");
+      console.log(err);
+    }
+  }
+
+  @SubscribeMessage('getFriendList')
+  async getFriendList(client: any, payload : any)
+  {
+    //console.log("test get Friend list" + payload);
+    try{
+      let data = await this.Prisma.user.findFirst({
+        where: {
+          id: Number(payload),
+        },
+        include: {
+          friends: true,
+        },
+      })
+      if (data != null && data != undefined)
+      {
+        console.log(data);
+        this.server.to(client.id).emit('listFriends', data.friends);
+      }
+    }
+    catch(err){
+      console.log("issue dans le get friend list");
+      console.log(err);
+    }
+  }
+
+  @SubscribeMessage('checkIfFriend')
+  async checkIfFriend(client: any, payload: any)
+  {
+    // console.log("check if friend app gateway");
+    // console.log(payload[0]);
+    // console.log(payload[1]);
+    // console.log("hello youuuuuuuu");
+    try{
+      let data = await this.Prisma.user.findUnique({
+        where: {
+          id: Number(payload[0]),
+        },
+        include: {
+          friends: true,
+        }
+      })
+    
+      
+      if (data !== null && data !== undefined){
+        const value = data.friends.find((element) => payload[1] === element.id);
+        // console.log("111515150000000000000");
+        if (value !== undefined){
+          this.server.to(client.id).emit('findFriendsOrNot', 1);
+          // console.log("11111111111111");
+        }
+        else{
+          this.server.to(client.id).emit('findFriendsOrNot', 0);
+          // console.log("00000000000000sdffdsfsddsffds00000");
+        }}
+      }
+    catch(err){
+    console.log("issue dans le get friend list");
+    console.log(err);
+    }
+  }
+
+    // const found = payload[0].find(element => element.id === payload[1]);
+    // console.log(found);
+    
+    // try{
+    //   let data = await this.      
+    // }
+    // if (data == 1)
+    // {
+    //   console.log(data);
+    //   this.server.to(client.id).emit('friendOrNot', data)
+    // }
+    
+}
+>>>>>>> a8bff5cc95f33a6c7906713ef010bb99fbf2fe86

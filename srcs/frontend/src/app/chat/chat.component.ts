@@ -53,6 +53,7 @@ export class ChatComponent implements OnInit {
   showchat:Boolean=false ;
   showFormule:Boolean=false;
   privatOrpublic:Boolean=false;
+  friendOrNot:boolean=true;
   showFormulePassword:Boolean=false;
   delay:number = 0;
 
@@ -116,7 +117,7 @@ export class ChatComponent implements OnInit {
   }
 
   constructor(private socketService: SocketService, private apiService: ApiService)
-  {
+  {    
   }
 
   async ngOnInit(): Promise<void> {

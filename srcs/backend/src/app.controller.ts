@@ -13,7 +13,7 @@ import { TechService } from './tech.service';
 import { MessageService } from './message.service';
 import { ChannelService } from './channel.service';
 import { OauthService } from './oauth.service';
-import { User as UserModel, Tech as TechModel, Oauth as OauthModel, Message as MessageModel, Channel as ChannelModel, Prisma, PrismaClient, User } from '@prisma/client';
+import { User as UserModel, Tech as TechModel, Oauth as OauthModel, Message as MessageModel, Channel as ChannelModel, Prisma, PrismaClient, User, prisma } from '@prisma/client';
 
 @Controller()
 export class AppController {
@@ -100,6 +100,14 @@ export class AppController {
 		return await this.userService.findUserByLogin(login);
 	}
 
+	@Get('checkIfFriend/:data')
+	async checkIfFriend(@Param('data') id: {id: number, id1: number} ) : Promise<number>
+	{
+		console.log("123456");
+//		return await this.userService.checkIfFriend(id);
+		return 1;
+	}
+
 	@Get('messages/:fromUserId/:userId')
 	async getMessages(
 		@Param('fromUserId') fromUserId: Number, @Param('userId') userId: Number
@@ -171,6 +179,7 @@ export class AppController {
 		return await this.userService.getAllUsers(data);
 	}
 
+<<<<<<< HEAD
 	// @Post('upload/')
 	// async uploadAvatar(
 	// 	@Body() param: {name: Blob}
@@ -188,3 +197,32 @@ export class AppController {
 
 	// }
 }
+=======
+	@Get('user/friends/:current')
+	async getUserFriends(@Param('current') id: number): Promise<UserModel>
+	{
+		let data = id;
+		return this.userService.getFriends(data);
+	}
+
+	@Post('addFriend')
+	async addFriend(@Body() UserData:{id:number, id1:number},): Promise<UserModel>
+	{
+		//console.log("add friend");
+		return await this.userService.addFriend(UserData);
+	}
+
+	@Post('removeFriend')
+	async removeFriend(@Body() UserData:{id:number, id1:number},): Promise<UserModel>
+	{
+		//console.log("remove friend12");
+		return await this.userService.removeFriend(UserData);
+	}
+
+	// @Post('checkIfFriend')
+	// async checkIfFriend(@Body() UserData:{user:User[], id1: number},): Promise<void>
+	// {
+
+	// }
+}
+>>>>>>> a8bff5cc95f33a6c7906713ef010bb99fbf2fe86
