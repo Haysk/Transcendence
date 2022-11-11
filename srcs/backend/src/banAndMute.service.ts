@@ -114,6 +114,9 @@ export class BanAndMuteService {
 				data: {
 					banned: {
 						connect: [{id: Number(userToBan)}],
+					},
+					joined: {
+						disconnect: [{id: Number(userToBan)}],
 					}
 				},
 				include: {
@@ -124,7 +127,9 @@ export class BanAndMuteService {
 				}
 			})
 			if (data != null && data != undefined)
+			{
 				return data
+			}
 		}
 		catch(err){
 			console.log("error dans banUserFromChannel :");

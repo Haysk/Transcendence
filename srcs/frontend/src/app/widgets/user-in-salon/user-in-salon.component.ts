@@ -109,7 +109,7 @@ export class UserInSalonComponent implements OnInit {
     }
     this.socketService.updateChannel();
     this.socketService.updateChannels();
-    //this.socketService.updateUserInSalonList(this.current_channel.name);
+    // this.socketService.updateUserInSalonList(this.current_channel.name);
   }
 
 }

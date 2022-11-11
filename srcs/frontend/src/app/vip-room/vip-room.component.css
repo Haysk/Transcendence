@@ -23,6 +23,19 @@
 
 }
 
+.titre_modify{
+ 
+    text-align: center;
+}
+
+.bloc_modify{
+  
+   
+    /* background-color: aqua; */
+ 
+   
+}
+
 .title_vip{
 
     width: 100%;
@@ -62,6 +75,13 @@
     padding-top: 5px;
     padding-bottom: 5px;
 }
+
+.search{
+    /* background-color: aqua; */
+    margin-top: 50px;
+}
+
+
 .champ_avatar{
     color: rgb(184, 142, 7);
     font-size: 18px;
@@ -100,3 +120,20 @@ input[type="text"]{
 
 
 } */
+
+
+@media only screen and (max-width: 600px) {
+    
+
+
+.bloc_modify{
+  
+    /* display: flex;
+    flex-direction: column;
+    */
+    /* background-color: aqua; */
+ 
+   
+}
+
+}

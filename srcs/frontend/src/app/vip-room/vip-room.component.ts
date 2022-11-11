@@ -2,6 +2,8 @@ import { Component, OnInit } from '@angular/core';
 import { ApiService } from '../services/api.service';
 import { HttpClient} from '@angular/common/http';
 import { HttpHeaders } from '@angular/common/http';
+import { SocketService } from '../services/socket.service';
+import { User } from '../models/user';
 
 
 @Component({
@@ -14,6 +16,19 @@ export class VipRoomComponent implements OnInit {
   visible_avatar:boolean = false;
   visible_nickname:boolean = false;
   
+  userToShow: User = {
+    login: String(localStorage.getItem("login")),
+    displayname: String(localStorage.getItem("displayname")),
+    image_url: String(localStorage.getItem("image_url")),
+    avatar_url: String(localStorage.getItem("avatar_url")),
+    nickname: String(localStorage.getItem("nickname")),
+    id: Number(localStorage.getItem("id")),
+    online: true,
+    email: "",
+    first_name: "",
+    last_name: "",
+    url: String(localStorage.getItem("avatar_url"))
+  };
   login = localStorage.getItem("login");
   displayname = localStorage.getItem("displayname");
   image_url = localStorage.getItem("image_url");
@@ -21,7 +36,11 @@ export class VipRoomComponent implements OnInit {
   nickname = localStorage.getItem("nickname");
   id = localStorage.getItem("id");
   newNickName!:string;
+  searchName:string = "";
   
+  constructor(private socketService: SocketService, private apiService: ApiService, private http: HttpClient) 
+  {
+  }
 
   // selectedFile!:File ;
   // onFileSelected(event){
@@ -40,7 +59,7 @@ export class VipRoomComponent implements OnInit {
   // }
 
   selectedFile! : File;
-  url = this.avatar_url;
+  // url = this.userToShow.avatar_url;
  
 
   onSelect(event) {
@@ -51,9 +70,9 @@ export class VipRoomComponent implements OnInit {
       let reader = new FileReader();
       reader.readAsDataURL(event.target.files[0]);
       reader.onload = (event: any) => {
-        this.url = event.target.result;
+        this.userToShow.url = event.target.result;
         console.log("avatar url:" + this.avatar_url);
-        console.log("new avatar url" + this.url);
+        console.log("new avatar url" + this.userToShow.url);
         // console.log(event);
       };
     } else {
@@ -64,9 +83,9 @@ export class VipRoomComponent implements OnInit {
   onUpload(){
     
       if (this.selectedFile.size < 75000){
-      this.apiService.updateAvatar(Number(this.id), String(this.url)).subscribe();
+      this.apiService.updateAvatar(Number(this.id), String(this.userToShow.url)).subscribe();
       console.log("this.url")
-      localStorage.setItem('avatar_url', String(this.url));
+      localStorage.setItem('avatar_url', String(this.userToShow.url));
       window.alert('***Update down***');
       }
       else{
@@ -83,16 +102,10 @@ export class VipRoomComponent implements OnInit {
     // );
   }
 
-  
-  constructor(private apiService: ApiService, private http: HttpClient) { }
-
   ngOnInit(): void {
-    
-    
-    
-    
-   
-
+    this.socketService.waitForAUser().subscribe((res) => {
+      this.userToShow = res;
+    })
   }
 
   showhide(){
@@ -119,5 +132,8 @@ export class VipRoomComponent implements OnInit {
 
   }
 
+  searchProfile(){
+    this.socketService.searchForAUser(this.searchName);
+  }
 
 }

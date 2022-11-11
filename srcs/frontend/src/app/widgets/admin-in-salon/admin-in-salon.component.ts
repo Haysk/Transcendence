@@ -46,7 +46,6 @@ export class AdminInSalonComponent implements OnInit {
 
 
   ngOnInit(): void {
-   
 
   }
 

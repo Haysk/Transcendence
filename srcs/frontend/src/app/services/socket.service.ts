@@ -78,9 +78,10 @@ unbanUser(userToBan: number, channelConcerned: number)
 
 amIBanned()
 {
-  return new Observable<number>((obs) => {
-    this.socket.on('youAreBanned', (res) => {
-      obs.next(res)
+  return new Observable<any>((obs) => {
+    this.socket.on('youAreBanned', (res: number, res2: User[]) => {
+      let data = {res, res2}
+      obs.next(data)
     })
   })
 }
@@ -223,8 +224,6 @@ amIBanned()
   {
     return new Observable<User[]>((observer) => {
         this.socket.on('someoneJoinedTheChannel', (data) => {
-          //console.log("SOMEONEJOINEDTHECHANNEL");
-          
           observer.next(data.joined);
         });
   
@@ -235,6 +234,20 @@ amIBanned()
   {
     return new Observable<User[]>((obs) => {
       this.socket.on('newAdminInChannel', (res) => {
+        obs.next(res);
+      })
+    })
+  }
+        
+  searchForAUser(login:string)
+  {
+    this.socket.emit('SearchForThisUser', login);
+  }
+
+  waitForAUser()
+  {
+    return new Observable<User>((obs) => {
+      this.socket.on('hereIsTheUserYouAskedFor', (res) => {
         obs.next(res);
       })
     })

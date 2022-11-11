@@ -71,6 +71,7 @@ export class OauthService {
 				redirect_uri: "https://localhost:8081",
 				}).pipe(take(1)).subscribe({
 					next: async result => {
+						console.log("4");
 						resolve(result.data);
 					},
 					error: err => {
