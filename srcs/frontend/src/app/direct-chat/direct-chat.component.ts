@@ -69,5 +69,8 @@ export class DirectChatComponent implements OnInit {
 
   }
 
+  goToProfile() {
+
+  }
 
 }

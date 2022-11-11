@@ -35,6 +35,7 @@ export class LoginComponent implements OnInit {
 			var code = params['code'];
 			if (code) {
 				this.code = code;
+				this.storageService.setCode(code);
 				this.signup(code);
 			}
 		})
@@ -66,7 +67,6 @@ export class LoginComponent implements OnInit {
 			this.apiService.signup(code).subscribe({
 				next: (result) => {
 					if (typeof (result) != "boolean" && result) {
-						this.storageService.setCode(code);
 						this.initUser(result);
 						this.locked = false;
 					}
@@ -85,7 +85,6 @@ export class LoginComponent implements OnInit {
 			this.apiService.validateTfa({ code: this.code, tfa_key: this.tfa_key }).subscribe({
 				next: (result) => {
 					if (typeof (result) != "boolean" && result) {
-						this.storageService.setCode(this.code);
 						this.initUser(result);
 						this.locked = false;
 					}

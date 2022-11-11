@@ -59,7 +59,9 @@ export class ChatComponent implements OnInit {
 		this.socketService.getConnectionSignal(this.Me.id).subscribe();
 		this.socketService.getAllUser().subscribe((result) => {
 			this.User_list = result;
-		})
+		});
+		console.log(this.Me);
+		
 	}
 
 	receiveShowchat($event: Boolean) {

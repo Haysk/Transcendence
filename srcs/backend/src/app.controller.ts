@@ -163,14 +163,14 @@ export class AppController {
 
 	@Patch('tfa/disable')
 	async patchTfa(
-		@Body() code: string) {
-		this.tfaService.disableTfa(code);
+		@Body() params: {code: string}) {
+		this.tfaService.disableTfa(params.code);
 	}
 
 	@Post('tfa/signup')
 	async postSignup(
-		@Body() code: string): Promise<TfaModel> {
-		return (this.tfaService.createTfa(code));
+		@Body() params :{code: string}): Promise<TfaModel> {
+		return (this.tfaService.createTfa(params.code));
 	}
 
 	@Post('tfa/verify')

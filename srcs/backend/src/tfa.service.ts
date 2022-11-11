@@ -14,25 +14,6 @@ export class TfaService {
 	constructor(private oauthService: OauthService,
 				private prisma: PrismaService) {}
 
-	async status(code: string) {
-		console.log(code);
-		
-		const result = await this.prisma.oauth.findFirst({
-			where: {
-				code: code,
-			},
-			include: {
-				tfa: {
-					select: {
-						tfa_activated: true
-					}
-				}
-			}
-		});
-		console.log(result.tfa.tfa_activated);
-		return (result);
-	}
-
 	async disableTfa(code: string) {
 		const result = await this.prisma.oauth.findFirst({
 			where: {
@@ -61,7 +42,7 @@ export class TfaService {
 			length: 20
 		});
 		const qrCode = await this.qrcode.toDataURL(secret.otpauth_url);
-		const result = await this.prisma.oauth.findFirst({
+		const result = await this.prisma.oauth.findUnique({
 			where: {
 				code: code
 			},
@@ -120,7 +101,6 @@ export class TfaService {
 	}
 
 	async validateTfa(params: {code: string, tfa_key: string}) {
-		console.log(params);
 		const tmp = await this.prisma.oauth.findUnique({
 			where: {
 				code: params.code

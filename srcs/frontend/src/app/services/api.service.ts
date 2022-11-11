@@ -116,11 +116,11 @@ export class ApiService {
   }
 
   signupTfa(code: string) {
-	return this.httpClient.post<Tfa>(`${this.API_SERVER}/tfa/signup`, code);
+	return this.httpClient.post<Tfa>(`${this.API_SERVER}/tfa/signup`, {code});
   }
 
   disableTfa(code: string) {
-	return this.httpClient.patch(`${this.API_SERVER}/tfa/disable`, code);
+	return this.httpClient.patch(`${this.API_SERVER}/tfa/disable`, {code});
   }
 
   verifyTfa(data: {code: string, tfa_key: string}) {
