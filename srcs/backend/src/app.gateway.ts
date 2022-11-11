@@ -12,13 +12,10 @@ import { PrismaService } from './prisma.service';
 import { Server, Socket } from 'socket.io';
 import { IoAdapter } from '@nestjs/platform-socket.io';
 import { UserService } from './user.service';
-<<<<<<< HEAD
 import { BanAndMuteService } from './banAndMute.service'
 import { truncateSync } from 'fs';
-=======
 import { async } from 'rxjs';
 import { emit } from 'process';
->>>>>>> a8bff5cc95f33a6c7906713ef010bb99fbf2fe86
 
 @WebSocketGateway({
   cors: {
@@ -608,12 +605,10 @@ catch(err){
   afterInit(server: Server) {
     this.logger.log('Init');
   }
-<<<<<<< HEAD
-}
-=======
 
-  async handleDisconnect(client: Socket): Promise<void> {
-    this.logger.log(`Client disconnected: ${client.id}`);
+
+  // async handleDisconnect(client: Socket): Promise<void> {
+  //   this.logger.log(`Client disconnected: ${client.id}`);
     // let tmp = await this.Prisma.user.findFirst({
     //   where: {
     //     socket: client.id
@@ -627,11 +622,11 @@ catch(err){
     //      online: false,
     //     },
     //   });
-  }
+  // }
 
-  handleConnection(client: Socket, ...args: any[]) {
-    this.logger.log(`Client connected: ${client.id}`);
-  }
+  // handleConnection(client: Socket, ...args: any[]) {
+  //   this.logger.log(`Client connected: ${client.id}`);
+  // }
 
   @SubscribeMessage('getAddFriend')
   async addingFriend(client: Socket, payload: any){
@@ -764,4 +759,3 @@ catch(err){
     // }
     
 }
->>>>>>> a8bff5cc95f33a6c7906713ef010bb99fbf2fe86
