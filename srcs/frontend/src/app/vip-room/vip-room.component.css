@@ -28,23 +28,13 @@
     text-align: center;
 }
 
-.bloc_modify{
-  
-   
-    /* background-color: aqua; */
- 
-   
-}
+
 
 .title_vip{
 
     width: 100%;
     height: 70px;
-    /* background-color: rgb(33, 40, 46); */
-    /* background-image: url("../../assets/imgs/vip_title.png"); */
-    /* background-size: contain;
-    background-repeat: no-repeat;
-    background-position: center;  */
+   
     margin-top: 50px;
     margin-bottom: 20px;
     color:rgb(184, 142, 7);
@@ -111,19 +101,9 @@ input[type="text"]{
     padding-top: 7px;
 }
 
-/* .bloc_vip_historique{
-
-    width: 100%;
-    height:300px;
-    background-color: rgba(92, 80, 22, 0.281);
-    margin-top: 10px;
 
 
-} */
 
-.search{
-   
-}
 
 input[type=text]{
     
@@ -137,14 +117,6 @@ input[type=text]{
     
 
 
-.bloc_modify{
-  
-    /* display: flex;
-    flex-direction: column;
-    */
-    /* background-color: aqua; */
- 
-   
-}
+
 
 }

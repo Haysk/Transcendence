@@ -42,24 +42,8 @@ export class VipRoomComponent implements OnInit {
   {
   }
 
-  // selectedFile!:File ;
-  // onFileSelected(event){
-  //  console.log(event);
-  //  this.selectedFile = event.target.files[0];
-  // }
-
-  // onUpload(){
-  //   const fd = new FormData();
-  //   fd.append('image', this.selectedFile, this.selectedFile.name);
-  //   console.log(this.selectedFile);
-  //   this.http.post('http://localhost:8081/api/upload/', fd).subscribe(res =>{
-  //     console.log(res);
-  //   })
-
-  // }
 
   selectedFile! : File;
-  // url = this.userToShow.avatar_url;
  
 
   onSelect(event) {
@@ -94,12 +78,6 @@ export class VipRoomComponent implements OnInit {
 
     
 
-    // this.http.post('https://localhost:8081/api/upload/', this.selectedFile).subscribe();
-
-     
-
-    //   this.http.post('https://localhost:8081/api/upload/', {name: this.url}).subscribe(
-    // );
   }
 
   ngOnInit(): void {

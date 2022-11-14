@@ -1,7 +1,9 @@
 
 <!-- <app-header [user]="user" ></app-header>
 <app-bloc-chat ></app-bloc-chat> -->
+<!-- <app-invitation-game></app-invitation-game> -->
 <app-bloc-chat *ngIf="getRoute() != '/'"></app-bloc-chat>
+
 <app-header [user]="user" *ngIf="getRoute() != '/'" ></app-header>
 <router-outlet></router-outlet>
 
