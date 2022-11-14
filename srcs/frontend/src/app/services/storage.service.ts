@@ -6,11 +6,11 @@ import { User } from '../models/user';
 import { ApiService } from './api.service';
 
 @Injectable({
-  providedIn: 'root',
+	providedIn: 'root',
 })
 export class StorageService {
 	constructor(private apiService: ApiService,
-				private cookieService: CookieService){
+		private cookieService: CookieService) {
 	}
 
 	getCode(): string {
@@ -74,7 +74,7 @@ export class StorageService {
 		if (nickname === null || nickname === undefined)
 			return "";
 		return nickname;
-		
+
 	}
 
 	getImageUrl(): string {
@@ -121,52 +121,99 @@ export class StorageService {
 		return qrCode;
 	}
 
-	setCode(code: string) {
+	setCode(code: string | undefined) {
+		if (code === undefined)
+			return false;
 		this.cookieService.set('code', code);
+		return true;
 	}
 
 	setId(id: number) {
-		localStorage.setItem("id", id.toString());
+		if (id) {
+			localStorage.setItem("id", id.toString());
+			return true;
+		}
+		return false;
 	}
 
 	setLogin(login: string) {
-		localStorage.setItem("login", login);
+		if (login) {
+			localStorage.setItem("login", login);
+			return true;
+		}
+		return false;
 	}
 
 	setEmail(email: string) {
-		localStorage.setItem("email", email);
+		if (email) {
+			localStorage.setItem("email", email);
+			return true;
+		}
+		return false;
 	}
 
 	setFirstName(first_name: string) {
-		localStorage.setItem("first_name", first_name);
+		if (first_name) {
+			localStorage.setItem("first_name", first_name);
+			return true;
+		}
+		return false;
 	}
 
 	setLastName(last_name: string) {
-		localStorage.setItem("last_name", last_name);
+		if (last_name) {
+			localStorage.setItem("last_name", last_name);
+			return true;
+		}
+		return false;
 	}
 
 	setUrl(url: string) {
-		localStorage.setItem("url", url);
+		if (url) {
+			localStorage.setItem("url", url);
+			return true;
+		}
+		return false;
 	}
 
 	setDisplayName(display_name: string) {
-		localStorage.setItem("display_name", display_name);
+		if (display_name) {
+			localStorage.setItem("display_name", display_name);
+			return true;
+		}
+		return false;
 	}
 
 	setNickName(nickname: string) {
-		localStorage.setItem("nickname", nickname);
+		if (nickname) {
+			localStorage.setItem("nickname", nickname);
+			return true;
+		}
+		return false;
 	}
 
 	setImageUrl(image_url: string) {
-		localStorage.setItem("image_url", image_url);
+		if (image_url) {
+			localStorage.setItem("image_url", image_url);
+			return true;
+		}
+		return false;
 	}
 
 	setAvatarUrl(avatar_url: string) {
-		localStorage.setItem("avatar_url", avatar_url);
+		if (avatar_url) {
+			localStorage.setItem("avatar_url", avatar_url);
+			return true;
+		}
+		return false;
 	}
 
 	setOnline(online: boolean) {
-		localStorage.setItem("online", String(online));
+		if (online) {
+			localStorage.setItem("online", String(online));
+			return true;
+		}
+		return false;
 	}
 
 	setTfa(two_factor_auth: boolean | undefined) {

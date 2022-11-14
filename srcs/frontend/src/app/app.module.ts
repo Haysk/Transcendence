@@ -32,6 +32,7 @@ import { PongGameComponent } from './pong-game/pong-game.component';
 import { PlayerPongComponent } from './widgets/player-pong/player-pong.component';
 import { PasswordComponent } from './widgets/password/password.component';
 import { AdminInSalonComponent } from './widgets/admin-in-salon/admin-in-salon.component';
+import { AuthModule } from './auth/auth.module';
 
 @NgModule({
   declarations: [
@@ -44,7 +45,6 @@ import { AdminInSalonComponent } from './widgets/admin-in-salon/admin-in-salon.c
     VipRoomComponent,
     BlocChatComponent,
     RestRoomComponent,
-    LoginComponent,
     ChatComponent,
     DirectChatComponent,
     ChatHistoryComponent,
@@ -67,7 +67,8 @@ import { AdminInSalonComponent } from './widgets/admin-in-salon/admin-in-salon.c
     BrowserModule,
     AppRoutingModule,
     HttpClientModule,
-    FormsModule
+    FormsModule,
+	AuthModule
   ],
   providers: [
     HttpClient,
