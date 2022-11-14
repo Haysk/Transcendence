@@ -40,6 +40,7 @@ export class ChatComponent implements OnInit {
 	privatOrpublic: Boolean = false;
 	showFormulePassword: Boolean = false;
 	delay: number = 0;
+  Friend_list!: User[];
 
 	channel_name!: string;
 	privateChannel!: Channel;
@@ -62,6 +63,19 @@ export class ChatComponent implements OnInit {
 		});
 		console.log(this.Me);
 		
+    //antoine show friend list ?check if friend 
+    this.socketService.getFriend().subscribe((result) => {
+    this.Friend_list = result;
+    })
+    
+    this.socketService.removeFriend().subscribe((result) => {
+      this.Friend_list = result;
+    })
+
+    this.socketService.getFriendList(this.Me.id);
+    this.socketService.listFriend().subscribe((result) => {
+      this.Friend_list = result;
+    })    
 	}
 
 	receiveShowchat($event: Boolean) {
