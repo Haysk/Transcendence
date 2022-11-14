@@ -1,40 +1,7 @@
-<!-- <app-select-user [user]="user"></app-select-user> -->
-<!-- <app-testing-fake-profile [user]="user"></app-testing-fake-profile> -->
-<!-- <p>friend works!</p>
-<h2>Testing friend </h2>
-<p> ami depuis le {{ this.createDate }}</p>
-<p>
-    <button (click)="onAddLike()"> Like </button>
-    nombre de click {{ like }}
-</p> -->
-<div class="firendonline" *ngFor="let friends of userList" >
-   {{friends.login}}
+<div class="chat_list_user">
+<button class="firendonline"  (click)="sendBtn(friend)">
+    <div class="onoff" style ="background-color: aqua"></div>
+   {{friend.nickname}} {{this.show_hide}}</button>
+
+
 </div>
-
-<!-- <p> nombre d'ami {{ userList?.length }} </p>
-
-<div *ngFor="let user of allUsers"> -->
-    <!-- <div *ngIf="user == friend"></div> -->
-    <!-- ici le login of the others users: {{user.login}} -->
-     <!-- <button (click)="onNewFriend()" > {{ ami }}</button> -->
-<!-- </div> -->
-
-<!-- <p> nombre d'utilistateur non ami {{ allUsers?.length }} </p> -->
- <!-- <table border="1" align="centre">  -->
-    <!-- <tr>
-        <td>ID</td>
-        <td>First name</td>
-    </tr> -->
-    <!-- <li *ngFor="let user of this.user.friends">; trackBy: friendUnfriend"> -->
-        <!-- <li *ngIf="!this.user.friends"> -->
-            <!-- <li *ngIf="onFriend"> -->
-            <!-- <td> {{ user.id }}</td> -->
-            <!-- <td> {{ user.first_name }}</td> -->
-    <!-- </li> -->
-    <!-- <li *ngIf="this.user.friends">
-        <p>not a friend</p>
-        <td> {{ user.first_name }} </td> -->
-<!-- </table> -->
-<!-- <p> test import {{ user.name }} </p> -->
-<!-- <p>nombre d'ami {{ numberOfFriend }}</p> -->
-

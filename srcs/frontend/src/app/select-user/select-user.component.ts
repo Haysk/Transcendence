@@ -41,12 +41,8 @@ export class SelectUserComponent implements OnInit {
     this.show_hide = this.show_chat?"close":"chat";
     this.showchatEvent.emit(this.show_chat);
     this.sendDestEvent.emit(this.user);
-    // this.socketService.getFriendList(this.Me.id);
-    // this.socketService.listFriend().subscribe((result) => {
-    //   //console.log("hello" + result);
-    //   this.userList = result;
-    // })
+
     this.socketService.checkIfFriend(this.Me.id, this.user.id);
-    // this.socketService.checkIfFriend(this.Me.id, this.user.id)
+
   }
 }
