@@ -22,6 +22,12 @@
 
 }
 
+.tfa_count{
+	color:white;
+    text-align: center;
+	font-size: large;
+	font-weight: bold;
+}
 
 a{
     position: relative;

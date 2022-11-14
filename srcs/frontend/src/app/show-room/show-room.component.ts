@@ -13,7 +13,7 @@ export class ShowRoomComponent implements OnInit {
 
   matches: string[] = []; 
   constructor(service: ApiService) { 
-     this.matches = service.getMatches();
+    //  this.matches = service.getMatches();
     
   }
 

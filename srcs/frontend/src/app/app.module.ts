@@ -3,6 +3,9 @@ import { HttpClient, HttpClientModule } from '@angular/common/http';
 import { FormsModule } from '@angular/forms';
 import { BrowserModule } from '@angular/platform-browser';
 import { AppRoutingModule } from './app-routing.module';
+import { CookieService } from 'ngx-cookie-service';
+import { ApiService } from './services/api.service';
+import { StorageService } from './services/storage.service';
 import { AppComponent } from './app.component';
 import { HomeComponent } from './home/home.component';
 import { PongComponent } from './pong/pong.component';
@@ -74,7 +77,11 @@ import { BlockUserComponent } from './block-user/block-user.component';
     FormsModule
   ],
   providers: [
-    HttpClient
+    HttpClient,
+    ApiService,
+	StorageService,
+	CookieService,
+	Storage,
   ],
   bootstrap: [AppComponent]
 })
