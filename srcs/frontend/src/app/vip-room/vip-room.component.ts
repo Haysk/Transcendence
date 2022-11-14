@@ -6,7 +6,7 @@
 	import { User } from '../models/user';
 
 	import { share } from 'rxjs';
-	import { StorageService } from '../services/storage.service';
+	import { StorageService } from '../services/storage.service'
 
 	@Component({
 		selector: 'app-vip-room',
