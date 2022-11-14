@@ -128,10 +128,15 @@
 	showhide_nickname() {
 		this.visible_nickname = this.visible_nickname ? false : true;
 		this.visible_avatar = false;
+		this.tfa_auth = false;
+		this.tfa_validation = false;
 	}
-		showhide_avatar() {
+	
+	showhide_avatar() {
 		this.visible_avatar = this.visible_avatar ? false : true;
 		this.visible_nickname = false;
+		this.tfa_auth = false;
+		this.tfa_validation = false;
 	}
 	tfa_signup() {
 		this.apiService.signupTfa(this.storage.getCode()).subscribe({
@@ -142,19 +147,27 @@
 				}
 				this.tfa_auth = true;
 				this.tfa_validation = true;
+				this.visible_avatar =false;
+				this.visible_nickname=false;
 			}
 		});
 	}
 
 	tfa_disable() {
+
+		
+		this.visible_nickname = false;
+		this.visible_avatar = false;
 		this.apiService.disableTfa(this.storage.getCode()).subscribe({
 			next: (result) => {
 				this.storage.setQrCode(undefined);
 				this.qrCode = "";
 				this.tfa_auth = false
 				this.tfa_validation = false;
+				
 			},
 		});
+		
 	}
 
 	tfa_verify() {

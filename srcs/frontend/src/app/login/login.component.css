@@ -22,6 +22,11 @@
 
 }
 
+input[type="text"]{
+    border-radius: 20px;
+    color: rgb(92, 89, 89);
+}
+
 .tfa_count{
 	color:white;
     text-align: center;

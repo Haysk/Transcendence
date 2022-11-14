@@ -1,0 +1,79 @@
+.all_invitation{
+    background-color: rgba(0, 12, 12, 0.616);
+    width: 100%;
+    height: 100%;
+    position: fixed;
+   
+    top:50%;
+    left:50%;
+    transform: translate(-50%, -50%);
+    z-index: 2;
+}
+
+
+.cercle2{
+
+    background-color: rgba(255, 255, 255, 0.733);
+    width: 420px;
+    height: 420px;
+    position: fixed;
+    /* border-radius: 50%; */
+    top:50%;
+    left:50%;
+    transform: translate(-50%, -50%);
+    display: flex;
+    justify-content: center;
+    box-shadow: 10px 5px 5px rgb(24, 7, 7);
+
+}
+
+.env_all{
+    /* background-color: aqua; */
+    width: 360px;
+       margin-top: 60px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    text-align: center;
+}
+
+.invite{
+    background-color: rgb(9, 175, 134);
+    width:160px;
+    height: 230px;
+
+}
+
+.photo{
+    background-color: blueviolet;
+    width: 180px;
+    height: 180px;
+    background-image: url("../../../assets/ade-temm.jpg");
+    background-size: cover;
+    background-repeat: no-repeat;
+    background-position: center; 
+    /* border-radius: 50%; */
+    
+}
+
+.message{
+    /* background-color: brown; */
+    width: 100%;
+    height: auto;
+    padding-top: 8px;
+    font-size: 20px;
+    color: rgb(10, 42, 129);
+    
+}
+
+.message2{
+    color:rgb(8, 78, 35);
+    font-size: 20px;
+    margin-top: -10px;
+}
+
+.env_button{
+  
+    width: 100%;
+
+}

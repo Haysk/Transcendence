@@ -35,6 +35,7 @@ import { AdminInSalonComponent } from './widgets/admin-in-salon/admin-in-salon.c
 import { CreatorInSalonComponent } from './widgets/creator-in-salon/creator-in-salon.component';
 import { FriendUserComponent } from './friend-user/friend-user.component';
 import { BlockUserComponent } from './block-user/block-user.component';
+import { InvitationGameComponent } from './widgets/invitation-game/invitation-game.component';
 
 @NgModule({
   declarations: [
@@ -68,7 +69,8 @@ import { BlockUserComponent } from './block-user/block-user.component';
    
     PlayerPongComponent,
     FriendUserComponent,
-    BlockUserComponent
+    BlockUserComponent,
+    InvitationGameComponent
   ],
   imports: [
     BrowserModule,

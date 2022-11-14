@@ -57,27 +57,39 @@
 
 }
 
+.env_qr{
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    text-align: center;
+
+
+}
 .qr_code{
-    height:200px;
+    width: 100%;
+    height:160px;
     /* background-color: bisque; */
     background-size: contain;
     background-repeat: no-repeat;
     background-position: center; 
-    margin-top: 20px;
+    margin-top: 50px;
+    margin-bottom: 20px;
+ 
 
 }
 
 .tfa_input{
     /* background-color: bisque; */
     width: 200px;
-    background-size: contain;
-    background-repeat: no-repeat;
-    background-position: center; 
+    height: 25px;
+    border-radius: 20px;
     margin-top: 20px;
+    text-align: center;
 
 }
 
 .tfa_count{
+    /* background-color: aqua; */
 	color:white;
     text-align: center;
 	font-size: large;
@@ -96,24 +108,36 @@
 }
 
 .search{
-    /* background-color: aqua; */
     margin-top: 50px;
+
+   
 }
+
 
 
 .champ_avatar{
-    color: rgb(184, 142, 7);
+    /* background-color: aqua; */
+    width: 100%;
+    color: rgb(85, 85, 85);
     font-size: 18px;
     font-weight:bold;
 }
+
+Input[type=file]{
+    background-color: rgb(255, 255, 255);
+    border-radius: 20px;
+   
+}
+
 .champ_nickname{
-    color: rgb(184, 142, 7);
+    color: rgb(255, 255, 255);
     font-size: 18px;
     font-weight:bold;
+  
 
 }
 input[type="text"]{
-    border-radius: 6px;
+    border-radius: 20px;
     color: rgb(92, 89, 89);
 }
 
@@ -140,13 +164,13 @@ input[type="text"]{
 
 } */
 
-input[type=text]{
+/* input[type=text]{
     
     border-radius: 20px;
     border:none;
  
 
-}
+} */
 
 @media only screen and (max-width: 600px) {
 }
