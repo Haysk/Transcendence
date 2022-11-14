@@ -43,6 +43,6 @@ export class SelectUserComponent implements OnInit {
     this.sendDestEvent.emit(this.user);
 
     this.socketService.checkIfFriend(this.Me.id, this.user.id);
-
+    this.socketService.checkIfBlock(this.Me.id, this.user.id);
   }
 }

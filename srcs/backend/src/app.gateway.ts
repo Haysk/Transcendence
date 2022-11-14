@@ -726,8 +726,6 @@ catch(err){
           friends: true,
         }
       })
-    
-      
       if (data !== null && data !== undefined){
         const value = data.friends.find((element) => payload[1] === element.id);
         // console.log("111515150000000000000");
@@ -746,16 +744,95 @@ catch(err){
     }
   }
 
-    // const found = payload[0].find(element => element.id === payload[1]);
-    // console.log(found);
-    
-    // try{
-    //   let data = await this.      
-    // }
-    // if (data == 1)
-    // {
-    //   console.log(data);
-    //   this.server.to(client.id).emit('friendOrNot', data)
-    // }
+  @SubscribeMessage('getBlockUser')
+  async getBlockUser(client: Socket, payload: any){
+    // console.log("test add " + payload);
+    try{
+      let data = await this.Prisma.user.update({
+        where: {
+          id: Number(payload[0]),
+        },
+        data:{
+          blocked: {
+            connect: [{id: Number(payload[1])}]
+          },
+      },
+      include: {
+        blocked: true,
+      }
+      })
+      if (data != null && data != undefined)
+      {
+        this.server.to(client.id).emit('blockedUser', data.blocked);
+      }
+    }
+    catch(err){
+      console.log("issue dans getAddBlock");
+      console.log(err);
+    }
+  }
+
+  @SubscribeMessage('getUnblockUser')
+  async getUnblockUser(client: Socket, payload: any){
+    // console.log("test add " + payload);
+    try{
+      let data = await this.Prisma.user.update({
+        where: {
+          id: Number(payload[0]),
+        },
+        data:{
+          blocked: {
+            disconnect: [{id: Number(payload[1])}]
+          },
+      },
+      include: {
+        blocked: true,
+      }
+      })
+      if (data != null && data != undefined)
+      {
+        this.server.to(client.id).emit('unblockedUser', data.blocked);
+      }
+    }
+    catch(err){
+      console.log("issue dans getRemoveBlock");
+      console.log(err);
+    }
+  }
+
+  @SubscribeMessage('checkIfBlock')
+  async checkIfBlock(client: any, payload: any)
+  {
+    // console.log("check if friend app gateway");
+    // console.log(payload[0]);
+    // console.log(payload[1]);
+    // console.log("hello youuuuuuuu");
+    try{
+      let data = await this.Prisma.user.findUnique({
+        where: {
+          id: Number(payload[0]),
+        },
+        include: {
+          blocked: true,
+        }
+      })
+      if (data !== null && data !== undefined){
+        const value = data.blocked.find((element) => payload[1] === element.id);
+        //  console.log("111515150000000000000");
+        if (value !== undefined){
+          this.server.to(client.id).emit('findBlockOrNot', 1);
+          // console.log(payload[1]);
+           console.log("11111111111111");
+        }
+        else{
+          this.server.to(client.id).emit('findBlockOrNot', 0);
+           console.log("00000000000000sdffdsfsddsffds00000");
+        }}
+      }
+    catch(err){
+    console.log("issue dans le get friend list");
+    console.log(err);
+    }
+  }
     
 }

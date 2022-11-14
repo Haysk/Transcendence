@@ -20,10 +20,11 @@ export class DirectChatComponent implements OnInit {
   friend: string="Add friend";
   @Input() friendOrNot:boolean=true;
   bloque: string="Block";
-  bloqueOrNot: boolean=true;
+  @Input() bloqueOrNot:boolean=true;
   roomName !:string;
   friendListCheck!: User[];
   num!: number;
+  blockList!: User[];
   //sub = WebSocket("ws://localhost:8081");
 
 
@@ -54,6 +55,22 @@ export class DirectChatComponent implements OnInit {
         this.friendOrNot=true;
         this.friend = "Add friend";
       }
+    })
+
+    this.socketService.findBlockOrNot().subscribe((result) => {
+      this.num = result;
+      console.log(this.num);
+      if (this.num == 0)
+      {
+        this.bloqueOrNot = false;
+        this.bloque = "Block";
+      }
+      else
+      {
+        this.bloqueOrNot = true;
+        this.bloque = "Unblock";
+      }
+      
     })
   }
 
@@ -100,21 +117,21 @@ export class DirectChatComponent implements OnInit {
   }
 
   blockOrNot(){
-    this.bloque = this.bloqueOrNot?"UnBlock":"Block";
+    this.bloque = this.bloqueOrNot?"Block":"Unblock";
     //this.bloqueOrNot = this.bloqueOrNot?false:true;
-    if (this.bloqueOrNot == true)
+    if (this.bloqueOrNot == false)
     {
       this.socketService.getBlockUser(this.Me.id, this.Dest.id);
       this.socketService.blockedUser().subscribe((result) => {
-        this.friendList = result;
+        this.blockList = result;
       })
       console.log("test block");
-      this.bloqueOrNot = false;
+      this.bloqueOrNot = true;
     }
     else
     {
       this.socketService.getUnblockUser(this.Me.id, this.Dest.id);
-      this.bloqueOrNot = true;
+      this.bloqueOrNot = false;
       console.log("unblock456");
     }
 

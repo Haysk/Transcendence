@@ -403,4 +403,17 @@ amIBanned()
       });
     });
   }
+
+  checkIfBlock(id: number, id1: number){
+    this.socket.emit('checkIfBlock', id, id1);
+  }
+
+  findBlockOrNot(): Observable<number> {
+    return new Observable<number>((obs) => {
+      this.socket.on('findBlockOrNot', (index: number) => {
+        obs.next(index);
+        console.log(`find block or not ${index}`);
+      })
+    })
+  }
 }
