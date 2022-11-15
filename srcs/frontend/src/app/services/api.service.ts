@@ -83,6 +83,10 @@ export class ApiService {
     return this.httpClient.patch<User>(`${this.API_SERVER}/user/${code}`, user);
   }
 
+  userInfo(code: string | undefined) {
+	return this.httpClient.get<boolean>(`${this.API_SERVER}/user/info/${code}`);
+  }
+
   getMessages(fromUserId: Number, userId: Number)
   {
     // console.log("api service : fromUserId : " + fromUserId + " userId : " + userId);

@@ -23,14 +23,10 @@ export class LoginComponent implements OnInit {
 
 	async ngOnInit() {
 		this.tfa = await this.authService.getCode();
-		this.router.navigate([], {
-			queryParams: {
-				'code': null,
-			},
-		})
 	}
 
 	OAuthSignIn() {
+		this.authService.logout();
 		this.authService.goToIntraLoginPage();
 	}
 

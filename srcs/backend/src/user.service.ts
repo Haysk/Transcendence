@@ -3,11 +3,13 @@ import { PrismaService } from './prisma.service';
 import { User, Prisma} from '@prisma/client';
 import { HttpService } from '@nestjs/axios';
 import { take } from 'rxjs';
+import { OauthService } from './oauth.service';
 
 @Injectable()
 export class UserService {
 	constructor(private prisma: PrismaService,
-		private httpClient: HttpService) { }
+		private httpClient: HttpService,
+		private oauthService: OauthService) { }
 
 	INTRA_API = "https://api.intra.42.fr";
 
@@ -80,6 +82,9 @@ export class UserService {
 				oauth: {
 					code
 				}
+			},
+			include: {
+				oauth: true
 			}
 		});
 	}
@@ -99,6 +104,23 @@ export class UserService {
 			where,
 			orderBy,
 		});
+	}
+
+	async userInfo(params: Prisma.OauthWhereUniqueInput) {
+		return new Promise<boolean>((resolve) => {
+			this.httpClient.get(`${this.INTRA_API}/oauth/token/info`, { params })
+			.pipe(take(1))
+			.subscribe(async (result) => {
+				console.log(result.data.expires_in_seconds);
+				
+				if (result.data.expires_in_seconds > 0) {
+					resolve(true);
+				} else {
+					resolve(false);
+				}
+			})
+		});
+
 	}
 
 	async addUser(params: User) {
@@ -209,12 +231,12 @@ export class UserService {
 		});
 	}
 
-	async getUser(param: number): Promise<User>
-	{
-		return this.prisma.user.findFirst({
-			where: {}
-		})
-	}
+	// async getUser(param: number): Promise<User>
+	// {
+	// 	return this.prisma.user.findFirst({
+	// 		where: {}
+	// 	})
+	// }
 
 	async addFriend(params : {id: number, id1: number}) : Promise<User>
     {

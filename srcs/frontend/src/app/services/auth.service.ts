@@ -4,6 +4,8 @@ import { StorageService } from './storage.service';
 import { environment } from 'src/environments/environment';
 import { User } from '../models/user';
 import { ApiService } from './api.service';
+import { SocketService } from './socket.service';
+import { Observable } from 'rxjs';
 
 @Injectable({
 	providedIn: 'root'
@@ -14,10 +16,11 @@ export class AuthService {
 	constructor(private route: ActivatedRoute,
 				private router: Router,
 				private storageService: StorageService,
-				private apiService: ApiService) {}
+				private apiService: ApiService,
+				private socketService: SocketService) {}
 
 	INTRA_API_AUTH = "https://api.intra.42.fr/oauth/authorize";
-	private code!: string | undefined;
+	private code: string = this.storageService.getCode();
 	private locked: boolean = true;
 	private tfa: boolean = false;
 
@@ -28,13 +31,13 @@ export class AuthService {
 	async getCode(): Promise<boolean> {
 		return new Promise<boolean>(resolve => {
 			this.route.queryParams.subscribe(async (params) => {
-				this.code = params['code'];
-				if (this.code) {
-					this.storageService.setCode(this.code);
+				if (params['code']) {
+					this.code = params['code'];
 					const result = this.postCode();
-					if (await result === true) {
+					if (await result === true)
 						this.tfa = true;
-					}
+					else
+						this.storageService.setCode(this.code);
 				}
 				resolve(this.tfa);
 		})});
@@ -44,9 +47,9 @@ export class AuthService {
 		return new Promise<User | boolean>(resolve => {
 			if (this.code)
 				this.apiService.signup(this.code).subscribe({
-					next: (result) => {
+					next: async (result) => {
 						if (typeof (result) != "boolean" && result) {
-							if (this.initUser(result)) {
+							if (await this.initUser(result)) {
 								this.locked = false;
 								this.router.navigate(["../home"], { relativeTo: this.route });
 							}
@@ -58,15 +61,15 @@ export class AuthService {
 	}
 
 	async validateTfaCode(tfaCode: string): Promise<User | boolean> {
-		this.code = this.storageService.getCode();	
 		return new Promise<User | boolean>(resolve => {
 			if (this.code && this.code !== "") {
 				this.apiService.validateTfa({ code: this.code, tfa_key: tfaCode }).subscribe({
-					next: (result) => {
+					next: async (result) => {
 						if (typeof (result) != "boolean" && result) {
-							if (this.initUser(result)) {
+							if (await this.initUser(result)) {
 								this.locked = false;
 								this.tfa = false;
+								this.storageService.setCode(this.code);
 								this.router.navigate(["../home"], { relativeTo: this.route });
 							}
 						}
@@ -77,7 +80,7 @@ export class AuthService {
 		});
 	}
 
-	initUser(user: User) {
+	async initUser(user: User) {
 		if (user.oauth !== undefined) {
 			this.storageService.setTfa(user.oauth.tfa?.tfa_activated);
 		}
@@ -99,6 +102,7 @@ export class AuthService {
 
 	logout() {
 		this.storageService.clear();
+		this.code = "";
 		this.router.navigate(["../"], {relativeTo: this.route}); 
 		this.locked = true;
 	}
@@ -109,5 +113,15 @@ export class AuthService {
 
 	getLocked() {
 		return this.locked;
+	}
+
+	async userIsOnline() {
+		return new Promise<boolean>((resolve) => {
+			this.apiService.userInfo(this.code).subscribe({
+				next: (result) => {
+					resolve(result);
+				}
+			});
+		});
 	}
 }
