@@ -77,6 +77,7 @@ export class ChatComponent implements OnInit {
     this.socketService.listFriend().subscribe((result) => {
       this.Friend_list = result;
     })    
+	
 	}
 
 	receiveShowchat($event: Boolean) {

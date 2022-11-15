@@ -17,10 +17,21 @@ export class AppComponent implements OnInit{
     private socketService: SocketService){
   }
 
-  invitation:boolean=true;
+  invitation:boolean=false;
+  invitationFromWho! :User;
 
 
   ngOnInit(): void {
+    // this.socketService.doIHaveToDisplay().subscribe((res) => {
+    //   this.invitation = res;
+    // })
+
+    this.socketService.doIHaveToDisplay().subscribe({
+      next: (data: {res: boolean, res2:User;}) =>{
+      this.invitation = data.res;
+      this.invitationFromWho = data.res2;
+      }
+    })
   }
 
   public getLogin(): string | null{

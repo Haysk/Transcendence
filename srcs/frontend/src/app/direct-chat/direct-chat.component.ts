@@ -120,6 +120,12 @@ export class DirectChatComponent implements OnInit {
 
   }
 
+  invite_game(){
+    this.socketService.displayInvitation(this.Dest, this.Me);
+
+  }
+
+
   goToProfile() {
 
   }

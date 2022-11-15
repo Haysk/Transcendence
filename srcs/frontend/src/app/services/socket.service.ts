@@ -297,14 +297,15 @@ amIBanned()
     })
   }
 
-  displayInvitation(target: User){
-    this.socket.emit('initDisplayInvitation', target);
+  displayInvitation(target: User, target2:User){
+    this.socket.emit('initDisplayInvitation', target, target2);
   }
 
   doIHaveToDisplay(){
-    return new Observable<boolean>((obs) => {
-      this.socket.on('DisplayInvitation', () => {
-        obs.next(true);
+    return new Observable<any>((obs) => {
+      this.socket.on('DisplayInvitation', (res:boolean, res2: User) => {
+        let data = {res, res2}
+        obs.next(data);
       })
     })
   }

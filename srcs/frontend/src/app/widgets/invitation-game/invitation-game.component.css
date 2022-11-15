@@ -53,10 +53,10 @@
 }
 
 .photo{
-    background-color: blueviolet;
+    /* background-color: blueviolet; */
     width: 120px;
     height: 120px;
-    background-image: url("../../../assets/ade-temm.jpg");
+    /* background-image: url("../../../assets/ade-temm.jpg"); */
     background-size: cover;
     background-repeat: no-repeat;
     background-position: center; 
@@ -92,14 +92,16 @@
 
 
 @media only screen and (max-width: 600px) {
+  
+
     .cercle2{
         background-image: url("../../../assets/imgs/super-mario-boo-512x512.png");
         /* background-color: rgba(255, 255, 255, 0.733); */
         background-size: cover;
         background-repeat: no-repeat;
         background-position: center; 
-        width: 600px;
-        height: 600px;
+        width: 500px;
+        height: 500px;
         position: fixed;
         /* border-radius: 50%; */
         top:50%;
@@ -111,18 +113,51 @@
      
     
     }
-
+    
     .env_all{
         background: linear-gradient(rgb(10, 212, 179), rgb(158, 213, 245));
-        width: 280px;
-        height: 280px;
-        margin-top: 350px;
-        margin-left: 300px;
+        width: 250px;
+        height: 250px;
+        margin-top: 300px;
+        margin-left: 200px;
         display: flex;
         flex-direction: column;
         align-items: center;
         text-align: center;
         border-radius: 50%;
+        
+    }
+
+
+    .invite{
+        background-color: rgb(9, 175, 134);
+        width:200px;
+        height: 200px;
+    
+    }
+    
+    .photo{
+        background-color: blueviolet;
+        width: 80px;
+        height: 80px;
+        background-image: url("../../../assets/ade-temm.jpg");
+        background-size: cover;
+        background-repeat: no-repeat;
+        background-position: center; 
+        border-radius: 50%;
+        margin-top: 20px;
+        
+    }
+
+    .message{
+        background-color: rgb(253, 252, 252);
+        width: 150px;
+        height: auto;
+        margin-top: 10px;
+        font-size: 24px;
+        color: rgb(129, 10, 10);
+        border-radius: 20px;
+    
         
     }
 }

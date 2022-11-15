@@ -610,9 +610,14 @@ catch(err){
   }
 
   @SubscribeMessage('initDisplayInvitation')
-  prepareInvitation(client: Socket, payload: any)
+  async prepareInvitation(client: Socket, payload: any)
   {
-    this.server.to(payload[0].socket).emit('DisplayInvitation'); //AJOUTER ICI LES INFOS DE LA PARTIE
+    let invitation:boolean = true;
+    let data = await this.Prisma.user.findFirst({
+      where: {login: payload[0].login},
+    })
+    if (data != null && data != undefined)
+      this.server.to(data.socket).emit('DisplayInvitation', invitation, payload[1]); //AJOUTER ICI LES INFOS DE LA PARTIE
   }
 
 /* PONG GAME */
