@@ -39,6 +39,7 @@ export class ChatComponent implements OnInit {
 	showFormule: Boolean = false;
 	privatOrpublic: Boolean = false;
 	showFormulePassword: Boolean = false;
+	
 	delay: number = 0;
   Friend_list!: User[];
 
@@ -81,6 +82,8 @@ export class ChatComponent implements OnInit {
 	receiveShowchat($event: Boolean) {
 		this.showchat = $event
 	}
+
+	
 
 	receiveSendDest($event : User) {
 		this.Dest = $event;

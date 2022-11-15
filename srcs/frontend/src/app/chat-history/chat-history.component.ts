@@ -10,7 +10,11 @@ import { Observable } from 'rxjs';
   templateUrl: './chat-history.component.html',
   styleUrls: ['./chat-history.component.css']
 })
+
+
 export class ChatHistoryComponent implements OnInit {
+  
+ 
   @Input() Me!: User;
   @Input() Dest!: User;
   tmp : Message = {fromUserId : 0, fromUserName : "", userId : 0, content : ""}

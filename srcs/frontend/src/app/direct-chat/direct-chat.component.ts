@@ -14,7 +14,7 @@ export class DirectChatComponent implements OnInit {
   @Input() Me!: User;
   @Input() Dest!: User;
   message: string = '';
-  messages: string[] = [];
+  @Input() messages: String[] = [];
   friendList!: User[];
   to_create!: Message;
   friend: string="Add friend";
@@ -25,7 +25,7 @@ export class DirectChatComponent implements OnInit {
   friendListCheck!: User[];
   num!: number;
   //sub = WebSocket("ws://localhost:8081");
-
+ 
 
   constructor(private socketService: SocketService, private apiService: ApiService) {}
 

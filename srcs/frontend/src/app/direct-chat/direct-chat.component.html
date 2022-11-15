@@ -7,9 +7,14 @@
 	<div class="contenu_chat" style="overflow-y: auto; height: xyz; " #scrollMe [scrollTop]="scrollMe.scrollHeight" >
 		
 		<div class="chatwith"> Chat with {{Dest.nickname}}</div>
+		
 		<div class="chat_history">
-		<app-chat-history [Me]="Me" [Dest]="Dest"></app-chat-history>
+		<app-chat-history [Me]="Me" [Dest]="Dest" ></app-chat-history>
 		</div>
+		
+		
+		
+
 		<div class="direct_message" *ngFor="let message of messages">
 			{{ message }}
 		</div>
