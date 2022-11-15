@@ -16,7 +16,7 @@
 		<div class="part2_left">
 			
 
-			<app-direct-chat [Dest]="Dest" [Me]="Me" *ngIf="this.showchat==true"> </app-direct-chat>
+			<app-direct-chat [Dest]="Dest" [Me]="Me" [messages]="messages" *ngIf="this.showchat==true"> </app-direct-chat>
 
 			<app-create-salon *ngIf="showFormule" (ShowSalonEvent)="receiveShowSalon($event)" (SendChannelNameEvent)="receiveChannelName($event)"></app-create-salon>
 
@@ -32,7 +32,7 @@
 			<div class="part2_titre_online">Users list</div>
 			<div class="part2_users_online">
 				<div *ngFor="let user of User_list">
-					<app-select-user [user]="user" [Me]="Me" (showchatEvent)="receiveShowchat($event)" (sendDestEvent)="receiveSendDest($event)" (click)="closeCreateSalon()"></app-select-user>
+					<app-select-user [user]="user" [Me]="Me" [show_chat]="this.test" (showchatEvent)="receiveShowchat($event)" (sendDestEvent)="receiveSendDest($event)" (click)="closeCreateSalon()"></app-select-user>
 				</div>
 			</div>
 

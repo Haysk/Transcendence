@@ -13,7 +13,7 @@ export class DirectChatComponent implements OnInit {
   @Input() Me!: User;
   @Input() Dest!: User;
   message: string = '';
-  messages: string[] = [];
+  @Input() messages: String[] = [];
   friendList!: User[];
   to_create!: Message;
   friend: string="Add friend";
@@ -29,9 +29,8 @@ export class DirectChatComponent implements OnInit {
   constructor(private socketService: SocketService, private apiService: ApiService) {}
 
   async ngOnInit(): Promise<void> {
-    await this.socketService.getMessage().subscribe( {
+    this.socketService.getMessage().subscribe( {
       next:(message: any) => {
-        //console.log("roomName = " + this.getRoomName(this.Me.login, this.Dest.login) + " | message.channel = " + message.channel)
         if (this.getRoomName(this.Me.login, this.Dest.login) == message.channel)
           this.messages.push(message.from + ": " + message.msg);
         this.message = "";

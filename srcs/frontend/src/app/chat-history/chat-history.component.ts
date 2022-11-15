@@ -13,12 +13,13 @@ export class ChatHistoryComponent implements OnInit {
   @Input() Me!: User;
   @Input() Dest!: User;
   tmp : Message = {fromUserId : 0, fromUserName : "", userId : 0, content : ""}
-  messages: Message[] = [this.tmp];
+  messages: Message[] = [];
   constructor(private apiService: ApiService, private socketService: SocketService) {}
 
   //potentiellement besoin de await si on vois que les messages ne se chargent pas
   async ngOnInit(): Promise<void> {
-    await this.apiService.getMessages(this.Me.id, this.Dest.id,).subscribe(
+    this.messages = [];
+    this.apiService.getMessages(this.Me.id, this.Dest.id,).subscribe(
     {
       next:(result) => {
       this.messages = result;

@@ -361,8 +361,6 @@ amIBanned()
 
   getAddFriend(id: number, id1: number){
     //this.socket.on('getAddFriend');
-    console.log("fdsfdsfsdfds123132");
-    
     this.socket.emit('getAddFriend', id, id1);
   }
 

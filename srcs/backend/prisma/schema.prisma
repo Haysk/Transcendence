@@ -58,7 +58,6 @@ model 				User {
 	muted			Channel[] @relation("muted_in_channel")
 	banned			Channel[] @relation("banned_in_channel")
 	admin_of		Channel[] @relation("admin_of")
-	
 }
 
 model           	Tech {

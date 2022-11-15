@@ -11,8 +11,7 @@ export class SelectUserComponent implements OnInit {
   @Input() Me!: User;
   @Input() user!: User;
   userList!: User[];
-  show_chat: Boolean = false;
-  show_hide: String = "chat";
+  @Input() show_chat: Boolean = false;
 
   you_got_message:boolean=true;
   icon_message!:string;
@@ -20,11 +19,12 @@ export class SelectUserComponent implements OnInit {
   @Output() showchatEvent = new EventEmitter<Boolean>();
   @Output() sendDestEvent = new EventEmitter<User>();
 
+
   constructor(private socketService: SocketService) { }
 
   ngOnInit(): void {
     
-    if (this.you_got_message==true){
+    if (this.you_got_message == true){
         this.icon_message="📨";
     }
     else{
@@ -34,13 +34,14 @@ export class SelectUserComponent implements OnInit {
   }
 
   sendBtn(dest : User): void {
-    console.log("Me = " + this.Me.login + " | dest : " + dest.login);
+    // console.log("Me = " + this.Me.login + " | dest : " + dest.login);
     this.show_chat = this.show_chat?false:true;
-    this.show_hide = this.show_chat?"close":"chat";
     this.showchatEvent.emit(this.show_chat);
     this.sendDestEvent.emit(this.user);
-
     this.socketService.checkIfFriend(this.Me.id, this.user.id);
-
+    if (this.user.login != dest.login)
+    {
+      this.show_chat = false;
+    }
   }
 }

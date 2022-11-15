@@ -1,4 +1,4 @@
-import { Component, OnInit, Input, Inject } from '@angular/core';
+import { Component, OnInit, Input, Inject, Output } from '@angular/core';
 import { SocketService } from '../services/socket.service';
 import { ApiService } from '../services/api.service';
 import { User } from '../models/user'
@@ -39,7 +39,9 @@ export class ChatComponent implements OnInit {
 	privatOrpublic: Boolean = false;
 	showFormulePassword: Boolean = false;
 	delay: number = 0;
-  Friend_list!: User[];
+  	Friend_list!: User[];
+
+	test: boolean = false
 
 	channel_name!: string;
 	privateChannel!: Channel;
@@ -50,23 +52,17 @@ export class ChatComponent implements OnInit {
 	}
 
 	async ngOnInit(): Promise<void> {
-		// await this.apiService.getAllUsers(this.Me.id).subscribe(
-		//   (result => {
-		//     this.User_list = result;
-		//   }));
-
 		this.socketService.askForUserList(this.Me.id);
 		this.socketService.getConnectionSignal(this.Me.id).subscribe();
 		this.socketService.getAllUser().subscribe((result) => {
 			this.User_list = result;
 		});
 		console.log(this.Me);
-		
-    //antoine show friend list ?check if friend 
+
     this.socketService.getFriend().subscribe((result) => {
     this.Friend_list = result;
     })
-    
+
     this.socketService.removeFriend().subscribe((result) => {
       this.Friend_list = result;
     })
@@ -74,11 +70,12 @@ export class ChatComponent implements OnInit {
     this.socketService.getFriendList(this.Me.id);
     this.socketService.listFriend().subscribe((result) => {
       this.Friend_list = result;
-    })    
+    })
 	}
 
 	receiveShowchat($event: Boolean) {
-		this.showchat = $event
+		this.test = !this.test;
+		this.showchat = $event;
 	}
 
 	receiveSendDest($event : User) {
