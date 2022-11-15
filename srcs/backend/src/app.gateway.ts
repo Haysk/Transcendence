@@ -108,7 +108,6 @@ export class AppGateway
   @SubscribeMessage('beAdminSalon')
   async beAdminSalon(client: any, payload: any)
   {
-    console.log(3)
     try {
       let data = await this.Prisma.channel.update({
       where: {
@@ -128,8 +127,8 @@ export class AppGateway
     })
     if(data != null && data != undefined)
       
-      this.server.emit('newAdminInChannel',data.admins)
-      this.server.emit('someoneJoinedTheChannel',data.joined)
+      this.server.to(data.name + "_channel").emit('newAdminInChannel', data.admins)
+      this.server.to(data.name + "_channel").emit('someoneJoinedTheChannel', data.joined)
       
   }
   catch(err) {

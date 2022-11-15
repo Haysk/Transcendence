@@ -35,8 +35,6 @@ export class UserInSalonComponent implements OnInit {
   @Input() usersAdmin:User[] =[];
   @Input() AdminOrNot:boolean=false;
   constructor(private socketService: SocketService) {
-  
-   
    }
 
   ngOnInit(): void {}
@@ -64,7 +62,6 @@ export class UserInSalonComponent implements OnInit {
    
     if (this.val_admin=="Be Admin")
     {
-       
         this.socketService.BeAdminSalon(this.guest.id, Number(this.current_channel.id));
     }
     this.socketService.updateUserInSalonList(this.current_channel.name);
