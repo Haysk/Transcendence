@@ -1,8 +1,10 @@
 import { Injectable } from '@nestjs/common';
 import { PrismaService } from './prisma.service';
-import { User, Prisma } from '@prisma/client';
+import { User, Prisma, Tfa } from '@prisma/client';
 import { HttpService } from '@nestjs/axios';
 import { catchError, take } from 'rxjs';
+import { Socket } from 'socket.io';
+import { IoAdapter } from '@nestjs/platform-socket.io';
 
 @Injectable()
 export class UserService {
@@ -11,12 +13,14 @@ export class UserService {
 
 	INTRA_API = "https://api.intra.42.fr";
 
-  async getAllUsers(current: number) : Promise<User[]>
+  async getAllUsers(code: string) : Promise<User[]>
   {
     return this.prisma.user.findMany({
       where: {
-        id: {
-			not: Number(current),
+        oauth: {
+			code: {
+				not: code,
+			}
 		},
       },
 })
@@ -28,7 +32,18 @@ export class UserService {
 	return await this.prisma.user.findUnique({
 		where: {
 			login: login
+		},
+		include:{
+			friends: true,
+			friendsof: true,
+			blocked: true,
+			blockedby: true,
+			creatorOf: true,
+			channel_joined: true,
+			muted: true,
+			admin_of: true
 		}
+
 	})
   }
 
@@ -61,12 +76,12 @@ export class UserService {
 	})
   }
 
-	async user(
-		userWhereInput: Prisma.UserWhereInput,
-	): Promise<User> {
+	async user(code: string): Promise<User> {
 		return this.prisma.user.findFirst({
 			where: {
-				id: userWhereInput.id
+				oauth: {
+					code
+				}
 			}
 		});
 	}
@@ -94,66 +109,87 @@ export class UserService {
 		})
 	}
 
-	async createUser(params: Prisma.OauthCreateInput): Promise<User> {
-		let toto = new Promise<User>(resolve =>
-			this.httpClient.get<User>(`${this.INTRA_API}/v2/me`, { params })
-				.pipe(take(1))
-				.subscribe(async (result) => {
-					try {
-						await this.prisma.user.create({
-							data: {
-								id: result.data.id,
-								email: result.data.email,
-								login: result.data.login,
-								first_name: result.data.first_name,
-								last_name: result.data.last_name,
-								url: result.data.url,
-								displayname: result.data.displayname,
-								image_url: result.data.image_url,
-								nickname: result.data.displayname,
-								avatar_url: result.data.image_url,
-								oauth: {
-									create: {
-										refresh_token: params.refresh_token,
-										access_token: params.access_token,
-									},
-								},
-								online: true,
-							}
-						});
-					} catch (e) {
-						await this.prisma.user.update({
-							where: {
-								id: result.data.id
-							},
-							data: {
-								oauth: {
-									update: {
-										refresh_token: params.refresh_token,
-										access_token: params.access_token,
+
+	async createUser(params: Prisma.OauthCreateInput, code: string): Promise<User | boolean> {
+		return new Promise<User | boolean>((resolve) => { this.httpClient.get<User>(`${this.INTRA_API}/v2/me`, { params })
+			.pipe(take(1))
+			.subscribe(async (result) => {
+				try {
+					await this.prisma.user.create({
+						data: {
+							id: result.data.id,
+							email: result.data.email,
+							login: result.data.login,
+							first_name: result.data.first_name,
+							last_name: result.data.last_name,
+							url: result.data.url,
+							displayname: result.data.displayname,
+							image_url: result.data.image_url,
+							nickname: result.data.displayname,
+							avatar_url: result.data.image_url,
+							oauth: {
+								create: {
+									code: code,
+									refresh_token: params.refresh_token,
+									access_token: params.access_token,
+									tfa: {
+										create: {}
 									}
 								},
-								online: true,
-							}
-						});
-					}
-					resolve(await this.prisma.user.findFirst({
+							},
+							online: true,
+						},
+					});
+				} catch (e) {
+					await this.prisma.user.update({
 						where: {
-							id: result.data.id,
+							id: result.data.id
+						},
+						data: {
+							oauth: {
+								update: {
+									code: code,
+									refresh_token: params.refresh_token,
+									access_token: params.access_token,
+								}
+							},
+							online: true,
 						}
-					}));
-				}));
-		return (await toto);
+					});
+				}
+				const tmp = await this.prisma.user.findFirst({
+					where: {
+						id: result.data.id
+					},
+					include: {
+						oauth: {
+							select: {
+								tfa: {
+								}
+							}
+						}
+					}
+				});
+				if (tmp.oauth.tfa.tfa_activated)
+					resolve(tmp.oauth.tfa.tfa_activated);
+				resolve(tmp);
+			})})
 	}
 
 	async updateUser(params: {
-		where: Prisma.UserWhereUniqueInput;
+		where: Prisma.OauthWhereUniqueInput;
 		data: Prisma.UserUpdateInput;
 	}): Promise<User> {
 		const { where, data } = params;
+		const user = await this.prisma.user.findFirst({
+			where,
+		});
+
 		return this.prisma.user.update({
 			data,
-			where,
+			where: {
+				id: user.id,
+			},
 		});
 	}
 
@@ -162,4 +198,87 @@ export class UserService {
 			where,
 		});
 	}
+
+	async getFriends(param: number): Promise<User>
+	{
+		return this.prisma.user.findFirst({
+			where: {
+				id: Number(param),
+			},
+			include: {
+				friends: true,
+			}
+		});
+	}
+
+	async getUser(param: number): Promise<User>
+	{
+		return this.prisma.user.findFirst({
+			where: {}
+		})
+	}
+
+	async addFriend(params : {id: number, id1: number}) : Promise<User>
+    {
+        return await this.prisma.user.update({
+			where: {
+				id: params.id,
+			},
+			data: {
+				friends: {
+					connect: [{id: params.id1}],
+				}
+			}
+		})
+    }
+
+	async removeFriend(params : {id: number, id1: number}) : Promise<User>
+    {
+        return await this.prisma.user.update({
+			where: {
+				id: params.id,
+			},
+			data: {
+				friends: {
+					disconnect: [{id: params.id1}],
+				}
+			}
+		})
+    }
+
+	// async checkIfFriend(params : {id: number, id1: number}) : Promise<boolean>
+	// {
+	// 	return await Boolean({
+
+	// 	})
+	// }
+
+	async blockUser(params : {id: number, id1: number}) : Promise<User>
+    {
+        return await this.prisma.user.update({
+			where: {
+				id: params.id,
+			},
+			data: {
+				blocked: {
+					connect: [{id: params.id1}],
+				}
+			}
+			
+		})
+    }
+
+	async unblockUser(params : {id: number, id1: number}) : Promise<User>
+    {
+        return await this.prisma.user.update({
+			where: {
+				id: params.id,
+			},
+			data: {
+				blocked: {
+					disconnect: [{id: params.id1}],
+				}
+			}
+		})
+    }
 }

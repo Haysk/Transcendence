@@ -9,16 +9,17 @@ import { User } from './models/user';
   templateUrl: './app.component.html',
   styleUrls: ['./app.component.css']
 })
-export class AppComponent implements OnInit{
-  user!: User;
-  title = 'todo-app';
-  visible:boolean = true;
 
+export class AppComponent implements OnInit{
 	constructor(
     public route: ActivatedRoute,
 		public router: Router,
     private socketService: SocketService){
   }
+
+  invitation:boolean=true;
+
+
   ngOnInit(): void {
   }
 

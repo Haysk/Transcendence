@@ -3,6 +3,9 @@ import { HttpClient, HttpClientModule } from '@angular/common/http';
 import { FormsModule } from '@angular/forms';
 import { BrowserModule } from '@angular/platform-browser';
 import { AppRoutingModule } from './app-routing.module';
+//import { CookieService } from 'ngx-cookie-service';
+import { ApiService } from './services/api.service';
+import { StorageService } from './services/storage.service';
 import { AppComponent } from './app.component';
 import { HomeComponent } from './home/home.component';
 import { PongComponent } from './pong/pong.component';
@@ -30,6 +33,10 @@ import { PlayerPongComponent } from './widgets/player-pong/player-pong.component
 import { PasswordComponent } from './widgets/password/password.component';
 import { AdminInSalonComponent } from './widgets/admin-in-salon/admin-in-salon.component';
 import { InvitationJouerComponent } from './invitation-jouer/invitation-jouer.component';
+import { CreatorInSalonComponent } from './widgets/creator-in-salon/creator-in-salon.component';
+import { FriendUserComponent } from './friend-user/friend-user.component';
+import { BlockUserComponent } from './block-user/block-user.component';
+import { InvitationGameComponent } from './widgets/invitation-game/invitation-game.component';
 
 @NgModule({
   declarations: [
@@ -60,7 +67,11 @@ import { InvitationJouerComponent } from './invitation-jouer/invitation-jouer.co
     PasswordComponent,
     AdminInSalonComponent,
     InvitationJouerComponent,
-   
+    CreatorInSalonComponent,
+    PlayerPongComponent,
+    FriendUserComponent,
+    BlockUserComponent,
+    InvitationGameComponent
   ],
   imports: [
     BrowserModule,
@@ -69,7 +80,11 @@ import { InvitationJouerComponent } from './invitation-jouer/invitation-jouer.co
     FormsModule
   ],
   providers: [
-    HttpClient
+    HttpClient,
+    ApiService,
+	StorageService,
+	//CookieService,
+	Storage,
   ],
   bootstrap: [AppComponent]
 })

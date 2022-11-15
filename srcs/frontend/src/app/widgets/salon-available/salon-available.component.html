@@ -4,9 +4,9 @@
    
         <div class="icon" *ngIf="salon_dispo.password!==null">🔒</div>
 
-        <div class="titre"  (click)="joinChannel(salon_dispo, current_user)" *ngIf="salon_dispo.password==null">{{salon_dispo.name}}</div>
+        <div class="titre"  (click)="joinChannel(salon_dispo, current_user)" *ngIf="salon_dispo.password==null">{{salon_dispo.name}} {{icon_message}}</div>
 
-        <div class="titre"  (click)="showFormulePassword(salon_dispo)" *ngIf="salon_dispo.password!==null">{{salon_dispo.name}}</div>
+        <div class="titre"  (click)="showFormulePassword(salon_dispo)" *ngIf="salon_dispo.password!==null">{{salon_dispo.name}} {{icon_message}}</div>
      </div>
 
 

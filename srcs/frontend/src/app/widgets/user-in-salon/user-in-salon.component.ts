@@ -2,7 +2,7 @@ import { Component, OnInit, Input } from '@angular/core';
 import { ApiService } from '../../services/api.service';
 import { Channel } from 'src/app/models/channel';
 import { User } from 'src/app/models/user';
-import { SocketService } from '../../services/socket.service';
+import { SocketService } from 'src/app/services/socket.service';
 
 
 @Component({
@@ -31,10 +31,13 @@ export class UserInSalonComponent implements OnInit {
   time_muet:number = 0;
   
 
- 
+  
   @Input() usersAdmin:User[] =[];
   @Input() AdminOrNot:boolean=false;
-  constructor(private socketService: SocketService) {}
+  constructor(private socketService: SocketService) {
+  
+   
+   }
 
   ngOnInit(): void {}
 
@@ -58,9 +61,16 @@ export class UserInSalonComponent implements OnInit {
    
   beAdmin(){
     this.ifAdmin=!this.ifAdmin;
+   
+    if (this.val_admin=="Be Admin")
+    {
+       
+        this.socketService.BeAdminSalon(this.guest.id, Number(this.current_channel.id));
+    }
+    this.socketService.updateUserInSalonList(this.current_channel.name);
     this.val_admin=this.ifAdmin?"Del Admin":"Be Admin";
     this.color1=this.ifAdmin?"rgb(76, 80, 79)":"rgb(44, 136, 125)";
-   
+      
   }
   
   beMuet(){

@@ -1,6 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { ApiService } from '../services/api.service';
 import { User } from '../models/user'
+import { StorageService } from '../services/storage.service';
 
 @Component({
   selector: 'app-game-room',
@@ -27,10 +28,11 @@ export class GameRoomComponent implements OnInit {
   }
 
 
-  constructor(private apiService: ApiService) { }
+  constructor(private apiService: ApiService,
+	private storageService: StorageService) { }
 
   async ngOnInit(): Promise<void> {
-  this.apiService.getAllUsers(this.user.id).subscribe(
+  this.apiService.getAllUsers(this.storageService.getCode()).subscribe(
       (result=>{
         this.list_user =result;
       }));

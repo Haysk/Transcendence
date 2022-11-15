@@ -25,6 +25,9 @@ export class SalonComponent implements OnInit {
   usersInGuest: User[] | undefined = [];
   usersAdmin:User[] =[];
   AdminOrNot!:boolean;
+  CreatorId!:number;
+  // CreatorId:number=this.current_channel.creator_id;
+
 
   
 
@@ -46,7 +49,16 @@ export class SalonComponent implements OnInit {
         if (this.current_channel != null && this.current_channel.admins !== undefined)
         {
           this.usersAdmin=this.current_channel.admins;
+         //this.usersInGuest.pop()
+        }  
+        if (this.current_channel != null && this.current_channel.creator_id !== undefined)
+        {
+          this.CreatorId=this.current_channel.creator_id;
+          
+         //this.usersInGuest.pop()
         }
+        
+
       },
       error: (err) => {},
       complete: () => {}
@@ -57,11 +69,21 @@ export class SalonComponent implements OnInit {
     })
     //console.log("findChannelByName finished");
     this.socketService.joinChannel(this.channel_name, this.current_user.id);
+   
     this.socketService.updateUserList().subscribe({
       next: (result) => {
         this.usersInGuest = result;
       }
     });
+
+    this.socketService.updateAdminList().subscribe({
+      next: (result) => {
+        this.usersAdmin = result;
+      }
+    })
+
+   
+
 
     this.apiService.getChannelMessages(this.channel_name).subscribe({
       next:(result) => {
@@ -97,6 +119,12 @@ export class SalonComponent implements OnInit {
     })
   }
   
+  isCreator(current:User){
+    if (this.current_channel.creator_id==current.id)
+      return 1;
+    return 0;
+  }
+
   isAdmin(current: User)
   {
     let i = 0;

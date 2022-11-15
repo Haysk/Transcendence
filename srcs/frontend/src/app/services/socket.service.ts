@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { Observable } from 'rxjs';
+import { observable, Observable } from 'rxjs';
 import { io } from 'socket.io-client';
 import { HttpClient } from '@angular/common/http';
 import { ApiService } from '../services/api.service';
@@ -8,8 +8,8 @@ import { Channel } from '../models/channel'
 import { environment } from 'src/environments/environment';
 import { IGameStates } from '../pong/game/interfaces/game-states.interface';
 import { IInput } from '../pong/game/interfaces/input.interface';
-import { observable } from 'rxjs';
 import { observeNotification } from 'rxjs/internal/Notification';
+
 
 @Injectable({
   providedIn: 'root'
@@ -24,6 +24,10 @@ export class SocketService {
   constructor(private apiService: ApiService) {
     this.socket = io(this.url);
   }
+
+
+
+
 
   //MUTE
 
@@ -41,6 +45,19 @@ export class SocketService {
   {
     this.socket.emit('unmuteUser', userToMute, channelConcerned);
   }
+
+
+  //Be Admin
+  BeAdminSalon(guestToBeAdmin: number, channelConcerned: number){
+      this.socket.emit('beAdminSalon', guestToBeAdmin, channelConcerned)
+      console.log(2)
+  }
+
+  delAdminSalon(guestToDelAdmin: number, channelConcerned: number){
+    this.socket.emit('delAdminSalon', guestToDelAdmin, channelConcerned)
+    console.log(2)
+}
+  
 
 //BAN
 
@@ -213,6 +230,15 @@ amIBanned()
       });
   };
 
+  updateAdminList() : Observable<User[]>
+  {
+    return new Observable<User[]>((obs) => {
+      this.socket.on('newAdminInChannel', (res) => {
+        obs.next(res);
+      })
+    })
+  }
+        
   searchForAUser(login:string)
   {
     this.socket.emit('SearchForThisUser', login);
@@ -331,6 +357,87 @@ amIBanned()
     return new Observable<void>((observer) => {
       this.socket.on('startToClient', (payload) => {
         observer.next(payload);
+      });
+    });
+  }
+
+  getAddFriend(id: number, id1: number){
+    //this.socket.on('getAddFriend');
+    console.log("fdsfdsfsdfds123132");
+    
+    this.socket.emit('getAddFriend', id, id1);
+  }
+
+  getFriend(): Observable<User[]> {
+    return new Observable<User[]>((observer) => {
+      this.socket.on('addFriend', (tab: User[]) => {
+        observer.next(tab);
+      });
+    });
+  }
+
+  getRemoveFriend(id: number, id1: number){
+    this.socket.emit('getRemoveFriend', id, id1);
+  }
+
+  removeFriend(): Observable<User[]> {
+    return new Observable<User[]>((obs) => {
+      this.socket.on('removeFriend', (tab: User[]) => {
+        obs.next(tab);
+      });
+    });
+  }
+
+  getFriendList(id: number){
+    this.socket.emit('getFriendList', id);
+  }
+
+  listFriend(): Observable<User[]> {
+    return new Observable<User[]>((obs) => {
+      this.socket.on('listFriends', (tab: User[]) => {
+        obs.next(tab);
+      });
+    });
+  }
+
+  updateListFriend(id: number){
+    this.socket.emit('getFriendList', id);
+  }
+
+  checkIfFriend(id: number, id1: number){
+    this.socket.emit('checkIfFriend', id, id1);
+  }
+
+  findFriendsOrNot(): Observable<number> {
+    return new Observable<number>((obs) => {
+      this.socket.on('findFriendsOrNot', (index: number) => {
+        obs.next(index);
+        console.log(`find friend or not ${index}`);
+      })
+    })
+  }
+
+  getBlockUser(id: number, id1: number){
+    //this.socket.on('get Block User');
+    this.socket.emit('getBlockUser', id, id1);
+  }
+
+  blockedUser(): Observable<User[]> {
+    return new Observable<User[]>((obs) => {
+      this.socket.on('blockedUser', (tab: User[]) => {
+        obs.next(tab);
+      });
+    });
+  }
+
+  getUnblockUser(id: number, id1: number){
+    this.socket.emit('getUnblockUser', id, id1);
+  }
+
+  unblockedUser(): Observable<User[]> {
+    return new Observable<User[]>((obs) => {
+      this.socket.on('unblockedUser', (tab: User[]) => {
+        obs.next(tab);
       });
     });
   }

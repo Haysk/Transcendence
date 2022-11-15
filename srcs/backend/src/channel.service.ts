@@ -15,29 +15,28 @@ export class ChannelService {
 		
 	INTRA_API = "https://api.intra.42.fr";
 
-	async	joinChannel(param : {target: Channel, user: User}) : Promise<Channel>
-	{
-		try{
-			//console.log("Channel Service : channel name : " + param.target.name + " | user name : " + param.user.login);
-			const data = {id: param.user.id};
-			var toto = await this.userService.user(param.user);
-			return await this.prisma.channel.update({
-				where: {
-					name: param.target.name
-				},
-				data: {
-					joined: {
-						connect: [{id: toto.id}],
-					}
-				},
-			})
-		}
-		catch(err)
-		{
-			console.log("error joinChannel service :");
-			console.log(err);
-		}
-	}
+	// async	joinChannel(param : {target: Channel, user: User}) : Promise<Channel>
+	// {
+	// 	try{
+	// 		//console.log("Channel Service : channel name : " + param.target.name + " | user name : " + param.user.login);
+	// 		var toto = await this.userService.user(param.user);
+	// 		return await this.prisma.channel.update({
+	// 			where: {
+	// 				name: param.target.name
+	// 			},
+	// 			data: {
+	// 				joined: {
+	// 					connect: [{id: toto.id}],
+	// 				}
+	// 			},
+	// 		})
+	// 	}
+	// 	catch(err)
+	// 	{
+	// 		console.log("error joinChannel service :");
+	// 		console.log(err);
+	// 	}
+	// }
 
 	async	addChannel(params : {name: string, creator_id: number}): Promise<Channel>
 	{

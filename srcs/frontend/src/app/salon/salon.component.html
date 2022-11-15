@@ -27,12 +27,20 @@
         
 <!-- ######users in salon #####-->
         <div class="guest_salon">
+            
+            <div class="titre_administrator">
+                Creator
+            </div>
+            <div class="userInSalon" *ngFor ="let userAdmin of usersAdmin" > 
+                <app-creator-in-salon  [usersAdmin]="usersAdmin" [guest]=userAdmin *ngIf="isCreator(userAdmin)==1"></app-creator-in-salon>
+            </div>
+
+
             <div class="titre_administrator">
                 Administrator
             </div>
-            
             <div class="userInSalon" *ngFor ="let userAdmin of usersAdmin" > 
-                <app-admin-in-salon  [usersAdmin]="usersAdmin" [current_channel]="current_channel" [guest]=userAdmin></app-admin-in-salon>
+                <app-admin-in-salon  [usersAdmin]="usersAdmin" [current_channel]="current_channel" [guest]=userAdmin [CreatorId]="CreatorId" *ngIf="isCreator(userAdmin)==0"></app-admin-in-salon>
             </div>
             
             
