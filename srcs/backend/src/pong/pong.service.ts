@@ -14,13 +14,15 @@ export class PongService {
     constructor(
         private game: Game,
         private pongGateway: PongGateway
-    ) {}
+    ) { }
 
     public start(): void {
+        if (this.tickSubscription == undefined) {
+            this.tickSubscription = interval(interval_tick).subscribe(() => {
+                this.tick();
+            });
+        }
         this.game.start()
-        this.tickSubscription = interval(interval_tick).subscribe(() => {
-            this.tick();
-          });
     }
 
     public updateMove(move: IInput): void {
