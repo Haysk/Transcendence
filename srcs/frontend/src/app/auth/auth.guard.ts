@@ -21,28 +21,12 @@ export class AuthGuard implements CanActivate {
 		this.locked = false;
 	} 
 	async canActivate(route: ActivatedRouteSnapshot, state: RouterStateSnapshot): Promise<boolean> {
-		// var locked = this.auth.getLocked();
-		// console.log(locked);
-		if (this.auth.getLocked() === false) {
+		if (this.auth.getLocked() === false)
 			return true;
-		}
-		else if (await this.auth.userIsOnline()) {
+		else if (await this.auth.userIsOnline())
 			return true;
-		}
 		this.auth.logout();
 		this.router.navigateByUrl('');
 		return false
-		// if (typeof(test) != 'boolean')
-		// 	test.subscribe()
-		// console.log(locked);
-		// if (locked) {
-		// 	console.log("is locked");
-			
-		// 	this.router.navigateByUrl('');
-		// 	return false;
-		// } else {
-		// 	console.log("unlocked");
-		// 	return true;
-		// }
 	}
 }
