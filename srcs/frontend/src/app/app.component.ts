@@ -14,8 +14,10 @@ export class AppComponent implements OnInit{
   title = 'todo-app';
   visible:boolean = true;
 
-	constructor(public route: ActivatedRoute,
-				public router: Router,private socketService: SocketService){
+	constructor(
+    public route: ActivatedRoute,
+		public router: Router,
+    private socketService: SocketService){
   }
   ngOnInit(): void {
   }

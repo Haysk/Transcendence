@@ -37,6 +37,17 @@ export class AppGateway
     return result;
   }
 
+  createGameRoomName(login1: string, login2: string): string{
+    let result: string;
+
+    if (login1 < login2)
+      result = login1 + login2;
+    else
+      result = login2 + login1;
+    result = result + "_game"
+    return result;
+  }
+
   @WebSocketServer()
   server!: Server;
   private logger: Logger = new Logger('AppGateway');
@@ -508,6 +519,28 @@ catch(err){
       console.log("error dans leaveChannel :");
       console.log(err);
     }
+  }
+
+/* INVITATION GAME */
+
+  @SubscribeMessage('CreateRoomToPlay')
+  createRoomToPlay(client: Socket, payload: any)
+  {
+    let RoomName: string = this.createGameRoomName(payload[0].login, payload[1].login);
+    this.server.in(client.id).socketsJoin(RoomName);
+    this.server.in(payload[1].socket).socketsJoin(RoomName); //Peut etre rechercher en BDD ce socket est mieux (actualisation)
+  }
+
+  @SubscribeMessage('invitationIsAccepted')
+  acceptInvitation(client: Socket, payload: any)
+  {
+    this.server.to(payload[0].socket).emit('invitationAccepted');
+  }
+
+  @SubscribeMessage('initDisplayInvitation')
+  prepareInvitation(client: Socket, payload: any)
+  {
+    this.server.to(payload[0].socket).emit('DisplayInvitation'); //AJOUTER ICI LES INFOS DE LA PARTIE
   }
 
 /* PONG GAME */
