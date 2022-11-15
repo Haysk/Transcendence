@@ -1,6 +1,7 @@
 import { Injectable } from '@nestjs/common';
 import { interval, Subscription } from 'rxjs';
 import { AppGateway } from 'src/app.gateway';
+import { defaultGameConfig } from './game/config';
 import { Game } from './game/game';
 import { IInput } from './game/interfaces/input.interface';
 import { PongGateway } from './pong.gateway';
@@ -27,6 +28,10 @@ export class PongService {
 
     public updateMove(move: IInput): void {
         this.game.updateInput(move);
+    }
+
+    public reset(): void {
+        this.game.updateStates(structuredClone(defaultGameConfig.states));
     }
 
     end(): void {

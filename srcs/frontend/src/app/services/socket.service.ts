@@ -85,6 +85,10 @@ export class SocketService {
     this.socket.emit('startToServer');
   }
 
+  sendReset(): void {
+    this.socket.emit('resetToServer');
+  }
+
   getStart() {
     return new Observable<void>((observer) => {
       this.socket.on('startToClient', (payload) => {

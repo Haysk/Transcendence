@@ -242,7 +242,8 @@ export class PongComponent implements OnInit, OnDestroy {
   }
 
   reset(): void {
-    this.game.updateStates(structuredClone(defaultGameConfig).states);
+    this.socketService.sendReset();
+    //this.game.updateStates(structuredClone(defaultGameConfig).states);
   }
 
   resetAll(): void {

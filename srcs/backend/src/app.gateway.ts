@@ -94,6 +94,11 @@ export class AppGateway
     this.pongService.start()
   }
 
+  @SubscribeMessage('resetToServer')
+  handleReset(client: Socket, payload: any): void {
+    this.pongService.reset()
+  }
+
   afterInit(server: Server) {
     this.logger.log('Init');
   }
