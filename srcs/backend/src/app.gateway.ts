@@ -12,20 +12,26 @@ import { PrismaService } from './prisma.service';
 import { Server, Socket } from 'socket.io';
 import { IoAdapter } from '@nestjs/platform-socket.io';
 import { UserService } from './user.service';
+import { PongService } from './pong/pong.service';
+import { time } from 'console';
+import { IGameStates } from './pong/game/interfaces/game-states.interface';
 
 @WebSocketGateway({
   cors: {
     origin: 'https://' + process.env.IP_HOST,
-    credential:true,
+    credential: true,
   },
 })
 export class AppGateway
-  implements OnGatewayInit, OnGatewayConnection, OnGatewayDisconnect
-{
-  constructor(private Prisma : PrismaService, private readonly userService: UserService,){}
+  implements OnGatewayInit, OnGatewayConnection, OnGatewayDisconnect {
+  constructor(
+    private Prisma: PrismaService,
+    private readonly userService: UserService,
+    private pongService: PongService
+  ) {
+  }
 
-  createRoomName(login1: string, login2: string): string
-  {
+  createRoomName(login1: string, login2: string): string {
     let result: string;
 
     if (login1 < login2)
@@ -43,7 +49,7 @@ export class AppGateway
   //payload[1] = socket dest
   //payload[2] = login1 - expediteur
   //payload[3] = login2 - Dest
-  
+
   @SubscribeMessage('sendMsgTo')
   async sendMsgTo(client: any, payload: any): Promise<void> {
     // const dest = await this.server.in(payload[1]).fetchSockets;
@@ -51,12 +57,11 @@ export class AppGateway
     const roomName = this.createRoomName(payload[2], payload[3]);
     this.server.in(payload[1]).socketsJoin(roomName);
     this.server.in(client.id).socketsJoin(roomName);
-    this.server.to(roomName).emit('PrivMsg', {msg: payload[0], channel: roomName, from: payload[2]});
+    this.server.to(roomName).emit('PrivMsg', { msg: payload[0], channel: roomName, from: payload[2] });
   }
 
   @SubscribeMessage('sendLogin')
-  async setupLogin(client: Socket, payload: any): Promise<void>
-  {
+  async setupLogin(client: Socket, payload: any): Promise<void> {
     //console.log("LOGIN :" + payload + " | mysocket : " + client.id)
     await this.Prisma.user.update({
       where: {
@@ -69,26 +74,24 @@ export class AppGateway
   }
 
   @SubscribeMessage('msgToMe')
-  handlePrivMsg(client:any, payload: any): void
-  {
+  handlePrivMsg(client: Socket, payload: any): void {
     // this.server.sockets.socketsJoin('test_room');
     this.server.sockets.to(payload).emit('msgToClient', client);
-    //this.server.emit('msgToClient', client);
+    // this.server.emit('msgToClient', client);
   }
 
   @SubscribeMessage('moveToServer')
-  handleMove(client: any, payload: any): void {
-    this.server.emit('moveToClient', payload);
+  handleMove(client: Socket, payload: any): void {
+    this.pongService.updateMove(payload)
   }
 
   @SubscribeMessage('gameStatesToServer')
-  handleGameStates(client: any, payload: any): void {
-    this.server.emit('gameStatesToClient', payload);
+  handleGameStates(client: Socket, payload: any): void {
   }
 
   @SubscribeMessage('startToServer')
-  handleStart(client: any, payload: any): void {
-    this.server.emit('startToClient', payload);
+  handleStart(client: Socket, payload: any): void {
+    this.pongService.start()
   }
 
   afterInit(server: Server) {

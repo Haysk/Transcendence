@@ -1,4 +1,4 @@
-import { Component, OnDestroy, OnInit } from "@angular/core";
+import { Component, Input, OnDestroy, OnInit } from "@angular/core";
 import { filter, fromEvent, interval, Subscription } from "rxjs";
 import { SocketService } from "../services/socket.service";
 import { Ai } from "./game/ai";
@@ -11,6 +11,19 @@ import { IInput } from "./game/interfaces/input.interface";
 const interval_tick = 8;
 const keyStart = " ";
 
+//partie en 3 acte:
+// gestion des param (config de la partie)
+// partie en cours
+// affichage du scors final
+
+// ajoue d'un mod bonus:
+// taille ball/rackette
+// vitess ball/racquett
+
+//ajout d'un bouton start
+
+//si pause ne fonctionne pas : le desactiver
+
 @Component({
   selector: "app-pong",
   templateUrl: "./pong.component.html",
@@ -18,7 +31,9 @@ const keyStart = " ";
   providers: [Game, Ai],
 })
 export class PongComponent implements OnInit, OnDestroy {
-  gameConfig: IGame;
+  //une config doit etre envoyer pour configurer une partie
+  @Input()
+  gameConfig: IGame = structuredClone(defaultGameConfig);
   moveLeft: IInput;
   moveRight: IInput;
   prevMoveLeft: IInput;
@@ -29,7 +44,7 @@ export class PongComponent implements OnInit, OnDestroy {
   ctx!: CanvasRenderingContext2D;
 
   moveSubscription!: Subscription;
-  startSubscription!: Subscription;
+  //startSubscription!: Subscription;
   gameStatesSubscription!: Subscription;
   tickSubscription!: Subscription;
   upSubscription!: Subscription;
@@ -40,7 +55,6 @@ export class PongComponent implements OnInit, OnDestroy {
     private game: Game,
     private ai: Ai
   ) {
-    this.gameConfig = structuredClone(defaultGameConfig);
     this.game = new Game();
     this.ai = new Ai();
     this.game.updateAll(this.gameConfig);
@@ -57,9 +71,11 @@ export class PongComponent implements OnInit, OnDestroy {
       .subscribe((move: IInput) => {
         this.game.updateInput(move);
       });
-    this.startSubscription = this.socketService.getStart().subscribe(() => {
-      this.game.start();
-    });
+    // ce doit etre uniquement le serveur qui recois le start et qui doit metre a jour sa partie intern
+    // this.startSubscription = this.socketService.getStart().subscribe(() => {
+    //   console.log("start")
+    //   this.game.start();
+    // });
     this.gameStatesSubscription = this.socketService
       .getGameStates()
       .subscribe((states: IGameStates) => {
@@ -84,7 +100,7 @@ export class PongComponent implements OnInit, OnDestroy {
 
   ngOnDestroy(): void {
     this.moveSubscription.unsubscribe();
-    this.startSubscription.unsubscribe();
+    //this.startSubscription.unsubscribe();
     this.gameStatesSubscription.unsubscribe();
     this.tickSubscription.unsubscribe();
     this.upSubscription.unsubscribe();
@@ -219,6 +235,10 @@ export class PongComponent implements OnInit, OnDestroy {
 
   win() {
     return this.game.getWinner();
+  }
+
+  start(): void {
+    this.sendStart()
   }
 
   reset(): void {

@@ -1,4 +1,5 @@
 import { Component, Input, OnInit } from '@angular/core';
+import { defaultGameConfig } from '../pong/game/config';
 import { IBallConfig } from '../pong/game/interfaces/ball-config.interface';
 
 @Component({
@@ -8,7 +9,7 @@ import { IBallConfig } from '../pong/game/interfaces/ball-config.interface';
 })
 export class PongBallComponent implements OnInit {
   @Input()
-  ball!: IBallConfig;
+  ball: IBallConfig = structuredClone(defaultGameConfig.ball);
 
   constructor() { }
 

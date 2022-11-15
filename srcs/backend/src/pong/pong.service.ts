@@ -1,0 +1,38 @@
+import { Injectable } from '@nestjs/common';
+import { interval, Subscription } from 'rxjs';
+import { AppGateway } from 'src/app.gateway';
+import { Game } from './game/game';
+import { IInput } from './game/interfaces/input.interface';
+import { PongGateway } from './pong.gateway';
+
+const interval_tick = 8;
+
+@Injectable()
+export class PongService {
+    tickSubscription!: Subscription;
+
+    constructor(
+        private game: Game,
+        private pongGateway: PongGateway
+    ) {}
+
+    public start(): void {
+        this.game.start()
+        this.tickSubscription = interval(interval_tick).subscribe(() => {
+            this.tick();
+          });
+    }
+
+    public updateMove(move: IInput): void {
+        this.game.updateInput(move);
+    }
+
+    end(): void {
+        this.tickSubscription.unsubscribe();
+    }
+
+    tick(): void {
+        this.game.tick();
+        this.pongGateway.sendGameStates(this.game.getGameStates());
+    }
+}

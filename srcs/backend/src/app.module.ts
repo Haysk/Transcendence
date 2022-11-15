@@ -7,19 +7,20 @@ import { TechService } from './tech.service';
 import { AppGateway } from './app.gateway';
 import { HttpModule } from '@nestjs/axios';
 import { OauthService } from './oauth.service';
+import { PongModule } from './pong/pong.module';
 
 @Module({
-  imports: [HttpModule],
+  imports: [HttpModule, PongModule],
   controllers: [
     AppController
   ],
   providers: [
-    PrismaService, 
-    UserService, 
-    TechService, 
-    MessageService, 
-    AppGateway, 
+    PrismaService,
+    UserService,
+    TechService,
+    MessageService,
+    AppGateway,
     OauthService
   ],
 })
-export class AppModule {}
+export class AppModule { }

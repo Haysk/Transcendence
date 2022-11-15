@@ -17,6 +17,7 @@
   </canvas>
   <div class="menu" *ngIf="!gameConfig.states.start">
     <h2>Menu</h2>
+    <button (click)="start()">start</button>
     <button (click)="reset()">new game</button>
     <button (click)="resetAll()">reset all params</button>
     
