@@ -7,15 +7,10 @@ import {
   WebSocketGateway,
   WebSocketServer,
 } from '@nestjs/websockets';
-import { PrismaClient } from '@prisma/client';
 import { PrismaService } from './prisma.service';
 import { Server, Socket } from 'socket.io';
-import { IoAdapter } from '@nestjs/platform-socket.io';
 import { UserService } from './user.service';
 import { BanAndMuteService } from './banAndMute.service'
-import { truncateSync } from 'fs';
-import { async } from 'rxjs';
-import { emit } from 'process';
 
 @WebSocketGateway({
   cors: {

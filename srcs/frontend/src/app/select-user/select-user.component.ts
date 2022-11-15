@@ -1,7 +1,5 @@
 import { Component, OnInit, Input, Output, EventEmitter } from '@angular/core';
 import { User } from '../models/user';
-import { ChatComponent } from '../chat/chat.component';
-import { VirtualTimeScheduler } from 'rxjs';
 import { SocketService } from '../services/socket.service';
 
 @Component({

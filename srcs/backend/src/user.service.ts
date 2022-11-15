@@ -1,10 +1,8 @@
 import { Injectable } from '@nestjs/common';
 import { PrismaService } from './prisma.service';
-import { User, Prisma, Tfa } from '@prisma/client';
+import { User, Prisma} from '@prisma/client';
 import { HttpService } from '@nestjs/axios';
-import { catchError, take } from 'rxjs';
-import { Socket } from 'socket.io';
-import { IoAdapter } from '@nestjs/platform-socket.io';
+import { take } from 'rxjs';
 
 @Injectable()
 export class UserService {

@@ -2,8 +2,6 @@ import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { SocketService } from './services/socket.service';
 
-import { User } from './models/user';
-
 @Component({
   selector: 'app-root',
   templateUrl: './app.component.html',

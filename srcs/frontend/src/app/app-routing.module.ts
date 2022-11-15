@@ -6,7 +6,6 @@ import { GameRoomComponent } from './game-room/game-room.component';
 import { ShowRoomComponent } from './show-room/show-room.component';
 import { VipRoomComponent } from './vip-room/vip-room.component';
 import { RestRoomComponent } from './rest-room/rest-room.component';
-import { LoginComponent } from './login/login.component';
 import { ChatComponent } from './chat/chat.component';
 import { SalonComponent } from './salon/salon.component';
 import { FriendUserComponent } from './friend-user/friend-user.component';

@@ -1,9 +1,9 @@
 
-import { HttpServer, Injectable } from '@nestjs/common';
+import { Injectable } from '@nestjs/common';
 import { PrismaService } from './prisma.service';
-import { Oauth, User, Prisma } from '@prisma/client';
+import { Oauth, Prisma } from '@prisma/client';
 import { HttpService } from '@nestjs/axios';
-import { catchError, take } from 'rxjs';
+import { take } from 'rxjs';
 
 export interface Tokens {
 		access_token: string,

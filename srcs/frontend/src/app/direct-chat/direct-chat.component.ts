@@ -3,7 +3,6 @@ import { SocketService } from '../services/socket.service';
 import { ApiService } from '../services/api.service';
 import { User } from '../models/user'
 import { Message } from '../models/message';
-import { subscribeOn } from 'rxjs';
 
 @Component({
   selector: 'app-direct-chat',

@@ -3,7 +3,6 @@ import { ApiService } from '../services/api.service';
 import { SocketService } from '../services/socket.service';
 import { User } from '../models/user'
 import { Message } from '../models/message'
-import { Observable } from 'rxjs';
 
 @Component({
   selector: 'app-chat-history',

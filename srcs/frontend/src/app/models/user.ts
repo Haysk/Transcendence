@@ -1,6 +1,5 @@
 import { Channel } from '../models/channel'
 import { Oauth } from './oauth';
-import { Socket } from './socket'
 
 export interface 	User {
     id: 			number;

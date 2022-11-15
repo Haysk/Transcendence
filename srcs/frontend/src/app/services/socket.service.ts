@@ -1,14 +1,12 @@
 import { Injectable } from '@angular/core';
-import { observable, Observable } from 'rxjs';
+import { Observable } from 'rxjs';
 import { io } from 'socket.io-client';
-import { HttpClient } from '@angular/common/http';
 import { ApiService } from '../services/api.service';
 import { User } from '../models/user';
 import { Channel } from '../models/channel'
 import { environment } from 'src/environments/environment';
 import { IGameStates } from '../pong/game/interfaces/game-states.interface';
 import { IInput } from '../pong/game/interfaces/input.interface';
-import { observeNotification } from 'rxjs/internal/Notification';
 
 
 @Injectable({

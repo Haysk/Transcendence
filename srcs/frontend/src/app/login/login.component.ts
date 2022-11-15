@@ -1,13 +1,6 @@
 import { Component, OnInit } from '@angular/core';
-import { ActivatedRoute, Router } from '@angular/router';
-import { environment } from 'src/environments/environment';
-import { ApiService } from '../services/api.service';
-import { Oauth, Tfa } from '../models/oauth';
-import { User } from '../models/oauth';
-import { waitForAsync } from '@angular/core/testing';
-import { first, mergeMap, ObservableInput, switchMap, take } from 'rxjs';
+import { Router } from '@angular/router';
 import { StorageService } from '../services/storage.service';
-import { SocketService } from '../services/socket.service';
 import { AuthService } from '../services/auth.service';
 
 @Component({

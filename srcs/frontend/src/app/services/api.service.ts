@@ -1,13 +1,9 @@
 import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
-import { Tech } from '../models/technology';
 import { User } from '../models/user';
 import { Message } from '../models/message';
 import { Channel } from '../models/channel';
-import { Observable } from 'rxjs';
-import { Oauth } from '../models/oauth';
 import { Tfa } from '../models/tfa'
-import { UrlSerializer } from '@angular/router';
 import { environment } from 'src/environments/environment';
 
 @Injectable({
