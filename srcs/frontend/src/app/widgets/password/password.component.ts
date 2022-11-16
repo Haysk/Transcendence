@@ -12,8 +12,8 @@ export class PasswordComponent implements OnInit {
 
   channel_password!:string;
   
-  @Output() ShowChannelPrivateEvent= new EventEmitter<Boolean>();
-  @Output() ShowFormulePasswordEvent = new EventEmitter<Boolean>();
+  @Output() ShowChannelPrivateEvent= new EventEmitter<boolean>();
+  @Output() ShowFormulePasswordEvent = new EventEmitter<boolean>();
 
   @Input() current_user !:User;
   @Input() channel!:Channel;

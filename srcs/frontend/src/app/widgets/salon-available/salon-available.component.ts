@@ -15,18 +15,18 @@ import { SocketService } from '../../services/socket.service';
 
 export class SalonAvailableComponent implements OnInit {
 
-  show_salon: Boolean=true;
-  show_formulePassword: Boolean=false;
+  show_salon: boolean=true;
+  show_formulePassword: boolean=false;
   you_got_message:boolean=true;
   icon_message!:string;
 
  
  
-  @Output() ShowChannelPublicEvent= new EventEmitter<Boolean>();
+  @Output() ShowChannelPublicEvent= new EventEmitter<boolean>();
   @Output() SendJoinChannelNameEvent = new EventEmitter<string>();
-  @Output() ShowFormulePasswordEvent = new EventEmitter<Boolean>();
-  @Output() showchatEvent = new EventEmitter<Boolean>();
-  @Output() showFormuleEvent = new EventEmitter<Boolean>();
+  @Output() ShowFormulePasswordEvent = new EventEmitter<boolean>();
+  @Output() showchatEvent = new EventEmitter<boolean>();
+  @Output() showFormuleEvent = new EventEmitter<boolean>();
   @Output() SendChannelEvent = new EventEmitter<Channel>();
   
 

@@ -1,4 +1,4 @@
-import { Component, OnInit, Input } from '@angular/core';
+import { Component, OnInit, Input, Output, EventEmitter} from '@angular/core';
 import { User } from '../../models/user'
 import { SocketService } from '../../services/socket.service';
 
@@ -11,7 +11,7 @@ export class InvitationGameComponent implements OnInit {
 
   @Input() fromWho!: User;
   @Input() to!: User;
-
+  @Output() showInvitationEvent = new EventEmitter<boolean>();
 
   toDisplay: boolean = false;
   gameAccepted: boolean = false;
@@ -33,6 +33,12 @@ export class InvitationGameComponent implements OnInit {
     this.socketService.isGameReady().subscribe((res) => {
       this.gameIsReady = res;
     })
+  }
+
+  Nothanks(){
+
+    this.showInvitationEvent.emit(false);
+
   }
 
 

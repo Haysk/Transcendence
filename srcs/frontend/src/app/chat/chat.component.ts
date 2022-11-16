@@ -35,10 +35,10 @@ export class ChatComponent implements OnInit {
 	User_list!: User[];
 	message: string = '';
 	messages: String[] = [];
-	showchat: Boolean = false;
-	showFormule: Boolean = false;
-	privatOrpublic: Boolean = false;
-	showFormulePassword: Boolean = false;
+	showchat: boolean = false;
+	showFormule: boolean = false;
+	privatOrpublic: boolean = false;
+	showFormulePassword: boolean = false;
 	
 	delay: number = 0;
   Friend_list!: User[];
@@ -80,7 +80,7 @@ export class ChatComponent implements OnInit {
 	
 	}
 
-	receiveShowchat($event: Boolean) {
+	receiveShowchat($event: boolean) {
 		this.showchat = $event
 	}
 
@@ -94,27 +94,27 @@ export class ChatComponent implements OnInit {
 		this.privateChannel = $event;
 	}
 
-	receveShowformule($event: Boolean) {
+	receveShowformule($event: boolean) {
 		this.showFormule = $event;
 	}
 
-	receiveShowchannelPrivate($event: Boolean) {
+	receiveShowchannelPrivate($event: boolean) {
 		this.privatOrpublic = $event;
 	}
 
-	receiveShowFormulePassword($event: Boolean) {
+	receiveShowFormulePassword($event: boolean) {
 		this.showFormulePassword = $event;
 	}
 
-	receiveShowSalon($event: Boolean) {
+	receiveShowSalon($event: boolean) {
 		this.privatOrpublic = $event;
 	}
 
-	receiveQuitSalon($event: Boolean) {
+	receiveQuitSalon($event: boolean) {
 		this.privatOrpublic = $event;
 	}
 
-	receiveChannelPublic($event: Boolean) {
+	receiveChannelPublic($event: boolean) {
 		this.privatOrpublic = $event;
 	}
 

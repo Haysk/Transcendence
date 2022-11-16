@@ -13,15 +13,15 @@ export class SelectUserComponent implements OnInit {
   @Input() Me!: User;
   @Input() user!: User;
   userList!: User[];
-  show_chat: Boolean = false;
+  show_chat: boolean = false;
   
   show_hide: String = "chat";
-  // sesame_showOrnot: Boolean = false;
+  // sesame_showOrnot: boolean = false;
 
   you_got_message:boolean=true;
   icon_message!:string;
 
-  @Output() showchatEvent = new EventEmitter<Boolean>();
+  @Output() showchatEvent = new EventEmitter<boolean>();
   @Output() sendDestEvent = new EventEmitter<User>();
 
 

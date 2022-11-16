@@ -21,9 +21,9 @@ export class FriendUserComponent implements OnInit {
   userList!: User[];
 
   show_hide: String = "chat";
-  show_chat: Boolean = false;
+  show_chat: boolean = false;
  
-  @Output() showchatEvent = new EventEmitter<Boolean>();
+  @Output() showchatEvent = new EventEmitter<boolean>();
   @Output() sendDestEvent = new EventEmitter<User>();
 
   constructor(private apiService:ApiService, private socketService: SocketService) {

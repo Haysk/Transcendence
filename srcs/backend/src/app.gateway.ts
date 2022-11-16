@@ -616,8 +616,11 @@ catch(err){
     let data = await this.Prisma.user.findFirst({
       where: {login: payload[0].login},
     })
+    let data2 = await this.Prisma.user.findFirst({
+      where: {login: payload[1].login},
+    })
     if (data != null && data != undefined)
-      this.server.to(data.socket).emit('DisplayInvitation', invitation, payload[1]); //AJOUTER ICI LES INFOS DE LA PARTIE
+      this.server.to(data.socket).emit('DisplayInvitation', invitation, data2); //AJOUTER ICI LES INFOS DE LA PARTIE
   }
 
 /* PONG GAME */
