@@ -1,10 +1,11 @@
-import { Component, OnInit, Input, Inject, Output } from '@angular/core';
+import { Component, OnInit, Input, Inject, Output, EventEmitter} from '@angular/core';
 import { SocketService } from '../services/socket.service';
 import { ApiService } from '../services/api.service';
 import { User } from '../models/user'
 import { Injectable } from '@angular/core';
 import { Channel } from '../models/channel';
 import { StorageService } from '../services/storage.service';
+import { Subject } from 'rxjs';
 
 
 @Component({
@@ -34,17 +35,22 @@ export class ChatComponent implements OnInit {
 	User_list!: User[];
 	message: string = '';
 	messages: String[] = [];
-	showchat: Boolean = false;
-	showFormule: Boolean = false;
-	privatOrpublic: Boolean = false;
-	showFormulePassword: Boolean = false;
+	showchat: boolean = false;
+	showFormule: boolean = false;
+	privatOrpublic: boolean = false;
+	showFormulePassword: boolean = false;
 	delay: number = 0;
   	Friend_list!: User[];
 
 	test: boolean = false
-
+	clean: boolean = false;
 	channel_name!: string;
 	privateChannel!: Channel;
+
+	eventsSubject: Subject<void> = new Subject<void>();
+	emitEventToChild() {
+	  this.eventsSubject.next();
+	}
 
 	constructor(private socketService: SocketService,
 		private apiService: ApiService,
@@ -73,12 +79,13 @@ export class ChatComponent implements OnInit {
     })
 	}
 
-	receiveShowchat($event: Boolean) {
-		this.test = !this.test;
+	receiveShowchat($event: boolean) {
+		// this.test = !this.test;
 		this.showchat = $event;
 	}
 
 	receiveSendDest($event : User) {
+		this.eventsSubject.next();
 		this.Dest = $event;
 	}
 
@@ -86,27 +93,27 @@ export class ChatComponent implements OnInit {
 		this.privateChannel = $event;
 	}
 
-	receveShowformule($event: Boolean) {
+	receveShowformule($event: boolean) {
 		this.showFormule = $event;
 	}
 
-	receiveShowchannelPrivate($event: Boolean) {
+	receiveShowchannelPrivate($event: boolean) {
 		this.privatOrpublic = $event;
 	}
 
-	receiveShowFormulePassword($event: Boolean) {
+	receiveShowFormulePassword($event: boolean) {
 		this.showFormulePassword = $event;
 	}
 
-	receiveShowSalon($event: Boolean) {
+	receiveShowSalon($event: boolean) {
 		this.privatOrpublic = $event;
 	}
 
-	receiveQuitSalon($event: Boolean) {
+	receiveQuitSalon($event: boolean) {
 		this.privatOrpublic = $event;
 	}
 
-	receiveChannelPublic($event: Boolean) {
+	receiveChannelPublic($event: boolean) {
 		this.privatOrpublic = $event;
 	}
 

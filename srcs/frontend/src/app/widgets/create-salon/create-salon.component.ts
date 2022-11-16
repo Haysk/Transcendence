@@ -14,9 +14,9 @@ import { io } from 'socket.io-client';
 export class CreateSalonComponent implements OnInit {
 
   show:boolean = false;
-  show_salon: Boolean=true;
+  show_salon: boolean=true;
 
-  @Output() ShowSalonEvent = new EventEmitter<Boolean>();
+  @Output() ShowSalonEvent = new EventEmitter<boolean>();
   @Output() SendChannelNameEvent = new EventEmitter<string>();
   
 

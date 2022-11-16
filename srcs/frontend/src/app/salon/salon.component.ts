@@ -17,7 +17,7 @@ export class SalonComponent implements OnInit {
   conversation: string[] = [];
   historiqueConv: Message[] = [];
   message: string= '';
-  quit_salon:Boolean=false;
+  quit_salon:boolean=false;
   content: Message = {content: "", fromUserId: 0, fromUserName: ""};
   
   
@@ -31,7 +31,7 @@ export class SalonComponent implements OnInit {
 
   
 
-  @Output() QuitSalonEvent = new EventEmitter<Boolean>();
+  @Output() QuitSalonEvent = new EventEmitter<boolean>();
   @Input() channel_name!:string;
   @Input() current_user!: User;
   constructor(private socketService: SocketService, private apiService: ApiService) {
