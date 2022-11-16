@@ -77,7 +77,7 @@ import { AuthModule } from './auth/auth.module';
     AppRoutingModule,
     HttpClientModule,
     FormsModule,
-	AuthModule
+	  AuthModule
   ],
   providers: [
     HttpClient,

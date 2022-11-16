@@ -1,0 +1,2252 @@
+
+diff --git a/srcs/backend/prisma/schema.prisma b/srcs/backend/prisma/schema.prisma
+index a766b80..8cc2c41 100644
+--- a/srcs/backend/prisma/schema.prisma
++++ b/srcs/backend/prisma/schema.prisma
+@@ -58,7 +58,6 @@ model 				User {
+ 	muted			Channel[] @relation("muted_in_channel")
+ 	banned			Channel[] @relation("banned_in_channel")
+ 	admin_of		Channel[] @relation("admin_of")
+-	
+ }
+ 
+ model           	Tech {
+diff --git a/srcs/backend/src/app.gateway.ts b/srcs/backend/src/app.gateway.ts
+index 7513d62..e62b23e 100644
+--- a/srcs/backend/src/app.gateway.ts
++++ b/srcs/backend/src/app.gateway.ts
+@@ -7,15 +7,10 @@ import {
+   WebSocketGateway,
+   WebSocketServer,
+ } from '@nestjs/websockets';
+-import { PrismaClient } from '@prisma/client';
+ import { PrismaService } from './prisma.service';
+ import { Server, Socket } from 'socket.io';
+-import { IoAdapter } from '@nestjs/platform-socket.io';
+ import { UserService } from './user.service';
+ import { BanAndMuteService } from './banAndMute.service'
+-import { truncateSync } from 'fs';
+-import { async } from 'rxjs';
+-import { emit } from 'process';
+ 
+ @WebSocketGateway({
+   cors: {
+@@ -39,6 +34,17 @@ export class AppGateway
+     return result;
+   }
+ 
++  createGameRoomName(login1: string, login2: string): string{
++    let result: string;
++
++    if (login1 < login2)
++      result = login1 + login2;
++    else
++      result = login2 + login1;
++    result = result + "_game"
++    return result;
++  }
++
+   @WebSocketServer()
+   server!: Server;
+   private logger: Logger = new Logger('AppGateway');
+@@ -97,7 +103,6 @@ export class AppGateway
+   @SubscribeMessage('beAdminSalon')
+   async beAdminSalon(client: any, payload: any)
+   {
+-    console.log(3)
+     try {
+       let data = await this.Prisma.channel.update({
+       where: {
+@@ -117,8 +122,8 @@ export class AppGateway
+     })
+     if(data != null && data != undefined)
+       
+-      this.server.emit('newAdminInChannel',data.admins)
+-      this.server.emit('someoneJoinedTheChannel',data.joined)
++      this.server.to(data.name + "_channel").emit('newAdminInChannel', data.admins)
++      this.server.to(data.name + "_channel").emit('someoneJoinedTheChannel', data)
+       
+   }
+   catch(err) {
+@@ -151,8 +156,8 @@ export class AppGateway
+     })
+     if(data != null && data != undefined)
+      
+-      this.server.emit('newAdminInChannel',data.admins)
+-      this.server.emit('someoneJoinedTheChannel',data)
++      this.server.to(data.name + "_channel").emit('newAdminInChannel', data.admins)
++      this.server.to(data.name + "_channel").emit('someoneJoinedTheChannel', data)
+      
+   }
+   catch(err) {
+@@ -204,8 +209,6 @@ export class AppGateway
+   @SubscribeMessage('isOnline')
+   async isOnline(client:any, payload: any)
+   {
+-    // console.log("PAYLOAD =>");
+-    // console.log(payload);
+     try {
+       let data = await this.Prisma.user.update({
+       where: {
+@@ -277,7 +280,6 @@ async handleConnection(client: Socket, ...args: any[]) {
+ @SubscribeMessage('sendLogin')
+ async setupLogin(client: Socket, payload: any): Promise<void>
+ {
+-  //console.log("LOGIN :" + payload + " | mysocket : " + client.id)
+   try{
+     let data = await this.Prisma.user.update({
+     where: {
+@@ -302,8 +304,6 @@ catch(err){
+   @SubscribeMessage('userListPlz')
+   async sendUserList(client: any, payload: any)
+   {
+-    // console.log("SENDUSERLIST en cours");
+-    
+     try{
+     let data = await this.Prisma.user.findMany({
+       where: {
+@@ -312,11 +312,14 @@ catch(err){
+         }
+       },
+       include: {
+-        channel_joined: true,
+-        blocked:        true,
+-        blockedby:      true,
+-        friends:        true,
+-        friendsof:      true,
++          friends: true,
++          channel_joined: true,
++          muted: true,
++          admin_of: true,
++          banned: true,
++          creatorOf: true,
++          blocked: true,
++          blockedby: true,
+       }
+     })
+     if(data != null && data != undefined)
+@@ -334,7 +337,6 @@ catch(err){
+ 
+   @SubscribeMessage('sendMsgTo')
+   async sendMsgTo(client: any, payload: any): Promise<void> {
+-    // const dest = await this.server.in(payload[1]).fetchSockets;
+     try{
+       payload[1] = (await this.userService.findUserByLogin(payload[3])).socket;
+       const roomName = this.createRoomName(payload[2], payload[3]);
+@@ -539,8 +541,8 @@ catch(err){
+       })
+       if (data != null && data != undefined)
+       {
+-        //this.server.to(payload + "_channel").emit('someoneJoinedTheChannel', data.joined)
+-        this.server.emit('someoneJoinedTheChannel', data.joined)
++        //this.server.emit('someoneJoinedTheChannel', data.joined)
++        this.server.to(payload + "_channel").emit('someoneJoinedTheChannel', data.joined)
+         return data;
+       }
+     }
+@@ -583,6 +585,28 @@ catch(err){
+     }
+   }
+ 
++/* INVITATION GAME */
++
++  @SubscribeMessage('CreateRoomToPlay')
++  createRoomToPlay(client: Socket, payload: any)
++  {
++    let RoomName: string = this.createGameRoomName(payload[0].login, payload[1].login);
++    this.server.in(client.id).socketsJoin(RoomName);
++    this.server.in(payload[1].socket).socketsJoin(RoomName); //Peut etre rechercher en BDD ce socket est mieux (actualisation)
++  }
++
++  @SubscribeMessage('invitationIsAccepted')
++  acceptInvitation(client: Socket, payload: any)
++  {
++    this.server.to(payload[0].socket).emit('invitationAccepted');
++  }
++
++  @SubscribeMessage('initDisplayInvitation')
++  prepareInvitation(client: Socket, payload: any)
++  {
++    this.server.to(payload[0].socket).emit('DisplayInvitation'); //AJOUTER ICI LES INFOS DE LA PARTIE
++  }
++
+ /* PONG GAME */
+ 
+   @SubscribeMessage('moveToServer')
+@@ -642,7 +666,7 @@ catch(err){
+           },
+       },
+       include: {
+-        friends: true,
++        friends: true
+       }
+       })
+       if (data != null && data != undefined)
+@@ -659,7 +683,6 @@ catch(err){
+ 
+   @SubscribeMessage('getRemoveFriend')
+   async removingFriend(client: Socket, payload: any){
+-    // console.log("test remove " + payload);
+     try{
+       let data = await this.Prisma.user.update({
+         where: {
+@@ -688,14 +711,13 @@ catch(err){
+   @SubscribeMessage('getFriendList')
+   async getFriendList(client: any, payload : any)
+   {
+-    //console.log("test get Friend list" + payload);
+     try{
+       let data = await this.Prisma.user.findFirst({
+         where: {
+           id: Number(payload),
+         },
+         include: {
+-          friends: true,
++          friends: true
+         },
+       })
+       if (data != null && data != undefined)
+@@ -713,31 +735,22 @@ catch(err){
+   @SubscribeMessage('checkIfFriend')
+   async checkIfFriend(client: any, payload: any)
+   {
+-    // console.log("check if friend app gateway");
+-    // console.log(payload[0]);
+-    // console.log(payload[1]);
+-    // console.log("hello youuuuuuuu");
+     try{
+       let data = await this.Prisma.user.findUnique({
+         where: {
+           id: Number(payload[0]),
+         },
+         include: {
+-          friends: true,
++          friends: true
+         }
+       })
+-    
+-      
+       if (data !== null && data !== undefined){
+         const value = data.friends.find((element) => payload[1] === element.id);
+-        // console.log("111515150000000000000");
+         if (value !== undefined){
+           this.server.to(client.id).emit('findFriendsOrNot', 1);
+-          // console.log("11111111111111");
+         }
+         else{
+           this.server.to(client.id).emit('findFriendsOrNot', 0);
+-          // console.log("00000000000000sdffdsfsddsffds00000");
+         }}
+       }
+     catch(err){
+@@ -746,16 +759,4 @@ catch(err){
+     }
+   }
+ 
+-    // const found = payload[0].find(element => element.id === payload[1]);
+-    // console.log(found);
+-    
+-    // try{
+-    //   let data = await this.      
+-    // }
+-    // if (data == 1)
+-    // {
+-    //   console.log(data);
+-    //   this.server.to(client.id).emit('friendOrNot', data)
+-    // }
+-    
+ }
+diff --git a/srcs/backend/src/channel.service.ts b/srcs/backend/src/channel.service.ts
+index 0cb7e70..c6bada9 100644
+--- a/srcs/backend/src/channel.service.ts
++++ b/srcs/backend/src/channel.service.ts
+@@ -1,9 +1,7 @@
+ import { Injectable } from '@nestjs/common';
+ import { HttpService } from '@nestjs/axios';
+-import { catchError, take } from 'rxjs';
+ import { PrismaService } from './prisma.service';
+-import { Channel, User, Prisma } from '@prisma/client';
+-import { userInfo } from 'os';
++import { Channel } from '@prisma/client';
+ import { UserService } from './user.service';
+ 
+ @Injectable()
+@@ -15,33 +13,8 @@ export class ChannelService {
+ 		
+ 	INTRA_API = "https://api.intra.42.fr";
+ 
+-	// async	joinChannel(param : {target: Channel, user: User}) : Promise<Channel>
+-	// {
+-	// 	try{
+-	// 		//console.log("Channel Service : channel name : " + param.target.name + " | user name : " + param.user.login);
+-	// 		var toto = await this.userService.user(param.user);
+-	// 		return await this.prisma.channel.update({
+-	// 			where: {
+-	// 				name: param.target.name
+-	// 			},
+-	// 			data: {
+-	// 				joined: {
+-	// 					connect: [{id: toto.id}],
+-	// 				}
+-	// 			},
+-	// 		})
+-	// 	}
+-	// 	catch(err)
+-	// 	{
+-	// 		console.log("error joinChannel service :");
+-	// 		console.log(err);
+-	// 	}
+-	// }
+-
+ 	async	addChannel(params : {name: string, creator_id: number}): Promise<Channel>
+ 	{
+-		
+-		//console.log("addChannel ChannelService params : creator_id : " + params.creator_id + " | Channel_name : " + params.name);
+ 		try{
+ 			await this.prisma.channel.create({
+ 				data: params,
+diff --git a/srcs/backend/src/oauth.service.ts b/srcs/backend/src/oauth.service.ts
+index 859a293..03e020b 100644
+--- a/srcs/backend/src/oauth.service.ts
++++ b/srcs/backend/src/oauth.service.ts
+@@ -1,9 +1,9 @@
+ 
+-import { HttpServer, Injectable } from '@nestjs/common';
++import { Injectable } from '@nestjs/common';
+ import { PrismaService } from './prisma.service';
+-import { Oauth, User, Prisma } from '@prisma/client';
++import { Oauth, Prisma } from '@prisma/client';
+ import { HttpService } from '@nestjs/axios';
+-import { catchError, take } from 'rxjs';
++import { take } from 'rxjs';
+ 
+ export interface Tokens {
+ 		access_token: string,
+diff --git a/srcs/backend/src/post.service.ts b/srcs/backend/src/post.service.ts
+deleted file mode 100644
+index 70eca67..0000000
+--- a/srcs/backend/src/post.service.ts
++++ /dev/null
+@@ -1,57 +0,0 @@
+-
+-// import { Injectable } from '@nestjs/common';
+-// import { PrismaService } from './prisma.service';
+-// import { Post, Prisma } from '@prisma/client';
+-
+-// @Injectable()
+-// export class PostService {
+-//   constructor(private prisma: PrismaService) {}
+-
+-//   async post(
+-//     postWhereUniqueInput: Prisma.PostWhereUniqueInput,
+-//   ): Promise<Post | null> {
+-//     return this.prisma.post.findUnique({
+-//       where: postWhereUniqueInput,
+-//     });
+-//   }
+-
+-//   async posts(params: {
+-//     skip?: number;
+-//     take?: number;
+-//     cursor?: Prisma.PostWhereUniqueInput;
+-//     where?: Prisma.PostWhereInput;
+-//     orderBy?: Prisma.PostOrderByWithRelationInput;
+-//   }): Promise<Post[]> {
+-//     const { skip, take, cursor, where, orderBy } = params;
+-//     return this.prisma.post.findMany({
+-//       skip,
+-//       take,
+-//       cursor,
+-//       where,
+-//       orderBy,
+-//     });
+-//   }
+-
+-//   async createPost(data: Prisma.PostCreateInput): Promise<Post> {
+-//     return this.prisma.post.create({
+-//       data,
+-//     });
+-//   }
+-
+-//   async updatePost(params: {
+-//     where: Prisma.PostWhereUniqueInput;
+-//     data: Prisma.PostUpdateInput;
+-//   }): Promise<Post> {
+-//     const { data, where } = params;
+-//     return this.prisma.post.update({
+-//       data,
+-//       where,
+-//     });
+-//   }
+-
+-//   async deletePost(where: Prisma.PostWhereUniqueInput): Promise<Post> {
+-//     return this.prisma.post.delete({
+-//       where,
+-//     });
+-//   }
+-// }
+diff --git a/srcs/backend/src/tfa.service.ts b/srcs/backend/src/tfa.service.ts
+index acb8ecf..5814b05 100644
+--- a/srcs/backend/src/tfa.service.ts
++++ b/srcs/backend/src/tfa.service.ts
+@@ -1,11 +1,7 @@
+ import { Injectable } from "@nestjs/common";
+-import { Oauth as OauthModel } from "@prisma/client";
+ import { OauthService } from "./oauth.service";
+-import { Prisma } from "@prisma/client";
+ import { PrismaService } from "./prisma.service";
+-import { totp } from 'otplib';
+ import { Tfa as TfaModel } from "@prisma/client"
+-import { Tfa } from "@prisma/client";
+ 
+ @Injectable()
+ export class TfaService {
+diff --git a/srcs/backend/src/user.service.ts b/srcs/backend/src/user.service.ts
+index a97a721..684ce30 100644
+--- a/srcs/backend/src/user.service.ts
++++ b/srcs/backend/src/user.service.ts
+@@ -1,10 +1,8 @@
+ import { Injectable } from '@nestjs/common';
+ import { PrismaService } from './prisma.service';
+-import { User, Prisma, Tfa } from '@prisma/client';
++import { User, Prisma} from '@prisma/client';
+ import { HttpService } from '@nestjs/axios';
+-import { catchError, take } from 'rxjs';
+-import { Socket } from 'socket.io';
+-import { IoAdapter } from '@nestjs/platform-socket.io';
++import { take } from 'rxjs';
+ 
+ @Injectable()
+ export class UserService {
+diff --git a/srcs/frontend/src/app/app-routing.module.ts b/srcs/frontend/src/app/app-routing.module.ts
+index a913c77..1dab386 100644
+--- a/srcs/frontend/src/app/app-routing.module.ts
++++ b/srcs/frontend/src/app/app-routing.module.ts
+@@ -6,30 +6,49 @@ import { GameRoomComponent } from './game-room/game-room.component';
+ import { ShowRoomComponent } from './show-room/show-room.component';
+ import { VipRoomComponent } from './vip-room/vip-room.component';
+ import { RestRoomComponent } from './rest-room/rest-room.component';
+-import { LoginComponent } from './login/login.component';
+ import { ChatComponent } from './chat/chat.component';
+ import { SalonComponent } from './salon/salon.component';
+ import { FriendUserComponent } from './friend-user/friend-user.component';
++import { AuthGuard } from './auth/auth.guard';
++
+ 
+ 
+ 
+ 
+ 
+ const routes: Routes = [
+-  { path: '', component: LoginComponent },
+-  { path: 'game-room', component: GameRoomComponent },
+-  { path: 'show-room', component: ShowRoomComponent },
+-  { path: 'vip-room', component: VipRoomComponent },
+-  { path: 'rest-room', component: RestRoomComponent },
+-  { path: 'pong', component: PongComponent },
+-  { path: 'home', component: HomeComponent },
+-  { path: 'chat', component: ChatComponent },
+-  { path: 'salon', component: SalonComponent},
+-  { path: 'friend', component: FriendUserComponent}
++
++	{ path: 'game-room', component: GameRoomComponent,
++		canActivate: [AuthGuard]
++	},
++	{ path: 'show-room', component: ShowRoomComponent,
++		canActivate: [AuthGuard]
++	},
++	{ path: 'vip-room', component: VipRoomComponent,
++		canActivate: [AuthGuard]
++	},
++	{ path: 'rest-room', component: RestRoomComponent,
++		canActivate: [AuthGuard]
++	},
++	{ path: 'pong', component: PongComponent,
++		canActivate: [AuthGuard]
++	},
++	{ path: 'home', component: HomeComponent,
++		canActivate: [AuthGuard]
++	},
++	{ path: 'chat', component: ChatComponent,
++		canActivate: [AuthGuard]
++	},
++	{ path: 'salon', component: SalonComponent,
++		canActivate: [AuthGuard]
++	},
++	{ path: 'friend', component: FriendUserComponent,
++		canActivate: [AuthGuard]
++	}
+ ];
+ 
+ @NgModule({
+-  imports: [RouterModule.forRoot(routes)],
+-  exports: [RouterModule]
++	imports: [RouterModule.forRoot(routes)],
++	exports: [RouterModule]
+ })
+ export class AppRoutingModule { }
+diff --git a/srcs/frontend/src/app/app.component.html b/srcs/frontend/src/app/app.component.html
+index 9656b88..af84769 100644
+--- a/srcs/frontend/src/app/app.component.html
++++ b/srcs/frontend/src/app/app.component.html
+@@ -1,6 +1,6 @@
+ 
+-<!-- <app-header [user]="user" ></app-header>
+-<app-bloc-chat ></app-bloc-chat> -->
++
++<!-- <app-invitation-game *ngIf="invitation"></app-invitation-game> -->
+ <app-bloc-chat *ngIf="getRoute() != '/'"></app-bloc-chat>
+ <app-header  *ngIf="getRoute() != '/'" ></app-header>
+ <router-outlet></router-outlet>
+diff --git a/srcs/frontend/src/app/app.component.ts b/srcs/frontend/src/app/app.component.ts
+index ee05e8c..44b26f7 100644
+--- a/srcs/frontend/src/app/app.component.ts
++++ b/srcs/frontend/src/app/app.component.ts
+@@ -2,17 +2,22 @@ import { Component, OnInit } from '@angular/core';
+ import { ActivatedRoute, Router } from '@angular/router';
+ import { SocketService } from './services/socket.service';
+ 
+-import { User } from './models/user';
+-
+ @Component({
+   selector: 'app-root',
+   templateUrl: './app.component.html',
+   styleUrls: ['./app.component.css']
+ })
++
+ export class AppComponent implements OnInit{
+-	constructor(public route: ActivatedRoute,
+-				public router: Router,private socketService: SocketService){
++	constructor(
++    public route: ActivatedRoute,
++		public router: Router,
++    private socketService: SocketService){
+   }
++
++  invitation:boolean=true;
++
++
+   ngOnInit(): void {
+   }
+ 
+diff --git a/srcs/frontend/src/app/app.module.ts b/srcs/frontend/src/app/app.module.ts
+index 423aca5..ef61f58 100644
+--- a/srcs/frontend/src/app/app.module.ts
++++ b/srcs/frontend/src/app/app.module.ts
+@@ -3,7 +3,6 @@ import { HttpClient, HttpClientModule } from '@angular/common/http';
+ import { FormsModule } from '@angular/forms';
+ import { BrowserModule } from '@angular/platform-browser';
+ import { AppRoutingModule } from './app-routing.module';
+-import { CookieService } from 'ngx-cookie-service';
+ import { ApiService } from './services/api.service';
+ import { StorageService } from './services/storage.service';
+ import { AppComponent } from './app.component';
+@@ -32,9 +31,12 @@ import { PongGameComponent } from './pong-game/pong-game.component';
+ import { PlayerPongComponent } from './widgets/player-pong/player-pong.component';
+ import { PasswordComponent } from './widgets/password/password.component';
+ import { AdminInSalonComponent } from './widgets/admin-in-salon/admin-in-salon.component';
++import { InvitationJouerComponent } from './invitation-jouer/invitation-jouer.component';
+ import { CreatorInSalonComponent } from './widgets/creator-in-salon/creator-in-salon.component';
+ import { FriendUserComponent } from './friend-user/friend-user.component';
+ import { BlockUserComponent } from './block-user/block-user.component';
++import { InvitationGameComponent } from './widgets/invitation-game/invitation-game.component';
++import { AuthModule } from './auth/auth.module';
+ 
+ @NgModule({
+   declarations: [
+@@ -47,7 +49,6 @@ import { BlockUserComponent } from './block-user/block-user.component';
+     VipRoomComponent,
+     BlocChatComponent,
+     RestRoomComponent,
+-    LoginComponent,
+     ChatComponent,
+     DirectChatComponent,
+     ChatHistoryComponent,
+@@ -64,23 +65,24 @@ import { BlockUserComponent } from './block-user/block-user.component';
+     PlayerPongComponent,
+     PasswordComponent,
+     AdminInSalonComponent,
++    InvitationJouerComponent,
+     CreatorInSalonComponent,
+-   
+     PlayerPongComponent,
+     FriendUserComponent,
+-    BlockUserComponent
++    BlockUserComponent,
++    InvitationGameComponent
+   ],
+   imports: [
+     BrowserModule,
+     AppRoutingModule,
+     HttpClientModule,
+-    FormsModule
++    FormsModule,
++	AuthModule
+   ],
+   providers: [
+     HttpClient,
+     ApiService,
+ 	StorageService,
+-	CookieService,
+ 	Storage,
+   ],
+   bootstrap: [AppComponent]
+diff --git a/srcs/frontend/src/app/auth/auth-routing.module.ts b/srcs/frontend/src/app/auth/auth-routing.module.ts
+new file mode 100644
+index 0000000..d3addd2
+--- /dev/null
++++ b/srcs/frontend/src/app/auth/auth-routing.module.ts
+@@ -0,0 +1,17 @@
++import { NgModule } from '@angular/core';
++import { RouterModule, Routes } from '@angular/router';
++import { LoginComponent } from '../login/login.component';
++
++const routes: Routes = [
++  { path: '', component: LoginComponent }
++];
++
++@NgModule({
++  imports: [
++    RouterModule.forChild(routes)
++  ],
++  exports: [
++    RouterModule
++  ]
++})
++export class AuthRoutingModule {}
+diff --git a/srcs/frontend/src/app/auth/auth.guard.ts b/srcs/frontend/src/app/auth/auth.guard.ts
+new file mode 100644
+index 0000000..ad5d1e6
+--- /dev/null
++++ b/srcs/frontend/src/app/auth/auth.guard.ts
+@@ -0,0 +1,23 @@
++import { Injectable } from '@angular/core';
++import { ActivatedRouteSnapshot, CanActivate, Router, RouterStateSnapshot } from '@angular/router';
++import { AuthService } from '../services/auth.service';
++
++@Injectable({
++	providedIn: 'root'
++})
++
++export class AuthGuard implements CanActivate {
++
++	constructor(private auth: AuthService,
++		private router: Router) { }
++
++	canActivate(route: ActivatedRouteSnapshot, state: RouterStateSnapshot): boolean {
++		const locked = this.auth.getLocked();
++		if (locked) {
++			this.router.navigateByUrl('');
++			return false;
++		} else {
++			return true;
++		}
++	}
++}
+diff --git a/srcs/frontend/src/app/auth/auth.module.ts b/srcs/frontend/src/app/auth/auth.module.ts
+new file mode 100644
+index 0000000..72c4d3a
+--- /dev/null
++++ b/srcs/frontend/src/app/auth/auth.module.ts
+@@ -0,0 +1,17 @@
++import { NgModule } from '@angular/core';
++import { CommonModule } from '@angular/common';
++import { LoginComponent } from '../login/login.component'
++import { AuthRoutingModule } from './auth-routing.module';
++import { FormsModule } from '@angular/forms';
++
++@NgModule({
++  declarations: [
++    LoginComponent
++  ],
++  imports: [
++    CommonModule,
++	FormsModule,
++    AuthRoutingModule
++  ]
++})
++export class AuthModule { }
+diff --git a/srcs/frontend/src/app/chat-history/chat-history.component.ts b/srcs/frontend/src/app/chat-history/chat-history.component.ts
+index 2b8bcfd..26de8c9 100644
+--- a/srcs/frontend/src/app/chat-history/chat-history.component.ts
++++ b/srcs/frontend/src/app/chat-history/chat-history.component.ts
+@@ -3,7 +3,6 @@ import { ApiService } from '../services/api.service';
+ import { SocketService } from '../services/socket.service';
+ import { User } from '../models/user'
+ import { Message } from '../models/message'
+-import { Observable } from 'rxjs';
+ 
+ @Component({
+   selector: 'app-chat-history',
+@@ -14,12 +13,13 @@ export class ChatHistoryComponent implements OnInit {
+   @Input() Me!: User;
+   @Input() Dest!: User;
+   tmp : Message = {fromUserId : 0, fromUserName : "", userId : 0, content : ""}
+-  messages: Message[] = [this.tmp];
++  messages: Message[] = [];
+   constructor(private apiService: ApiService, private socketService: SocketService) {}
+ 
+   //potentiellement besoin de await si on vois que les messages ne se chargent pas
+   async ngOnInit(): Promise<void> {
+-    await this.apiService.getMessages(this.Me.id, this.Dest.id,).subscribe(
++    this.messages = [];
++    this.apiService.getMessages(this.Me.id, this.Dest.id,).subscribe(
+     {
+       next:(result) => {
+       this.messages = result;
+diff --git a/srcs/frontend/src/app/chat/chat.component.html b/srcs/frontend/src/app/chat/chat.component.html
+index 07f9a3a..0b83c5d 100644
+--- a/srcs/frontend/src/app/chat/chat.component.html
++++ b/srcs/frontend/src/app/chat/chat.component.html
+@@ -16,7 +16,7 @@
+ 		<div class="part2_left">
+ 			
+ 
+-			<app-direct-chat [Dest]="Dest" [Me]="Me" [friendOrNot]="friendOrNot" *ngIf="this.showchat==true"> </app-direct-chat>
++			<app-direct-chat [Dest]="Dest" [Me]="Me" [messages]="messages" *ngIf="this.showchat==true"> </app-direct-chat>
+ 
+ 			<app-create-salon *ngIf="showFormule" (ShowSalonEvent)="receiveShowSalon($event)" (SendChannelNameEvent)="receiveChannelName($event)"></app-create-salon>
+ 
+@@ -32,7 +32,7 @@
+ 			<div class="part2_titre_online">Users list</div>
+ 			<div class="part2_users_online">
+ 				<div *ngFor="let user of User_list">
+-					<app-select-user [user]="user" [Me]="Me" (showchatEvent)="receiveShowchat($event)" (sendDestEvent)="receiveSendDest($event)" (click)="closeCreateSalon()"></app-select-user>
++					<app-select-user [user]="user" [Me]="Me" [show_chat]="this.test" (showchatEvent)="receiveShowchat($event)" (sendDestEvent)="receiveSendDest($event)" (click)="closeCreateSalon()"></app-select-user>
+ 				</div>
+ 			</div>
+ 
+diff --git a/srcs/frontend/src/app/chat/chat.component.ts b/srcs/frontend/src/app/chat/chat.component.ts
+index 6541649..d5277ad 100644
+--- a/srcs/frontend/src/app/chat/chat.component.ts
++++ b/srcs/frontend/src/app/chat/chat.component.ts
+@@ -1,8 +1,7 @@
+-import { Component, OnInit, Input, Inject } from '@angular/core';
++import { Component, OnInit, Input, Inject, Output } from '@angular/core';
+ import { SocketService } from '../services/socket.service';
+ import { ApiService } from '../services/api.service';
+ import { User } from '../models/user'
+-import { NgForm } from '@angular/forms';
+ import { Injectable } from '@angular/core';
+ import { Channel } from '../models/channel';
+ import { StorageService } from '../services/storage.service';
+@@ -40,6 +39,9 @@ export class ChatComponent implements OnInit {
+ 	privatOrpublic: Boolean = false;
+ 	showFormulePassword: Boolean = false;
+ 	delay: number = 0;
++  	Friend_list!: User[];
++
++	test: boolean = false
+ 
+ 	channel_name!: string;
+ 	privateChannel!: Channel;
+@@ -50,22 +52,30 @@ export class ChatComponent implements OnInit {
+ 	}
+ 
+ 	async ngOnInit(): Promise<void> {
+-		// await this.apiService.getAllUsers(this.Me.id).subscribe(
+-		//   (result => {
+-		//     this.User_list = result;
+-		//   }));
+-
+ 		this.socketService.askForUserList(this.Me.id);
+ 		this.socketService.getConnectionSignal(this.Me.id).subscribe();
+ 		this.socketService.getAllUser().subscribe((result) => {
+ 			this.User_list = result;
+ 		});
+ 		console.log(this.Me);
+-		
++
++    this.socketService.getFriend().subscribe((result) => {
++    this.Friend_list = result;
++    })
++
++    this.socketService.removeFriend().subscribe((result) => {
++      this.Friend_list = result;
++    })
++
++    this.socketService.getFriendList(this.Me.id);
++    this.socketService.listFriend().subscribe((result) => {
++      this.Friend_list = result;
++    })
+ 	}
+ 
+ 	receiveShowchat($event: Boolean) {
+-		this.showchat = $event
++		this.test = !this.test;
++		this.showchat = $event;
+ 	}
+ 
+ 	receiveSendDest($event : User) {
+diff --git a/srcs/frontend/src/app/direct-chat/direct-chat.component.ts b/srcs/frontend/src/app/direct-chat/direct-chat.component.ts
+index 8f06bbc..4591d5e 100644
+--- a/srcs/frontend/src/app/direct-chat/direct-chat.component.ts
++++ b/srcs/frontend/src/app/direct-chat/direct-chat.component.ts
+@@ -3,7 +3,6 @@ import { SocketService } from '../services/socket.service';
+ import { ApiService } from '../services/api.service';
+ import { User } from '../models/user'
+ import { Message } from '../models/message';
+-import { subscribeOn } from 'rxjs';
+ 
+ @Component({
+   selector: 'app-direct-chat',
+@@ -13,12 +12,13 @@ import { subscribeOn } from 'rxjs';
+ export class DirectChatComponent implements OnInit {
+   @Input() Me!: User;
+   @Input() Dest!: User;
++  @Input() messages: String[] = [];
++  @Input() friendOrNot:boolean=true;
++  
+   message: string = '';
+-  messages: string[] = [];
+   friendList!: User[];
+   to_create!: Message;
+   friend: string="Add friend";
+-  @Input() friendOrNot:boolean=true;
+   bloque: string="Block";
+   bloqueOrNot: boolean=true;
+   roomName !:string;
+@@ -30,9 +30,8 @@ export class DirectChatComponent implements OnInit {
+   constructor(private socketService: SocketService, private apiService: ApiService) {}
+ 
+   async ngOnInit(): Promise<void> {
+-    await this.socketService.getMessage().subscribe( {
++    this.socketService.getMessage().subscribe( {
+       next:(message: any) => {
+-        //console.log("roomName = " + this.getRoomName(this.Me.login, this.Dest.login) + " | message.channel = " + message.channel)
+         if (this.getRoomName(this.Me.login, this.Dest.login) == message.channel)
+           this.messages.push(message.from + ": " + message.msg);
+         this.message = "";
+diff --git a/srcs/frontend/src/app/header/header.component.ts b/srcs/frontend/src/app/header/header.component.ts
+index 48ac933..b597486 100644
+--- a/srcs/frontend/src/app/header/header.component.ts
++++ b/srcs/frontend/src/app/header/header.component.ts
+@@ -1,38 +1,29 @@
+ import { Component, OnInit, Input, Injectable } from '@angular/core';
+ import { SocketService } from '../services/socket.service';
+-import { User } from '../models/user';
+ import { StorageService } from '../services/storage.service';
+-import { Router, ActivatedRoute } from '@angular/router';
+-import { share } from 'rxjs';
++import { AuthService } from '../services/auth.service';
+ 
+ @Injectable()
+ @Component({
+-  selector: 'app-header',
+-  templateUrl: './header.component.html',
+-  styleUrls: ['./header.component.css']
++	selector: 'app-header',
++	templateUrl: './header.component.html',
++	styleUrls: ['./header.component.css']
+ })
+ export class HeaderComponent implements OnInit {
+ 
+-	constructor(private route: ActivatedRoute,
+-				private router: Router,
+-				private storage: StorageService,
+-				private socketService: SocketService) { }
++	constructor(private storage: StorageService,
++		private socketService: SocketService,
++		private authService: AuthService) { }
+ 
+ 	login = this.storage.getLogin();
+ 
+ 	ngOnInit(): void {
+-		if (this.storage.getCode().length === 0 || this.storage.getLogin().length === 0) {
+-			this.router.navigate(["../"], { relativeTo: this.route });
+-		}
+-		else {
+-    this.socketService.sendLogin(String(this.login)); //obtenir son socket
+-    this.socketService.imConnected(String(this.login));
+-		}
++		this.socketService.sendLogin(String(this.login)); //obtenir son socket
++		this.socketService.imConnected(String(this.login));
+ 	}
+ 
+ 	async logout() {
+-		this.storage.clear();
+-    	this.socketService.imDisconnected(String(this.login));
+-		this.router.navigate(["../"], {relativeTo: this.route}); 
++		this.socketService.imDisconnected(String(this.login));
++		this.authService.logout();
+ 	}
+ }
+diff --git a/srcs/frontend/src/app/invitation-jouer/invitation-jouer.component.css b/srcs/frontend/src/app/invitation-jouer/invitation-jouer.component.css
+new file mode 100644
+index 0000000..e69de29
+diff --git a/srcs/frontend/src/app/invitation-jouer/invitation-jouer.component.html b/srcs/frontend/src/app/invitation-jouer/invitation-jouer.component.html
+new file mode 100644
+index 0000000..e69de29
+diff --git a/srcs/frontend/src/app/invitation-jouer/invitation-jouer.component.spec.ts b/srcs/frontend/src/app/invitation-jouer/invitation-jouer.component.spec.ts
+new file mode 100644
+index 0000000..0679813
+--- /dev/null
++++ b/srcs/frontend/src/app/invitation-jouer/invitation-jouer.component.spec.ts
+@@ -0,0 +1,23 @@
++import { ComponentFixture, TestBed } from '@angular/core/testing';
++
++import { InvitationJouerComponent } from './invitation-jouer.component';
++
++describe('InvitationJouerComponent', () => {
++  let component: InvitationJouerComponent;
++  let fixture: ComponentFixture<InvitationJouerComponent>;
++
++  beforeEach(async () => {
++    await TestBed.configureTestingModule({
++      declarations: [ InvitationJouerComponent ]
++    })
++    .compileComponents();
++
++    fixture = TestBed.createComponent(InvitationJouerComponent);
++    component = fixture.componentInstance;
++    fixture.detectChanges();
++  });
++
++  it('should create', () => {
++    expect(component).toBeTruthy();
++  });
++});
+diff --git a/srcs/frontend/src/app/invitation-jouer/invitation-jouer.component.ts b/srcs/frontend/src/app/invitation-jouer/invitation-jouer.component.ts
+new file mode 100644
+index 0000000..e455cf6
+--- /dev/null
++++ b/srcs/frontend/src/app/invitation-jouer/invitation-jouer.component.ts
+@@ -0,0 +1,36 @@
++import { Component, OnInit, Input } from '@angular/core';
++import { User } from '../models/user';
++import { SocketService } from '../services/socket.service';
++
++@Component({
++  selector: 'app-invitation-jouer',
++  templateUrl: './invitation-jouer.component.html',
++  styleUrls: ['./invitation-jouer.component.css']
++})
++export class InvitationJouerComponent implements OnInit {
++
++  @Input() from!: User;
++  @Input() to!: User;
++
++  toDisplay: boolean = false;
++  gameAccepted: boolean = false;
++  gameIsReady: boolean = false;
++
++  constructor(private socketService: SocketService) {}
++
++  ngOnInit(): void {
++
++    this.socketService.doIHaveToDisplay().subscribe((res) => {
++      this.toDisplay = res;
++    })
++
++    this.socketService.isGameAccepted().subscribe((res) => {
++      this.gameAccepted = res;
++    })
++
++    this.socketService.isGameReady().subscribe((res) => {
++      this.gameIsReady = res;
++    })
++  }
++
++}
+diff --git a/srcs/frontend/src/app/login/login.component.css b/srcs/frontend/src/app/login/login.component.css
+index f4f1f29..2cc7ea6 100644
+--- a/srcs/frontend/src/app/login/login.component.css
++++ b/srcs/frontend/src/app/login/login.component.css
+@@ -22,6 +22,11 @@
+ 
+ }
+ 
++input[type="text"]{
++    border-radius: 20px;
++    color: rgb(92, 89, 89);
++}
++
+ .tfa_count{
+ 	color:white;
+     text-align: center;
+diff --git a/srcs/frontend/src/app/login/login.component.ts b/srcs/frontend/src/app/login/login.component.ts
+index eec20f3..c046cab 100644
+--- a/srcs/frontend/src/app/login/login.component.ts
++++ b/srcs/frontend/src/app/login/login.component.ts
+@@ -1,13 +1,7 @@
+ import { Component, OnInit } from '@angular/core';
+-import { ActivatedRoute, Router } from '@angular/router';
+-import { environment } from 'src/environments/environment';
+-import { ApiService } from '../services/api.service';
+-import { Oauth, Tfa } from '../models/oauth';
+-import { User } from '../models/oauth';
+-import { waitForAsync } from '@angular/core/testing';
+-import { first, mergeMap, ObservableInput, switchMap, take } from 'rxjs';
++import { Router } from '@angular/router';
+ import { StorageService } from '../services/storage.service';
+-import { SocketService } from '../services/socket.service';
++import { AuthService } from '../services/auth.service';
+ 
+ @Component({
+   selector: 'app-root',
+@@ -16,29 +10,19 @@ import { SocketService } from '../services/socket.service';
+ })
+ export class LoginComponent implements OnInit {
+ 
+-	INTRA_API_AUTH = "https://api.intra.42.fr/oauth/authorize";
+ 	code: string = "";
+ 	locked: boolean = true;
+ 	tfa: boolean = false;
+ 	tfa_key: string = "";
+ 	tfa_count: number = 3;
+ 
+-	constructor(private socketService: SocketService,
+-		private route: ActivatedRoute,
+-		private apiService: ApiService,
+-		private storageService: StorageService,
+-		private router: Router) {
++	constructor(private storageService: StorageService,
++		private router: Router,
++		private authService: AuthService) {
+ 	}
+ 
+-	ngOnInit(): void {
+-		this.route.queryParams.subscribe((params) => {
+-			var code = params['code'];
+-			if (code) {
+-				this.code = code;
+-				this.storageService.setCode(code);
+-				this.signup(code);
+-			}
+-		})
++	async ngOnInit() {
++		this.tfa = await this.authService.getCode();
+ 		this.router.navigate([], {
+ 			queryParams: {
+ 				'code': null,
+@@ -47,57 +31,11 @@ export class LoginComponent implements OnInit {
+ 	}
+ 
+ 	OAuthSignIn() {
+-		var login = this.storageService.getLogin();
+-		var code = this.storageService.getCode();
+-		console.log(this.locked);
+-		if (login.length > 0 && code.length > 0) {
+-				this.router.navigate(["../home"], { relativeTo: this.route });
+-		}
+-		else
+-			window.location.href = `${this.INTRA_API_AUTH}?client_id=${environment.INTRA_UID}&redirect_uri=https%3A%2F%2Flocalhost%3A8081&response_type=code`;
+-	}
+-
+-	async signup(code: string) {
+-		this.postCode(code);
+-
+-	}
+-
+-	async postCode(code: string) {
+-		const result = await new Promise<User | boolean>(resolve => {
+-			this.apiService.signup(code).subscribe({
+-				next: (result) => {
+-					if (typeof (result) != "boolean" && result) {
+-						this.initUser(result);
+-						this.locked = false;
+-					}
+-					resolve(result);
+-				}
+-			})
+-		});
+-		if (result === true)
+-			this.tfa = true;
+-		else if (!this.locked)
+-			this.router.navigate(["../home"], { relativeTo: this.route });
+-	}
+-
+-	async validateTfaCode(): Promise<User | boolean> {
+-		return new Promise<User | boolean>(resolve => {
+-			this.apiService.validateTfa({ code: this.code, tfa_key: this.tfa_key }).subscribe({
+-				next: (result) => {
+-					if (typeof (result) != "boolean" && result) {
+-						this.initUser(result);
+-						this.locked = false;
+-					}
+-					resolve(result);
+-				}
+-			});
+-		});
++		this.authService.goToIntraLoginPage();
+ 	}
+ 
+ 	async tfaLogin() {
+-		const result = await this.validateTfaCode();
+-			console.log(result);
+-			if (result === false) {
++		const tfa = await this.authService.validateTfaCode(this.tfa_key);
+ 				if (this.tfa_count < 2) {
+ 					this.tfa_count = 3;
+ 					this.tfa = false;
+@@ -106,27 +44,5 @@ export class LoginComponent implements OnInit {
+ 				}
+ 				this.tfa_count--;
+ 				this.tfa_key = "";
+-			}
+-			else if (!this.locked) {
+-				this.router.navigate(["../home"], { relativeTo: this.route });
+-			}
+-
+-	}
+-
+-	initUser(user: User) {
+-		this.storageService.setId(user.id);
+-		this.storageService.setEmail(user.email);
+-		this.storageService.setLogin(user.login);
+-		this.storageService.setFirstName(user.first_name);
+-		this.storageService.setLastName(user.last_name);
+-		this.storageService.setUrl(user.url);
+-		this.storageService.setDisplayName(user.displayname);
+-		this.storageService.setNickName(user.nickname);
+-		this.storageService.setImageUrl(user.image_url);
+-		this.storageService.setAvatarUrl(user.avatar_url);
+-		if (user.oauth !== undefined) {
+-			this.storageService.setTfa(user.oauth.tfa?.tfa_activated);
+-		}
+-		
+ 	}
+ }
+diff --git a/srcs/frontend/src/app/models/user.ts b/srcs/frontend/src/app/models/user.ts
+index 28a0eba..c717121 100644
+--- a/srcs/frontend/src/app/models/user.ts
++++ b/srcs/frontend/src/app/models/user.ts
+@@ -1,6 +1,5 @@
+ import { Channel } from '../models/channel'
+ import { Oauth } from './oauth';
+-import { Socket } from './socket'
+ 
+ export interface 	User {
+     id: 			number;
+diff --git a/srcs/frontend/src/app/rest-room/rest-room.component.html b/srcs/frontend/src/app/rest-room/rest-room.component.html
+index b2bfe90..0e45c60 100644
+--- a/srcs/frontend/src/app/rest-room/rest-room.component.html
++++ b/srcs/frontend/src/app/rest-room/rest-room.component.html
+@@ -8,7 +8,7 @@
+                 <div class="content_rest">★ Backend : • Authentification <br>
+                     <!-- ★ frontend: • bobobob <br><br> -->
+                     <a href="https://profile.intra.42.fr/users/adylewsk" target="blank"><button type="restroomBlack">Intra 42</button></a>
+-                    <a href="https://github.com/" target="blank"><button type="restroomBlack">Github</button></a>
++                    <a href="https://github.com/Haysk" target="blank"><button type="restroomBlack">Github</button></a>
+                 </div>
+                 </div><!-- fin de env_arnaud -->
+         </div><!-- fin de arnaud -->
+@@ -19,7 +19,7 @@
+                 <div class="content_rest">★ Backend : • Chat <br>
+                     <!-- ★ frontend: • bobobob <br><br> -->
+                     <a href="https://profile.intra.42.fr/users/ade-temm" target="blank"><button type="restroomBlack">Intra 42</button></a>
+-                    <a href="https://github.com/" target="blank"> <button type="restroomBlack">Github</button></a>
++                    <a href="https://github.com/alex-thp/" target="blank"> <button type="restroomBlack">Github</button></a>
+                 </div>
+                 </div><!-- fin de env_alex -->
+         </div><!-- fin de alex -->
+@@ -31,7 +31,7 @@
+                 <div class="content_rest_black">★ Backend : • Jeu  <br>
+                     <!-- ★ frontend: • bobobob <br><br> -->
+                     <a href="https://profile.intra.42.fr/users/anclarma" target="blank"><button type="restroomBlack">Intra 42</button></a>
+-                    <a href="https://github.com/" target="blank"><button type="restroomBlack">Github</button></a>
++                    <a href="https://github.com/alisterd51/" target="blank"><button type="restroomBlack">Github</button></a>
+                 </div>
+                 </div><!-- fin de env_antoine_c -->
+         </div><!-- fin de antoine_c -->
+@@ -43,7 +43,7 @@
+             <div class="content_rest">★ Backend : • Chat <br>
+                 <!-- ★ frontend: • bobobob <br><br> -->
+                 <a href="https://profile.intra.42.fr/users/antton-t" target="blank"><button type="restroomBlack">Intra 42</button></a>
+-                <a href="https://github.com/" target="blank"> <button type="restroomBlack">Github</button></a>
++                <a href="https://github.com/antton-t" target="blank"> <button type="restroomBlack">Github</button></a>
+             </div>
+             </div><!-- fin de env_antoine_t -->
+     </div><!-- fin de antoine_t -->
+@@ -55,7 +55,7 @@
+                 <!-- ★ Backend :  <br> -->
+                 ★ frontend <br><br>
+                 <a href="https://profile.intra.42.fr/users/chilee" target="blank"><button type="restroomBlack">Intra 42</button></a>
+-                <a href="https://github.com/" target="blank"><button type="restroomBlack">Github</button></a>
++                <a href="https://github.com/ddalee75" target="blank"><button type="restroomBlack">Github</button></a>
+             </div>
+             </div><!-- fin de env_ching -->
+     </div><!-- fin de ching -->
+diff --git a/srcs/frontend/src/app/salon/salon.component.ts b/srcs/frontend/src/app/salon/salon.component.ts
+index a9ef652..800d64c 100644
+--- a/srcs/frontend/src/app/salon/salon.component.ts
++++ b/srcs/frontend/src/app/salon/salon.component.ts
+@@ -82,9 +82,6 @@ export class SalonComponent implements OnInit {
+       }
+     })
+ 
+-   
+-
+-
+     this.apiService.getChannelMessages(this.channel_name).subscribe({
+       next:(result) => {
+         this.historiqueConv = result;
+diff --git a/srcs/frontend/src/app/select-user/select-user.component.html b/srcs/frontend/src/app/select-user/select-user.component.html
+index 2a40e17..9ab2143 100644
+--- a/srcs/frontend/src/app/select-user/select-user.component.html
++++ b/srcs/frontend/src/app/select-user/select-user.component.html
+@@ -5,14 +5,14 @@
+     <div >
+     <button class="chat_user_online" *ngIf="user.online" (click)="sendBtn(user)">
+         <div class="onoff" style ="background-color: aqua"></div>
+-        {{user.nickname}} {{this.show_hide}} {{icon_message}}</button>
++        {{user.nickname}} {{icon_message}}</button>
+ 
+     </div>
+ 
+ 
+     <button class="chat_user_offline" *ngIf="user.online==false" (click)="sendBtn(user)">
+         <div class="onoff" style ="background-color: rgb(114, 113, 113)"></div>
+-        {{user.nickname}} {{this.show_hide}} </button> 
++        {{user.nickname}} </button> 
+ 
+     </div>
+ 
+diff --git a/srcs/frontend/src/app/select-user/select-user.component.ts b/srcs/frontend/src/app/select-user/select-user.component.ts
+index 55609e0..8a6bbd3 100644
+--- a/srcs/frontend/src/app/select-user/select-user.component.ts
++++ b/srcs/frontend/src/app/select-user/select-user.component.ts
+@@ -1,7 +1,5 @@
+ import { Component, OnInit, Input, Output, EventEmitter } from '@angular/core';
+ import { User } from '../models/user';
+-import { ChatComponent } from '../chat/chat.component';
+-import { VirtualTimeScheduler } from 'rxjs';
+ import { SocketService } from '../services/socket.service';
+ 
+ @Component({
+@@ -13,8 +11,7 @@ export class SelectUserComponent implements OnInit {
+   @Input() Me!: User;
+   @Input() user!: User;
+   userList!: User[];
+-  show_chat: Boolean = false;
+-  show_hide: String = "chat";
++  @Input() show_chat: Boolean = false;
+ 
+   you_got_message:boolean=true;
+   icon_message!:string;
+@@ -22,11 +19,12 @@ export class SelectUserComponent implements OnInit {
+   @Output() showchatEvent = new EventEmitter<Boolean>();
+   @Output() sendDestEvent = new EventEmitter<User>();
+ 
++
+   constructor(private socketService: SocketService) { }
+ 
+   ngOnInit(): void {
+     
+-    if (this.you_got_message==true){
++    if (this.you_got_message == true){
+         this.icon_message="📨";
+     }
+     else{
+@@ -36,13 +34,14 @@ export class SelectUserComponent implements OnInit {
+   }
+ 
+   sendBtn(dest : User): void {
+-    console.log("Me = " + this.Me.login + " | dest : " + dest.login);
++    // console.log("Me = " + this.Me.login + " | dest : " + dest.login);
+     this.show_chat = this.show_chat?false:true;
+-    this.show_hide = this.show_chat?"close":"chat";
+     this.showchatEvent.emit(this.show_chat);
+     this.sendDestEvent.emit(this.user);
+-
+     this.socketService.checkIfFriend(this.Me.id, this.user.id);
+-
++    if (this.user.login != dest.login)
++    {
++      this.show_chat = false;
++    }
+   }
+ }
+diff --git a/srcs/frontend/src/app/services/api.service.ts b/srcs/frontend/src/app/services/api.service.ts
+index 7c2b63e..04ab178 100644
+--- a/srcs/frontend/src/app/services/api.service.ts
++++ b/srcs/frontend/src/app/services/api.service.ts
+@@ -1,13 +1,9 @@
+ import { HttpClient } from '@angular/common/http';
+ import { Injectable } from '@angular/core';
+-import { Tech } from '../models/technology';
+ import { User } from '../models/user';
+ import { Message } from '../models/message';
+ import { Channel } from '../models/channel';
+-import { Observable } from 'rxjs';
+-import { Oauth } from '../models/oauth';
+ import { Tfa } from '../models/tfa'
+-import { UrlSerializer } from '@angular/router';
+ import { environment } from 'src/environments/environment';
+ 
+ @Injectable({
+diff --git a/srcs/frontend/src/app/services/auth.service.ts b/srcs/frontend/src/app/services/auth.service.ts
+new file mode 100644
+index 0000000..67e459c
+--- /dev/null
++++ b/srcs/frontend/src/app/services/auth.service.ts
+@@ -0,0 +1,113 @@
++import { Injectable } from '@angular/core';
++import { ActivatedRoute, Router } from '@angular/router';
++import { StorageService } from './storage.service';
++import { environment } from 'src/environments/environment';
++import { User } from '../models/user';
++import { ApiService } from './api.service';
++
++@Injectable({
++	providedIn: 'root'
++})
++
++export class AuthService {
++
++	constructor(private route: ActivatedRoute,
++				private router: Router,
++				private storageService: StorageService,
++				private apiService: ApiService) {}
++
++	INTRA_API_AUTH = "https://api.intra.42.fr/oauth/authorize";
++	private code!: string | undefined;
++	private locked: boolean = true;
++	private tfa: boolean = false;
++
++	goToIntraLoginPage() {
++			window.location.href = `${this.INTRA_API_AUTH}?client_id=${environment.INTRA_UID}&redirect_uri=https%3A%2F%2Flocalhost%3A8081&response_type=code`;
++	}
++
++	async getCode(): Promise<boolean> {
++		return new Promise<boolean>(resolve => {
++			this.route.queryParams.subscribe(async (params) => {
++				this.code = params['code'];
++				if (this.code) {
++					this.storageService.setCode(this.code);
++					const result = this.postCode();
++					if (await result === true) {
++						this.tfa = true;
++					}
++				}
++				resolve(this.tfa);
++		})});
++	}
++
++	async postCode() {
++		return new Promise<User | boolean>(resolve => {
++			if (this.code)
++				this.apiService.signup(this.code).subscribe({
++					next: (result) => {
++						if (typeof (result) != "boolean" && result) {
++							if (this.initUser(result)) {
++								this.locked = false;
++								this.router.navigate(["../home"], { relativeTo: this.route });
++							}
++						}
++						resolve(result);
++					}
++				})
++		});
++	}
++
++	async validateTfaCode(tfaCode: string): Promise<User | boolean> {
++		this.code = this.storageService.getCode();	
++		return new Promise<User | boolean>(resolve => {
++			if (this.code && this.code !== "") {
++				this.apiService.validateTfa({ code: this.code, tfa_key: tfaCode }).subscribe({
++					next: (result) => {
++						if (typeof (result) != "boolean" && result) {
++							if (this.initUser(result)) {
++								this.locked = false;
++								this.tfa = false;
++								this.router.navigate(["../home"], { relativeTo: this.route });
++							}
++						}
++						resolve(result);
++					}
++				});
++			}
++		});
++	}
++
++	initUser(user: User) {
++		if (user.oauth !== undefined) {
++			this.storageService.setTfa(user.oauth.tfa?.tfa_activated);
++		}
++		if (this.storageService.setId(user.id) &&
++		this.storageService.setEmail(user.email) &&
++		this.storageService.setLogin(user.login) &&
++		this.storageService.setFirstName(user.first_name) &&
++		this.storageService.setLastName(user.last_name) &&
++		this.storageService.setUrl(user.url) &&
++		this.storageService.setDisplayName(user.displayname) &&
++		this.storageService.setNickName(user.nickname) &&
++		this.storageService.setImageUrl(user.image_url) &&
++		this.storageService.setAvatarUrl(user.avatar_url)) {
++			return true;
++		} else {
++			return false
++		}
++	}
++
++	logout() {
++		this.storageService.clear();
++		this.router.navigate(["../"], {relativeTo: this.route}); 
++		this.locked = true;
++	}
++	
++	getTfa() {
++		return this.tfa;
++	}
++
++	getLocked() {
++		return this.locked;
++	}
++}
+diff --git a/srcs/frontend/src/app/services/socket.service.ts b/srcs/frontend/src/app/services/socket.service.ts
+index 8d7e399..d4a9432 100644
+--- a/srcs/frontend/src/app/services/socket.service.ts
++++ b/srcs/frontend/src/app/services/socket.service.ts
+@@ -1,14 +1,12 @@
+ import { Injectable } from '@angular/core';
+-import { observable, Observable } from 'rxjs';
++import { Observable } from 'rxjs';
+ import { io } from 'socket.io-client';
+-import { HttpClient } from '@angular/common/http';
+ import { ApiService } from '../services/api.service';
+ import { User } from '../models/user';
+ import { Channel } from '../models/channel'
+ import { environment } from 'src/environments/environment';
+ import { IGameStates } from '../pong/game/interfaces/game-states.interface';
+ import { IInput } from '../pong/game/interfaces/input.interface';
+-import { observeNotification } from 'rxjs/internal/Notification';
+ 
+ 
+ @Injectable({
+@@ -283,6 +281,44 @@ amIBanned()
+     });
+   }
+ 
++  //INVITATION GAME
++
++  initSessionToPlay(player1: User, player2: User){
++    this.socket.emit('CreateRoomToPlay', player1, player2);
++  }
++
++  isGameReady(){
++    return new Observable<boolean>((obs) => {
++      this.socket.on('GameIsReady', () => {
++        obs.next(true);
++      })
++    })
++  }
++
++  displayInvitation(target: User){
++    this.socket.emit('initDisplayInvitation', target);
++  }
++
++  doIHaveToDisplay(){
++    return new Observable<boolean>((obs) => {
++      this.socket.on('DisplayInvitation', () => {
++        obs.next(true);
++      })
++    })
++  }
++
++  acceptInvitation(target: User){
++    this.socket.emit('invitationIsAccepted', target);
++  }
++
++  isGameAccepted(){
++    return new Observable<boolean>((obs) => {
++      this.socket.on('invitationAccepted', () => {
++        obs.next(true);
++      })
++    })
++  }
++
+   //PONG GAME
+ 
+   sendMove(move: IInput): void {
+@@ -325,8 +361,6 @@ amIBanned()
+ 
+   getAddFriend(id: number, id1: number){
+     //this.socket.on('getAddFriend');
+-    console.log("fdsfdsfsdfds123132");
+-    
+     this.socket.emit('getAddFriend', id, id1);
+   }
+ 
+diff --git a/srcs/frontend/src/app/services/storage.service.ts b/srcs/frontend/src/app/services/storage.service.ts
+index 98ecc2c..1567e16 100644
+--- a/srcs/frontend/src/app/services/storage.service.ts
++++ b/srcs/frontend/src/app/services/storage.service.ts
+@@ -1,16 +1,14 @@
+ 
+ import { Injectable } from '@angular/core';
+ import { CookieService } from 'ngx-cookie-service';
+-import { BehaviorSubject } from 'rxjs';
+-import { User } from '../models/user';
+ import { ApiService } from './api.service';
+ 
+ @Injectable({
+-  providedIn: 'root',
++	providedIn: 'root',
+ })
+ export class StorageService {
+ 	constructor(private apiService: ApiService,
+-				private cookieService: CookieService){
++		private cookieService: CookieService) {
+ 	}
+ 
+ 	getCode(): string {
+@@ -74,7 +72,7 @@ export class StorageService {
+ 		if (nickname === null || nickname === undefined)
+ 			return "";
+ 		return nickname;
+-		
++
+ 	}
+ 
+ 	getImageUrl(): string {
+@@ -121,52 +119,99 @@ export class StorageService {
+ 		return qrCode;
+ 	}
+ 
+-	setCode(code: string) {
++	setCode(code: string | undefined) {
++		if (code === undefined)
++			return false;
+ 		this.cookieService.set('code', code);
++		return true;
+ 	}
+ 
+ 	setId(id: number) {
+-		localStorage.setItem("id", id.toString());
++		if (id) {
++			localStorage.setItem("id", id.toString());
++			return true;
++		}
++		return false;
+ 	}
+ 
+ 	setLogin(login: string) {
+-		localStorage.setItem("login", login);
++		if (login) {
++			localStorage.setItem("login", login);
++			return true;
++		}
++		return false;
+ 	}
+ 
+ 	setEmail(email: string) {
+-		localStorage.setItem("email", email);
++		if (email) {
++			localStorage.setItem("email", email);
++			return true;
++		}
++		return false;
+ 	}
+ 
+ 	setFirstName(first_name: string) {
+-		localStorage.setItem("first_name", first_name);
++		if (first_name) {
++			localStorage.setItem("first_name", first_name);
++			return true;
++		}
++		return false;
+ 	}
+ 
+ 	setLastName(last_name: string) {
+-		localStorage.setItem("last_name", last_name);
++		if (last_name) {
++			localStorage.setItem("last_name", last_name);
++			return true;
++		}
++		return false;
+ 	}
+ 
+ 	setUrl(url: string) {
+-		localStorage.setItem("url", url);
++		if (url) {
++			localStorage.setItem("url", url);
++			return true;
++		}
++		return false;
+ 	}
+ 
+ 	setDisplayName(display_name: string) {
+-		localStorage.setItem("display_name", display_name);
++		if (display_name) {
++			localStorage.setItem("display_name", display_name);
++			return true;
++		}
++		return false;
+ 	}
+ 
+ 	setNickName(nickname: string) {
+-		localStorage.setItem("nickname", nickname);
++		if (nickname) {
++			localStorage.setItem("nickname", nickname);
++			return true;
++		}
++		return false;
+ 	}
+ 
+ 	setImageUrl(image_url: string) {
+-		localStorage.setItem("image_url", image_url);
++		if (image_url) {
++			localStorage.setItem("image_url", image_url);
++			return true;
++		}
++		return false;
+ 	}
+ 
+ 	setAvatarUrl(avatar_url: string) {
+-		localStorage.setItem("avatar_url", avatar_url);
++		if (avatar_url) {
++			localStorage.setItem("avatar_url", avatar_url);
++			return true;
++		}
++		return false;
+ 	}
+ 
+ 	setOnline(online: boolean) {
+-		localStorage.setItem("online", String(online));
++		if (online) {
++			localStorage.setItem("online", String(online));
++			return true;
++		}
++		return false;
+ 	}
+ 
+ 	setTfa(two_factor_auth: boolean | undefined) {
+diff --git a/srcs/frontend/src/app/vip-room/vip-room.component.css b/srcs/frontend/src/app/vip-room/vip-room.component.css
+index e68b6d2..5ffce3f 100644
+--- a/srcs/frontend/src/app/vip-room/vip-room.component.css
++++ b/srcs/frontend/src/app/vip-room/vip-room.component.css
+@@ -57,27 +57,39 @@
+ 
+ }
+ 
++.env_qr{
++    display: flex;
++    flex-direction: column;
++    align-items: center;
++    text-align: center;
++
++
++}
+ .qr_code{
+-    height:200px;
++    width: 100%;
++    height:160px;
+     /* background-color: bisque; */
+     background-size: contain;
+     background-repeat: no-repeat;
+     background-position: center; 
+-    margin-top: 20px;
++    margin-top: 50px;
++    margin-bottom: 20px;
++ 
+ 
+ }
+ 
+ .tfa_input{
+     /* background-color: bisque; */
+     width: 200px;
+-    background-size: contain;
+-    background-repeat: no-repeat;
+-    background-position: center; 
++    height: 25px;
++    border-radius: 20px;
+     margin-top: 20px;
++    text-align: center;
+ 
+ }
+ 
+ .tfa_count{
++    /* background-color: aqua; */
+ 	color:white;
+     text-align: center;
+ 	font-size: large;
+@@ -96,24 +108,36 @@
+ }
+ 
+ .search{
+-    /* background-color: aqua; */
+     margin-top: 50px;
++
++   
+ }
+ 
+ 
++
+ .champ_avatar{
+-    color: rgb(184, 142, 7);
++    /* background-color: aqua; */
++    width: 100%;
++    color: rgb(85, 85, 85);
+     font-size: 18px;
+     font-weight:bold;
+ }
++
++Input[type=file]{
++    background-color: rgb(255, 255, 255);
++    border-radius: 20px;
++   
++}
++
+ .champ_nickname{
+-    color: rgb(184, 142, 7);
++    color: rgb(255, 255, 255);
+     font-size: 18px;
+     font-weight:bold;
++  
+ 
+ }
+ input[type="text"]{
+-    border-radius: 6px;
++    border-radius: 20px;
+     color: rgb(92, 89, 89);
+ }
+ 
+@@ -140,13 +164,13 @@ input[type="text"]{
+ 
+ } */
+ 
+-input[type=text]{
++/* input[type=text]{
+     
+     border-radius: 20px;
+     border:none;
+  
+ 
+-}
++} */
+ 
+ @media only screen and (max-width: 600px) {
+ }
+diff --git a/srcs/frontend/src/app/vip-room/vip-room.component.html b/srcs/frontend/src/app/vip-room/vip-room.component.html
+index b7ef604..d2b7167 100644
+--- a/srcs/frontend/src/app/vip-room/vip-room.component.html
++++ b/srcs/frontend/src/app/vip-room/vip-room.component.html
+@@ -11,26 +11,30 @@
+        
+ 
+         <div *ngIf="this.userToShow.login==this.login">
++
+         <div class="titre_modify"><app-button-v2 [text]="'Modify profile'" (click)="showhide()"></app-button-v2></div>
++
+         <div class="bloc_modify" *ngIf="visible">
+             <app-button-v2 [text]="'Modify avatar'" (click)="showhide_avatar()"></app-button-v2>
++
+             <app-button-v2 [text]="'Modify nickname'" (click)="showhide_nickname()"></app-button-v2>
+-            <!-- <app-button-v2 [text]="'Modify 2FA: ' + (two_factor_auth | async)" (click)="toggle_two_factor_auth(false)"></app-button-v2> -->
++    
+             <app-button-v2 *ngIf="tfa_auth" [text]="'Modify 2FA: Enabled'" (click)="tfa_disable()"></app-button-v2>
+             <app-button-v2 *ngIf="!tfa_auth" [text]="'Modify 2FA: Disabled'" (click)="tfa_signup()"></app-button-v2>
+         </div><!-- fin de div bloc_modify  -->
+-		<div *ngIf="tfa_validation && visible">
++
++		<div class="env_qr" *ngIf="tfa_validation && visible">
+ 			<div class="qr_code"  style="background-image:url({{qrCode}})"></div>
+-			<p class="tfa_count">{{tfa_count}} TRIES LEFT</p>
+-			<input class="tfa_input" placeholder="Two-Factor Authentication Key" (keydown.enter)="tfa_verify()" [(ngModel)]="tfa_key">
++			<div class="tfa_count">{{tfa_count}} TRIES LEFT</div>
++            <div class="center_tfa">
++			<input class="tfa_input" placeholder="Two-Factor Authentication Key" (keydown.enter)="tfa_verify()" [(ngModel)]="tfa_key"></div>
+ 		</div>
++
+         <!--UpLoad avatar-->
+         <div class="champ_avatar" *ngIf="visible_avatar">
+-            <!-- <label for="file">Choose File:&nbsp;</label>
+-            <input type="file" id="file" (change)="onFileSelected($event)">
+-            <app-button-v2 [text]="'Upload'" (click)="onUpload()"></app-button-v2> -->
++           
+             <div class="container">
+-                <!-- <img [src]="url" title="Profile Picture" height="150px" width="150px" /> -->
++              
+                 <input
+                   type="file"
+                   id="img"
+@@ -38,13 +42,11 @@
+                   (change)="onSelect($event)"
+                 />
+                 <app-button-v2 [text]="'Upload'" (click)="onUpload()"></app-button-v2>
+-              </div>
+-
+-            
+-            
+-			</div>
+-    
++            </div>
++		</div>
++    </div>
+         
++    
+         <!--Change nickname-->
+         <div class="champ_nickname" *ngIf="visible_nickname">
+             New nickname:&nbsp; <input type="text" id="new_nickname" value="Your new nickname" [(ngModel)]="newNickName">
+diff --git a/srcs/frontend/src/app/vip-room/vip-room.component.ts b/srcs/frontend/src/app/vip-room/vip-room.component.ts
+index fea9161..848b5d1 100644
+--- a/srcs/frontend/src/app/vip-room/vip-room.component.ts
++++ b/srcs/frontend/src/app/vip-room/vip-room.component.ts
+@@ -6,7 +6,7 @@
+ 	import { User } from '../models/user';
+ 
+ 	import { share } from 'rxjs';
+-	import { StorageService } from '../services/storage.service';
++	import { StorageService } from '../services/storage.service'
+ 
+ 	@Component({
+ 		selector: 'app-vip-room',
+@@ -128,10 +128,15 @@
+ 	showhide_nickname() {
+ 		this.visible_nickname = this.visible_nickname ? false : true;
+ 		this.visible_avatar = false;
++		this.tfa_auth = false;
++		this.tfa_validation = false;
+ 	}
+-		showhide_avatar() {
++	
++	showhide_avatar() {
+ 		this.visible_avatar = this.visible_avatar ? false : true;
+ 		this.visible_nickname = false;
++		this.tfa_auth = false;
++		this.tfa_validation = false;
+ 	}
+ 	tfa_signup() {
+ 		this.apiService.signupTfa(this.storage.getCode()).subscribe({
+@@ -142,19 +147,27 @@
+ 				}
+ 				this.tfa_auth = true;
+ 				this.tfa_validation = true;
++				this.visible_avatar =false;
++				this.visible_nickname=false;
+ 			}
+ 		});
+ 	}
+ 
+ 	tfa_disable() {
++
++		
++		this.visible_nickname = false;
++		this.visible_avatar = false;
+ 		this.apiService.disableTfa(this.storage.getCode()).subscribe({
+ 			next: (result) => {
+ 				this.storage.setQrCode(undefined);
+ 				this.qrCode = "";
+ 				this.tfa_auth = false
+ 				this.tfa_validation = false;
++				
+ 			},
+ 		});
++		
+ 	}
+ 
+ 	tfa_verify() {
+diff --git a/srcs/frontend/src/app/widgets/admin-in-salon/admin-in-salon.component.ts b/srcs/frontend/src/app/widgets/admin-in-salon/admin-in-salon.component.ts
+index 38b531a..4145cb6 100644
+--- a/srcs/frontend/src/app/widgets/admin-in-salon/admin-in-salon.component.ts
++++ b/srcs/frontend/src/app/widgets/admin-in-salon/admin-in-salon.component.ts
+@@ -14,106 +14,93 @@ export class AdminInSalonComponent implements OnInit {
+ 
+   @Input() guest!: User;
+   @Input() current_channel!: Channel;
+- 
+-  ifAdmin:boolean=false;
+-  ifMuet:boolean=false;
+-   ifBanne:boolean=false;
+-  val_admin:string="Del Admin";
+-  val_muet:string="Muet(Secondes)";
+-  val_banne:string="Ban(Secondes)";
+-  showOption: boolean=false;
+-  color1:string="rgb(76, 80, 79)";
+-  color2:string="rgb(44, 136, 125)";
+-  color3:string="rgb(44, 136, 125)";
+-  time_ban!:number;
+-  countTimeMuet:boolean= true;
+-  countTimeBan:boolean=true;
+-  time_muet!:number;
+-  
+-
+-  @Input() CreatorId!:number;
+-  @Input() usersAdmin:User[] =[];
+-  @Input() AdminOrNot:boolean=false;
++
++  ifAdmin: boolean = false;
++  ifMuet: boolean = false;
++  ifBanne: boolean = false;
++  val_admin: string = "Del Admin";
++  val_muet: string = "Muet(Secondes)";
++  val_banne: string = "Ban(Secondes)";
++  showOption: boolean = false;
++  color1: string = "rgb(76, 80, 79)";
++  color2: string = "rgb(44, 136, 125)";
++  color3: string = "rgb(44, 136, 125)";
++  time_ban!: number;
++  countTimeMuet: boolean = true;
++  countTimeBan: boolean = true;
++  time_muet!: number;
++
++
++  @Input() CreatorId!: number;
++  @Input() usersAdmin: User[] = [];
++  @Input() AdminOrNot: boolean = false;
+ 
+   constructor(private socketService: SocketService) {
+-  
+-   
+   }
+ 
+-   
+-
+-
+-
+-
+   ngOnInit(): void {
+ 
+   }
+ 
+-  isCreator(){
+-     
+-      
+-    
+-      if(Number(localStorage.getItem('id'))== this.CreatorId)
+-         return 1;     
+-      return 0;
++  isCreator() {
++    if (Number(localStorage.getItem('id')) == this.CreatorId)
++      return 1;
++    return 0;
+   }
+ 
+-  show_info(){
++  show_info() {
+ 
+-    this.showOption = this.showOption?false:true;
++    this.showOption = this.showOption ? false : true;
+   }
+-   
+-  delAdmin(){
+-    this.ifAdmin=!this.ifAdmin;
+-   
++
++  delAdmin() {
++    this.ifAdmin = !this.ifAdmin;
++
+     console.log(22)
+     this.socketService.delAdminSalon(this.guest.id, Number(this.current_channel.id));
+-    
++
+     this.socketService.updateUserInSalonList(this.current_channel.name);
+ 
+-    this.val_admin=this.ifAdmin?"Del Admin":"Be Admin";
+-    this.color1=this.ifAdmin?"rgb(76, 80, 79)":"rgb(44, 136, 125)";
+-      
++    this.val_admin = this.ifAdmin ? "Del Admin" : "Be Admin";
++    this.color1 = this.ifAdmin ? "rgb(76, 80, 79)" : "rgb(44, 136, 125)";
++
+   }
+-  
+-  beMuet(){
+-    this.ifMuet=!this.ifMuet;
+-    this.val_muet=this.ifMuet?"Not Muet":"Muet(secondes)";
+-    this.color2=this.ifMuet?"rgb(76, 80, 79)":"rgb(44, 136, 125)";
+-    this.countTimeMuet=!this.countTimeMuet;
+-    if (this.val_muet == "Not Muet")
+-    {
++
++  beMuet() {
++    this.ifMuet = !this.ifMuet;
++    this.val_muet = this.ifMuet ? "Not Muet" : "Muet(secondes)";
++    this.color2 = this.ifMuet ? "rgb(76, 80, 79)" : "rgb(44, 136, 125)";
++    this.countTimeMuet = !this.countTimeMuet;
++    if (this.val_muet == "Not Muet") {
+       if (this.time_muet != 0)
+         this.socketService.muteUserByTime(this.guest.id, Number(this.current_channel.id), this.time_muet);
+       else
+         this.socketService.muteUser(this.guest.id, Number(this.current_channel.id));
+     }
+-    else{
++    else {
+       this.socketService.unmuteUser(this.guest.id, Number(this.current_channel.id));
+     }
+     this.socketService.updateChannel();
+     this.socketService.updateChannels();
+   }
+ 
+-  beBanne(){
+-    this.ifBanne=!this.ifBanne;
+-    this.val_banne=this.ifBanne?"Unban":"Ban(Secondes)";
+-    this.color3=this.ifBanne?"rgb(76, 80, 79)":"rgb(44, 136, 125)";
+-    this.countTimeBan=!this.countTimeBan;
+-    if(this.val_banne == "Unban"){
++  beBanne() {
++    this.ifBanne = !this.ifBanne;
++    this.val_banne = this.ifBanne ? "Unban" : "Ban(Secondes)";
++    this.color3 = this.ifBanne ? "rgb(76, 80, 79)" : "rgb(44, 136, 125)";
++    this.countTimeBan = !this.countTimeBan;
++    if (this.val_banne == "Unban") {
+       if (this.time_ban != 0)
+         this.socketService.banUserByTime(this.guest.id, Number(this.current_channel.id), this.time_ban);
+       else
+         this.socketService.banUser(this.guest.id, Number(this.current_channel.id));
+       this.socketService.leaveChannel(this.current_channel.name, this.guest.id);
+     }
+-    else{
++    else {
+       this.socketService.unbanUser(this.guest.id, Number(this.current_channel.id));
+     }
+     this.socketService.updateChannel();
+     this.socketService.updateChannels();
+     //this.socketService.updateUserInSalonList(this.current_channel.name);
+   }
+-
+-
+ }
+diff --git a/srcs/frontend/src/app/widgets/button-v2/button-v2.component.css b/srcs/frontend/src/app/widgets/button-v2/button-v2.component.css
+index 82e73b7..d14f69f 100644
+--- a/srcs/frontend/src/app/widgets/button-v2/button-v2.component.css
++++ b/srcs/frontend/src/app/widgets/button-v2/button-v2.component.css
+@@ -26,7 +26,7 @@ button[type="submit"]:hover{
+     border: none;
+     border-radius: 20px;
+     cursor: pointer;
+-    background-color: rgb(184, 142, 7);
++    background-color: rgb(247, 189, 0);
+     color: rgb(46, 41, 35);
+     padding-left: 10px;
+     padding-right: 10px;
+diff --git a/srcs/frontend/src/app/widgets/invitation-game/invitation-game.component.css b/srcs/frontend/src/app/widgets/invitation-game/invitation-game.component.css
+new file mode 100644
+index 0000000..1ee33d0
+--- /dev/null
++++ b/srcs/frontend/src/app/widgets/invitation-game/invitation-game.component.css
+@@ -0,0 +1,128 @@
++.all_invitation{
++    background-color: rgba(6, 248, 248, 0.63);
++    width: 100%;
++    height: 100%;
++    position: fixed;
++   
++    top:50%;
++    left:50%;
++    transform: translate(-50%, -50%);
++    z-index: 2;
++}
++
++
++.cercle2{
++    background-image: url("../../../assets/super-mario-boo-512x512.png");
++    /* background-color: rgba(255, 255, 255, 0.733); */
++    background-size: cover;
++    background-repeat: no-repeat;
++    background-position: center; 
++    width: 700px;
++    height: 700px;
++    position: fixed;
++    /* border-radius: 50%; */
++    top:50%;
++    left:50%;
++    transform: translate(-50%, -50%);
++    display: flex;
++    justify-content: center;
++    
++ 
++
++}
++
++.env_all{
++    background: linear-gradient(rgb(10, 212, 179), rgb(158, 213, 245));
++    width: 300px;
++    height: 300px;
++    margin-top: 350px;
++    margin-left: 300px;
++    display: flex;
++    flex-direction: column;
++    align-items: center;
++    text-align: center;
++    border-radius: 50%;
++    
++}
++
++.invite{
++    background-color: rgb(9, 175, 134);
++    width:160px;
++    height: 230px;
++
++}
++
++.photo{
++    background-color: blueviolet;
++    width: 150px;
++    height: 150px;
++    background-image: url("../../../assets/ade-temm.jpg");
++    background-size: cover;
++    background-repeat: no-repeat;
++    background-position: center; 
++    border-radius: 50%;
++    margin-top: 20px;
++    
++}
++
++.message{
++    background-color: rgb(253, 252, 252);
++    width: 220px;
++    height: auto;
++    margin-top: 10px;
++    font-size: 24px;
++    color: rgb(129, 10, 10);
++    border-radius: 20px;
++
++    
++}
++
++.message2{
++
++    color:rgb(0, 0, 0);
++    font-size: 20px;
++    
++}
++
++.env_button{
++
++    width: 100%;
++
++}
++
++
++@media only screen and (max-width: 600px) {
++    .cercle2{
++        background-image: url("../../../assets/super-mario-boo-512x512.png");
++        /* background-color: rgba(255, 255, 255, 0.733); */
++        background-size: cover;
++        background-repeat: no-repeat;
++        background-position: center; 
++        width: 600px;
++        height: 600px;
++        position: fixed;
++        /* border-radius: 50%; */
++        top:50%;
++        left:50%;
++        transform: translate(-50%, -50%);
++        display: flex;
++        justify-content: center;
++        
++     
++    
++    }
++
++    .env_all{
++        background: linear-gradient(rgb(10, 212, 179), rgb(158, 213, 245));
++        width: 280px;
++        height: 280px;
++        margin-top: 350px;
++        margin-left: 300px;
++        display: flex;
++        flex-direction: column;
++        align-items: center;
++        text-align: center;
++        border-radius: 50%;
++        
++    }
++}
+diff --git a/srcs/frontend/src/app/widgets/invitation-game/invitation-game.component.html b/srcs/frontend/src/app/widgets/invitation-game/invitation-game.component.html
+new file mode 100644
+index 0000000..7732fad
+--- /dev/null
++++ b/srcs/frontend/src/app/widgets/invitation-game/invitation-game.component.html
+@@ -0,0 +1,24 @@
++<div class="all_invitation">
++    <div class="cercle2">
++    <div class="env_all">
++        
++            <div class="photo"></div><!-- fin div phoot -->
++            <div class="message">
++                Alex
++            </div><!-- fin div message -->
++    
++
++        <div class="message2">
++        
++            invite you to play a game
++        </div>
++        <div class="env_button">
++            <app-button-v2 [text]="'No,thanks'"></app-button-v2>
++            <app-button-v2 [text]="'Play Now'"></app-button-v2>
++
++        </div>
++
++
++    </div><!-- fin div env_all -->
++    </div><!-- fin div cercle2 -->
++</div><!-- fin div all_invitation -->
+\ No newline at end of file
+diff --git a/srcs/frontend/src/app/widgets/invitation-game/invitation-game.component.spec.ts b/srcs/frontend/src/app/widgets/invitation-game/invitation-game.component.spec.ts
+new file mode 100644
+index 0000000..0971295
+--- /dev/null
++++ b/srcs/frontend/src/app/widgets/invitation-game/invitation-game.component.spec.ts
+@@ -0,0 +1,23 @@
++import { ComponentFixture, TestBed } from '@angular/core/testing';
++
++import { InvitationGameComponent } from './invitation-game.component';
++
++describe('InvitationGameComponent', () => {
++  let component: InvitationGameComponent;
++  let fixture: ComponentFixture<InvitationGameComponent>;
++
++  beforeEach(async () => {
++    await TestBed.configureTestingModule({
++      declarations: [ InvitationGameComponent ]
++    })
++    .compileComponents();
++
++    fixture = TestBed.createComponent(InvitationGameComponent);
++    component = fixture.componentInstance;
++    fixture.detectChanges();
++  });
++
++  it('should create', () => {
++    expect(component).toBeTruthy();
++  });
++});
+diff --git a/srcs/frontend/src/app/widgets/invitation-game/invitation-game.component.ts b/srcs/frontend/src/app/widgets/invitation-game/invitation-game.component.ts
+new file mode 100644
+index 0000000..e3b48b7
+--- /dev/null
++++ b/srcs/frontend/src/app/widgets/invitation-game/invitation-game.component.ts
+@@ -0,0 +1,15 @@
++import { Component, OnInit } from '@angular/core';
++
++@Component({
++  selector: 'app-invitation-game',
++  templateUrl: './invitation-game.component.html',
++  styleUrls: ['./invitation-game.component.css']
++})
++export class InvitationGameComponent implements OnInit {
++
++  constructor() { }
++
++  ngOnInit(): void {
++  }
++
++}
+diff --git a/srcs/frontend/src/app/widgets/user-in-salon/user-in-salon.component.ts b/srcs/frontend/src/app/widgets/user-in-salon/user-in-salon.component.ts
+index 3c704e3..bb7c4c6 100644
+--- a/srcs/frontend/src/app/widgets/user-in-salon/user-in-salon.component.ts
++++ b/srcs/frontend/src/app/widgets/user-in-salon/user-in-salon.component.ts
+@@ -35,8 +35,6 @@ export class UserInSalonComponent implements OnInit {
+   @Input() usersAdmin:User[] =[];
+   @Input() AdminOrNot:boolean=false;
+   constructor(private socketService: SocketService) {
+-  
+-   
+    }
+ 
+   ngOnInit(): void {}
+@@ -64,7 +62,6 @@ export class UserInSalonComponent implements OnInit {
+    
+     if (this.val_admin=="Be Admin")
+     {
+-       
+         this.socketService.BeAdminSalon(this.guest.id, Number(this.current_channel.id));
+     }
+     this.socketService.updateUserInSalonList(this.current_channel.name);
+diff --git a/srcs/frontend/src/assets/super-mario-boo-512x512.png b/srcs/frontend/src/assets/super-mario-boo-512x512.png
+new file mode 100644
+index 0000000..26e9d8e
+Binary files /dev/null and b/srcs/frontend/src/assets/super-mario-boo-512x512.png differ

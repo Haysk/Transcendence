@@ -14,4 +14,6 @@ import { FormsModule } from '@angular/forms';
     AuthRoutingModule
   ]
 })
-export class AuthModule { }
+export class AuthModule {
+  constructor(){}
+}
