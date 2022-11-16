@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, Input } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { SocketService } from './services/socket.service';
 
@@ -46,5 +46,11 @@ export class AppComponent implements OnInit{
   public getRoute() {
 	return this.router.url.split("?")[0];
   }
+
+  receiveShowInivtationEvent($event: boolean){
+    this.invitation = $event;
+   
+  }
+
 
 }

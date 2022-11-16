@@ -55,18 +55,7 @@
 		url = this.avatar_url;
 		selectedFile! : File;
 
-		//fileToUpload: File | null = null;
-
-
-		// selectedFile!:File ;
-		// onFileSelected(event){
-		//  console.log(event);
-		//  this.selectedFile = event.target.files[0];
-		// }
-
-	// url = this.userToShow.avatar_url;
 	
-
 	onSelect(event) {
 		
 		this.selectedFile =event.target.files[0];
@@ -125,6 +114,11 @@
 	searchProfile(){
 		this.socketService.searchForAUser(this.searchName);
 	}
+
+	backtoMyself(){
+		this.socketService.searchForAUser(String(this.login));
+	}
+
 	showhide_nickname() {
 		this.visible_nickname = this.visible_nickname ? false : true;
 		this.visible_avatar = false;

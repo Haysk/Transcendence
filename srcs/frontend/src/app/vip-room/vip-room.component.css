@@ -109,6 +109,7 @@
 
 .search{
     margin-top: 50px;
+    text-align: center;
 
    
 }
@@ -153,24 +154,6 @@ input[type="text"]{
     font-weight: bold;
     padding-top: 7px;
 }
-
-/* .bloc_vip_historique{
-
-    width: 100%;
-    height:300px;
-    background-color: rgba(92, 80, 22, 0.281);
-    margin-top: 10px;
-
-
-} */
-
-/* input[type=text]{
-    
-    border-radius: 20px;
-    border:none;
- 
-
-} */
 
 @media only screen and (max-width: 600px) {
 }

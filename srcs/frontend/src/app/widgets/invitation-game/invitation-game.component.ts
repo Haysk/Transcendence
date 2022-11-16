@@ -38,7 +38,7 @@ export class InvitationGameComponent implements OnInit {
   Nothanks(){
 
     this.showInvitationEvent.emit(false);
-
+    
   }
 
 

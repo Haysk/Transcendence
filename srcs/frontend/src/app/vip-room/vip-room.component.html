@@ -57,6 +57,8 @@
         <div class="search">
             <input type="text"  [(ngModel)]="searchName">
         <app-button-v2 [text]="'Search Profile'" (click)="searchProfile()"></app-button-v2>
+        <div  *ngIf="this.login != this.userToShow.login">
+        <app-button-v2 [text]="'Back to your profile'" (click)="backtoMyself()"></app-button-v2></div>
         </div>
 
 
