@@ -22,7 +22,7 @@
 	userToShow: User = {
 		login: String(localStorage.getItem("login")),
 		displayname: String(localStorage.getItem("displayname")),
-		image_url: String(localStorage.getItem("image_url")),
+		image: String(localStorage.getItem("image")),
 		avatar_url: String(localStorage.getItem("avatar_url")),
 		nickname: String(localStorage.getItem("nickname")),
 		id: Number(localStorage.getItem("id")),
@@ -34,7 +34,7 @@
 	};
 	login = localStorage.getItem("login");
 	displayname = localStorage.getItem("displayname");
-	image_url = localStorage.getItem("image_url");
+	image = localStorage.getItem("image");
 	avatar_url = localStorage.getItem("avatar_url");
 	nickname = localStorage.getItem("nickname");
 	id = localStorage.getItem("id");

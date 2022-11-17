@@ -270,15 +270,27 @@ amIBanned()
     this.socket.emit('msgToServer', message);
   }
 
-  sendMessageTo(message: string, login1: string, login2: string): void
+  sendMessageTo(message: string, login1: string, login2: string, nickname: string): void
   {
-    this.socket.emit('sendMsgTo', message, "", login1, login2)
+    this.socket.emit('sendMsgTo', message, "", login1, login2, nickname)
   };
 
   getMessage(): Observable<string> {
     return new Observable<string>((observer) => {
       this.socket.on('PrivMsg', (message) => {
         observer.next(message);
+      });
+    });
+  }
+
+  initDestActualisation(dest: User){
+    this.socket.emit('ActualisationDest', dest);
+  }
+
+  destActualisation(): Observable<User> {
+    return new Observable<User>((obs) => {
+      this.socket.on('DestActualisation', (res) => {
+        obs.next(res);
       });
     });
   }

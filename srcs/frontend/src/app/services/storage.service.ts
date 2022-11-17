@@ -78,10 +78,10 @@ export class StorageService {
 	}
 
 	getImageUrl(): string {
-		let image_url = localStorage.getItem("image_url");
-		if (image_url === null || image_url === undefined)
+		let image = localStorage.getItem("image");
+		if (image === null || image === undefined)
 			return "";
-		return image_url;
+		return image;
 	}
 
 	getAvatarUrl(): string {
@@ -157,8 +157,8 @@ export class StorageService {
 		localStorage.setItem("nickname", nickname);
 	}
 
-	setImageUrl(image_url: string) {
-		localStorage.setItem("image_url", image_url);
+	setImageUrl(image: string) {
+		localStorage.setItem("image", image);
 	}
 
 	setAvatarUrl(avatar_url: string) {

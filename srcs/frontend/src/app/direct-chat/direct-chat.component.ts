@@ -4,6 +4,7 @@ import { ApiService } from '../services/api.service';
 import { User } from '../models/user'
 import { Message } from '../models/message';
 import { subscribeOn } from 'rxjs';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-direct-chat',
@@ -11,28 +12,49 @@ import { subscribeOn } from 'rxjs';
   styleUrls: ['./direct-chat.component.css']
 })
 export class DirectChatComponent implements OnInit {
+  
   @Input() Me!: User;
   @Input() Dest!: User;
-  message: string = '';
+  @Input() friendOrNot:boolean=true;
   @Input() messages: String[] = [];
+
+  message: string = '';
   friendList!: User[];
   to_create!: Message;
   friend: string="Add friend";
-  @Input() friendOrNot:boolean=true;
   bloque: string="Block";
   bloqueOrNot: boolean=true;
   roomName !:string;
   friendListCheck!: User[];
   num!: number;
-  //sub = WebSocket("ws://localhost:8081");
- 
+  old_messages: Message[] = [];
 
-  constructor(private socketService: SocketService, private apiService: ApiService) {}
+  constructor(private socketService: SocketService,
+              private apiService: ApiService,
+              public router:Router) {}
 
   async ngOnInit(): Promise<void> {
-    await this.socketService.getMessage().subscribe( {
+    this.socketService.destActualisation().subscribe((res) => {
+      for (let i = this.old_messages.length; i > 0; i--) {
+        this.old_messages.pop();
+      }
+      for (let i = this.messages.length; i > 0; i--) {
+        this.messages.pop();
+      }
+      this.Dest = res;
+      this.apiService.getMessages(this.Me.id, this.Dest.id,).subscribe(
+        {
+          next:(result) => {
+          this.old_messages = result;
+          },
+          error: (err) =>{},
+          complete:() => {}
+        
+        })
+    })
+
+    this.socketService.getMessage().subscribe( {
       next:(message: any) => {
-        //console.log("roomName = " + this.getRoomName(this.Me.login, this.Dest.login) + " | message.channel = " + message.channel)
         if (this.getRoomName(this.Me.login, this.Dest.login) == message.channel)
           this.messages.push(message.from + ": " + message.msg);
         this.message = "";
@@ -70,7 +92,7 @@ export class DirectChatComponent implements OnInit {
 
   sendMessage() {
     //this.socketService.sendMessage(this.message);
-    this.socketService.sendMessageTo(this.message, this.Me.login,this.Dest.login);
+    this.socketService.sendMessageTo(this.message, this.Me.login,this.Dest.login, this.Me.nickname);
     this.apiService.createMessage({userId: this.Dest.id, fromUserName: this.Me.nickname , fromUserId: this.Me.id, content: this.message}).subscribe((result)=>{
       // console.log(result);
     });
@@ -78,12 +100,10 @@ export class DirectChatComponent implements OnInit {
   }
 
   addDelFriend(){
-
     this.friend = this.friendOrNot?"Del friend":"Add friend";
     if (this.friendOrNot == true)
     {
       this.socketService.getAddFriend(this.Me.id, this.Dest.id);
-      console.log("id ==>" + this.Me.id + "|| id dest ==> " + this.Dest.id);
       this.socketService.getFriend().subscribe((result) => {
         this.friendList = result;
       })
@@ -108,14 +128,12 @@ export class DirectChatComponent implements OnInit {
       this.socketService.blockedUser().subscribe((result) => {
         this.friendList = result;
       })
-      console.log("test block");
       this.bloqueOrNot = false;
     }
     else
     {
       this.socketService.getUnblockUser(this.Me.id, this.Dest.id);
       this.bloqueOrNot = true;
-      console.log("unblock456");
     }
 
   }

@@ -23,7 +23,7 @@ export class ChatHistoryComponent implements OnInit {
 
   //potentiellement besoin de await si on vois que les messages ne se chargent pas
   async ngOnInit(): Promise<void> {
-    await this.apiService.getMessages(this.Me.id, this.Dest.id,).subscribe(
+    this.apiService.getMessages(this.Me.id, this.Dest.id,).subscribe(
     {
       next:(result) => {
       this.messages = result;

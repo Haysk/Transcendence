@@ -20,7 +20,6 @@ export class FriendUserComponent implements OnInit {
 
   userList!: User[];
 
-  show_hide: String = "chat";
   show_chat: boolean = false;
  
   @Output() showchatEvent = new EventEmitter<boolean>();
@@ -54,9 +53,8 @@ export class FriendUserComponent implements OnInit {
   sendBtn(friend : User): void {
    
     this.show_chat = this.show_chat?false:true;
-    this.show_hide = this.show_chat?"close":"chat";
     this.showchatEvent.emit(this.show_chat);
-    this.sendDestEvent.emit(friend);
+    this.socketService.initDestActualisation(friend);
 
     this.socketService.checkIfFriend(Number(this.Me.id), Number(friend.id));
 

@@ -12,17 +12,14 @@ import { SocketService } from '../services/socket.service';
 export class SelectUserComponent implements OnInit {
   @Input() Me!: User;
   @Input() user!: User;
+
+  @Output() showchatEvent = new EventEmitter<boolean>();
+  
   userList!: User[];
   show_chat: boolean = false;
-  
-  show_hide: String = "chat";
-  // sesame_showOrnot: boolean = false;
-
   you_got_message:boolean=true;
   icon_message!:string;
 
-  @Output() showchatEvent = new EventEmitter<boolean>();
-  @Output() sendDestEvent = new EventEmitter<User>();
 
 
   constructor(private socketService: SocketService) { }
@@ -42,9 +39,8 @@ export class SelectUserComponent implements OnInit {
     // if (this.Me.login != dest.login){
     console.log("Me = " + this.Me.login + " | dest : " + dest.login);
     this.show_chat = !this.show_chat;
-    this.show_hide = this.show_chat?"close":"chat";
     this.showchatEvent.emit(this.show_chat);
-    this.sendDestEvent.emit(this.user);
+    this.socketService.initDestActualisation(dest);
  
 
 

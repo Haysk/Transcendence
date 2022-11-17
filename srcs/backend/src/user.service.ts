@@ -124,9 +124,9 @@ export class UserService {
 							last_name: result.data.last_name,
 							url: result.data.url,
 							displayname: result.data.displayname,
-							image_url: result.data.image_url,
+							image: result.data.image, //remplacer par image
 							nickname: result.data.displayname,
-							avatar_url: result.data.image_url,
+							avatar_url: result.data.image,
 							oauth: {
 								create: {
 									code: code,

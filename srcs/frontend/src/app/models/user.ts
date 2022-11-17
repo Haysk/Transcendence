@@ -11,7 +11,7 @@ export interface 	User {
 	url:			string;
 	displayname:	string;
 	nickname:		string;
-	image_url:		string;
+	image:		string;
 	avatar_url:		string;
 	online:			boolean;
 	channel_joined?:Channel[];
