@@ -1,9 +1,14 @@
 
+.all_players
+{
+    width: 120px;
+    background-color:rgb(51, 48, 38);
+}
 .user_photo{
     width: 120px;
     height:120px;
     /* background-color: bisque; */
-    background-size: contain;
+    background-size: cover;
     background-repeat: no-repeat;
     background-position: center; 
 }
@@ -14,8 +19,10 @@
 }
 
 .playerdispo{
+    width: 100%;
     font-size: 16px;
     text-decoration: none;
+   
 }
 
 .playerdispo:visited {

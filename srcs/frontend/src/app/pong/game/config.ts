@@ -1,14 +1,14 @@
 import { IGame } from './interfaces/game.interface';
 
-const racketHeight = 200;
-const racketWidth = 50;
+const racketHeight = 160;
+const racketWidth = 30;
 const racketSpeed = 10;
 
 const gameHeight = 790;
 const gameWidth = 1000;
 const gameMargin = 10;
 
-const ballDiameter = 20;
+const ballDiameter = 22;
 const ballSpeed = 5;
 
 export const defaultGameConfig: IGame = {
@@ -23,7 +23,7 @@ export const defaultGameConfig: IGame = {
       width: racketWidth,
       height: racketHeight,
       speed: racketSpeed,
-      color: '#5a74c4',
+      color: '#04EBB2',
     },
     input: {
       userId: 0,
@@ -42,7 +42,7 @@ export const defaultGameConfig: IGame = {
       width: racketWidth,
       height: racketHeight,
       speed: racketSpeed,
-      color: '#a43737',
+      color: '#FFBB33',
     },
     input: {
       userId: 1,

@@ -3,16 +3,22 @@
   
     <div class="bloc_vip">
         <div class="title_vip">{{this.userToShow.login}}'s Profile</div>
+        <div class="title_vip2">(Nickname: {{this.userToShow.nickname}})</div>
         <div class="user_photo"  style="background-image:url({{this.userToShow.avatar_url}})" ></div>
         <div class="user_name" >{{this.userToShow.nickname}}</div>
         
+        
       
 
-       
+        <div  *ngIf="this.login != this.userToShow.login">
+        <app-button-v4 [text]="'Back to your profile'" (click)="backtoMyself()"></app-button-v4></div>
 
+        <!--Affichage user profile-->
         <div *ngIf="this.userToShow.login==this.login">
 
         <div class="titre_modify"><app-button-v2 [text]="'Modify profile'" (click)="showhide()"></app-button-v2></div>
+        
+        <!--Affichage Partie Modification Profile si meme User -->
 
         <div class="bloc_modify" *ngIf="visible">
             <app-button-v2 [text]="'Modify avatar'" (click)="showhide_avatar()"></app-button-v2>
@@ -22,7 +28,8 @@
             <app-button-v2 *ngIf="tfa_auth" [text]="'Modify 2FA: Enabled'" (click)="tfa_disable()"></app-button-v2>
             <app-button-v2 *ngIf="!tfa_auth" [text]="'Modify 2FA: Disabled'" (click)="tfa_signup()"></app-button-v2>
         </div><!-- fin de div bloc_modify  -->
-
+        
+        <!--Qrcode-->
 		<div class="env_qr" *ngIf="tfa_validation && visible">
 			<div class="qr_code"  style="background-image:url({{qrCode}})"></div>
 			<div class="tfa_count">{{tfa_count}} TRIES LEFT</div>
@@ -54,15 +61,19 @@
         </div>
         
 
+        <!--Search profile-->
         <div class="search">
+
+         
+
             <input type="text"  [(ngModel)]="searchName">
-        <app-button-v2 [text]="'Search Profile'" (click)="searchProfile()"></app-button-v2>
-        <div  *ngIf="this.login != this.userToShow.login">
-        <app-button-v2 [text]="'Back to your profile'" (click)="backtoMyself()"></app-button-v2></div>
-        </div>
+            <app-button-v2 [text]="'Search Profile'" (click)="searchProfile()"></app-button-v2>
+
+        
+            </div><!--fin div search-->
 
 
-
+        <!--History Match-->
         <div class="title_historique">Match History</div>
         <div class="bloc_vip_historique"></div>
 

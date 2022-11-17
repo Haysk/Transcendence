@@ -30,7 +30,10 @@
 		<app-button-v3 [text]= "friend" (click)="addDelFriend()" ></app-button-v3>
 		<app-button-v3 [text]="'Play Pong'" (click)="invite_game()" ></app-button-v3>
 		<app-button-v3 [text]="bloque" (click)="blockOrNot()"></app-button-v3>
-		<app-button-v3 text="profile" (click)="goToProfile()"></app-button-v3>
+		
+		<a routerLink="/vip-room">
+		<app-button-v3 text="Profile" (click)="goToProfile()"></app-button-v3>
+		</a>
 		
 		
 	</div><!-- fin de realtion -->

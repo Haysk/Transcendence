@@ -128,6 +128,7 @@ export class DirectChatComponent implements OnInit {
 
   goToProfile() {
 
+    this.socketService.searchForAUser(this.Dest.login);
   }
 
 }
