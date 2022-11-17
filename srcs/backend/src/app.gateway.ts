@@ -345,12 +345,15 @@ catch(err){
   @SubscribeMessage('sendMsgTo')
   async sendMsgTo(client: any, payload: any): Promise<void> {
     // const dest = await this.server.in(payload[1]).fetchSockets;
+    console.log("ICI OIUI OUI : ");
+    
+    console.log(payload[4])
     try{
       payload[1] = (await this.userService.findUserByLogin(payload[3])).socket;
       const roomName = this.createRoomName(payload[2], payload[3]);
       this.server.in(payload[1]).socketsJoin(roomName);
       this.server.in(client.id).socketsJoin(roomName);
-      this.server.to(roomName).emit('PrivMsg', {msg: payload[0], channel: roomName, from: payload[2]});
+      this.server.to(roomName).emit('PrivMsg', {msg: payload[0], channel: roomName, from: payload[4]});
     }
     catch(err){
       console.log("error dans sendMsgTo");
@@ -368,6 +371,12 @@ catch(err){
   handlePrivMsg(client:any, payload: any): void
   {
     this.server.sockets.to(payload).emit('msgToClient', client);
+  }
+
+  @SubscribeMessage('ActualisationDest')
+  async destActualisation(client: Socket, payload: any)
+  {
+    this.server.to(client.id).emit('DestActualisation', payload);
   }
 
   /* CREATE CHANNEL */
@@ -463,7 +472,6 @@ catch(err){
       if (data != null && data != undefined)
       {
         this.server.to(data.name + "_channel").emit('channelIsUpdated', data);
-        //this.server.emit('channelIsUpdated');
       }
     }
     catch(err){
@@ -549,8 +557,8 @@ catch(err){
       })
       if (data != null && data != undefined)
       {
-        //this.server.to(payload + "_channel").emit('someoneJoinedTheChannel', data.joined)
-        this.server.emit('someoneJoinedTheChannel', data.joined)
+        this.server.to(payload + "_channel").emit('someoneJoinedTheChannel', data.joined)
+        //this.server.emit('someoneJoinedTheChannel', data.joined)
         return data;
       }
     }
@@ -646,31 +654,8 @@ catch(err){
     this.logger.log('Init');
   }
 
-
-  // async handleDisconnect(client: Socket): Promise<void> {
-  //   this.logger.log(`Client disconnected: ${client.id}`);
-    // let tmp = await this.Prisma.user.findFirst({
-    //   where: {
-    //     socket: client.id
-    //   }
-    // });
-    // await this.Prisma.user.update({
-    //     where: {
-    //       login: tmp.login,
-    //     },
-    //     data: {
-    //      online: false,
-    //     },
-    //   });
-  // }
-
-  // handleConnection(client: Socket, ...args: any[]) {
-  //   this.logger.log(`Client connected: ${client.id}`);
-  // }
-
   @SubscribeMessage('getAddFriend')
   async addingFriend(client: Socket, payload: any){
-    // console.log("test add " + payload);
     try{
       let data = await this.Prisma.user.update({
         where: {
@@ -688,7 +673,6 @@ catch(err){
       if (data != null && data != undefined)
       {
         this.server.to(client.id).emit('addFriend', data.friends);
-        // this.server.to(client.id).emit('updateListFriend',data.friends);
       }
     }
     catch(err){
@@ -699,7 +683,6 @@ catch(err){
 
   @SubscribeMessage('getRemoveFriend')
   async removingFriend(client: Socket, payload: any){
-    // console.log("test remove " + payload);
     try{
       let data = await this.Prisma.user.update({
         where: {
@@ -728,7 +711,6 @@ catch(err){
   @SubscribeMessage('getFriendList')
   async getFriendList(client: any, payload : any)
   {
-    //console.log("test get Friend list" + payload);
     try{
       let data = await this.Prisma.user.findFirst({
         where: {

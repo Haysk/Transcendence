@@ -8,11 +8,13 @@
 		
 		<div class="chatwith"> Chat with {{Dest.nickname}}</div>
 		
-		<div class="chat_history">
+		<!-- <div class="chat_history">
 		<app-chat-history [Me]="Me" [Dest]="Dest" ></app-chat-history>
+		</div> -->
+		
+		<div class="direct_message" *ngFor="let message of old_messages">
+			{{message.fromUserName}}: {{message.content}}
 		</div>
-		
-		
 		
 
 		<div class="direct_message" *ngFor="let message of messages">
