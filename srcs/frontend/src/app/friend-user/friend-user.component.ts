@@ -57,7 +57,6 @@ export class FriendUserComponent implements OnInit {
     this.socketService.initDestActualisation(friend);
 
     this.socketService.checkIfFriend(Number(this.Me.id), Number(friend.id));
-
   }
 
 

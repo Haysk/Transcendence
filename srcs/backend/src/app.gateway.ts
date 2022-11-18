@@ -325,45 +325,7 @@ catch(err){
     })
     if(data != null && data != undefined)
     {
-      // console.log({ data })
-      // console.log("-----------------------"); 
-      // const filteredValues = data.filter((elem, index, arr) => {
-      //   console.log({elem}); 
-      //   console.log("------------------------");
-      //   let i = 0;
-      //   while (elem.blocked[i])
-      //   {
-      //     if (elem.blocked[i].id == payload)
-      //       return false;
-      //     i++;
-      //   }
-      //   return true;
-      //  })
-      //  let loop = data;
-      //  var j = 0;
-      //  var i = 0;
-      //  console.log({loop});
-      //  console.log({data});
-      //  while (loop[i])
-      //  {
-      //    while (loop[i].blocked[j])
-      //    {
-      //      j = 0;
-      //      console.log({loop});
-      //      if (loop[i].blocked[j].id == payload)
-      //      {
-      //       console.log("11111111111111111111111111111");
-            
-      //        console.log(loop.slice(i));
-      //        break;
-      //      }
-      //      j++;
-      //    }
-      //    i++;
-      //  }
-      // this.server.to(client.id).emit('hereIsTheUserList', loop);
       this.server.to(client.id).emit('hereIsTheUserList', data);
-      // this.server.to(client.id).emit('hereIsTheUserList', filteredValues);
     }
   }
   catch(err) {
@@ -376,10 +338,6 @@ catch(err){
 
   @SubscribeMessage('sendMsgTo')
   async sendMsgTo(client: any, payload: any): Promise<void> {
-    // const dest = await this.server.in(payload[1]).fetchSockets;
-    // console.log("ICI OIUI OUI : ");
-    
-    // console.log(payload[4])
     try{
       payload[1] = (await this.userService.findUserByLogin(payload[3])).socket;
       const roomName = this.createRoomName(payload[2], payload[3]);
@@ -590,7 +548,6 @@ catch(err){
       if (data != null && data != undefined)
       {
         this.server.to(payload + "_channel").emit('someoneJoinedTheChannel', data.joined)
-        //this.server.emit('someoneJoinedTheChannel', data.joined)
         return data;
       }
     }
@@ -763,7 +720,12 @@ catch(err){
           id: Number(payload),
         },
         include: {
-          friends: true,
+          friends: {
+            include: {
+              blockedby: true,
+              blocked: true
+            }
+          },
           channel_joined: true,
           muted: true,
           admin_of: true,
@@ -825,7 +787,6 @@ catch(err){
    
   @SubscribeMessage('getBlockUser')
   async getBlockUser(client: Socket, payload: any){
-    // console.log("test add " + payload);
     try{
       let data = await this.Prisma.user.update({
         where: {
@@ -853,7 +814,6 @@ catch(err){
 
   @SubscribeMessage('getUnblockUser')
   async getUnblockUser(client: Socket, payload: any){
-    // console.log("test add " + payload);
     try{
       let data = await this.Prisma.user.update({
         where: {
@@ -882,9 +842,6 @@ catch(err){
   @SubscribeMessage('checkIfBlock')
   async checkIfBlock(client: any, payload: any)
   {
-    // console.log(payload[0]);
-    // console.log(payload[1]);
-    // console.log("hello youuuuuuuu");
     try{
       let data = await this.Prisma.user.findUnique({
         where: {
@@ -896,20 +853,44 @@ catch(err){
       })
       if (data !== null && data !== undefined){
         const value = data.blocked.find((element) => payload[1] === element.id);
-        //  console.log("111515150000000000000");
         if (value !== undefined){
           this.server.to(client.id).emit('findBlockOrNot', 1);
-          // console.log(payload[1]);
-          //  console.log("11111111111111");
         }
         else{
           this.server.to(client.id).emit('findBlockOrNot', 0);
-          //  console.log("00000000000000sdffdsfsddsffds00000");
         }}
       }
     catch(err){
     console.log("issue dans le get blocked list");
     console.log(err);
+    }
+  }
+
+  @SubscribeMessage('hasBeenBlocked')
+  async hasBeenBlocked(client: Socket, payload: any)
+  {
+    let data = await this.Prisma.user.findFirst({
+      where: {
+        id: payload[0].id,
+      }
+    })
+    if (data !== null && data !== undefined)
+    {
+      this.server.to(data.socket).emit("youHaveBeenBlocked", payload[1]);
+    }
+  }
+
+  @SubscribeMessage('hasBeenUnblocked')
+  async hasBeenUnblocked(client: Socket, payload: any)
+  {
+    let data = await this.Prisma.user.findFirst({
+      where: {
+        id: payload[0].id,
+      }
+    })
+    if (data !== null && data !== undefined)
+    {
+      this.server.to(data.socket).emit("youHaveBeenUnblocked", payload[1]);
     }
   }
 

@@ -19,15 +19,14 @@ export class DirectChatComponent implements OnInit {
   @Input() messages: String[] = [];
 
   message: string = '';
-  friendList!: User[];
   to_create!: Message;
   friend: string="Add friend";
   bloque: string="Block";
   bloqueOrNot: boolean=true;
   roomName !:string;
-  friendListCheck!: User[];
   num!: number;
   old_messages: Message[] = [];
+  friendList!: User[];
 
   constructor(private socketService: SocketService,
               private apiService: ApiService,
@@ -61,12 +60,10 @@ export class DirectChatComponent implements OnInit {
     },
     error: (err) =>{},
     complete:() => {}
-      // console.log("message[0] = " + message.msg + " | message[1] = " + message.channel);
     });
     
     this.socketService.findFriendsOrNot().subscribe((result) => {
       this.num = result;
-      console.log(this.num);
       if (this.num == 1)
       {
         this.friendOrNot=false;
@@ -80,19 +77,37 @@ export class DirectChatComponent implements OnInit {
 
     this.socketService.findBlockOrNot().subscribe((result) => {
       this.num = result;
-      // console.log(this.num);
       if (this.num == 0)
       {
-        this.bloqueOrNot = false;
+        this.bloqueOrNot = true;
         this.bloque = "Block";
       }
       else
       {
-        this.bloqueOrNot = true;
+        this.bloqueOrNot = false;
         this.bloque = "Unblock";
       }
       
     })
+
+    this.socketService.unblockedUser().subscribe((result) => {
+      // this.friendList = result;
+      this.bloqueOrNot = true;
+      this.socketService.hasBeenUnblocked(this.Dest, this.Me);
+    })
+
+    this.socketService.blockedUser().subscribe((result) => {
+      // this.friendList = result;
+      this.bloqueOrNot = false;
+      this.socketService.hasBeenBlocked(this.Dest, this.Me);
+    })
+
+    this.socketService.getFriend().subscribe((result) => {      
+    })
+
+    this.socketService.removeFriend().subscribe((result) => {
+    })
+
   }
 
   getRoomName(login1: string, login2 : string) : string
@@ -107,12 +122,9 @@ export class DirectChatComponent implements OnInit {
   }
 
   sendMessage() {
-    //this.socketService.sendMessage(this.message);
     this.socketService.sendMessageTo(this.message, this.Me.login,this.Dest.login, this.Me.nickname);
     this.apiService.createMessage({userId: this.Dest.id, fromUserName: this.Me.nickname , fromUserId: this.Me.id, content: this.message}).subscribe((result)=>{
-      // console.log(result);
     });
-    // this.message = "";
   }
 
   addDelFriend(){
@@ -120,38 +132,30 @@ export class DirectChatComponent implements OnInit {
     if (this.friendOrNot == true)
     {
       this.socketService.getAddFriend(this.Me.id, this.Dest.id);
-      this.socketService.getFriend().subscribe((result) => {
-        this.friendList = result;
-      })
       this.friendOrNot = false;
     }
     else
     {
       this.socketService.getRemoveFriend(this.Me.id, this.Dest.id);
-      this.socketService.removeFriend().subscribe((result) => {
-        this.friendList = result;
-      })
       this.friendOrNot = true;
     }
   }
 
   blockOrNot(){
-    this.bloque = this.bloqueOrNot?"UnBlock":"Block";
-    //this.bloqueOrNot = this.bloqueOrNot?false:true;
-    if (this.bloqueOrNot == true)
+        this.bloque = this.bloqueOrNot?"UnBlock":"Block";
+    if (this.bloqueOrNot === true)
     {
       this.socketService.getBlockUser(this.Me.id, this.Dest.id);
-      this.socketService.blockedUser().subscribe((result) => {
-        this.friendList = result;
-      })
-      this.bloqueOrNot = false;
+      this.socketService.getRemoveFriend(this.Me.id, this.Dest.id);
+      this.friendOrNot = false;
     }
     else
     {
       this.socketService.getUnblockUser(this.Me.id, this.Dest.id);
-      this.bloqueOrNot = true;
-    }
+      this.friendOrNot = true;
+      this.friend = "Add friend";
 
+    }
   }
 
   invite_game(){

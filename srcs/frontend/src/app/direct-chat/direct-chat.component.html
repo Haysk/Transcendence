@@ -23,16 +23,16 @@
 		<div class="chatfond" style="background-image: url('{{Dest.avatar}}');"></div>
 	</div><!-- fin de contenu_chat	 -->
 	
-	<div class="input_chat">
+	<div *ngIf="this.bloqueOrNot" class="input_chat">
 	<input type="text" (keydown.enter)="sendMessage()" [(ngModel)]="message">
 	</div>
 
 	<div class="relation">
 	
-		<app-button-v3 [text]= "friend" (click)="addDelFriend()" ></app-button-v3>
-		<app-button-v3 [text]="'Play Pong'" (click)="invite_game()" ></app-button-v3>
+		<app-button-v3 *ngIf="this.bloqueOrNot" [text]= "friend" (click)="addDelFriend()" ></app-button-v3>
+		<app-button-v3 *ngIf="this.bloqueOrNot" [text]="'Play Pong'" (click)="invite_game()" ></app-button-v3>
 		<app-button-v3 [text]="bloque" (click)="blockOrNot()"></app-button-v3>
-		<app-button-v3 text="profile" (click)="goToProfile()"></app-button-v3>
+		<app-button-v3 *ngIf="this.bloqueOrNot" text="profile" (click)="goToProfile()"></app-button-v3>
 		
 		
 	</div><!-- fin de realtion -->

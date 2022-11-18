@@ -31,14 +31,14 @@
 
 			<div class="part2_titre_online">Users list</div>
 			<div class="part2_users_online">
-				<div *ngFor="let user of User_list">
+				<div *ngFor="let user of User_filtred_list">
 					<app-select-user [user]="user" [Me]="Me" (showchatEvent)="receiveShowchat($event)" (click)="closeCreateSalon()"></app-select-user>
 				</div>
 			</div>
 
 			<div class="part2_titre_friends">Friends Online</div>
 			<div class="part2_friends_online">
-				<div *ngFor="let friend of Friend_list">
+				<div *ngFor="let friend of Friend_filtred_list">
 				<app-friend-user  [friend]="friend" [Me]="Me" (showchatEvent)="receiveShowchat($event)" ></app-friend-user>
 				</div>
 			</div>

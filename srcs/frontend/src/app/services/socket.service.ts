@@ -421,23 +421,37 @@ amIBanned()
     return new Observable<number>((obs) => {
       this.socket.on('findFriendsOrNot', (index: number) => {
         obs.next(index);
-        console.log(`find friend or not ${index}`);
+        // console.log(`find friend or not ${index}`);
       })
     })
   }
+
 //Block User
 
   getBlockUser(id: number, id1: number){
-   //this.socket.on('get Block User');
    this.socket.emit('getBlockUser', id, id1);
   }
 
-  blockedUser(): Observable<User[]> {
+  blockedUser(): Observable<User[]> {    
    return new Observable<User[]>((obs) => {
      this.socket.on('blockedUser', (tab: User[]) => {
        obs.next(tab);
      });
    });
+  }
+
+  hasBeenBlocked(dest: User, Me: User)
+  {
+    this.socket.emit('hasBeenBlocked', dest, Me);
+  }
+
+  getUserListWhenBlocked()
+  {
+    return new Observable<User> ((obs) => {
+      this.socket.on('youHaveBeenBlocked', (data: User) => {
+        obs.next(data);
+      })
+    })
   }
 
 //Unblock User
@@ -466,4 +480,19 @@ amIBanned()
       })
     })
   }
+
+  hasBeenUnblocked(dest: User, Me: User)
+  {
+    this.socket.emit('hasBeenUnblocked', dest, Me);
+  }
+
+  getUserListWhenUnblocked()
+  {
+    return new Observable<User> ((obs) => {
+      this.socket.on('youHaveBeenUnblocked', (data: User) => {
+        obs.next(data);
+      })
+    })
+  }
+
 }

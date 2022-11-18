@@ -46,6 +46,7 @@ export class SelectUserComponent implements OnInit {
 
 
     this.socketService.checkIfFriend(this.Me.id, this.user.id);
+    this.socketService.checkIfBlock(this.Me.id, this.user.id);
     // }
     // else{
     //   this.show_chat = false;
