@@ -1,24 +1,25 @@
 import { Component, OnInit, Input, Output, EventEmitter} from '@angular/core';
 import { User } from '../../models/user'
 import { SocketService } from '../../services/socket.service';
-import { StorageService } from 'src/app/services/storage.service';
 
 @Component({
-  selector: 'app-invitation-game',
-  templateUrl: './invitation-game.component.html',
-  styleUrls: ['./invitation-game.component.css']
+  selector: 'app-invitation-refuse',
+  templateUrl: './invitation-refuse.component.html',
+  styleUrls: ['./invitation-refuse.component.css']
 })
-export class InvitationGameComponent implements OnInit {
+export class InvitationRefuseComponent implements OnInit {
 
-  @Input() fromWho!: User;
+  @Input() refuseFromWho!: User;
+  
   @Input() to!: User;
-  @Output() showInvitationEvent = new EventEmitter<boolean>();
+  @Output() refuseInvitationEvent = new EventEmitter<boolean>();
 
   toDisplay: boolean = false;
+ 
   gameAccepted: boolean = false;
   gameIsReady: boolean = false;
 
-  constructor(private socketService: SocketService, private storageService: StorageService) {}
+  constructor(private socketService: SocketService) {}
 
   ngOnInit(): void {
 
@@ -36,10 +37,9 @@ export class InvitationGameComponent implements OnInit {
     })
   }
 
-  Nothanks(){
+  okGotIt(){
 
-    this.socketService.refuseInvitation(this.fromWho, String(this.storageService.getLogin()));
-    this.showInvitationEvent.emit(false);
+    this.refuseInvitationEvent.emit(false);
     
   }
 

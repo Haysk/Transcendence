@@ -19,7 +19,8 @@ export class AppComponent implements OnInit{
 
   invitation:boolean=false;
   invitationFromWho! :User;
-
+  refuse:boolean=false;
+  refuseFromWho! : User;
 
   ngOnInit(): void {
     // this.socketService.doIHaveToDisplay().subscribe((res) => {
@@ -30,6 +31,13 @@ export class AppComponent implements OnInit{
       next: (data: {res: boolean, res2:User;}) =>{
       this.invitation = data.res;
       this.invitationFromWho = data.res2;
+      }
+    })
+
+    this.socketService.showrefuseInvitation().subscribe({
+      next: (data: {res: boolean, res2:User;}) =>{
+      this.refuse = data.res;
+      this.refuseFromWho = data.res2;
       }
     })
   }
@@ -49,8 +57,10 @@ export class AppComponent implements OnInit{
 
   receiveShowInivtationEvent($event: boolean){
     this.invitation = $event;
-   
   }
 
+  receiverefueInvitationEvent($event: boolean){
+    this.refuse = $event;
+  }
 
 }

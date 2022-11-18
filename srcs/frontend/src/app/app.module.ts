@@ -39,6 +39,7 @@ import { InvitationGameComponent } from './widgets/invitation-game/invitation-ga
 import { ButtonV4Component } from './widgets/button-v4/button-v4.component';
 import { BlocUserProfileComponent } from './widgets/bloc-user-profile/bloc-user-profile.component';
 import { Vip2RoomComponent } from './vip2-room/vip2-room.component';
+import { InvitationRefuseComponent } from './widgets/invitation-refuse/invitation-refuse.component';
 
 @NgModule({
   declarations: [
@@ -75,7 +76,8 @@ import { Vip2RoomComponent } from './vip2-room/vip2-room.component';
     InvitationGameComponent,
     ButtonV4Component,
     BlocUserProfileComponent,
-    Vip2RoomComponent
+    Vip2RoomComponent,
+    InvitationRefuseComponent
   ],
   imports: [
     BrowserModule,

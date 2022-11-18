@@ -623,6 +623,20 @@ catch(err){
       this.server.to(data.socket).emit('DisplayInvitation', invitation, data2); //AJOUTER ICI LES INFOS DE LA PARTIE
   }
 
+  @SubscribeMessage('refuseInvitation')
+  async refuseInvitation(client:Socket, payload:any)
+  {
+    let refuse:boolean =true;
+    let data = await this.Prisma.user.findFirst({
+      where: {login: payload[0].login},
+    })
+    let data2 = await this.Prisma.user.findFirst({
+      where: {login: payload[1]},
+    })
+    if (data != null && data != undefined)
+      this.server.to(data.socket).emit('refuseInvitation', refuse, data2);
+  }
+
 /* PONG GAME */
 
   @SubscribeMessage('moveToServer')

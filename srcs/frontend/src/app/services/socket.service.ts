@@ -301,6 +301,10 @@ amIBanned()
     this.socket.emit('initDisplayInvitation', target, target2);
   }
 
+  refuseInvitation(target: User, target2:string){
+    this.socket.emit('refuseInvitation', target, target2);
+  }
+
   doIHaveToDisplay(){
     return new Observable<any>((obs) => {
       this.socket.on('DisplayInvitation', (res:boolean, res2: User) => {
@@ -309,6 +313,17 @@ amIBanned()
       })
     })
   }
+
+
+  showrefuseInvitation(){
+    return new Observable<any>((obs) => {
+      this.socket.on('refuseInvitation', (res:boolean, res2: User) => {
+        let data = {res, res2}
+        obs.next(data);
+      })
+    })
+  }
+
 
   acceptInvitation(target: User){
     this.socket.emit('invitationIsAccepted', target);
