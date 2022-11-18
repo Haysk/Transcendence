@@ -33,7 +33,7 @@ import { ConfigModule } from '@nestjs/config';
     OauthService,
     ChannelService,
     BanAndMuteService,
-	TfaService
+	  TfaService
   ],
 })
 export class AppModule {}

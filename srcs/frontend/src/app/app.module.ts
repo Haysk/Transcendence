@@ -3,7 +3,6 @@ import { HttpClient, HttpClientModule } from '@angular/common/http';
 import { FormsModule } from '@angular/forms';
 import { BrowserModule } from '@angular/platform-browser';
 import { AppRoutingModule } from './app-routing.module';
-//import { CookieService } from 'ngx-cookie-service';
 import { ApiService } from './services/api.service';
 import { StorageService } from './services/storage.service';
 import { AppComponent } from './app.component';
@@ -37,6 +36,7 @@ import { CreatorInSalonComponent } from './widgets/creator-in-salon/creator-in-s
 import { FriendUserComponent } from './friend-user/friend-user.component';
 import { BlockUserComponent } from './block-user/block-user.component';
 import { InvitationGameComponent } from './widgets/invitation-game/invitation-game.component';
+import { AuthModule } from './auth/auth.module';
 
 @NgModule({
   declarations: [
@@ -49,7 +49,6 @@ import { InvitationGameComponent } from './widgets/invitation-game/invitation-ga
     VipRoomComponent,
     BlocChatComponent,
     RestRoomComponent,
-    LoginComponent,
     ChatComponent,
     DirectChatComponent,
     ChatHistoryComponent,
@@ -77,13 +76,13 @@ import { InvitationGameComponent } from './widgets/invitation-game/invitation-ga
     BrowserModule,
     AppRoutingModule,
     HttpClientModule,
-    FormsModule
+    FormsModule,
+	AuthModule
   ],
   providers: [
     HttpClient,
     ApiService,
 	StorageService,
-	//CookieService,
 	Storage,
   ],
   bootstrap: [AppComponent]

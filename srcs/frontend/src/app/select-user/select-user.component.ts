@@ -1,7 +1,5 @@
 import { Component, OnInit, Input, Output, EventEmitter } from '@angular/core';
 import { User } from '../models/user';
-import { ChatComponent } from '../chat/chat.component';
-import { VirtualTimeScheduler } from 'rxjs';
 import { SocketService } from '../services/socket.service';
 
 @Component({
@@ -12,6 +10,8 @@ import { SocketService } from '../services/socket.service';
 export class SelectUserComponent implements OnInit {
   @Input() Me!: User;
   @Input() user!: User;
+  // userList!: User[];
+  // @Input() show_chat: Boolean = false;
 
   @Output() showchatEvent = new EventEmitter<boolean>();
   
@@ -22,11 +22,12 @@ export class SelectUserComponent implements OnInit {
 
 
 
+
   constructor(private socketService: SocketService) { }
 
   ngOnInit(): void {
     
-    if (this.you_got_message==true){
+    if (this.you_got_message == true){
         this.icon_message="📨";
     }
     else{

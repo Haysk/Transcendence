@@ -7,15 +7,10 @@ import {
   WebSocketGateway,
   WebSocketServer,
 } from '@nestjs/websockets';
-import { PrismaClient } from '@prisma/client';
 import { PrismaService } from './prisma.service';
 import { Server, Socket } from 'socket.io';
-import { IoAdapter } from '@nestjs/platform-socket.io';
 import { UserService } from './user.service';
 import { BanAndMuteService } from './banAndMute.service'
-import { truncateSync } from 'fs';
-import { async } from 'rxjs';
-import { emit } from 'process';
 
 @WebSocketGateway({
   cors: {
@@ -128,7 +123,7 @@ export class AppGateway
     if(data != null && data != undefined)
       
       this.server.to(data.name + "_channel").emit('newAdminInChannel', data.admins)
-      this.server.to(data.name + "_channel").emit('someoneJoinedTheChannel', data.joined)
+      this.server.to(data.name + "_channel").emit('someoneJoinedTheChannel', data)
       
   }
   catch(err) {
@@ -161,8 +156,8 @@ export class AppGateway
     })
     if(data != null && data != undefined)
      
-      this.server.emit('newAdminInChannel',data.admins)
-      this.server.emit('someoneJoinedTheChannel',data)
+      this.server.to(data.name + "_channel").emit('newAdminInChannel', data.admins)
+      this.server.to(data.name + "_channel").emit('someoneJoinedTheChannel', data)
      
   }
   catch(err) {
@@ -214,8 +209,6 @@ export class AppGateway
   @SubscribeMessage('isOnline')
   async isOnline(client:any, payload: any)
   {
-    // console.log("PAYLOAD =>");
-    // console.log(payload);
     try {
       let data = await this.Prisma.user.update({
       where: {
@@ -287,7 +280,6 @@ async handleConnection(client: Socket, ...args: any[]) {
 @SubscribeMessage('sendLogin')
 async setupLogin(client: Socket, payload: any): Promise<void>
 {
-  //console.log("LOGIN :" + payload + " | mysocket : " + client.id)
   try{
     let data = await this.Prisma.user.update({
     where: {
@@ -312,8 +304,6 @@ catch(err){
   @SubscribeMessage('userListPlz')
   async sendUserList(client: any, payload: any)
   {
-    // console.log("SENDUSERLIST en cours");
-    
     try{
     let data = await this.Prisma.user.findMany({
       where: {
@@ -322,11 +312,14 @@ catch(err){
         }
       },
       include: {
-        channel_joined: true,
-        blocked:        true,
-        blockedby:      true,
-        friends:        true,
-        friendsof:      true,
+          friends: true,
+          channel_joined: true,
+          muted: true,
+          admin_of: true,
+          banned: true,
+          creatorOf: true,
+          blocked: true,
+          blockedby: true,
       }
     })
     if(data != null && data != undefined)
@@ -345,9 +338,9 @@ catch(err){
   @SubscribeMessage('sendMsgTo')
   async sendMsgTo(client: any, payload: any): Promise<void> {
     // const dest = await this.server.in(payload[1]).fetchSockets;
-    console.log("ICI OIUI OUI : ");
+    // console.log("ICI OIUI OUI : ");
     
-    console.log(payload[4])
+    // console.log(payload[4])
     try{
       payload[1] = (await this.userService.findUserByLogin(payload[3])).socket;
       const roomName = this.createRoomName(payload[2], payload[3]);
@@ -668,6 +661,13 @@ catch(err){
       },
       include: {
         friends: true,
+          channel_joined: true,
+          muted: true,
+          admin_of: true,
+          banned: true,
+          creatorOf: true,
+          blocked: true,
+          blockedby: true,
       }
       })
       if (data != null && data != undefined)
@@ -695,6 +695,13 @@ catch(err){
         },
         include: {
           friends: true,
+          channel_joined: true,
+          muted: true,
+          admin_of: true,
+          banned: true,
+          creatorOf: true,
+          blocked: true,
+          blockedby: true,
         }
       })
       if (data != null && data != undefined)
@@ -718,6 +725,13 @@ catch(err){
         },
         include: {
           friends: true,
+          channel_joined: true,
+          muted: true,
+          admin_of: true,
+          banned: true,
+          creatorOf: true,
+          blocked: true,
+          blockedby: true,
         },
       })
       if (data != null && data != undefined)
@@ -735,7 +749,6 @@ catch(err){
   @SubscribeMessage('checkIfFriend')
   async checkIfFriend(client: any, payload: any)
   {
-    
     try{
       let data = await this.Prisma.user.findUnique({
         where: {
@@ -743,10 +756,15 @@ catch(err){
         },
         include: {
           friends: true,
+          channel_joined: true,
+          muted: true,
+          admin_of: true,
+          banned: true,
+          creatorOf: true,
+          blocked: true,
+          blockedby: true,
         }
       })
-    
-      
       if (data !== null && data !== undefined){
         const value = data.friends.find((element) => payload[1] === element.id);
         
