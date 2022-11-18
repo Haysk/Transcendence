@@ -5,6 +5,7 @@ import { PongComponent } from './pong/pong.component';
 import { GameRoomComponent } from './game-room/game-room.component';
 import { ShowRoomComponent } from './show-room/show-room.component';
 import { VipRoomComponent } from './vip-room/vip-room.component';
+import { Vip2RoomComponent } from './vip2-room/vip2-room.component';
 import { RestRoomComponent } from './rest-room/rest-room.component';
 import { LoginComponent } from './login/login.component';
 import { ChatComponent } from './chat/chat.component';
@@ -25,6 +26,7 @@ const routes: Routes = [
   { path: 'home', component: HomeComponent },
   { path: 'chat', component: ChatComponent },
   { path: 'salon', component: SalonComponent},
+  { path: 'vip2-room', component: Vip2RoomComponent },
   { path: 'friend', component: FriendUserComponent}
 ];
 
