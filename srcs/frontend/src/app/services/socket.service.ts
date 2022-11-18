@@ -412,29 +412,45 @@ amIBanned()
       })
     })
   }
+//Block User
 
   getBlockUser(id: number, id1: number){
-    //this.socket.on('get Block User');
-    this.socket.emit('getBlockUser', id, id1);
+   //this.socket.on('get Block User');
+   this.socket.emit('getBlockUser', id, id1);
   }
 
   blockedUser(): Observable<User[]> {
-    return new Observable<User[]>((obs) => {
-      this.socket.on('blockedUser', (tab: User[]) => {
-        obs.next(tab);
-      });
-    });
+   return new Observable<User[]>((obs) => {
+     this.socket.on('blockedUser', (tab: User[]) => {
+       obs.next(tab);
+     });
+   });
   }
 
+//Unblock User
+
   getUnblockUser(id: number, id1: number){
-    this.socket.emit('getUnblockUser', id, id1);
+   this.socket.emit('getUnblockUser', id, id1);
   }
 
   unblockedUser(): Observable<User[]> {
-    return new Observable<User[]>((obs) => {
-      this.socket.on('unblockedUser', (tab: User[]) => {
+   return new Observable<User[]>((obs) => {
+    this.socket.on('unblockedUser', (tab: User[]) => {
         obs.next(tab);
       });
     });
+  }
+
+  checkIfBlock(id: number, id1: number){
+    this.socket.emit('checkIfBlock', id, id1);
+  }
+
+  findBlockOrNot(): Observable<number> {
+    return new Observable<number>((obs) => {
+      this.socket.on('findBlockOrNot', (index: number) => {
+        obs.next(index);
+        // console.log(`find block or not ${index}`);
+      })
+    })
   }
 }

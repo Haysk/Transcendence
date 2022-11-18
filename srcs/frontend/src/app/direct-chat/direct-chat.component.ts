@@ -53,6 +53,22 @@ export class DirectChatComponent implements OnInit {
         this.friend = "Add friend";
       }
     })
+
+    this.socketService.findBlockOrNot().subscribe((result) => {
+      this.num = result;
+      // console.log(this.num);
+      if (this.num == 0)
+      {
+        this.bloqueOrNot = false;
+        this.bloque = "Block";
+      }
+      else
+      {
+        this.bloqueOrNot = true;
+        this.bloque = "Unblock";
+      }
+      
+    })
   }
 
   getRoomName(login1: string, login2 : string) : string
