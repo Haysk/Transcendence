@@ -11,6 +11,7 @@ import { PrismaService } from './prisma.service';
 import { Server, Socket } from 'socket.io';
 import { UserService } from './user.service';
 import { BanAndMuteService } from './banAndMute.service'
+import { log } from 'console';
 
 @WebSocketGateway({
   cors: {
@@ -324,7 +325,45 @@ catch(err){
     })
     if(data != null && data != undefined)
     {
+      // console.log({ data })
+      // console.log("-----------------------"); 
+      // const filteredValues = data.filter((elem, index, arr) => {
+      //   console.log({elem}); 
+      //   console.log("------------------------");
+      //   let i = 0;
+      //   while (elem.blocked[i])
+      //   {
+      //     if (elem.blocked[i].id == payload)
+      //       return false;
+      //     i++;
+      //   }
+      //   return true;
+      //  })
+      //  let loop = data;
+      //  var j = 0;
+      //  var i = 0;
+      //  console.log({loop});
+      //  console.log({data});
+      //  while (loop[i])
+      //  {
+      //    while (loop[i].blocked[j])
+      //    {
+      //      j = 0;
+      //      console.log({loop});
+      //      if (loop[i].blocked[j].id == payload)
+      //      {
+      //       console.log("11111111111111111111111111111");
+            
+      //        console.log(loop.slice(i));
+      //        break;
+      //      }
+      //      j++;
+      //    }
+      //    i++;
+      //  }
+      // this.server.to(client.id).emit('hereIsTheUserList', loop);
       this.server.to(client.id).emit('hereIsTheUserList', data);
+      // this.server.to(client.id).emit('hereIsTheUserList', filteredValues);
     }
   }
   catch(err) {
@@ -784,4 +823,94 @@ catch(err){
   }
 
    
+  @SubscribeMessage('getBlockUser')
+  async getBlockUser(client: Socket, payload: any){
+    // console.log("test add " + payload);
+    try{
+      let data = await this.Prisma.user.update({
+        where: {
+          id: Number(payload[0]),
+        },
+        data:{
+          blocked: {
+            connect: [{id: Number(payload[1])}]
+          },
+      },
+      include: {
+        blocked: true,
+      }
+      })
+      if (data != null && data != undefined)
+      {
+        this.server.to(client.id).emit('blockedUser', data.blocked);
+      }
+    }
+    catch(err){
+      console.log("issue dans getAddBlock");
+      console.log(err);
+    }
+  }
+
+  @SubscribeMessage('getUnblockUser')
+  async getUnblockUser(client: Socket, payload: any){
+    // console.log("test add " + payload);
+    try{
+      let data = await this.Prisma.user.update({
+        where: {
+          id: Number(payload[0]),
+        },
+        data:{
+          blocked: {
+            disconnect: [{id: Number(payload[1])}]
+          },
+      },
+      include: {
+        blocked: true,
+      }
+      })
+      if (data != null && data != undefined)
+      {
+        this.server.to(client.id).emit('unblockedUser', data.blocked);
+      }
+    }
+    catch(err){
+      console.log("issue dans getRemoveBlock");
+      console.log(err);
+    }
+  }
+
+  @SubscribeMessage('checkIfBlock')
+  async checkIfBlock(client: any, payload: any)
+  {
+    // console.log(payload[0]);
+    // console.log(payload[1]);
+    // console.log("hello youuuuuuuu");
+    try{
+      let data = await this.Prisma.user.findUnique({
+        where: {
+          id: Number(payload[0]),
+        },
+        include: {
+          blocked: true,
+        }
+      })
+      if (data !== null && data !== undefined){
+        const value = data.blocked.find((element) => payload[1] === element.id);
+        //  console.log("111515150000000000000");
+        if (value !== undefined){
+          this.server.to(client.id).emit('findBlockOrNot', 1);
+          // console.log(payload[1]);
+          //  console.log("11111111111111");
+        }
+        else{
+          this.server.to(client.id).emit('findBlockOrNot', 0);
+          //  console.log("00000000000000sdffdsfsddsffds00000");
+        }}
+      }
+    catch(err){
+    console.log("issue dans le get blocked list");
+    console.log(err);
+    }
+  }
+
 }
