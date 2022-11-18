@@ -8,17 +8,19 @@
 		
 		<div class="chatwith"> Chat with {{Dest.nickname}}</div>
 		
-		<div class="chat_history">
+		<!-- <div class="chat_history">
 		<app-chat-history [Me]="Me" [Dest]="Dest" ></app-chat-history>
+		</div> -->
+		
+		<div class="direct_message" *ngFor="let message of old_messages">
+			{{message.fromUserName}}: {{message.content}}
 		</div>
-		
-		
 		
 
 		<div class="direct_message" *ngFor="let message of messages">
 			{{ message }}
 		</div>
-		<div class="chatfond" style="background-image: url('{{Dest.avatar_url}}');"></div>
+		<div class="chatfond" style="background-image: url('{{Dest.avatar}}');"></div>
 	</div><!-- fin de contenu_chat	 -->
 	
 	<div class="input_chat">

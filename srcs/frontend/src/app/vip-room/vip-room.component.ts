@@ -20,24 +20,24 @@
 	visible_nickname:boolean = false;
 	
 	userToShow: User = {
-		login: String(localStorage.getItem("login")),
-		displayname: String(localStorage.getItem("displayname")),
-		image_url: String(localStorage.getItem("image_url")),
-		avatar_url: String(localStorage.getItem("avatar_url")),
-		nickname: String(localStorage.getItem("nickname")),
-		id: Number(localStorage.getItem("id")),
+		login: this.storage.getLogin(),
+		displayname: this.storage.getDisplayName(),
+		image: this.storage.getImage(),
+		avatar: this.storage.getAvatar(),
+		nickname: this.storage.getNickName(),
+		id: this.storage.getId(),
 		online: true,
 		email: "",
 		first_name: "",
 		last_name: "",
-		url: String(localStorage.getItem("avatar_url"))
+		url: this.storage.getAvatar()
 	};
-	login = localStorage.getItem("login");
-	displayname = localStorage.getItem("displayname");
-	image_url = localStorage.getItem("image_url");
-	avatar_url = localStorage.getItem("avatar_url");
-	nickname = localStorage.getItem("nickname");
-	id = localStorage.getItem("id");
+	login = this.storage.getLogin();
+	displayname = this.storage.getDisplayName();
+	image = this.storage.getImage();
+	avatar = this.storage.getAvatar();
+	nickname = this.storage.getNickName();
+	id = this.storage.getId();
 	newNickName!:string;
 	searchName:string = "";
 	
@@ -52,9 +52,19 @@
 		qrCode: string = "";
 		tfa_key: string = "";
 		tfa_count: number = 3;
-		url = this.avatar_url;
+		url = this.avatar;
 		selectedFile! : File;
 
+		//fileToUpload: File | null = null;
+
+
+		// selectedFile!:File ;
+		// onFileSelected(event){
+		//  console.log(event);
+		//  this.selectedFile = event.target.files[0];
+		// }
+
+	// url = this.userToShow.avatar;
 	
 	onSelect(event) {
 		
@@ -65,7 +75,7 @@
 		reader.readAsDataURL(event.target.files[0]);
 		reader.onload = (event: any) => {
 			this.userToShow.url = event.target.result;
-			console.log("avatar url:" + this.avatar_url);
+			console.log("avatar url:" + this.avatar);
 			console.log("new avatar url" + this.userToShow.url);
 			// console.log(event);
 		};
@@ -79,7 +89,7 @@
 		if (this.selectedFile.size < 75000){
 		this.apiService.updateAvatar(Number(this.id), String(this.userToShow.url)).subscribe();
 		console.log("this.url")
-		localStorage.setItem('avatar_url', String(this.userToShow.url));
+		this.storage.setAvatar(String(this.userToShow.url));
 		window.alert('***Update down***');
 		}
 		else{
@@ -105,7 +115,7 @@
 
 	changeNickname(){
 		this.apiService.updateNickName(Number(this.id), this.newNickName).subscribe();
-		localStorage.setItem('nickname', this.newNickName)
+		this.storage.setNickName(this.newNickName)
 		this.newNickName = "";
 		window.alert('***Nickname changed. Reload page ***');
 

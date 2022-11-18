@@ -1,7 +1,6 @@
 import { Component, OnInit, Input } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { SocketService } from './services/socket.service';
-
 import { User } from './models/user';
 
 @Component({

@@ -22,20 +22,20 @@ export class Vip2RoomComponent implements OnInit {
 	userToShow: User = {
 		login: String(localStorage.getItem("login")),
 		displayname: String(localStorage.getItem("displayname")),
-		image_url: String(localStorage.getItem("image_url")),
-		avatar_url: String(localStorage.getItem("avatar_url")),
+		image: String(localStorage.getItem("image")),
+		avatar: String(localStorage.getItem("avatar")),
 		nickname: String(localStorage.getItem("nickname")),
 		id: Number(localStorage.getItem("id")),
 		online: true,
 		email: "",
 		first_name: "",
 		last_name: "",
-		url: String(localStorage.getItem("avatar_url"))
+		url: String(localStorage.getItem("avatar"))
 	};
 	login = localStorage.getItem("login");
 	displayname = localStorage.getItem("displayname");
-	image_url = localStorage.getItem("image_url");
-	avatar_url = localStorage.getItem("avatar_url");
+	image = localStorage.getItem("image");
+	avatar = localStorage.getItem("avatar");
 	nickname = localStorage.getItem("nickname");
 	id = localStorage.getItem("id");
 	newNickName!:string;
@@ -52,7 +52,7 @@ export class Vip2RoomComponent implements OnInit {
 		qrCode: string = "";
 		tfa_key: string = "";
 		tfa_count: number = 3;
-		url = this.avatar_url;
+		url = this.avatar;
 		selectedFile! : File;
 
 	
@@ -65,7 +65,7 @@ export class Vip2RoomComponent implements OnInit {
 		reader.readAsDataURL(event.target.files[0]);
 		reader.onload = (event: any) => {
 			this.userToShow.url = event.target.result;
-			console.log("avatar url:" + this.avatar_url);
+			console.log("avatar url:" + this.avatar);
 			console.log("new avatar url" + this.userToShow.url);
 			// console.log(event);
 		};

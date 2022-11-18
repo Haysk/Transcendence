@@ -1,14 +1,12 @@
 import { Injectable } from '@angular/core';
-import { observable, Observable } from 'rxjs';
+import { Observable } from 'rxjs';
 import { io } from 'socket.io-client';
-import { HttpClient } from '@angular/common/http';
 import { ApiService } from '../services/api.service';
 import { User } from '../models/user';
 import { Channel } from '../models/channel'
 import { environment } from 'src/environments/environment';
 import { IGameStates } from '../pong/game/interfaces/game-states.interface';
 import { IInput } from '../pong/game/interfaces/input.interface';
-import { observeNotification } from 'rxjs/internal/Notification';
 
 
 @Injectable({
@@ -270,15 +268,27 @@ amIBanned()
     this.socket.emit('msgToServer', message);
   }
 
-  sendMessageTo(message: string, login1: string, login2: string): void
+  sendMessageTo(message: string, login1: string, login2: string, nickname: string): void
   {
-    this.socket.emit('sendMsgTo', message, "", login1, login2)
+    this.socket.emit('sendMsgTo', message, "", login1, login2, nickname)
   };
 
   getMessage(): Observable<string> {
     return new Observable<string>((observer) => {
       this.socket.on('PrivMsg', (message) => {
         observer.next(message);
+      });
+    });
+  }
+
+  initDestActualisation(dest: User){
+    this.socket.emit('ActualisationDest', dest);
+  }
+
+  destActualisation(): Observable<User> {
+    return new Observable<User>((obs) => {
+      this.socket.on('DestActualisation', (res) => {
+        obs.next(res);
       });
     });
   }
@@ -379,8 +389,6 @@ amIBanned()
 
   getAddFriend(id: number, id1: number){
     //this.socket.on('getAddFriend');
-    console.log("fdsfdsfsdfds123132");
-    
     this.socket.emit('getAddFriend', id, id1);
   }
 

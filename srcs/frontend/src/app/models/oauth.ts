@@ -7,8 +7,8 @@ export interface User {
 	url:			string;
 	displayname:	string;
 	nickname:		string;
-	image_url:		string;
-	avatar_url:		string;
+	image:		string;
+	avatar:		string;
 	online:			boolean;
 	oauth_id?:		number;
 	oauth?:			Oauth;

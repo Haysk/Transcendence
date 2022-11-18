@@ -1,9 +1,7 @@
 import { Injectable } from '@nestjs/common';
 import { HttpService } from '@nestjs/axios';
-import { catchError, take } from 'rxjs';
 import { PrismaService } from './prisma.service';
-import { Channel, User, Prisma } from '@prisma/client';
-import { userInfo } from 'os';
+import { Channel } from '@prisma/client';
 import { UserService } from './user.service';
 
 @Injectable()
@@ -15,33 +13,8 @@ export class ChannelService {
 		
 	INTRA_API = "https://api.intra.42.fr";
 
-	// async	joinChannel(param : {target: Channel, user: User}) : Promise<Channel>
-	// {
-	// 	try{
-	// 		//console.log("Channel Service : channel name : " + param.target.name + " | user name : " + param.user.login);
-	// 		var toto = await this.userService.user(param.user);
-	// 		return await this.prisma.channel.update({
-	// 			where: {
-	// 				name: param.target.name
-	// 			},
-	// 			data: {
-	// 				joined: {
-	// 					connect: [{id: toto.id}],
-	// 				}
-	// 			},
-	// 		})
-	// 	}
-	// 	catch(err)
-	// 	{
-	// 		console.log("error joinChannel service :");
-	// 		console.log(err);
-	// 	}
-	// }
-
 	async	addChannel(params : {name: string, creator_id: number}): Promise<Channel>
 	{
-		
-		//console.log("addChannel ChannelService params : creator_id : " + params.creator_id + " | Channel_name : " + params.name);
 		try{
 			await this.prisma.channel.create({
 				data: params,

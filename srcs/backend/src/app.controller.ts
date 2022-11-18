@@ -23,6 +23,7 @@ import {
 	Channel as ChannelModel,
 	Prisma, PrismaClient
 } from '@prisma/client';
+import { lstat } from 'fs';
 
 @Controller()
 export class AppController {
@@ -63,7 +64,7 @@ export class AppController {
 	}
 
 	@Post('updateAvatar')
-	async updateAvatar(@Body() UserData:{id:number, avatar_url:string},): Promise<UserModel>
+	async updateAvatar(@Body() UserData:{id:number, avatar:string},): Promise<UserModel>
 	{
 		return await this.userService.updateAvatar(UserData);
 	}
@@ -154,6 +155,20 @@ export class AppController {
 		@Param('code') code: string) {
 		this.userService.user(code);
 	}
+
+	@Get('user/info/:code')
+	async getUserInfo(
+		@Param('code') code: string): Promise<boolean> {
+			try {
+				const tmp = await this.oauthService.oauth({code});
+				const result = await this.userService.userInfo(tmp);
+				return (result);
+			}
+			catch {
+				return false;
+			}
+			
+		}
 
 	@Post('auth/')
 	async signup(

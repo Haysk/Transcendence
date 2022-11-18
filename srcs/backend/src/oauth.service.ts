@@ -1,9 +1,9 @@
 
-import { HttpServer, Injectable } from '@nestjs/common';
+import { Injectable } from '@nestjs/common';
 import { PrismaService } from './prisma.service';
-import { Oauth, User, Prisma } from '@prisma/client';
+import { Oauth, Prisma } from '@prisma/client';
 import { HttpService } from '@nestjs/axios';
-import { catchError, take } from 'rxjs';
+import { take } from 'rxjs';
 
 export interface Tokens {
 		access_token: string,
@@ -70,7 +70,6 @@ export class OauthService {
 				redirect_uri: "https://localhost:8081",
 				}).pipe(take(1)).subscribe({
 					next: async result => {
-						console.log("4");
 						resolve(result.data);
 					},
 					error: err => {

@@ -22,8 +22,8 @@ export class GameRoomComponent implements OnInit {
     url: this.getUrl(),
     displayname: this.getDisplayName(),
     nickname: this.getNickname(),
-    image_url: this.getImageUrl(),
-    avatar_url: this.getAvatarUrl(),
+    image: this.getImage(),
+    avatar: this.getAvatar(),
     online: this.getOnline(),
   }
 
@@ -38,7 +38,7 @@ export class GameRoomComponent implements OnInit {
       }));
     
     console.log("User Online = " + this.user.login );
-    console.log("User url = " + this.user.image_url );
+    console.log("User url = " + this.user.image );
   }
 
   showavailable(){
@@ -103,18 +103,18 @@ export class GameRoomComponent implements OnInit {
     return  nickname;
   }
 
-  getImageUrl(): string{
-    let image_url = localStorage.getItem("image_url");
-    if (image_url === null || image_url === undefined)
+  getImage(): string{
+    let image = localStorage.getItem("image");
+    if (image === null || image === undefined)
       return "";
-    return  image_url;
+    return  image;
   }
 
-  getAvatarUrl(): string{
-    let avatar_url = localStorage.getItem("avatar_url");
-    if (avatar_url === null || avatar_url === undefined)
+  getAvatar(): string{
+    let avatar = localStorage.getItem("avatar");
+    if (avatar === null || avatar === undefined)
       return "";
-    return  avatar_url;
+    return  avatar;
   }
 
 

@@ -7,31 +7,52 @@ import { ShowRoomComponent } from './show-room/show-room.component';
 import { VipRoomComponent } from './vip-room/vip-room.component';
 import { Vip2RoomComponent } from './vip2-room/vip2-room.component';
 import { RestRoomComponent } from './rest-room/rest-room.component';
-import { LoginComponent } from './login/login.component';
 import { ChatComponent } from './chat/chat.component';
 import { SalonComponent } from './salon/salon.component';
 import { FriendUserComponent } from './friend-user/friend-user.component';
+import { AuthGuard } from './auth/auth.guard';
+
 
 
 
 
 
 const routes: Routes = [
-  { path: '', component: LoginComponent },
-  { path: 'game-room', component: GameRoomComponent },
-  { path: 'show-room', component: ShowRoomComponent },
-  { path: 'vip-room', component: VipRoomComponent },
-  { path: 'rest-room', component: RestRoomComponent },
-  { path: 'pong', component: PongComponent },
-  { path: 'home', component: HomeComponent },
-  { path: 'chat', component: ChatComponent },
-  { path: 'salon', component: SalonComponent},
-  { path: 'vip2-room', component: Vip2RoomComponent },
-  { path: 'friend', component: FriendUserComponent}
+
+	{ path: 'game-room', component: GameRoomComponent,
+		canActivate: [AuthGuard]
+	},
+	{ path: 'show-room', component: ShowRoomComponent,
+		canActivate: [AuthGuard]
+	},
+	{ path: 'vip-room', component: VipRoomComponent,
+		canActivate: [AuthGuard]
+	},
+	{ path: 'vip2-room', component: Vip2RoomComponent,
+		canActivate: [AuthGuard]
+	},
+	{ path: 'rest-room', component: RestRoomComponent,
+		canActivate: [AuthGuard]
+	},
+	{ path: 'pong', component: PongComponent,
+		canActivate: [AuthGuard]
+	},
+	{ path: 'home', component: HomeComponent,
+		canActivate: [AuthGuard]
+	},
+	{ path: 'chat', component: ChatComponent,
+		canActivate: [AuthGuard]
+	},
+	{ path: 'salon', component: SalonComponent,
+		canActivate: [AuthGuard]
+	},
+	{ path: 'friend', component: FriendUserComponent,
+		canActivate: [AuthGuard]
+	}
 ];
 
 @NgModule({
-  imports: [RouterModule.forRoot(routes)],
-  exports: [RouterModule]
+	imports: [RouterModule.forRoot(routes)],
+	exports: [RouterModule]
 })
 export class AppRoutingModule { }

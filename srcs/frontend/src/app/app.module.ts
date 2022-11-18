@@ -3,7 +3,6 @@ import { HttpClient, HttpClientModule } from '@angular/common/http';
 import { FormsModule } from '@angular/forms';
 import { BrowserModule } from '@angular/platform-browser';
 import { AppRoutingModule } from './app-routing.module';
-//import { CookieService } from 'ngx-cookie-service';
 import { ApiService } from './services/api.service';
 import { StorageService } from './services/storage.service';
 import { AppComponent } from './app.component';
@@ -40,6 +39,7 @@ import { ButtonV4Component } from './widgets/button-v4/button-v4.component';
 import { BlocUserProfileComponent } from './widgets/bloc-user-profile/bloc-user-profile.component';
 import { Vip2RoomComponent } from './vip2-room/vip2-room.component';
 import { InvitationRefuseComponent } from './widgets/invitation-refuse/invitation-refuse.component';
+import { AuthModule } from './auth/auth.module';
 
 @NgModule({
   declarations: [
@@ -52,7 +52,6 @@ import { InvitationRefuseComponent } from './widgets/invitation-refuse/invitatio
     VipRoomComponent,
     BlocChatComponent,
     RestRoomComponent,
-    LoginComponent,
     ChatComponent,
     DirectChatComponent,
     ChatHistoryComponent,
@@ -83,13 +82,13 @@ import { InvitationRefuseComponent } from './widgets/invitation-refuse/invitatio
     BrowserModule,
     AppRoutingModule,
     HttpClientModule,
-    FormsModule
+    FormsModule,
+	AuthModule
   ],
   providers: [
     HttpClient,
     ApiService,
 	StorageService,
-	//CookieService,
 	Storage,
   ],
   bootstrap: [AppComponent]
