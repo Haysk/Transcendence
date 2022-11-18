@@ -75,18 +75,18 @@ export class StorageService {
 
 	}
 
-	getImageUrl(): string {
-		let image_url = localStorage.getItem("image_url");
-		if (image_url === null || image_url === undefined)
+	getImage(): string {
+		let image = localStorage.getItem("image");
+		if (image === null || image === undefined)
 			return "";
-		return image_url;
+		return image;
 	}
 
-	getAvatarUrl(): string {
-		let avatar_url = localStorage.getItem("display_name");
-		if (avatar_url === null || avatar_url === undefined)
+	getAvatar(): string {
+		let avatar = localStorage.getItem("avatar");
+		if (avatar === null || avatar === undefined)
 			return "";
-		return avatar_url;
+		return avatar;
 
 	}
 
@@ -190,17 +190,17 @@ export class StorageService {
 		return false;
 	}
 
-	setImageUrl(image_url: string) {
-		if (image_url) {
-			localStorage.setItem("image_url", image_url);
+	setImage(image: string) {
+		if (image) {
+			localStorage.setItem("image", image);
 			return true;
 		}
 		return false;
 	}
 
-	setAvatarUrl(avatar_url: string) {
-		if (avatar_url) {
-			localStorage.setItem("avatar_url", avatar_url);
+	setAvatar(avatar: string) {
+		if (avatar) {
+			localStorage.setItem("avatar", avatar);
 			return true;
 		}
 		return false;

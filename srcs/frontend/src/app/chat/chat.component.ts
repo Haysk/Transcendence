@@ -26,11 +26,11 @@ export class ChatComponent implements OnInit {
 		url: this.storageService.getUrl(),
 		displayname: this.storageService.getDisplayName(),
 		nickname: this.storageService.getNickName(),
-		image_url: this.storageService.getImageUrl(),
-		avatar_url: this.storageService.getAvatarUrl(),
+		image: this.storageService.getImage(),
+		avatar: this.storageService.getAvatar(),
 		online: this.storageService.getOnline(),
 	};
-	Dest: User = { id: 0, login: "", email: "", first_name: "", last_name: "", url: "", displayname: "", nickname: "", image_url: "", avatar_url: "", online: false };
+	Dest: User = { id: 0, login: "", email: "", first_name: "", last_name: "", url: "", displayname: "", nickname: "", image: "", avatar: "", online: false };
 	User_list!: User[];
 	message: string = '';
 	messages: String[] = [];

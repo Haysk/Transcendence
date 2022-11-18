@@ -68,9 +68,9 @@ export class ApiService {
     return this.httpClient.post<User>(`${this.API_SERVER}/updateNickName`, data);
   }
 
-  updateAvatar(id:number, avatar_url:string)
+  updateAvatar(id:number, avatar:string)
   {
-    let data = {id, avatar_url};
+    let data = {id, avatar};
     return this.httpClient.post<User>(`${this.API_SERVER}/updateAvatar`, data);
   }
 

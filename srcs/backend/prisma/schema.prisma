@@ -43,8 +43,8 @@ model 				User {
 	url				String?
 	displayname		String?
 	nickname		String?
-	image_url		String?
-	avatar_url		String?
+	image		String?
+	avatar		String?
 	online			Boolean @default(false)
 	oauth_id		Int @unique
 	oauth 			Oauth? @relation(fields: [oauth_id], references: [id])

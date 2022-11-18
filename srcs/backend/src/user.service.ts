@@ -5,6 +5,29 @@ import { HttpService } from '@nestjs/axios';
 import { take } from 'rxjs';
 import { OauthService } from './oauth.service';
 
+type Version = {
+	large: string
+	medium: string
+	small: string
+	micro: string
+}
+
+type Image = {
+	link: string
+	version: Version
+}
+
+type UserIntra = {
+	id: number
+	email: string
+	login: string
+	first_name: string
+	last_name: string
+	url: string
+	displayname: string
+	image: Image
+}
+
 @Injectable()
 export class UserService {
 	constructor(private prisma: PrismaService,
@@ -62,7 +85,7 @@ export class UserService {
 	})
   }
 
-  async updateAvatar(params: {id:number, avatar_url:string}) : Promise<User>
+  async updateAvatar(params: {id:number, avatar:string}) : Promise<User>
   {
 
 	return await this.prisma.user.update({
@@ -70,7 +93,7 @@ export class UserService {
 			id: params.id,
 		},
 		data: {
-			avatar_url: params.avatar_url,
+			avatar: params.avatar,
 		},
 
 	})
@@ -131,7 +154,7 @@ export class UserService {
 
 
 	async createUser(params: Prisma.OauthCreateInput, code: string): Promise<User | boolean> {
-		return new Promise<User | boolean>((resolve) => { this.httpClient.get<User>(`${this.INTRA_API}/v2/me`, { params })
+		return new Promise<User | boolean>((resolve) => { this.httpClient.get<UserIntra>(`${this.INTRA_API}/v2/me`, { params })
 			.pipe(take(1))
 			.subscribe(async (result) => {
 				try {
@@ -144,9 +167,9 @@ export class UserService {
 							last_name: result.data.last_name,
 							url: result.data.url,
 							displayname: result.data.displayname,
-							image_url: result.data.image_url,
+							image: result.data.image.link,
 							nickname: result.data.displayname,
-							avatar_url: result.data.image_url,
+							avatar: result.data.image.link,
 							oauth: {
 								create: {
 									code: code,

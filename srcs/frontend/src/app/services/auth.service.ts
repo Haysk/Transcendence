@@ -92,8 +92,8 @@ export class AuthService {
 		this.storageService.setUrl(user.url) &&
 		this.storageService.setDisplayName(user.displayname) &&
 		this.storageService.setNickName(user.nickname) &&
-		this.storageService.setImageUrl(user.image_url) &&
-		this.storageService.setAvatarUrl(user.avatar_url)) {
+		this.storageService.setImage(user.image) &&
+		this.storageService.setAvatar(user.avatar)) {
 			return true;
 		} else {
 			return false

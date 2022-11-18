@@ -64,7 +64,7 @@ export class AppController {
 	}
 
 	@Post('updateAvatar')
-	async updateAvatar(@Body() UserData:{id:number, avatar_url:string},): Promise<UserModel>
+	async updateAvatar(@Body() UserData:{id:number, avatar:string},): Promise<UserModel>
 	{
 		return await this.userService.updateAvatar(UserData);
 	}
