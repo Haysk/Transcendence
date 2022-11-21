@@ -73,23 +73,18 @@ export class UserInSalonComponent implements OnInit {
     this.ifMuet=!this.ifMuet;
     this.color2=this.ifMuet?"rgb(76, 80, 79)":"rgb(44, 136, 125)";
     this.countTimeMuet=!this.countTimeMuet;
-    console.log("this.val_muet = " + this.val_muet);
     if (this.val_muet == "Muet(Secondes)")
     {
-      console.log("time_muet = " + this.time_muet)
       if (this.time_muet != 0)
       {
-        console.log("mute pendant " + this.time_muet + " secondes");
         this.socketService.muteUserByTime(this.guest.id, Number(this.current_channel.id), this.time_muet);
       }
       else
       {
-        console.log("mute indefini");
         this.socketService.muteUser(this.guest.id, Number(this.current_channel.id));
       }
     }
     else{
-      console.log("ici : time_muet = " + this.time_muet)
       this.socketService.unmuteUser(this.guest.id, Number(this.current_channel.id));
     }
     this.val_muet=this.ifMuet?"Not Muet":"Muet(Secondes)";
@@ -100,10 +95,11 @@ export class UserInSalonComponent implements OnInit {
 
   beBanne(){
     this.ifBanne=!this.ifBanne;
-    this.val_banne=this.ifBanne?"Unban":"Ban(Secondes)";
     this.color3=this.ifBanne?"rgb(76, 80, 79)":"rgb(44, 136, 125)";
     this.countTimeBan=!this.countTimeBan;
-    if(this.val_banne == "Unban"){
+    console.log("val ban = " + this.val_banne);
+    if(this.val_banne == "Ban(Secondes)"){
+      console.log("val time ban = " + this.time_ban);
       if (this.time_ban != 0)
         this.socketService.banUserByTime(this.guest.id, Number(this.current_channel.id), this.time_ban);
       else
@@ -113,6 +109,7 @@ export class UserInSalonComponent implements OnInit {
     else{
       this.socketService.unbanUser(this.guest.id, Number(this.current_channel.id));
     }
+    this.val_banne=this.ifBanne?"Unban":"Ban(Secondes)";
     this.socketService.updateChannel();
     this.socketService.updateChannels();
     this.time_ban = 0;

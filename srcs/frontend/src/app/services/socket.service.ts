@@ -78,6 +78,7 @@ amIBanned()
 {
   return new Observable<any>((obs) => {
     this.socket.on('youAreBanned', (res: number, res2: User[]) => {
+      console.log("amIBanned function is triggered")
       let data = {res, res2}
       obs.next(data)
     })
@@ -115,6 +116,7 @@ amIBanned()
       this.socket.emit('joinChannel', channel_name, creator_id);
     });
   }
+  
   getConnectionSignal(current_id: number)
   {
     return new Observable((obs) => {
@@ -246,6 +248,20 @@ amIBanned()
   {
     return new Observable<User>((obs) => {
       this.socket.on('hereIsTheUserYouAskedFor', (res) => {
+        obs.next(res);
+      })
+    })
+  }
+
+  updateUser(current: User)
+  {
+    this.socket.emit('updateUser', current);
+  }
+
+  getUserUpdated()
+  {
+    return new Observable<User> ((obs) => {
+      this.socket.on("userUpdated", (res) => {
         obs.next(res);
       })
     })

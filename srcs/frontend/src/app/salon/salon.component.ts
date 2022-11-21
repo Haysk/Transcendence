@@ -49,13 +49,10 @@ export class SalonComponent implements OnInit {
         if (this.current_channel != null && this.current_channel.admins !== undefined)
         {
           this.usersAdmin=this.current_channel.admins;
-         //this.usersInGuest.pop()
         }  
         if (this.current_channel != null && this.current_channel.creator_id !== undefined)
         {
           this.CreatorId=this.current_channel.creator_id;
-          
-         //this.usersInGuest.pop()
         }
         
 
@@ -67,7 +64,6 @@ export class SalonComponent implements OnInit {
     (await this.socketService.getUpdateChannel()).subscribe((res) => {
       this.current_channel = res;
     })
-    //console.log("findChannelByName finished");
     this.socketService.joinChannel(this.channel_name, this.current_user.id);
    
     this.socketService.updateUserList().subscribe({
@@ -85,7 +81,6 @@ export class SalonComponent implements OnInit {
     this.apiService.getChannelMessages(this.channel_name).subscribe({
       next:(result) => {
         this.historiqueConv = result;
-        // console.log("ici chat history : " + result[0].content)
         },
         error: (err) =>{},
         complete:() => {}
@@ -104,14 +99,13 @@ export class SalonComponent implements OnInit {
       next: (data: {res : Number, res2 : Channel;}) => {
         if (Number(data.res) == Number(localStorage.getItem("id")))
         {
-          //this.socketService.updateUserInSalonList(this.channel_name);
+          this.socketService.updateUser(this.current_user);
           this.quitSalon()
           window.alert("You just got banned from this channel.")
         }
         else{
           this.usersInGuest = data.res2.joined;
         }
-        //this.socketService.updateUserInSalonList(this.channel_name);
       }
     })
   }

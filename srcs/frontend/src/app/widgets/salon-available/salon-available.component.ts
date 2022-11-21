@@ -36,8 +36,6 @@ export class SalonAvailableComponent implements OnInit {
   
   constructor(private apiService:ApiService, private socketService: SocketService) {
 
-    
-
    }
 
   async ngOnInit(): Promise<void> {
@@ -65,41 +63,40 @@ export class SalonAvailableComponent implements OnInit {
     this.socketService.updateChannel();
     ;(await this.socketService.getUpdateChannels()).subscribe({
       next: (result) => {
-        // console.log("ICI LE RESULT => ");
-        // console.log(result);
         this.salons_dispos = result;
       }
     })
 
+    this.socketService.getUserUpdated().subscribe(res => {
+      this.current_user = res;
+    })
+
+    this.socketService.updateUser(this.current_user);
+
     this.socketService.updateChannels();
   }
 
-  isBanned(banList: Channel, current_user: User)
+  isBanned(current_user: User, current_channel : Channel)
   {
+    console.log(current_user);
     let i = 0;
-    // console.log("banList => ");
-    // console.log(banList.banned);
-    while(banList.banned != null && banList.banned != undefined
-      && banList.banned[i] != null && banList.banned[i] != undefined)
+    while(current_user.banned != null && current_user.banned != undefined
+      && current_user.banned[i] != null && current_user.banned[i] != undefined)
       {
-        // console.log("banned[i] = " + banList.banned[i] + " | user = " + current_user);
-        if (banList.banned[i].id == current_user.id)
+        if (current_user.banned[i].id == current_channel.id)
           return 1
         i++;
       }
+      console.log("pas ban")
       return 0
   }
 
   joinChannel(current_channel: Channel, current_user: User)
   {
-    //console.log("salon_available : channel name : " + current_channel.name + " | user name : " + current_user.login);
-    //console.log(current_user);
-    // console.log("VALEUR DE IS BANNED");
-    // console.log(this.isBanned(current_channel, current_user));
-    if(this.isBanned(current_channel, current_user) != 1)
+    this.socketService.updateUser(this.current_user);
+    if(this.isBanned(current_user, current_channel) != 1)
     {
       this.socketService.joinChannel(current_channel.name, this.current_user.id);
-      //this.apiService.joinChannel(current_channel, current_user).subscribe();
       this.ShowChannelPublicEvent.emit(this.show_salon);
       this.SendJoinChannelNameEvent.emit(current_channel.name);
       this.show_formulePassword=false;

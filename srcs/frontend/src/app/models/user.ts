@@ -10,11 +10,12 @@ export interface 	User {
 	url:			string;
 	displayname:	string;
 	nickname:		string;
-	image:		string;
-	avatar:		string;
+	image:			string;
+	avatar:			string;
 	online:			boolean;
 	channel_joined?:Channel[];
 	muted?:			Channel[];
+	banned?:		Channel[];
 	admin_of?:		Channel[];
 	oauth_id?:		number;
 	oauth?:			Oauth;
