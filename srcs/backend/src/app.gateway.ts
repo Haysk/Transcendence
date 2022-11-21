@@ -10,7 +10,6 @@ import {
 import { PrismaService } from './prisma.service';
 import { Server, Socket } from 'socket.io';
 import { UserService } from './user.service';
-import { BanAndMuteService } from './banAndMute.service'
 import { log } from 'console';
 
 @WebSocketGateway({
@@ -22,7 +21,7 @@ import { log } from 'console';
 export class AppGateway
   implements OnGatewayInit, OnGatewayConnection, OnGatewayDisconnect
 {
-  constructor(private BaM: BanAndMuteService, private Prisma : PrismaService, private readonly userService: UserService,){}
+  constructor(private Prisma : PrismaService, private readonly userService: UserService,){}
 
   sleep(ms:number) {
 		return new Promise(resolve => setTimeout(resolve, ms));
