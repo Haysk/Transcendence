@@ -436,7 +436,7 @@ amIBanned()
     return new Observable<number>((obs) => {
       this.socket.on('findFriendsOrNot', (index: number) => {
         obs.next(index);
-        console.log(`find friend or not ${index}`);
+        // console.log(`find friend or not ${index}`);
       })
     })
   }

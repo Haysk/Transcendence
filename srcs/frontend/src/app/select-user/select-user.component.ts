@@ -38,7 +38,7 @@ export class SelectUserComponent implements OnInit {
 
   sendBtn(dest : User): void {
     // if (this.Me.login != dest.login){
-    console.log("Me = " + this.Me.login + " | dest : " + dest.login);
+    // console.log("Me = " + this.Me.login + " | dest : " + dest.login);
     this.show_chat = true;
     this.showchatEvent.emit(this.show_chat);
     this.socketService.initDestActualisation(dest);

@@ -3,8 +3,8 @@ import { SocketService } from '../services/socket.service';
 import { ApiService } from '../services/api.service';
 import { User } from '../models/user'
 import { Message } from '../models/message';
-import { subscribeOn } from 'rxjs';
 import { Router } from '@angular/router';
+import { ViewChild, ElementRef } from '@angular/core';
 
 @Component({
   selector: 'app-direct-chat',
@@ -13,6 +13,10 @@ import { Router } from '@angular/router';
 })
 export class DirectChatComponent implements OnInit {
   
+  @ViewChild('scrollMe') 
+  comment! : ElementRef;  
+  scrolltop: number = 0 ;
+
   @Input() Me!: User;
   @Input() Dest!: User;
   @Input() friendOrNot:boolean=true;
@@ -33,7 +37,12 @@ export class DirectChatComponent implements OnInit {
               private apiService: ApiService,
               public router:Router) {}
 
+              ngDoCheck() {
+                this.updateScroll();
+              }
+
   async ngOnInit(): Promise<void> {
+    
     this.socketService.destActualisation().subscribe((res) => {
       for (let i = this.old_messages.length; i > 0; i--) {
         this.old_messages.pop();
@@ -48,7 +57,8 @@ export class DirectChatComponent implements OnInit {
           this.old_messages = result;
           },
           error: (err) =>{},
-          complete:() => {}
+          complete:() => {
+          }
         
         })
     })
@@ -56,8 +66,9 @@ export class DirectChatComponent implements OnInit {
     this.socketService.getMessage().subscribe( {
       next:(message: any) => {
         if (this.getRoomName(this.Me.login, this.Dest.login) == message.channel)
+        {  
           this.messages.push(message.from + ": " + message.msg);
-        this.message = "";
+      }
     },
     error: (err) =>{},
     complete:() => {}
@@ -66,7 +77,7 @@ export class DirectChatComponent implements OnInit {
     
     this.socketService.findFriendsOrNot().subscribe((result) => {
       this.num = result;
-      console.log(this.num);
+      // console.log(this.num);
       if (this.num == 1)
       {
         this.friendOrNot=false;
@@ -78,7 +89,7 @@ export class DirectChatComponent implements OnInit {
       }
     })
   }
-
+  
   getRoomName(login1: string, login2 : string) : string
   {
     let result : string;
@@ -94,9 +105,8 @@ export class DirectChatComponent implements OnInit {
     //this.socketService.sendMessage(this.message);
     this.socketService.sendMessageTo(this.message, this.Me.login,this.Dest.login, this.Me.nickname);
     this.apiService.createMessage({userId: this.Dest.id, fromUserName: this.Me.nickname , fromUserId: this.Me.id, content: this.message}).subscribe((result)=>{
-      // console.log(result);
     });
-    // this.message = "";
+    this.message = "";
   }
 
   addDelFriend(){
@@ -147,6 +157,12 @@ export class DirectChatComponent implements OnInit {
   goToProfile() {
 
     this.socketService.searchForAUser(this.Dest.login);
+  }
+  
+  updateScroll() {
+   
+    if (this.comment)
+      this.scrolltop = this.comment.nativeElement.scrollHeight;
   }
 
 }

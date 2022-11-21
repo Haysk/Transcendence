@@ -4,7 +4,8 @@
 
 <div class="all_direct">
 	
-	<div class="contenu_chat" style="overflow-y: auto; height: xyz; " #scrollMe [scrollTop]="scrollMe.scrollHeight" >
+	<!-- <div class="contenu_chat"  #scrollMe [scrollTop]="scrollMe.scrollHeight"> -->
+	<div class="contenu_chat"  #scrollMe scrollTop={{scrolltop}}   >
 		
 		<div class="chatwith"> Chat with {{Dest.nickname}}</div>
 		
@@ -17,7 +18,7 @@
 		</div>
 		
 
-		<div class="direct_message" *ngFor="let message of messages">
+		<div class="direct_message" *ngFor="let message of messages;">
 			{{ message }}
 		</div>
 		<div class="chatfond" style="background-image: url('{{Dest.avatar}}');"></div>

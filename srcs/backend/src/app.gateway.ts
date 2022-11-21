@@ -389,6 +389,9 @@ catch(err){
             connect: [{id: Number(payload[1])}],
           }
         },
+        include : {
+          joined: true,
+        }
 		  })
       const data = await this.Prisma.channel.findMany({
         include: {
