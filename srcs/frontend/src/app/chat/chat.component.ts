@@ -59,24 +59,26 @@ export class ChatComponent implements OnInit {
 		this.socketService.getConnectionSignal(this.Me.id).subscribe();
 		this.socketService.getAllUser().subscribe((result) => {
 			this.User_list = result;
-			this.userFiltred();		
+			this.userFiltred();
 		});
 
-    this.socketService.getFriend().subscribe((result) => {
-    this.Friend_list = result;
-	this.friendFiltred();
+	// Friend Update
 
-	console.log(result);	
+    this.socketService.getFriend().subscribe((result) => {
+		this.socketService.askForUserList(this.Me.id);
+    	this.Friend_list = result;
+		this.friendFiltred();
     })
 
     this.socketService.removeFriend().subscribe((result) => {
-      this.Friend_list = result;
-	  console.log(result);	
-	  this.friendFiltred();
-
+		this.socketService.askForUserList(this.Me.id);
+    	this.Friend_list = result;
+		this.friendFiltred();
+		// this.socketService.getConnectionSignal(this.Me.id).subscribe();
     })
 
     this.socketService.getFriendList(this.Me.id);
+	// this.socketService.getConnectionSignal(this.Me.id).subscribe();
     this.socketService.listFriend().subscribe((result) => {
       this.Friend_list = result;
 	  this.friendFiltred();
@@ -114,6 +116,17 @@ export class ChatComponent implements OnInit {
 			}
 			return true;
 		});
+		this.User_filtred_list = this.User_list.filter((elem, index, arr) => {
+			let i = 0;
+			if (elem.friendsof) {
+				while (elem.friendsof[i]) {
+					if (elem.friendsof[i].id == this.Me.id)
+						return false;
+						i++;
+					}
+				}
+				return true;
+			});
 	}
 
 	friendFiltred() {
