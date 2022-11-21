@@ -14,7 +14,9 @@ export class UserInSalonComponent implements OnInit {
 
   @Input() guest!: User;
   @Input() current_channel !: Channel;
- 
+  @Input() usersAdmin:User[] =[];
+  @Input() AdminOrNot:boolean=false;
+
   ifAdmin:boolean=false;
   ifMuet:boolean=false;
   ifBanne:boolean=false;
@@ -25,19 +27,16 @@ export class UserInSalonComponent implements OnInit {
   color1:string="rgb(44, 136, 125)";
   color2:string="rgb(44, 136, 125)";
   color3:string="rgb(44, 136, 125)";
-  time_ban:number = 0;
   countTimeMuet:boolean= true;
   countTimeBan:boolean=true;
   time_muet:number = 0;
-  
+  time_ban:number = 0;
 
-  
-  @Input() usersAdmin:User[] =[];
-  @Input() AdminOrNot:boolean=false;
   constructor(private socketService: SocketService) {
    }
 
-  ngOnInit(): void {}
+  ngOnInit(): void {
+  }
 
   isAdmin2()
   {
@@ -72,21 +71,31 @@ export class UserInSalonComponent implements OnInit {
   
   beMuet(){
     this.ifMuet=!this.ifMuet;
-    this.val_muet=this.ifMuet?"Not Muet":"Muet(secondes)";
     this.color2=this.ifMuet?"rgb(76, 80, 79)":"rgb(44, 136, 125)";
     this.countTimeMuet=!this.countTimeMuet;
-    if (this.val_muet == "Not Muet")
+    console.log("this.val_muet = " + this.val_muet);
+    if (this.val_muet == "Muet(Secondes)")
     {
+      console.log("time_muet = " + this.time_muet)
       if (this.time_muet != 0)
+      {
+        console.log("mute pendant " + this.time_muet + " secondes");
         this.socketService.muteUserByTime(this.guest.id, Number(this.current_channel.id), this.time_muet);
+      }
       else
+      {
+        console.log("mute indefini");
         this.socketService.muteUser(this.guest.id, Number(this.current_channel.id));
+      }
     }
     else{
+      console.log("ici : time_muet = " + this.time_muet)
       this.socketService.unmuteUser(this.guest.id, Number(this.current_channel.id));
     }
+    this.val_muet=this.ifMuet?"Not Muet":"Muet(Secondes)";
     this.socketService.updateChannel();
     this.socketService.updateChannels();
+    this.time_muet = 0;
   }
 
   beBanne(){
@@ -106,6 +115,7 @@ export class UserInSalonComponent implements OnInit {
     }
     this.socketService.updateChannel();
     this.socketService.updateChannels();
+    this.time_ban = 0;
     // this.socketService.updateUserInSalonList(this.current_channel.name);
   }
 

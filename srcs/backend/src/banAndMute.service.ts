@@ -28,9 +28,17 @@ export class BanAndMuteService {
 
 	async muteUserDuringDelay(userToMute: number, channelToMute: number, time: number)
 	{
-		this.muteUserFromChannel(userToMute, channelToMute);
-		await this.sleep(time * 1000);
-		this.unmuteUserFromChannel(userToMute, channelToMute)
+		let data = await this.muteUserFromChannel(userToMute, channelToMute);
+		if (data != null && data != undefined)
+		{
+			console.log("on attend");
+			await this.sleep(time * 1000);
+			console.log("on a fini d'attendre");
+			data = null;
+			data = await this.unmuteUserFromChannel(userToMute, channelToMute)
+			if (data != null && data != undefined)
+				return data
+		}
 	}
 
 
