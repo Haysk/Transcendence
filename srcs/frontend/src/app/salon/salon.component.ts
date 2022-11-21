@@ -64,7 +64,9 @@ export class SalonComponent implements OnInit {
     (await this.socketService.getUpdateChannel()).subscribe((res) => {
       this.current_channel = res;
     })
-   
+
+    this.socketService.joinChannel(this.channel_name, this.current_user.id);
+
     this.socketService.updateUserList().subscribe({
       next: (result) => {
         console.log("triggered")
@@ -73,8 +75,8 @@ export class SalonComponent implements OnInit {
       }
     });
 
-    this.socketService.joinChannel(this.channel_name, this.current_user.id);
-
+    this.socketService.socketInTotoRoom();
+    
     this.socketService.updateAdminList().subscribe({
       next: (result) => {
         this.usersAdmin = result;
@@ -115,7 +117,6 @@ export class SalonComponent implements OnInit {
   }
   
   ngOnDestroy(){
-    
   }
 
   isCreator(current:User){
@@ -157,7 +158,8 @@ export class SalonComponent implements OnInit {
     this.content.fromUserName = this.current_user.nickname;
   }
 
-  sendMessage(){
+  sendMessage()
+  {
     if(this.isMuted(this.current_user) != 1)
     {
       console.log(this.message);

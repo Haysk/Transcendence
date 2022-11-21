@@ -23,9 +23,9 @@ export class SocketService {
     this.socket = io(this.url);
   }
 
-
-
-
+  socketInTotoRoom(){
+    this.socket.emit('userInTotoRoom');
+  }
 
   //MUTE
 
