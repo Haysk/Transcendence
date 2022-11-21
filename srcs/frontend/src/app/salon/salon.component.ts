@@ -64,13 +64,16 @@ export class SalonComponent implements OnInit {
     (await this.socketService.getUpdateChannel()).subscribe((res) => {
       this.current_channel = res;
     })
-    this.socketService.joinChannel(this.channel_name, this.current_user.id);
    
     this.socketService.updateUserList().subscribe({
       next: (result) => {
+        console.log("triggered")
+        console.log(result)
         this.usersInGuest = result;
       }
     });
+
+    this.socketService.joinChannel(this.channel_name, this.current_user.id);
 
     this.socketService.updateAdminList().subscribe({
       next: (result) => {
@@ -99,6 +102,7 @@ export class SalonComponent implements OnInit {
       next: (data: {res : Number, res2 : Channel;}) => {
         if (Number(data.res) == Number(localStorage.getItem("id")))
         {
+          this.socketService.stopAmIBanned();
           this.socketService.updateUser(this.current_user);
           this.quitSalon()
           window.alert("You just got banned from this channel.")
@@ -110,6 +114,10 @@ export class SalonComponent implements OnInit {
     })
   }
   
+  ngOnDestroy(){
+    
+  }
+
   isCreator(current:User){
     if (this.current_channel.creator_id==current.id)
       return 1;

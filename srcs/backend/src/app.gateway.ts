@@ -735,6 +735,8 @@ catch(err){
   async joinChannel(client: Socket, payload: any)
   {
     try{
+      console.log("DANS JOIN CHANNEL GATEWAY")
+      console.log(payload[0]);
       this.server.in(client.id).socketsJoin(payload[0] + "_channel");
       let data = await this.Prisma.channel.update({
         where: {
@@ -754,6 +756,7 @@ catch(err){
       })
       if (data != null && data != undefined)
       {
+        console.log("DATA EST PAS NULL")
         this.server.to(payload[0] + "_channel").emit('someoneJoinedTheChannel', data)
         return data;
       }

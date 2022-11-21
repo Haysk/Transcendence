@@ -96,6 +96,7 @@ export class SalonAvailableComponent implements OnInit {
     this.socketService.updateUser(this.current_user);
     if(this.isBanned(current_user, current_channel) != 1)
     {
+      console.log("console log la")
       this.socketService.joinChannel(current_channel.name, this.current_user.id);
       this.ShowChannelPublicEvent.emit(this.show_salon);
       this.SendJoinChannelNameEvent.emit(current_channel.name);
