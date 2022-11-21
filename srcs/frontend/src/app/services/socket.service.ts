@@ -27,6 +27,13 @@ export class SocketService {
     this.socket.emit('userInTotoRoom');
   }
 
+  unsubsribeChannelEvent() {
+	this.socket.off("channelIsUpdated");
+	this.socket.off("someoneJoinedTheChannel");
+	this.socket.off("newAdminInChannel");
+	this.socket.off("msginchannel");
+	this.socket.off("youAreBanned");
+  }
   //MUTE
 
   muteUserByTime(userToMute: number, channelConcerned: number, timeToMute: number)
@@ -82,11 +89,6 @@ amIBanned()
       obs.next(data)
     })
   })
-}
-
-stopAmIBanned()
-{
-  this.socket.off('youAreBanned');
 }
 
 //CONNECTION

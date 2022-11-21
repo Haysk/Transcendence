@@ -104,9 +104,8 @@ export class SalonComponent implements OnInit {
       next: (data: {res : Number, res2 : Channel;}) => {
         if (Number(data.res) == Number(localStorage.getItem("id")))
         {
-          this.socketService.stopAmIBanned();
           this.socketService.updateUser(this.current_user);
-          this.quitSalon()
+           this.quitSalon();
           window.alert("You just got banned from this channel.")
         }
         else{
@@ -117,6 +116,7 @@ export class SalonComponent implements OnInit {
   }
   
   ngOnDestroy(){
+	this.socketService.unsubsribeChannelEvent();
   }
 
   isCreator(current:User){
@@ -185,4 +185,5 @@ export class SalonComponent implements OnInit {
     this.QuitSalonEvent.emit(this.quit_salon);
     
   }
+  
 }

@@ -94,7 +94,7 @@ export class AdminInSalonComponent implements OnInit {
         this.socketService.banUserByTime(this.guest.id, Number(this.current_channel.id), this.time_ban);
       else
         this.socketService.banUser(this.guest.id, Number(this.current_channel.id));
-      this.socketService.leaveChannel(this.current_channel.name, this.guest.id);
+    //   this.socketService.leaveChannel(this.current_channel.name, this.guest.id);
     }
     else {
       this.socketService.unbanUser(this.guest.id, Number(this.current_channel.id));
