@@ -182,7 +182,6 @@ export class AppGateway
   @SubscribeMessage('unmuteUser')
   async unmuteUser(client: any, payload: any)
   {
-  console.log("natural unmute user")
   try{
     let data = await this.Prisma.channel.update({
       where: {
@@ -222,7 +221,6 @@ async banUserByTime(client: any, payload: any)
   // if (data != null && data != undefined)
   //   this.server.emit('youAreBanned', payload[0], data);
   try{
-    console.log("payload 0 = " + Number(payload[0]) + " | payload 1 = " + Number(payload[1]))
     let data = await this.Prisma.channel.update({
       where: {
         id: Number(payload[1])
@@ -280,7 +278,6 @@ async banUserByTime(client: any, payload: any)
 async banUser(client: any, payload: any)
 {
   try{
-    console.log("payload 0 = " + Number(payload[0]) + " | payload 1 = " + Number(payload[1]))
     let data = await this.Prisma.channel.update({
       where: {
         id: Number(payload[1])
@@ -381,7 +378,6 @@ async unbanUser(client: any, payload: any)
   @SubscribeMessage('delAdminSalon')
   async delAdminSalon(client: any, payload: any)
   {
-    console.log(3)
     try {
       let data = await this.Prisma.channel.update({
       where: {
@@ -478,8 +474,6 @@ async handleDisconnect(client: Socket): Promise<void> {
     })
     if (data != null && data != undefined)
     {
-      //console.log("DECONNEXION =>");
-      console.log(data)
       this.isOffline(client, data.login);
       this.server.emit('userListUpdated');
     }
@@ -746,8 +740,6 @@ catch(err){
   async joinChannel(client: Socket, payload: any)
   {
     try{
-      console.log("DANS JOIN CHANNEL GATEWAY")
-      console.log(payload[0]);
       this.server.in(client.id).socketsJoin(payload[0] + "_channel");
       let data = await this.Prisma.channel.update({
         where: {
@@ -767,7 +759,6 @@ catch(err){
       })
       if (data != null && data != undefined)
       {
-        console.log("DATA EST PAS NULL")
         this.server.to(payload[0] + "_channel").emit('someoneJoinedTheChannel', data)
         return data;
       }
@@ -984,7 +975,6 @@ catch(err){
       })
       if (data != null && data != undefined)
       {
-        console.log(data);
         this.server.to(client.id).emit('listFriends', data.friends);
       }
     }

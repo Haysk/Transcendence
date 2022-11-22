@@ -134,8 +134,6 @@ export class UserService {
 			this.httpClient.get(`${this.INTRA_API}/oauth/token/info`, { params })
 			.pipe(take(1))
 			.subscribe(async (result) => {
-				console.log(result.data.expires_in_seconds);
-				
 				if (result.data.expires_in_seconds > 0) {
 					resolve(true);
 				} else {
