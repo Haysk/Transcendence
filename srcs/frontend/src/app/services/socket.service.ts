@@ -134,6 +134,29 @@ amIBanned()
     })
   }
 
+  verifyPassword(password: string, channel_name: string)
+  {
+    this.socket.emit('verifyPassword', password, channel_name);
+  }
+
+  getPassVerifResponse()
+  {
+    return new Observable<boolean>((obs) => {
+      this.socket.on('goodPassword', (res: boolean) => {
+        obs.next(res);
+      })
+      this.socket.on('wrongPassword', (res: boolean) => {
+        obs.next(res);
+      })
+    })
+  }
+
+  stopListeningPassVerifResponse()
+  {
+    this.socket.off('goodPassword');
+    this.socket.off('wrongPassword');
+  }
+
 //UPDATE CHANNEL
 
   async updateChannel()

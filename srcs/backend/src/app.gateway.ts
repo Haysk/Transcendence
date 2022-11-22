@@ -720,7 +720,7 @@ catch(err){
           joined: true,
           muted: true,
           banned: true,
-          admins: true
+          admins: true,
         },
       })
       if (data != null && data != undefined)
@@ -738,6 +738,24 @@ catch(err){
   }
 
   /* JOIN/LEAVE CHANNEL */
+
+  @SubscribeMessage('verifyPassword')
+  async verifyPassword(client: Socket, payload:any)
+  {
+    let data = await this.Prisma.channel.findFirst({
+      where: {
+        name: payload[1]
+      }
+    })
+    if (data != null && data != undefined)
+    {
+      if(data.password == payload[0])
+        this.server.to(client.id).emit('goodPassword', true);
+      else
+        this.server.to(client.id).emit('wrongPassword', false);
+    }
+  }
+
   @SubscribeMessage('resetChannelPassword')
   async resetChannelPassword(client: Socket, payload: any)
   {

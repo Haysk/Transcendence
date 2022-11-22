@@ -46,11 +46,9 @@ export class CreatorInSalonComponent implements OnInit {
       this.show_pwd=false;
       if (this.current_channel.creator_id == this.guest.id)
       {
-        
-         await this.socketService.resetChannelPassword(this.current_channel, this.new_pwd)
+        this.socketService.resetChannelPassword(this.current_channel, this.new_pwd)
       }
       this.new_pwd ="";
-      
     }
     else{
       window.alert("New Password Please!");
@@ -65,11 +63,8 @@ export class CreatorInSalonComponent implements OnInit {
       this.show_pwd=false;
       if (this.current_channel.creator_id == this.guest.id)
       {
-
-        await this.socketService.resetChannelPassword(this.current_channel, this.new_pwd)
-        
+        this.socketService.resetChannelPassword(this.current_channel, this.new_pwd)
       }
-    
     }
     else{
       window.alert("Please use reset PWD");
