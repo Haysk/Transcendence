@@ -64,29 +64,29 @@ export class ChatComponent implements OnInit {
 
 	// Friend Update
 
-    this.socketService.getFriend().subscribe((result) => {
-		this.socketService.askForUserList(this.Me.id);
+    this.socketService.getFriend(this.Me.id).subscribe((result) => {
+		// this.socketService.askForUserList(this.Me.id);
     	this.Friend_list = result;
 		this.friendFiltred();
     })
 
-    this.socketService.removeFriend().subscribe((result) => {
-		this.socketService.askForUserList(this.Me.id);
+    this.socketService.removeFriend(this.Me.id).subscribe((result) => {
+		// this.socketService.askForUserList(this.Me.id);
     	this.Friend_list = result;
 		this.friendFiltred();
-		// this.socketService.getConnectionSignal(this.Me.id).subscribe();
     })
 
     this.socketService.getFriendList(this.Me.id);
-	// this.socketService.getConnectionSignal(this.Me.id).subscribe();
-    this.socketService.listFriend().subscribe((result) => {
-      this.Friend_list = result;
-	  this.friendFiltred();
+    this.socketService.listFriend(this.Me.id).subscribe((result) => {
+    	this.Friend_list = result;
+		this.friendFiltred();
     })    
 	
 	this.socketService.destActualisation().subscribe((res) => {
 		this.Dest = res;
 	  })
+
+	// Update List Block
 
     this.socketService.getUserListWhenBlocked().subscribe((res) => {
 		if (res.id === this.Dest.id)
@@ -103,6 +103,8 @@ export class ChatComponent implements OnInit {
 	})
 
 	}
+
+	// Filtre UserList
 
 	userFiltred() {
 		this.User_filtred_list = this.User_list.filter((elem, index, arr) => {
@@ -128,6 +130,8 @@ export class ChatComponent implements OnInit {
 				return true;
 			});
 	}
+
+	// Filtre 
 
 	friendFiltred() {
 		this.Friend_filtred_list = this.Friend_list.filter((elem, index, arr) => {

@@ -1,7 +1,15 @@
 <div class="chat_list_user">
-<button class="firendonline"  (click)="sendBtn(friend)">
+<button class="firendonline" *ngIf="friend.online"  (click)="sendBtn(friend)">
     <div class="onoff" style ="background-color: aqua"></div>
    {{friend.nickname}}</button>
 
+   <button class="firendoffline" *ngIf="friend.online==false"  (click)="sendBtn(friend)">
+    <div class="onoff" style ="background-color: rgb(114, 113, 113)"></div>
+   {{friend.nickname}}</button>
+
+
 
 </div>
+
+
+

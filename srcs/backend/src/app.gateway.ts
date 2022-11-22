@@ -256,12 +256,19 @@ async handleDisconnect(client: Socket): Promise<void> {
     let data = await this.Prisma.user.findFirst({
     where: {
       socket: client.id
+    },
+    include: {
+      // joined: true,
+      blocked: true,
+      friends: true,
+      muted: true,
+      banned: true
     }
     })
     if (data != null && data != undefined)
     {
       //console.log("DECONNEXION =>");
-      console.log(data)
+      // console.log(data)
       this.isOffline(client, data.login);
       this.server.emit('userListUpdated');
     }
@@ -738,7 +745,7 @@ catch(err){
       })
       if (data != null && data != undefined)
       {
-        console.log(data);
+        // console.log(data);
         this.server.to(client.id).emit('listFriends', data.friends);
       }
     }

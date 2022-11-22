@@ -55,6 +55,7 @@ export class FriendUserComponent implements OnInit {
     this.show_chat = this.show_chat?false:true;
     this.showchatEvent.emit(this.show_chat);
     this.socketService.initDestActualisation(friend);
+    
 
     this.socketService.checkIfFriend(Number(this.Me.id), Number(friend.id));
   }
