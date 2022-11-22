@@ -624,6 +624,9 @@ catch(err){
             connect: [{id: Number(payload[1])}],
           }
         },
+        include : {
+          joined: true,
+        }
 		  })
       const data = await this.Prisma.channel.findMany({
         include: {
@@ -735,6 +738,31 @@ catch(err){
   }
 
   /* JOIN/LEAVE CHANNEL */
+  @SubscribeMessage('resetChannelPassword')
+  async resetChannelPassword(client: Socket, payload: any)
+  {
+    try{
+    let data = await this.Prisma.channel.update({
+      where:{
+        name: String(payload[0].name)
+      },
+      data:{
+        password: payload[1]
+      },
+      include: {
+        joined: true,
+        muted: true,
+        banned: true,
+        admins: true
+      },
+    })
+    }
+    catch(error){
+    console.log(error);
+    }
+  }
+
+
 
   @SubscribeMessage('joinChannel')
   async joinChannel(client: Socket, payload: any)
@@ -856,6 +884,20 @@ catch(err){
     })
     if (data != null && data != undefined)
       this.server.to(data.socket).emit('DisplayInvitation', invitation, data2); //AJOUTER ICI LES INFOS DE LA PARTIE
+  }
+
+  @SubscribeMessage('refuseInvitation')
+  async refuseInvitation(client:Socket, payload:any)
+  {
+    let refuse:boolean =true;
+    let data = await this.Prisma.user.findFirst({
+      where: {login: payload[0].login},
+    })
+    let data2 = await this.Prisma.user.findFirst({
+      where: {login: payload[1]},
+    })
+    if (data != null && data != undefined)
+      this.server.to(data.socket).emit('refuseInvitation', refuse, data2);
   }
 
 /* PONG GAME */

@@ -4,7 +4,8 @@
 
 <div class="all_direct">
 	
-	<div class="contenu_chat" style="overflow-y: auto; height: xyz; " #scrollMe [scrollTop]="scrollMe.scrollHeight" >
+	<!-- <div class="contenu_chat"  #scrollMe [scrollTop]="scrollMe.scrollHeight"> -->
+	<div class="contenu_chat"  #scrollMe scrollTop={{scrolltop}}   >
 		
 		<div class="chatwith"> Chat with {{Dest.nickname}}</div>
 		
@@ -17,7 +18,7 @@
 		</div>
 		
 
-		<div class="direct_message" *ngFor="let message of messages">
+		<div class="direct_message" *ngFor="let message of messages;">
 			{{ message }}
 		</div>
 		<div class="chatfond" style="background-image: url('{{Dest.avatar}}');"></div>
@@ -32,7 +33,10 @@
 		<app-button-v3 *ngIf="this.bloqueOrNot" [text]= "friend" (click)="addDelFriend()" ></app-button-v3>
 		<app-button-v3 *ngIf="this.bloqueOrNot" [text]="'Play Pong'" (click)="invite_game()" ></app-button-v3>
 		<app-button-v3 [text]="bloque" (click)="blockOrNot()"></app-button-v3>
-		<app-button-v3 *ngIf="this.bloqueOrNot" text="profile" (click)="goToProfile()"></app-button-v3>
+		
+		<a routerLink="/vip2-room">
+		<app-button-v3 text="Profile" (click)="goToProfile()"></app-button-v3>
+		</a>
 		
 		
 	</div><!-- fin de realtion -->

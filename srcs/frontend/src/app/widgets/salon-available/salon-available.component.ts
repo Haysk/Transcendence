@@ -109,11 +109,13 @@ export class SalonAvailableComponent implements OnInit {
   }
 
   showFormulePassword(current_channel: Channel){
-    this.show_formulePassword= !this.show_formulePassword
+    this.showchatEvent.emit(false);
+    this.show_formulePassword= true;
+    this.ShowFormulePasswordEvent.emit(this.show_formulePassword);
     this.SendChannelEvent.emit(current_channel);
     this.SendJoinChannelNameEvent.emit(current_channel.name);
-    this.ShowFormulePasswordEvent.emit(this.show_formulePassword);
-    this.showchatEvent.emit(false);
+    
+    // this.showchatEvent.emit(false);
     this.showFormuleEvent.emit(false);
   }
 }

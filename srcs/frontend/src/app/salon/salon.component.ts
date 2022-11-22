@@ -6,12 +6,15 @@ import { User } from '../models/user';
 import { Message } from '../models/message';
 
 
+
 @Component({
   selector: 'app-salon',
   templateUrl: './salon.component.html',
   styleUrls: ['./salon.component.css']
 })
 export class SalonComponent implements OnInit {
+
+  
 
   // guests:string[] = [];
   conversation: string[] = [];
@@ -86,6 +89,10 @@ export class SalonComponent implements OnInit {
     this.apiService.getChannelMessages(this.channel_name).subscribe({
       next:(result) => {
         this.historiqueConv = result;
+<<<<<<< HEAD
+=======
+        
+>>>>>>> 43396e878393c16a8ff0e11870fa69b7d16adff5
         },
         error: (err) =>{},
         complete:() => {}
