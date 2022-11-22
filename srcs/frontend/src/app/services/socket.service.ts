@@ -372,32 +372,26 @@ amIBanned()
     });
   }
 
-  //ADD Friend
-
   getAddFriend(id: number, id1: number){
     //this.socket.on('getAddFriend');
     this.socket.emit('getAddFriend', id, id1);
   }
 
-  getFriend(current_id: number): Observable<User[]> {
+  getFriend(): Observable<User[]> {
     return new Observable<User[]>((observer) => {
       this.socket.on('addFriend', (tab: User[]) => {
-        this.socket.emit('userListPlz', current_id);
         observer.next(tab);
       });
     });
   }
 
-  //Remove Friend
-
   getRemoveFriend(id: number, id1: number){
     this.socket.emit('getRemoveFriend', id, id1);
   }
 
-  removeFriend(current_id: number): Observable<User[]> {
+  removeFriend(): Observable<User[]> {
     return new Observable<User[]>((obs) => {
       this.socket.on('removeFriend', (tab: User[]) => {
-        this.socket.emit('userListPlz', current_id);
         obs.next(tab);
       });
     });
@@ -407,10 +401,9 @@ amIBanned()
     this.socket.emit('getFriendList', id);
   }
 
-  listFriend(current_id: number): Observable<User[]> {
+  listFriend(): Observable<User[]> {
     return new Observable<User[]>((obs) => {
       this.socket.on('listFriends', (tab: User[]) => {
-        this.socket.emit('userListPlz', current_id);
         obs.next(tab);
       });
     });
