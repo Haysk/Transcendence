@@ -20,7 +20,6 @@ export interface 	User {
 	oauth?:			Oauth;
 	socket?:		string;
 	friends?:		User[];
-	friendsof?:		User[];
 	blocked?:		User[];
 	blockedby?:		User[];
 	

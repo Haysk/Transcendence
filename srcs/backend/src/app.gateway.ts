@@ -321,7 +321,6 @@ catch(err){
           creatorOf: true,
           blocked: true,
           blockedby: true,
-          friendsof: true,
       }
     })
     if(data != null && data != undefined)
