@@ -65,13 +65,10 @@ export class ChatComponent implements OnInit {
     this.socketService.getFriend().subscribe((result) => {
     this.Friend_list = result;
 	this.friendFiltred();
-
-	console.log(result);	
     })
 
     this.socketService.removeFriend().subscribe((result) => {
       this.Friend_list = result;
-	  console.log(result);	
 	  this.friendFiltred();
 
     })
@@ -97,9 +94,7 @@ export class ChatComponent implements OnInit {
 	  this.socketService.getUserListWhenUnblocked().subscribe((res) => {
 		this.socketService.askForUserList(this.Me.id)
 		this.socketService.getFriendList(this.Me.id);
-		console.log("tata");
 	})
-
 	}
 
 	userFiltred() {
