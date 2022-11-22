@@ -45,7 +45,6 @@ export class MessageService {
   }
 
   async getMessages(params: { fromUserId: Number, userId: Number }): Promise<Message[]> {
-    console.log("requete prisma : params : fromUserId : " + params.fromUserId + " | userId : " + params.userId);
     try{
       return await this.prisma.message.findMany({
         where: {
@@ -89,7 +88,6 @@ export class MessageService {
   async createChannelMessage(data: Prisma.MessageCreateInput): Promise<Message>
   {
     try{
-    //console.log("createChannelMessage : channel_name : " + data.channelName + " | content : " + data.content + " | fromUserName : " + data.fromUserName);
       return await this.prisma.message.create({
         data,
       });
