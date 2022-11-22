@@ -89,10 +89,7 @@ export class SalonComponent implements OnInit {
     this.apiService.getChannelMessages(this.channel_name).subscribe({
       next:(result) => {
         this.historiqueConv = result;
-<<<<<<< HEAD
-=======
         
->>>>>>> 43396e878393c16a8ff0e11870fa69b7d16adff5
         },
         error: (err) =>{},
         complete:() => {}
