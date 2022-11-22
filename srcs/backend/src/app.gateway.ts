@@ -885,9 +885,22 @@ catch(err){
   }
 
   @SubscribeMessage('invitationIsAccepted')
-  acceptInvitation(client: Socket, payload: any)
+  async acceptInvitation(client: Socket, payload: any)
   {
-    this.server.to(payload[0].socket).emit('invitationAccepted');
+    let data = await this.Prisma.user.findFirst({
+      where: {
+        id: payload[0].id,
+      },
+      include:{
+        banned:true,
+        channel_joined:true,
+        friends:true,
+        friendsof: true,
+        muted:true
+      }
+    })
+    if(data != null && data != undefined)
+      this.server.to(data.socket).emit('invitationAccepted', true, data, payload[1]);
   }
 
   @SubscribeMessage('initDisplayInvitation')
@@ -900,8 +913,8 @@ catch(err){
     let data2 = await this.Prisma.user.findFirst({
       where: {login: payload[1].login},
     })
-    if (data != null && data != undefined)
-      this.server.to(data.socket).emit('DisplayInvitation', invitation, data2); //AJOUTER ICI LES INFOS DE LA PARTIE
+    if (data != null && data != undefined && data2 != null && data2 != undefined)
+      this.server.to(data.socket).emit('DisplayInvitation', invitation, data2, data); //AJOUTER ICI LES INFOS DE LA PARTIE
   }
 
   @SubscribeMessage('refuseInvitation')

@@ -16,20 +16,47 @@ export class AppComponent implements OnInit{
     private socketService: SocketService){
   }
 
-  invitation:boolean=false;
   invitationFromWho! :User;
-  refuse:boolean=false;
   refuseFromWho! : User;
+
+  player1!: User;
+  player2!: User;
+
+  invitation:boolean=false;
+  refuse:boolean=false;
+  gameAccepted:boolean = false;
+  gameIsReady:boolean = false;
 
   ngOnInit(): void {
     // this.socketService.doIHaveToDisplay().subscribe((res) => {
     //   this.invitation = res;
     // })
 
+    this.socketService.isGameAccepted().subscribe((data) => {
+      this.gameAccepted = data.res;
+      console.log(data.res);
+      
+      if(this.gameAccepted == true)
+      {
+        console.log("player1 : ");
+        console.log(this.player1);
+        console.log("player2 : ");
+        console.log(this.player2);
+        
+        //lancer le jeu la
+      }
+    })
+
+    this.socketService.isGameReady().subscribe((res) => {
+      this.gameIsReady = res;
+    })
+
     this.socketService.doIHaveToDisplay().subscribe({
-      next: (data: {res: boolean, res2:User;}) =>{
+      next: (data: {res: boolean, res2:User, res3:User;}) =>{
       this.invitation = data.res;
       this.invitationFromWho = data.res2;
+      this.player1 = data.res2;
+      this.player2 = data.res3;
       }
     })
 

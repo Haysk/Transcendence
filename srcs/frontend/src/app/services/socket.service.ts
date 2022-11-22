@@ -191,8 +191,6 @@ amIBanned()
   {
     return new Observable<User[]>((obs) => {
       this.socket.on('hereIsTheUserList', (res: User[]) => {
-        // console.log("HEREISTHEUSERLIST OK =>")
-        // console.log(res);
         obs.next(res);
       })
   })
@@ -368,8 +366,8 @@ amIBanned()
 
   doIHaveToDisplay(){
     return new Observable<any>((obs) => {
-      this.socket.on('DisplayInvitation', (res:boolean, res2: User) => {
-        let data = {res, res2}
+      this.socket.on('DisplayInvitation', (res:boolean, res2: User, res3: User) => {
+        let data = {res, res2, res3}
         obs.next(data);
       })
     })
@@ -386,14 +384,15 @@ amIBanned()
   }
 
 
-  acceptInvitation(target: User){
-    this.socket.emit('invitationIsAccepted', target);
+  acceptInvitation(target: User, from: User){
+    this.socket.emit('invitationIsAccepted', target, from);
   }
 
   isGameAccepted(){
-    return new Observable<boolean>((obs) => {
-      this.socket.on('invitationAccepted', () => {
-        obs.next(true);
+    return new Observable<any>((obs) => {
+      this.socket.on('invitationAccepted', (res:boolean, res2:User, res3: User) => {
+        let data = {res, res2, res3}
+        obs.next(data);
       })
     })
   }
