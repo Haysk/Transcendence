@@ -503,6 +503,31 @@ catch(err){
   }
 
   /* JOIN/LEAVE CHANNEL */
+  @SubscribeMessage('resetChannelPassword')
+  async resetChannelPassword(client: Socket, payload: any)
+  {
+    try{
+    let data = await this.Prisma.channel.update({
+      where:{
+        name: String(payload[0].name)
+      },
+      data:{
+        password: payload[1]
+      },
+      include: {
+        joined: true,
+        muted: true,
+        banned: true,
+        admins: true
+      },
+    })
+    }
+    catch(error){
+    console.log(error);
+    }
+  }
+
+
 
   @SubscribeMessage('joinChannel')
   async joinChannel(client: Socket, payload: any)

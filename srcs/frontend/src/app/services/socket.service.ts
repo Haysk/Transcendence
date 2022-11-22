@@ -182,6 +182,11 @@ amIBanned()
     })
   }
 
+  resetChannelPassword(channel:Channel, new_pwd:string){
+
+    this.socket.emit('resetChannelPassword', channel, new_pwd); 
+  }
+
   joinChannel(channel_name: string, id: number)
   {
     this.socket.emit('joinChannel', channel_name, id);

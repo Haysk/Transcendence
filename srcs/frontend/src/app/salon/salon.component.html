@@ -30,8 +30,9 @@
             <div class="titre_administrator">
                 Creator
             </div>
+            
             <div class="userInSalon" *ngFor ="let userAdmin of usersAdmin" > 
-                <app-creator-in-salon  [usersAdmin]="usersAdmin" [guest]=userAdmin *ngIf="isCreator(userAdmin)==1"></app-creator-in-salon>
+                <app-creator-in-salon  [current_user]="current_user" [current_channel] ="current_channel" [guest]=userAdmin *ngIf="isCreator(userAdmin)==1"></app-creator-in-salon>
             </div>
 
 

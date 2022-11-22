@@ -58,7 +58,6 @@ export class ChatComponent implements OnInit {
 		this.socketService.getAllUser().subscribe((result) => {
 			this.User_list = result;
 		});
-		// console.log(this.Me);
 
     this.socketService.getFriend().subscribe((result) => {
     this.Friend_list = result;
