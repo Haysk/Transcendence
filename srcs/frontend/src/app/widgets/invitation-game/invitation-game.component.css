@@ -14,21 +14,39 @@
 .cercle2{
     background-image: url("../../../assets/imgs/super-mario-boo-512x512.png");
     /* background-color: rgba(255, 255, 255, 0.733); */
-    background-size: cover;
+    background-size: contain;
     background-repeat: no-repeat;
     background-position: center; 
     width: 550px;
-    height: 550px;
+    height: auto;
     position: fixed;
     /* border-radius: 50%; */
     top:50%;
     left:50%;
     transform: translate(-50%, -50%);
     display: flex;
-    justify-content: center;
+    flex-direction: column;
+    align-items: flex-end;
+    
+  
     
  
 
+}
+
+.infoGame{
+    width: 180px;
+    height: 180px;
+    background: linear-gradient( rgba(255, 253, 235, 0.822), rgba(255, 188, 112, 0.712));
+    padding-left: 35px;
+    margin-top: -40px;
+    /* margin-left: 300px; */
+    margin-right: 30px;
+    border-radius: 50%;
+    padding-top: 45px;
+    color: rgb(0, 0, 0);
+    line-height: 17px;
+    font-size: 14px;
 }
 
 .env_all{
@@ -70,9 +88,11 @@
     width: 180px;
     height: auto;
     margin-top: 10px;
-    font-size: 24px;
+    font-size: 20px;
     color: rgb(129, 10, 10);
     border-radius: 20px;
+    padding-left: 2px;
+    padding-right: 2px;
 
     
 }

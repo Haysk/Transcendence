@@ -6,15 +6,7 @@
             <div class="message">
                 {{this.fromWho.nickname}}
             </div><!-- fin div message -->
-            <!--BALL-->
-            diametre ball : {{this.gameConfig.ball.diammeter}}
-            <br/>
-            ball speed : {{this.gameConfig.ball.speed}}
-            <br/>
-            ball color : {{this.gameConfig.ball.collor}}
-            <br/>
-            <!--Board-->
-            score to win : {{this.gameConfig.board.scoreToWin}}
+          
         <div class="message2">
         
             invite you to play a game
@@ -24,8 +16,21 @@
             <app-button-v2 [text]="'Play Now'" (click)="Yesplease()"></app-button-v2>
 
         </div>
-
-
+        
     </div><!-- fin div env_all -->
+
+    <div class="infoGame">
+        <!--BALL-->
+          Game settings :<br/>
+          Diametre ball : {{this.gameConfig.ball.diammeter}}
+          <br/>
+          Ball speed : {{this.gameConfig.ball.speed}}
+          <br/>
+          Ball color : {{this.gameConfig.ball.collor}}
+          <br/>
+          <!--Board-->
+          Score to win : {{this.gameConfig.board.scoreToWin}}
+        </div>  <!-- fin div infoGame-->
     </div><!-- fin div cercle2 -->
+    
 </div><!-- fin div all_invitation -->
