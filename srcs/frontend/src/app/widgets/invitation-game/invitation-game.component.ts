@@ -44,8 +44,9 @@ export class InvitationGameComponent implements OnInit {
   }
 
   Yesplease(){
-    this.socketService.acceptInvitation(this.fromWho, this.to);
+    this.socketService.acceptInvitation(this.to, this.fromWho);
     console.log("IMPORTANT");
+    console.log(this.fromWho);
     console.log(this.to);
     
     //let data = {fromWho: this.fromWho, to: this.to}

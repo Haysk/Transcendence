@@ -2,6 +2,7 @@ import { Component, OnInit, Input } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { SocketService } from './services/socket.service';
 import { User } from './models/user';
+import { StorageService } from './services/storage.service';
 
 @Component({
   selector: 'app-root',
@@ -13,8 +14,10 @@ export class AppComponent implements OnInit{
 	constructor(
     public route: ActivatedRoute,
 		public router: Router,
-    private socketService: SocketService){
+    private socketService: SocketService,
+    private storageService: StorageService){
   }
+  
 
   invitationFromWho! :User;
   refuseFromWho! : User;
@@ -26,6 +29,20 @@ export class AppComponent implements OnInit{
   refuse:boolean=false;
   gameAccepted:boolean = false;
   gameIsReady:boolean = false;
+
+  to: User = {
+		id: this.storageService.getId(),
+		login: this.storageService.getLogin(),
+		email: this.storageService.getEmail(),
+		first_name: this.storageService.getFirstName(),
+		last_name: this.storageService.getLastName(),
+		url: this.storageService.getUrl(),
+		displayname: this.storageService.getDisplayName(),
+		nickname: this.storageService.getNickName(),
+		image: this.storageService.getImage(),
+		avatar: this.storageService.getAvatar(),
+		online: this.storageService.getOnline(),
+	};
 
   ngOnInit(): void {
     // this.socketService.doIHaveToDisplay().subscribe((res) => {

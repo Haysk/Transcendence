@@ -898,6 +898,7 @@ catch(err){
         friendsof: true,
         muted:true
       }
+    
     })
     if(data != null && data != undefined)
       this.server.to(data.socket).emit('invitationAccepted', true, data, payload[1]);
