@@ -915,7 +915,7 @@ catch(err){
       where: {login: payload[1].login},
     })
     if (data != null && data != undefined && data2 != null && data2 != undefined)
-      this.server.to(data.socket).emit('DisplayInvitation', invitation, data2, data); //AJOUTER ICI LES INFOS DE LA PARTIE
+      this.server.to(data.socket).emit('DisplayInvitation', invitation, data2, data, payload[2]); //PAYLOAD[2] = LES INFOS DE LA PARTIE
   }
 
   @SubscribeMessage('refuseInvitation')

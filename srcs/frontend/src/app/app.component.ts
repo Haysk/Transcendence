@@ -3,6 +3,7 @@ import { ActivatedRoute, Router } from '@angular/router';
 import { SocketService } from './services/socket.service';
 import { User } from './models/user';
 import { StorageService } from './services/storage.service';
+import { IGame } from './pong/game/interfaces/game.interface';
 
 @Component({
   selector: 'app-root',
@@ -23,6 +24,7 @@ export class AppComponent implements OnInit{
   refuseFromWho! : User;
   player1!: User;
   player2!: User;
+  gameConfig!: IGame;
   invitation:boolean=false;
   refuse:boolean=false;
   gameAccepted:boolean = false;
@@ -74,11 +76,12 @@ export class AppComponent implements OnInit{
     })
 
     this.socketService.doIHaveToDisplay().subscribe({
-      next: (data: {res: boolean, res2:User, res3:User;}) =>{
+      next: (data: {res: boolean, res2:User, res3:User, res4: IGame;}) =>{
       this.invitation = data.res;
       this.invitationFromWho = data.res2;
       this.player1 = data.res2;
       this.player2 = data.res3;
+      this.gameConfig = data.res4;
       }
     })
 

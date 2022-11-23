@@ -7,6 +7,7 @@ import { Channel } from '../models/channel'
 import { environment } from 'src/environments/environment';
 import { IGameStates } from '../pong/game/interfaces/game-states.interface';
 import { IInput } from '../pong/game/interfaces/input.interface';
+import { GameMode, PlayerMode, IGame } from '../pong/game/interfaces/game.interface';
 
 
 @Injectable({
@@ -356,8 +357,8 @@ amIBanned()
     })
   }
 
-  displayInvitation(target: User, target2:User){
-    this.socket.emit('initDisplayInvitation', target, target2);
+  displayInvitation(player2: User, player1:User, gameConfig: IGame){
+    this.socket.emit('initDisplayInvitation', player2, player1, gameConfig);
   }
 
   refuseInvitation(target: User, target2:string){
@@ -366,8 +367,8 @@ amIBanned()
 
   doIHaveToDisplay(){
     return new Observable<any>((obs) => {
-      this.socket.on('DisplayInvitation', (res:boolean, res2: User, res3: User) => {
-        let data = {res, res2, res3}
+      this.socket.on('DisplayInvitation', (res:boolean, res2: User, res3: User, res4: IGame) => {
+        let data = {res, res2, res3, res4}
         obs.next(data);
       })
     })

@@ -76,7 +76,7 @@ export class GameSettingsComponent implements OnInit, OnDestroy {
   sendInvitation(): void {
     this.showGameSettingsEvent.emit(this.showGameSettings);
     this.game.updateStates(structuredClone(defaultGameConfig).states);
-    this.socketService.displayInvitation(this.player2, this.player1);
+    this.socketService.displayInvitation(this.player2, this.player1, this.gameConfig);
   }
 
   resetAll(): void {

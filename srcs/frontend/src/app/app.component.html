@@ -3,6 +3,7 @@
 <app-invitation-game 
 [fromWho]="this.invitationFromWho" 
 [to]="to"
+[gameConfig]="gameConfig"
 (showInvitationEvent)="receiveShowInivtationEvent($event)"
 *ngIf="invitation==true"></app-invitation-game>
 
