@@ -1,0 +1,22 @@
+
+
+	<div class="menu" *ngIf="!gameConfig.states.start">
+	  <h2>Game Settings</h2>
+	  
+	  <app-pong-player [player]="gameConfig.left"></app-pong-player>
+	  <app-pong-player [player]="gameConfig.right"></app-pong-player>
+
+	  <div class="customize">
+		  <div class="pong_ball">
+		  <app-pong-ball [ball]="gameConfig.ball"></app-pong-ball></div>
+		  <div class="pong-game">
+		  <app-pong-game [game]="gameConfig"></app-pong-game></div>
+	  </div> <!--fin div customize-->
+
+	  	<div class="les_buttons">
+	  	<button (click)="sendInvitation()">Send Invitation</button>
+	  	<button (click)="resetAll()">Reset params</button>
+	 	 <button (click)="goBack()">Go back</button>
+		</div><!--fin div les_buttons-->
+	
+	</div><!--fin div menu-->

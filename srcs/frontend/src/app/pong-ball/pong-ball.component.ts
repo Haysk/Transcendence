@@ -7,8 +7,7 @@ import { IBallConfig } from '../pong/game/interfaces/ball-config.interface';
   styleUrls: ['./pong-ball.component.css']
 })
 export class PongBallComponent implements OnInit {
-  @Input()
-  ball!: IBallConfig;
+  @Input() ball!: IBallConfig;
 
   constructor() { }
 

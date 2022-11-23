@@ -343,4 +343,8 @@ export class PongComponent implements OnInit, OnDestroy {
       this.gameConfig.board.board.height * 0.05
     );
   }
+
+  go(){
+    
+  }
 }
