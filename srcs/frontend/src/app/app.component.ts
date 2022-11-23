@@ -21,14 +21,15 @@ export class AppComponent implements OnInit{
 
   invitationFromWho! :User;
   refuseFromWho! : User;
-
   player1!: User;
   player2!: User;
-
   invitation:boolean=false;
   refuse:boolean=false;
   gameAccepted:boolean = false;
   gameIsReady:boolean = false;
+  showPong:boolean =false;
+
+
 
   to: User = {
 		id: this.storageService.getId(),
@@ -55,10 +56,14 @@ export class AppComponent implements OnInit{
       
       if(this.gameAccepted == true)
       {
+
+        this.showPong=true;
+        this.invitation=false;
         console.log("player1 : ");
-        console.log(this.player1);
+        console.log(data.res3);
         console.log("player2 : ");
-        console.log(this.player2);
+        console.log(data.res2);
+       
         
         //lancer le jeu la
       }

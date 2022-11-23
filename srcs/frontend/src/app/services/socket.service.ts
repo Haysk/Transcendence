@@ -384,8 +384,8 @@ amIBanned()
   }
 
 
-  acceptInvitation(target: User, from: User){
-    this.socket.emit('invitationIsAccepted', target, from);
+  acceptInvitation(player2: User, player1: User){
+    this.socket.emit('invitationIsAccepted', player2, player1);
   }
 
   isGameAccepted(){
