@@ -102,7 +102,7 @@ export class DirectChatComponent implements OnInit {
       this.socketService.hasBeenBlocked(this.Dest, this.Me);
     })
 
-    this.socketService.getFriend().subscribe((result) => {      
+    this.socketService.getFriend(this.Me.id).subscribe((result) => {      
     })
 
     this.socketService.removeFriend().subscribe((result) => {

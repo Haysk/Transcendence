@@ -64,7 +64,7 @@ export class ChatComponent implements OnInit {
 			this.userFiltred2();
 		});
 
-    this.socketService.getFriend().subscribe((result) => {
+    this.socketService.getFriend(this.Me.id).subscribe((result) => {
 		this.socketService.askForUserList(this.Me.id);
 	    this.Friend_list = result;
 		this.friendFiltred();
@@ -77,6 +77,7 @@ export class ChatComponent implements OnInit {
 
     })
 
+	this.socketService.getConnectionSignalFriend(this.Me.id).subscribe();
     this.socketService.getFriendList(this.Me.id);
     this.socketService.listFriend().subscribe((result) => {
 		// this.socketService.askForUserList(this.Me.id);
