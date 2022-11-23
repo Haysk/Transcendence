@@ -22,5 +22,5 @@ export interface 	User {
 	friends?:		User[];
 	blocked?:		User[];
 	blockedby?:		User[];
-	
+	friendsof?:		User[];
 }

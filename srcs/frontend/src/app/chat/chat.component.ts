@@ -63,23 +63,25 @@ export class ChatComponent implements OnInit {
 		});
 
     this.socketService.getFriend().subscribe((result) => {
-    this.Friend_list = result;
-	this.friendFiltred();
-
-	console.log(result);	
+		this.socketService.askForUserList(this.Me.id);
+	    this.Friend_list = result;
+		this.friendFiltred();
+		console.log(result);	
     })
 
     this.socketService.removeFriend().subscribe((result) => {
-      this.Friend_list = result;
-	  console.log(result);	
-	  this.friendFiltred();
+		this.socketService.askForUserList(this.Me.id);
+      	this.Friend_list = result;
+	  	//console.log(result);	
+	  	this.friendFiltred();
 
     })
 
     this.socketService.getFriendList(this.Me.id);
     this.socketService.listFriend().subscribe((result) => {
-      this.Friend_list = result;
-	  this.friendFiltred();
+		// this.socketService.askForUserList(this.Me.id);
+    	this.Friend_list = result;
+		this.friendFiltred();
     })    
 	
 	this.socketService.destActualisation().subscribe((res) => {
@@ -89,7 +91,7 @@ export class ChatComponent implements OnInit {
     this.socketService.getUserListWhenBlocked().subscribe((res) => {
 		if (res.id === this.Dest.id)
 			this.showchat = false;
-		this.socketService.askForUserList(this.Me.id)
+		this.socketService.askForUserList(this.Me.id);
 		this.socketService.getFriendList(this.Me.id);
 		
 	  })
@@ -104,15 +106,28 @@ export class ChatComponent implements OnInit {
 
 	userFiltred() {
 		this.User_filtred_list = this.User_list.filter((elem, index, arr) => {
-		let i = 0;
-		if (elem.blocked) {
-			while (elem.blocked[i]) {
-				if (elem.blocked[i].id == this.Me.id)
-					return false;
-					i++;
+			let i = 0;
+			if (elem.friendsof) {
+				while (elem.friendsof[i]) {
+					console.log( {elem});
+					
+					if (elem.friendsof[i].id == this.Me.id)
+						return false;
+						i++;
+					}
 				}
-			}
-			return true;
+				return true;
+		});
+		this.User_filtred_list = this.User_list.filter((elem, index, arr) => {
+			let i = 0;
+			if (elem.blocked) {
+				while (elem.blocked[i]) {
+					if (elem.blocked[i].id == this.Me.id)
+						return false;
+						i++;
+					}
+				}
+				return true;
 		});
 	}
 
