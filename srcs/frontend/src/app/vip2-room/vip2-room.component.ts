@@ -95,6 +95,9 @@ export class Vip2RoomComponent implements OnInit {
 		this.qrCode = this.storage.getQrCode();
 	}
 
+	ngOnDestroy() {
+		this.socketService.unsubscribeSocket("hereIsTheUserYouAskedFor");
+	}
 
 	showhide() {
 		this.visible = this.visible ? false : true;

@@ -121,6 +121,17 @@ export class DirectChatComponent implements OnInit {
     })
 
   }
+
+	ngOnDestroy() {
+		this.socketService.unsubscribeSocket("DestActualisation");
+		this.socketService.unsubscribeSocket("PrivMsg");
+		this.socketService.unsubscribeSocket("findFriendsOrNot");
+		this.socketService.unsubscribeSocket("findBlockOrNot");
+		this.socketService.unsubscribeSocket("findBlockOrNot");
+		this.socketService.unsubscribeSocket("unblockedUser");
+		this.socketService.unsubscribeSocket("blockedUser");
+		this.socketService.unsubscribeSocket("addFriend");
+	}
   
   getRoomName(login1: string, login2 : string) : string
   {
