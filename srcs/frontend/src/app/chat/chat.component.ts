@@ -1,10 +1,12 @@
-import { Component, OnInit, Input, Inject, Output } from '@angular/core';
+import { Component, OnInit, Input, Inject, Output, EventEmitter } from '@angular/core';
 import { SocketService } from '../services/socket.service';
 import { ApiService } from '../services/api.service';
 import { User } from '../models/user'
 import { Injectable } from '@angular/core';
 import { Channel } from '../models/channel';
 import { StorageService } from '../services/storage.service';
+import { GameMode, PlayerMode, IGame } from 'src/app/pong/game/interfaces/game.interface';
+
 
 
 @Component({
@@ -48,6 +50,9 @@ export class ChatComponent implements OnInit {
 
 	channel_name!: string;
 	privateChannel!: Channel;
+	global2!: {player1: User, player2:  User, gameConfig: IGame};
+
+	@Output() global3Event = new EventEmitter<any>();
 
 	constructor(private socketService: SocketService,
 		private apiService: ApiService,
@@ -191,5 +196,9 @@ export class ChatComponent implements OnInit {
 		this.showFormulePassword = false;
 	}
 
+	receiveGlobalEvent($event:any){
+		this.global2 =$event;
+		this.global3Event.emit(this.global2);
+	}
 
 }

@@ -920,10 +920,14 @@ catch(err){
     })
     if(data != null && data != undefined && data2 != null && data2 != undefined)
     {
+      // console.log("GATEWAY ACCEPT INVITATION :")
+      // console.log(data);
+      // console.log(data2);
       this.server.to(data.socket).emit('invitationAccepted', true, data, data2);
       let roomName = this.createGameRoomName(data.login, data2.login);
       this.server.in(data.socket).socketsJoin(roomName);
       this.server.in(data2.socket).socketsJoin(roomName);
+      this.server.to(roomName).emit('invitationAccepted', true, data, data2);
       this.TabReady.set(roomName, ["", ""]);
       this.server.to(roomName).emit('areYouReady', true);
     }
@@ -958,14 +962,20 @@ catch(err){
   }
 
   @SubscribeMessage('ready')
-  async getReadyForGame(Client: Socket, payload: any) //PAYLOAD[0] = login1 PAYLOAD[1] = login2
+  async getReadyForGame(Client: Socket, payload: any) //PAYLOAD[0] = player1 PAYLOAD[1] = player2 PAYLOAD[2] = gameConfig
   {
-    let roomName = this.createGameRoomName(payload[0], payload[1]);
+    let roomName = this.createGameRoomName(payload[0].login, payload[1].login);
     let room = this.TabReady.get(roomName);
-    if (room[0] != Client.id)
+    if (room[0] != Client.id && room[1] != Client.id)
     {
-      
+      if (room[0] == "")
+        room[0] = Client.id;
+      else{
+        room[1] = Client.id;
+      }
     }
+    if (room[0] != "" && room[1] != "")
+      this.server.to(roomName).emit('bothPlayerAreReady', payload[0], payload[1], payload[2]);
   }
 
 /* PONG GAME */
@@ -1134,6 +1144,7 @@ catch(err){
     console.log(err);
     }
   }
+
 
    
   @SubscribeMessage('getBlockUser')

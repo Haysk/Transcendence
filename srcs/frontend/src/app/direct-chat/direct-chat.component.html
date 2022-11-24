@@ -3,7 +3,9 @@
 <button (click)="sendMessage()">Send</button> -->
 
 <div class="gameSetting">
-	<app-game-settings (showGameSettingsEvent)="receiveShowGameSettings($event)" 
+	<app-game-settings 
+	(showGameSettingsEvent)="receiveShowGameSettings($event)" 
+	(globalEvent)="receiveGlobalEvent($event)"
 	[player2]="this.Dest" [player1]="this.Me"
 	*ngIf="showGameSettings==true"></app-game-settings>
 </div>

@@ -31,6 +31,7 @@ export class GameSettingsComponent implements OnInit, OnDestroy {
   // @Input() Me!:User;
   
   @Output()showGameSettingsEvent= new EventEmitter<boolean>();
+  @Output()globalEvent = new EventEmitter<any>();
 
   gameConfig!: IGame;
   moveLeft!: IInput;
@@ -49,6 +50,8 @@ export class GameSettingsComponent implements OnInit, OnDestroy {
   tickSubscription!: Subscription;
   upSubscription!: Subscription;
   downSubscription!: Subscription;
+
+  global!: {player1: User, player2:  User, gameConfig: IGame};
 
   constructor(
     private socketService: SocketService,
@@ -77,6 +80,9 @@ export class GameSettingsComponent implements OnInit, OnDestroy {
     this.showGameSettingsEvent.emit(this.showGameSettings);
     this.game.updateStates(structuredClone(defaultGameConfig).states);
     this.socketService.displayInvitation(this.player2, this.player1, this.gameConfig);
+    this.global = {player1: this.player1,player2: this.player2, gameConfig: this.gameConfig};
+    this.globalEvent.emit(this.global);
+    
   }
 
   resetAll(): void {

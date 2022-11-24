@@ -19,7 +19,6 @@ export class AppComponent implements OnInit{
     private storageService: StorageService){
   }
   
-
   invitationFromWho! :User;
   refuseFromWho! : User;
   player1!: User;
@@ -30,7 +29,7 @@ export class AppComponent implements OnInit{
   gameAccepted:boolean = false;
   gameIsReady:boolean = false;
   showPong:boolean =false;
-
+  global5!: {player1: User, player2:  User, gameConfig: IGame};
 
 
   to: User = {
@@ -93,6 +92,21 @@ export class AppComponent implements OnInit{
       this.refuseFromWho = data.res2;
       }
     })
+
+    this.socketService.isGameReady().subscribe({
+      next: (data: {res: User, res2: User, res3: IGame}) => {
+        this.player1 = data.res;
+        this.player2 = data.res2;
+        this.gameConfig = data.res3;
+        console.log("LA LISTE :");
+        console.log("PLAYER 1 :");
+        console.log(this.player1);
+        console.log("PLAYER 2 :");
+        console.log(this.player2);
+        console.log("GAME CONFIG : ");
+        console.log(this.gameConfig);
+      }
+    })
   }
 
   public getLogin(): string | null{
@@ -116,4 +130,11 @@ export class AppComponent implements OnInit{
     this.refuse = $event;
   }
 
+  receiveGlobal4Event($event: any){
+    this.global5= $event;
+    this.player1 = this.global5.player1;
+    this.player2 = this.global5.player2;
+    this.gameConfig = this.global5.gameConfig;
+  }
 }
+

@@ -384,12 +384,17 @@ amIBanned()
     })
   }
 
-  readySignal(login1: string, login2: string)
+  readySignal(player1: User, player2: User, gameConfig: IGame)
   {
-    this.socket.emit('ready', login1, login2);
+    this.socket.emit('ready', player1, player2, gameConfig);
   }
 
   acceptInvitation(player2: User, player1: User){
+    // console.log("ACCEPT INVITATION :");
+    
+    // console.log(player1);
+    // console.log(player2);
+    
     this.socket.emit('invitationIsAccepted', player2, player1);
   }
 
@@ -406,6 +411,18 @@ amIBanned()
     return new Observable<boolean>((obs) => {
       this.socket.on('areYouReady', (res: boolean) => {
         obs.next(res);
+      })
+    })
+  }
+
+  isGameReady()
+  {
+    return new Observable<any>((obs) => {
+      this.socket.on('bothPlayerAreReady', (res:User, res2:User, res3:IGame) => {
+        let data = {res, res2, res3}
+        console.log("CONSOLE LOOOOOOG");
+        
+        obs.next(data);
       })
     })
   }
