@@ -1,6 +1,6 @@
 import { Component, OnInit, Input, Output, EventEmitter } from '@angular/core';
 import { User } from '../models/user';
-import { ChatComponent } from '../chat/chat.component';
+import { SocketService } from '../services/socket.service';
 
 @Component({
   selector: 'app-select-user',
@@ -10,22 +10,50 @@ import { ChatComponent } from '../chat/chat.component';
 export class SelectUserComponent implements OnInit {
   @Input() Me!: User;
   @Input() user!: User;
-  show_chat: Boolean = false;
-  show_hide: String = "chat";
+  // userList!: User[];
+  // @Input() show_chat: Boolean = false;
 
-  @Output() showchatEvent = new EventEmitter<Boolean>();
-  @Output() sendDestEvent = new EventEmitter<User>();
+  @Output() showchatEvent = new EventEmitter<boolean>();
+  
+  userList!: User[];
+  show_chat: boolean = false;
+  you_got_message:boolean=true;
+  icon_message!:string;
 
-  constructor() { }
+
+
+
+  constructor(private socketService: SocketService) { }
 
   ngOnInit(): void {
+    
+    if (this.you_got_message == true){
+        this.icon_message="📨";
+    }
+    else{
+      this.icon_message="";
+    }
+    
   }
 
   sendBtn(dest : User): void {
-    console.log("Me = " + this.Me.login + " | dest : " + dest.login);
-    this.show_chat = this.show_chat?false:true;
-    this.show_hide = this.show_chat?"close":"chat";
+    // if (this.Me.login != dest.login){
+    // console.log("Me = " + this.Me.login + " | dest : " + dest.login);
+    this.show_chat = true;
     this.showchatEvent.emit(this.show_chat);
-    this.sendDestEvent.emit(this.user); 
+    this.socketService.initDestActualisation(dest);
+ 
+
+
+    this.socketService.checkIfFriend(this.Me.id, this.user.id);
+    this.socketService.checkIfBlock(this.Me.id, this.user.id);
+    // }
+    // else{
+    //   this.show_chat = false;
+    //   this.show_hide = this.show_chat?"close":"chat";
+    //   this.showchatEvent.emit(this.show_chat);
+     
+    // }
+
   }
 }

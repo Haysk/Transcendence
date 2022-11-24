@@ -32,18 +32,22 @@
 .titre_salon_p1{
     font-size: 20px;
     text-align: end;
-    width: 30%;
+    width: 10%;
     /* background-color: aqua; */
 }
 
 .titre_salon_p2{
     font-size: 20px;
-    width: 30%;
+    width: 60%;
     /* background-color: rgb(17, 114, 114); */
+    padding-top: 6px;
 }
 
 .titre_salon_p3{
     width: 30%;
+    align-items: center;
+    display: flex;
+    flex-direction: center;
     /* background-color: rgb(11, 63, 63); */
 }
 
@@ -149,6 +153,39 @@ button[type="exit"] span::before{
 
 }
 
+button[type="pause"]{
+    color: aliceblue;
+
+    width: 20px;
+    height: 20px;
+    text-align: center;
+    background-color: rgb(62, 65, 66);
+    font-size: 14px;
+    border: none;
+    border-radius: 20px;
+    cursor: pointer;
+    margin-right: 10px;
+    
+    transform: rotate(90deg);
+}
+
+button[type="pause"]:hover{
+    color: rgb(240, 255, 254);
+    width: 20px;
+    height: 20px;
+    text-align: center;
+    background-color: rgb(18, 161, 125);
+    font-size: 14px;
+    border: none;
+    border-radius: 20px;
+    cursor: pointer;
+    margin-right: 10px;
+    text-transform: uppercase;
+    transform: rotate(135deg);
+
+}
+
+
 
 .contenu_salon{
     width: 500px;
@@ -162,13 +199,12 @@ button[type="exit"] span::before{
 
 .env_conversation{
     width: 70%;
-    height: 100%;
     background-color: rgb(0,0,0);
     background-image: url(../../assets/imgs/login1240x1240px.jpg);
     background-size: cover;
     background-repeat: no-repeat;
     background-position: center; 
- 
+    
 
 }
 
@@ -196,18 +232,25 @@ button[type="exit"] span::before{
 }
 
 .titre_administrator{
-    color:rgb(107, 179, 155);
+    font-size: 14px;
+    color:rgb(131, 129, 125);
     text-align: center;
-    background-color: rgb(32, 43, 39);
+    background-color: rgb(0, 0, 0);
+    margin-top: 2px;
 
 }
 
 .titre_guest{
-    color:rgb(107, 179, 155);
+    
+    font-size: 14px;
+    color:rgb(131, 129, 125);
     text-align: center;
-    background-color: rgb(32, 43, 39);
+    background-color: rgb(0, 0, 0);
+    margin-top: 2px;
+
 
 }
+
 
 /* .user_salon{
     width: 100%;

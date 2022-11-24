@@ -11,9 +11,6 @@ export class BlocChatComponent implements OnInit {
   constructor() { }
 
   ngOnInit(): void {
-  
-   
-  
   }
 
   buttonTitle:string = "Show";

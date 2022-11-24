@@ -3,6 +3,8 @@ import { HttpClient, HttpClientModule } from '@angular/common/http';
 import { FormsModule } from '@angular/forms';
 import { BrowserModule } from '@angular/platform-browser';
 import { AppRoutingModule } from './app-routing.module';
+import { ApiService } from './services/api.service';
+import { StorageService } from './services/storage.service';
 import { AppComponent } from './app.component';
 import { HomeComponent } from './home/home.component';
 import { PongComponent } from './pong/pong.component';
@@ -26,6 +28,18 @@ import { SalonAvailableComponent } from './widgets/salon-available/salon-availab
 import { PongPlayerComponent } from './pong-player/pong-player.component';
 import { PongBallComponent } from './pong-ball/pong-ball.component';
 import { PongGameComponent } from './pong-game/pong-game.component';
+import { PlayerPongComponent } from './widgets/player-pong/player-pong.component';
+import { PasswordComponent } from './widgets/password/password.component';
+import { AdminInSalonComponent } from './widgets/admin-in-salon/admin-in-salon.component';
+import { CreatorInSalonComponent } from './widgets/creator-in-salon/creator-in-salon.component';
+import { FriendUserComponent } from './friend-user/friend-user.component';
+import { BlockUserComponent } from './block-user/block-user.component';
+import { InvitationGameComponent } from './widgets/invitation-game/invitation-game.component';
+import { ButtonV4Component } from './widgets/button-v4/button-v4.component';
+import { BlocUserProfileComponent } from './widgets/bloc-user-profile/bloc-user-profile.component';
+import { Vip2RoomComponent } from './vip2-room/vip2-room.component';
+import { InvitationRefuseComponent } from './widgets/invitation-refuse/invitation-refuse.component';
+import { AuthModule } from './auth/auth.module';
 
 @NgModule({
   declarations: [
@@ -38,7 +52,6 @@ import { PongGameComponent } from './pong-game/pong-game.component';
     VipRoomComponent,
     BlocChatComponent,
     RestRoomComponent,
-    LoginComponent,
     ChatComponent,
     DirectChatComponent,
     ChatHistoryComponent,
@@ -51,16 +64,32 @@ import { PongGameComponent } from './pong-game/pong-game.component';
     SalonAvailableComponent,
     PongPlayerComponent,
     PongBallComponent,
-    PongGameComponent
+    PongGameComponent,
+    PlayerPongComponent,
+    PasswordComponent,
+    AdminInSalonComponent,
+    CreatorInSalonComponent,
+    PlayerPongComponent,
+    FriendUserComponent,
+    BlockUserComponent,
+    InvitationGameComponent,
+    ButtonV4Component,
+    BlocUserProfileComponent,
+    Vip2RoomComponent,
+    InvitationRefuseComponent
   ],
   imports: [
     BrowserModule,
     AppRoutingModule,
     HttpClientModule,
-    FormsModule
+    FormsModule,
+	AuthModule
   ],
   providers: [
-    HttpClient
+    HttpClient,
+    ApiService,
+	StorageService,
+	Storage,
   ],
   bootstrap: [AppComponent]
 })

@@ -1,11 +1,9 @@
 import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
-import { Tech } from '../models/technology';
 import { User } from '../models/user';
 import { Message } from '../models/message';
-import { Observable } from 'rxjs';
-import { Oauth } from '../models/oauth';
-import { UrlSerializer } from '@angular/router';
+import { Channel } from '../models/channel';
+import { Tfa } from '../models/tfa'
 import { environment } from 'src/environments/environment';
 
 @Injectable({
@@ -14,47 +12,79 @@ import { environment } from 'src/environments/environment';
 export class ApiService {
   API_SERVER = "https://" + environment.IP_HOST + "/api";
 
-  constructor(private httpClient: HttpClient) { }
+	constructor(private httpClient: HttpClient,) {
+
+  }
+
+//   joinChannel(target: Channel, user :User)
+//   {
+//     const data = {target, user}
+//     //console.log("api service : channel name : " + target.name + " | user name : " + user.login);
+//     return this.httpClient.post<Channel>(`${this.API_SERVER}/joinChannel`, data);
+//   }
+
+  addPrivateChannel(name: string, creator_id: number, password: string)
+  {
+    const data = {name, creator_id, password};
+    //console.log("API SERVICE : addPrivateChannel");
+    return this.httpClient.post<Channel>(`${this.API_SERVER}/addPrivateChannel`, data);
+  }
+
+  addChannel(name: string, creator_id: number)
+  {
+    const data = {name, creator_id};
+    //console.log("API SERVICE : addChannel");
+    return this.httpClient.post<Channel>(`${this.API_SERVER}/addChannel`, data);
+  }
+
+  findChannelByName(name: string)
+  {
+    return this.httpClient.get<Channel>(`${this.API_SERVER}/findChannelByName/${name}`)
+  }
+
+  getAllChannels()
+  {
+    return this.httpClient.get<Channel[]>(`${this.API_SERVER}/getAllChannels`)
+  }
 
   getSocket(login: string)
   {
     return this.httpClient.get<User>(`${this.API_SERVER}/getSocket/${login}`)
   }
 
-  getTechs() {
-    return this.httpClient.get<Tech[]>(`${this.API_SERVER}/techs`);
-  }
-
-  getTech(id: number) {
-    return this.httpClient.get<Tech>(`${this.API_SERVER}/tech/${id}`)
-  }
-
-  createTech(techno: Tech) {
-    return this.httpClient.post<Tech>(`${this.API_SERVER}/tech`, techno);
-  }
-
-  updateTech(techno: Tech) {
-    return this.httpClient.patch<Tech>(`${this.API_SERVER}/tech/${techno.id}`, techno);
-  }
-
-  removeTech(id: number) {
-    return this.httpClient.delete(`${this.API_SERVER}/tech/${id}`);
-  }
-
   getUser(code: string)
   {
-	console.log("toto");
     return this.httpClient.get<User>(`${this.API_SERVER}/user/${code}`);
   }
 
-  getAllUsers(current: number)
+  findUserByLogin(login: string)
   {
-    return this.httpClient.get<User[]>(`${this.API_SERVER}/allusers/${current}`);
+    return this.httpClient.get<User>(`${this.API_SERVER}/userByLogin/${login}`);
   }
 
-  createUser(data: User)
+  updateNickName(id:number, nickname:string)
   {
-    return this.httpClient.post<User>(`${this.API_SERVER}/createUser`, data);
+    let data = {id, nickname};
+    return this.httpClient.post<User>(`${this.API_SERVER}/updateNickName`, data);
+  }
+
+  updateAvatar(id:number, avatar:string)
+  {
+    let data = {id, avatar};
+    return this.httpClient.post<User>(`${this.API_SERVER}/updateAvatar`, data);
+  }
+
+  getAllUsers(code: string)
+  {
+    return this.httpClient.get<User[]>(`${this.API_SERVER}/users/${code}`);
+  }
+
+  updateUser(code: string, user: User) {
+    return this.httpClient.patch<User>(`${this.API_SERVER}/user/${code}`, user);
+  }
+
+  userInfo(code: string | undefined) {
+	return this.httpClient.get<boolean>(`${this.API_SERVER}/user/info/${code}`);
   }
 
   getMessages(fromUserId: Number, userId: Number)
@@ -65,32 +95,70 @@ export class ApiService {
     return this.httpClient.get<Message[]>(`${this.API_SERVER}/messages/${fromUserId}/${userId}`);
   }
 
+  getChannelMessages(channelName: string)
+  {
+    return this.httpClient.get<Message[]>(`${this.API_SERVER}/channelMessages/${channelName}`);
+  }
+
+  createChannelMessage(message: Message)
+  {
+    return this.httpClient.post<Message>(`${this.API_SERVER}/channelMessage`, message);
+  }
+
   createMessage(message: Message)
   {    
     // console.log("post message api service called");
     return this.httpClient.post<Message>(`${this.API_SERVER}/message`, message);
   }
 
-  postOauthCode(code: string | null) {
-	console.log("post :" + code);
-	return this.httpClient.post<User>(`${this.API_SERVER}/auth/token/code`, {code});
+  signup(code: string) {
+	return this.httpClient.post<User | boolean>(`${this.API_SERVER}/auth/`, {code});
   }
 
-  //pour la page Show-room-affiche les matches en cours
-  getMatches(){
-    return ["chilee vs ade-temm", "anclarmat vs antton-t", "hello kitty vs snoppy"];
+  signupTfa(code: string) {
+	return this.httpClient.post<Tfa>(`${this.API_SERVER}/tfa/signup`, {code});
   }
 
-  //pour la page salon - palyers in salon
-  getGuests(){
-    return ["chilee", "anclamar", "anton"];
+  disableTfa(code: string) {
+	return this.httpClient.patch(`${this.API_SERVER}/tfa/disable`, {code});
+  }
+
+  verifyTfa(data: {code: string, tfa_key: string}) {
+	return this.httpClient.post(`${this.API_SERVER}/tfa/verify`, data);
+  }
+
+  validateTfa(data: {code: string, tfa_key: string}) {
+	return this.httpClient.post<User | boolean>(`${this.API_SERVER}/tfa/validate`, data);
   }
 
 
-    //pour la page chat - salons disponibiles
-    getSalons_dispos(){
-      return ["Super groupe", "42 Pong"];
-    }
+  //get friend 
+
+  getFriend(current: number){
+    return this.httpClient.get<User>(`${this.API_SERVER}/user/friends/${current}`); 
+  }
+
+  //add friend
+
+  addFriend(id: number, id1: number){
+    const data = {id, id1};
+    //console.log("add friend hoho");
+    return this.httpClient.post<User>(`${this.API_SERVER}/addFriend`, data);
+  }
+
+  //remove friend
   
+  removeFriend(id: number, id1: number){
+    const data = {id, id1};
+    //console.log("remove friend hoho");
+    return this.httpClient.post<User>(`${this.API_SERVER}/removeFriend`, data);
+  }
 
+  //check if friend
+
+  checkIfFriend(user: User[], id1: number){
+    const data = {user, id1};
+    console.log ("check if friend or not");
+    return this.httpClient.get<User>(`${this.API_SERVER}/checkIfFriend/${data}`);
+  }
 }

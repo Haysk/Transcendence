@@ -1,4 +1,5 @@
-import { Socket } from '../models/socket'
+import { Channel } from '../models/channel'
+import { Oauth } from './oauth';
 
 export interface 	User {
     id: 			number;
@@ -8,8 +9,19 @@ export interface 	User {
 	last_name:		string;
 	url:			string;
 	displayname:	string;
-	image_url:		string;
+	nickname:		string;
+	image:			string;
+	avatar:			string;
 	online:			boolean;
-	socket?:		string;			
+	channel_joined?:Channel[];
+	muted?:			Channel[];
+	banned?:		Channel[];
+	admin_of?:		Channel[];
+	oauth_id?:		number;
+	oauth?:			Oauth;
+	socket?:		string;
 	friends?:		User[];
+	blocked?:		User[];
+	blockedby?:		User[];
+	
 }

@@ -6,12 +6,24 @@ import {
 	Body,
 	Put,
 	Delete,
+	ConsoleLogger,
+	Patch,
 } from '@nestjs/common';
 import { UserService } from './user.service';
 import { TechService } from './tech.service';
 import { MessageService } from './message.service';
+import { ChannelService } from './channel.service';
 import { OauthService } from './oauth.service';
-import { User as UserModel, Tech as TechModel, Oauth as OauthModel, Message as MessageModel, Prisma, PrismaClient } from '@prisma/client';
+import { TfaService } from './tfa.service';
+import {
+	User as UserModel, Tech as TechModel,
+	Oauth as OauthModel,
+	Tfa as TfaModel,
+	Message as MessageModel,
+	Channel as ChannelModel,
+	Prisma, PrismaClient
+} from '@prisma/client';
+import { lstat } from 'fs';
 
 @Controller()
 export class AppController {
@@ -20,20 +32,84 @@ export class AppController {
 		private readonly userService: UserService,
 		private readonly techService: TechService,
 		private readonly oauthService: OauthService,
+		private readonly channelService: ChannelService,
+		private readonly tfaService: TfaService
 	) { }
+
+	// @Post('joinChannel')
+	// async joinChannel(@Body() data : {target: ChannelModel, user: UserModel})
+	// {
+	// 	console.log("App Controller : channel name : " + data.target.name + " | user name : " + data.user.login);
+	// 	return await this.channelService.joinChannel(data);
+	// }
+
+	@Post('addChannel')
+	async addChannel(@Body() ChannelData: {name: string, creator_id: number},): Promise<ChannelModel>
+	{
+		return await this.channelService.addChannel(ChannelData);
+	}
+
+	@Post('addPrivateChannel')
+	async addPrivateChannel(@Body() ChannelData: {name: string, creator_id: number, password: string},): Promise<ChannelModel>
+	{
+		return await this.channelService.addChannel(ChannelData);
+	}
+
+	@Post('updateNickName')
+	async updateNickName(@Body() UserData:{id:number, nickname:string},): Promise<UserModel>
+	{
+		return await this.userService.updateNickName(UserData);
+	}
+
+	@Post('updateAvatar')
+	async updateAvatar(@Body() UserData:{id:number, avatar:string},): Promise<UserModel>
+	{
+		return await this.userService.updateAvatar(UserData);
+	}
+
+	@Get('getAllChannels')
+	async getAllChannels() : Promise<ChannelModel[]>
+	{
+		return await this.channelService.getAllChannels();
+	}
+
+	@Get('findChannelByName/:name')
+	async findChannelByName(@Param('name') name: string): Promise<ChannelModel>
+	{
+		return await this.channelService.findChannelByName(name);
+	}
+
+	@Get('userByLogin/:login')
+	async getUserByLogin(@Param('login') login: string)
+	{
+		return await this.userService.findUserByLogin(login);
+	}
+
+	// @Post('updateNickName/:')
 
 	@Post('message')
 	async addMessage(
-		@Body() messageData: {userId: number, fromUserName: string, fromUserId: number, content: string},
+		@Body() messageData: { userId: number, fromUserName: string, fromUserId: number, content: string },
 	): Promise<MessageModel> {
-		// console.log("@Post message dans app.controller backend");
 		return await this.messageService.createMessage(messageData);
 	}
 
+	@Post('channelMessage')
+	async channelMessage(
+		@Body() messageData: {channel_name: string, fromUserName: string, fromUserId: number, content: string}) : Promise<MessageModel> {
+		return await this.messageService.createChannelMessage(messageData);
+	}
+	
 	@Get('getSocket/:login')
-	async getSocket(@Param('login') login: string) : Promise<UserModel>
-	{
+	async getSocket(@Param('login') login: string) : Promise<UserModel> {
 		return await this.userService.findUserByLogin(login);
+	}
+
+	@Get('checkIfFriend/:data')
+	async checkIfFriend(@Param('data') id: {id: number, id1: number} ) : Promise<number>
+	{
+//		return await this.userService.checkIfFriend(id);
+		return 1;
 	}
 
 	@Get('messages/:fromUserId/:userId')
@@ -41,61 +117,103 @@ export class AppController {
 		@Param('fromUserId') fromUserId: Number, @Param('userId') userId: Number
 		): Promise<MessageModel[]> {
 			let data  = {fromUserId, userId};
-			console.log("app.controller : data.fromUserId : " + data.fromUserId + " data.userId : " + data.userId);
 			return await this.messageService.getMessages(data);
 		}
 	
-	@Get('techs')
-	async getTechs(): Promise<TechModel[]> {
-		return this.techService.techs({});
+	@Get('channelMessages/:channelName')
+	async getChannelMessages(
+		@Param('channelName') channelName: string
+	): Promise<MessageModel[]> {
+		let data = {channelName};
+		return await this.messageService.getChannelMessages(data);
 	}
 
-	@Get('tech/:id')
-	async getTech(@Param('id') id: string): Promise<TechModel> {
-		return this.techService.tech({id: Number(id)});
+	@Get('users/:code')
+	async getUsers(@Param('code') code: string): Promise<UserModel[]> {
+		let data = code;
+		return await this.userService.getAllUsers(data);
 	}
 
-	@Post('tech')
-	async addTech(
-		@Body() techData: {name: string, categorie?: string, details?: string},
-	) : Promise<TechModel> {
-		return this.techService.createTech(techData);
-	}
-
-	@Post('tech/:id')
-	async updateTech(@Param('id') id: string,
-		@Body() techData: {name?: string, categorie?: string, details?: string}
-	): Promise<TechModel> {
-		return this.techService.updateTech({
-			where: {id: Number(id) },
-			data: techData
+	@Patch('user/:code')
+	async patchUser(@Param('code') code: string,
+		@Body() userData: { online?: boolean, two_factor_auth?: boolean }): Promise<UserModel> {
+		return this.userService.updateUser({
+			where: { code },
+			data: userData
 		});
 	}
 
-	@Delete('tech/:id')
-	async deleteTech(@Param('id') id: string): Promise<TechModel> {
-		return this.techService.deleteTech({ id: Number(id) });
+	@Get('user/:code')
+	async getUser(
+		@Param('code') code: string) {
+		this.userService.user(code);
 	}
 
-	@Post('auth/token/code')
-	async postInitOauth(
-		@Body() oauthCode: {code: string}
-	): Promise<UserModel> {
-		var oauth = await this.oauthService.getToken(oauthCode);
-		if (oauth != null) {
-			var user = await this.userService.createUser(oauth);
-			return user;
+	@Get('user/info/:code')
+	async getUserInfo(
+		@Param('code') code: string): Promise<boolean> {
+			try {
+				const tmp = await this.oauthService.oauth({code});
+				const result = await this.userService.userInfo(tmp);
+				return (result);
+			}
+			catch {
+				return false;
+			}
+			
 		}
-		else {
-			throw Prisma.PrismaClientKnownRequestError
+
+	@Post('auth/')
+	async signup(
+		@Body() auth: { code: string }): Promise<UserModel | boolean> {
+		try {
+			var oauth = await this.oauthService.getToken(auth.code);
+			if (oauth != null)
+				return await this.userService.createUser(oauth, auth.code);
+			else
+				throw Prisma.PrismaClientKnownRequestError
+		} catch (e) {
 		}
-		//return this.userService.user(oauthData);
 	}
 
-	@Get('allusers/:current')
-	async getAllUsers(@Param('current') id: number) : Promise<UserModel[]>
-	{
-		let data = id;
-		return await this.userService.getAllUsers(data);
+	@Patch('tfa/disable')
+	async patchTfa(
+		@Body() params: {code: string}) {
+		this.tfaService.disableTfa(params.code);
 	}
+
+	@Post('tfa/signup')
+	async postSignup(
+		@Body() params :{code: string}): Promise<TfaModel> {
+		return (this.tfaService.createTfa(params.code));
+	}
+
+	@Post('tfa/verify')
+	async postVerify(
+		@Body() param: { code: string, tfa_key: string }) {
+		return (await this.tfaService.verifyTfa(param))
+	}
+
+	@Post('tfa/validate')
+	async postValidate(
+		@Body() param: { code: string, tfa_key: string }): Promise<UserModel | boolean> {
+		return (await this.tfaService.validateTfa(param));
+	}
+
+	// @Post('upload/')
+	// async uploadAvatar(
+	// 	@Body() param: {name: Blob}
+	// ) {
+		
+	// 	const fs = require('fs');
+	// 	let filePath= './upload/${Date.now()_$test}';
+	// 	console.log("nom:" + param.name);
+	// 	// let buffer=Buffer.from(param.name.split(',')[1],"base64");
+	// 	// console.log("hello" + buffer);
+	// 	fs.writeFiles(filePath, param.name);
+		
+
+
+
+		// }
 }

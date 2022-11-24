@@ -1,5 +1,8 @@
 FROM node:18-alpine
 
+ENV TZ=Europe/Paris
+
+RUN apk add --update tzdata
 RUN npm install -g npm
 
 # Create app directory

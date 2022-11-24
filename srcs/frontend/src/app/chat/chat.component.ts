@@ -1,177 +1,195 @@
-import { Component, OnInit, Input, Inject } from '@angular/core';
+import { Component, OnInit, Input, Inject, Output } from '@angular/core';
 import { SocketService } from '../services/socket.service';
 import { ApiService } from '../services/api.service';
 import { User } from '../models/user'
-import { NgForm }   from '@angular/forms';
+import { Injectable } from '@angular/core';
+import { Channel } from '../models/channel';
+import { StorageService } from '../services/storage.service';
 
 
 @Component({
-  selector: 'app-chat',
-  templateUrl: './chat.component.html',
-  styleUrls: ['./chat.component.css'],
-  providers: [
-    {
-      provide: 'user_list',
-      useValue: [
-        {id: 1, name: "Alex", online: true},
-        {id: 2, name: "Antoine", online: true},
-        {id: 3, name: "Arnaud", online: true},
-        {id: 4, name: "Ching", online: false},
-
-      ]
-    },
-    {
-      provide: 'whoAmI',
-      //useValue : {id: 2, name: "Antoine", online: true}
-      useValue: {id: 1, name: "Alexandre", email: "someEmail", online: true}
-    },
-    // {
-    //   provide: 'user_list',
-    //   useValue: [
-    //     {id: 1, login: "Alexandre", online: true},
-    //     {id: 2, login: "Antoine", online: true},
-    //     {id: 3, login: "Arnaud", online: false},
-    //     {id: 4, login: "Ching", online: true}
-    //   ]
-    // },
-    // {
-    //   provide: 'whoAmI',
-    //   //useValue : {id: 2, login: "Antoine", online: true}
-    //   useValue: {id: 1, login: "Alexandre", email: "someEmail", online: true}
-    // },
-]
+	selector: 'app-chat',
+	templateUrl: './chat.component.html',
+	styleUrls: ['./chat.component.css'],
+	providers: []
+})
+@Injectable({
+	providedIn: 'root'
 })
 export class ChatComponent implements OnInit {
-  Me: User = {
-              id: this.getId(),
-              login: this.getLogin(),
-              email: this.getEmail(),
-              first_name: this.getFirstName(),
-              last_name: this.getLastName(),
-              url: this.getUrl(),
-              displayname: this.getDisplayName(),
-              image_url: this.getImageUrl(),
-              online: this.getOnline(),
-            };
-  Dest: User = {id: 0, login: "", email: "", first_name: "", last_name: "", url: "", displayname: "", image_url: "", online: false};
-  User_list!: User[];
-  message: string = '';
-  messages: String[] = [];
-  showchat:Boolean=false ;
+	Me: User = {
+		id: this.storageService.getId(),
+		login: this.storageService.getLogin(),
+		email: this.storageService.getEmail(),
+		first_name: this.storageService.getFirstName(),
+		last_name: this.storageService.getLastName(),
+		url: this.storageService.getUrl(),
+		displayname: this.storageService.getDisplayName(),
+		nickname: this.storageService.getNickName(),
+		image: this.storageService.getImage(),
+		avatar: this.storageService.getAvatar(),
+		online: this.storageService.getOnline(),
+	};
+	Dest: User = { id: 0, login: "", email: "", first_name: "", last_name: "", url: "", displayname: "", nickname: "", image: "", avatar: "", online: false };
+	User_list!: User[];
+	User_filtred_list!: User[];
+	message: string = '';
+	messages: String[] = [];
+	showchat: boolean = false;
+	showFormule: boolean = false;
+	privatOrpublic: boolean = false;
+	showFormulePassword: boolean = false;
+	
+	delay: number = 0;
+  	Friend_list!: User[];
+  	Friend_filtred_list!: User[];
 
-  showFormule:Boolean=false;
+	test: boolean = false
 
-  privatOrpublic:Boolean=false;
+	channel_name!: string;
+	privateChannel!: Channel;
 
-  receiveShowchat($event: Boolean) {
-      this.showchat = $event
-  }
+	constructor(private socketService: SocketService,
+		private apiService: ApiService,
+		private storageService: StorageService) {
+	}
 
-  receiveSendDest($event : User) {
-      this.Dest = $event;
-  }
-  
-  receiveShowSalon($event: Boolean) {
-    this.privatOrpublic = $event
-  }
+	async ngOnInit(): Promise<void> {
+		this.socketService.askForUserList(this.Me.id);
+		this.socketService.getConnectionSignal(this.Me.id).subscribe();
+		this.socketService.getAllUser().subscribe((result) => {
+			this.User_list = result;
+			this.userFiltred();		
+		});
 
-  receiveQuitSalon($event: Boolean) {
-    this.privatOrpublic = $event
-}
+    this.socketService.getFriend().subscribe((result) => {
+    this.Friend_list = result;
+	this.friendFiltred();
+    })
+
+    this.socketService.removeFriend().subscribe((result) => {
+      this.Friend_list = result;
+	  this.friendFiltred();
+
+    })
+
+    this.socketService.getFriendList(this.Me.id);
+    this.socketService.listFriend().subscribe((result) => {
+      this.Friend_list = result;
+	  this.friendFiltred();
+    })    
+	
+	this.socketService.destActualisation().subscribe((res) => {
+		this.Dest = res;
+	  })
+
+    this.socketService.getUserListWhenBlocked().subscribe((res) => {
+		if (res.id === this.Dest.id)
+			this.showchat = false;
+		this.socketService.askForUserList(this.Me.id)
+		this.socketService.getFriendList(this.Me.id);
+		
+	  })
+
+	  this.socketService.getUserListWhenUnblocked().subscribe((res) => {
+		this.socketService.askForUserList(this.Me.id)
+		this.socketService.getFriendList(this.Me.id);
+	})
+	}
+
+	userFiltred() {
+		this.User_filtred_list = this.User_list.filter((elem, index, arr) => {
+		let i = 0;
+		if (elem.blocked) {
+			while (elem.blocked[i]) {
+				if (elem.blocked[i].id == this.Me.id)
+					return false;
+					i++;
+				}
+			}
+			return true;
+		});
+	}
+
+	friendFiltred() {
+		this.Friend_filtred_list = this.Friend_list.filter((elem, index, arr) => {
+		let i = 0;
+		if (elem.blockedby) {
+			while (elem.blockedby[i]) {
+				if (elem.blockedby[i].id == this.Me.id)
+					return false;
+					i++;
+				}
+			}
+			return true;
+		})
+		this.Friend_filtred_list = this.Friend_list.filter((elem, index, arr) => {
+			let i = 0;
+			if (elem.blocked) {
+				while (elem.blocked[i]) {
+					if (elem.blocked[i].id == this.Me.id)
+						return false;
+					i++;
+				}
+			}
+			return true;
+		});
+	}
+
+	receiveShowchat($event: boolean) {
+		this.showFormulePassword = false;
+		this.showchat = $event;
+	}
 
 
-  formuleCreate(){
-    this.showFormule=this.showFormule?false:true;
-    this.showchat=false;
+	receivePrivateChannel($event: Channel) {
+		this.privateChannel = $event;
+	}
 
-  }
+	receveShowformule($event: boolean) {
+		this.showFormule = $event;
+	}
 
-  closeCreateSalon(){
-    this.showFormule=false;
-  }
+	receiveShowchannelPrivate($event: boolean) {
+		this.privatOrpublic = $event;
+	}
 
-  constructor(private socketService: SocketService, private apiService: ApiService)
-  {
-  }
+	receiveShowFormulePassword($event: boolean) {
+		this.showFormulePassword = $event;
+		
+	}
 
-  async ngOnInit(): Promise<void> {
-    await this.apiService.getAllUsers(this.Me.id).subscribe(
-      (result => {
-        this.User_list = result;
-      }));
+	receiveShowSalon($event: boolean) {
+		this.privatOrpublic = $event;
+		
+	}
 
-      // this.socketService.sendLogin(this.Me.login); //obtenir son socket
+	receiveQuitSalon($event: boolean) {
+		this.privatOrpublic = $event;
+	}
 
-      // this.socketService.getPrivMsg().subscribe((result => {
-      //   this.test = result;
-      // }))
-      //}))
-  }
+	receiveChannelPublic($event: boolean) {
+		this.privatOrpublic = $event;
+	}
 
-  getId(): number{
-    let id = localStorage.getItem("id");
-    if (id === null || id === undefined)
-      return 0;
-    return  Number(id);
-  }
+	receiveJoinChannelName($event: string) {
+		this.channel_name = $event;
+	}
 
-  getLogin(): string{
-    let login = localStorage.getItem("login");
-    if (login === null || login === undefined)
-      return "";
-    return  login;
-  }
+	formuleCreate() {
+		this.showFormule = this.showFormule ? false : true;
+		this.showchat = false;
+		this.showFormulePassword = false;
+	}
 
-  getEmail(): string{
-    let email = localStorage.getItem("email");
-    if (email === null || email === undefined)
-      return "";
-    return  email;
-  }
+	receiveChannelName($event: string) {
+		this.channel_name = $event;
+	}
 
-  getFirstName(): string{
-    let first_name = localStorage.getItem("first_name");
-    if (first_name === null || first_name === undefined)
-      return "";
-    return  first_name;
-  }
-
-  getLastName(): string{
-    let last_name = localStorage.getItem("last_name");
-    if (last_name === null || last_name === undefined)
-      return "";
-    return  last_name;
-  }
-
-  getUrl(): string{
-    let url = localStorage.getItem("url");
-    if (url === null || url === undefined)
-      return "";
-    return  url;
-  }
-
-  getDisplayName(): string{
-    let display_name = localStorage.getItem("display_name");
-    if (display_name === null || display_name === undefined)
-      return "";
-    return  display_name;
-  }
-
-  getImageUrl(): string{
-    let image_url = localStorage.getItem("image_url");
-    if (image_url === null || image_url === undefined)
-      return "";
-    return  image_url;
-  }
-
-  getOnline(): boolean{
-    let online = localStorage.getItem("online");
-    if (online === "true")
-      return true
-    else
-      return false
-  }
-
+	closeCreateSalon() {
+		this.showFormule = false;
+		this.showFormulePassword = false;
+	}
 
 
 }

@@ -7,20 +7,35 @@ import { TechService } from './tech.service';
 import { AppGateway } from './app.gateway';
 import { HttpModule } from '@nestjs/axios';
 import { OauthService } from './oauth.service';
-import { PongModule } from './pong/pong.module';
+import { ChannelService } from './channel.service';
+import { ScheduleModule } from '@nestjs/schedule';
+import { BanAndMuteService } from './banAndMute.service';
+import { TfaService } from './tfa.service';
+import { ConfigModule } from '@nestjs/config';import { PongModule } from './pong/pong.module';
 
 @Module({
-  imports: [HttpModule, PongModule],
-  controllers: [
+  imports: 
+  [
+    HttpModule, 
+    PongModule,
+    ScheduleModule.forRoot(),
+    ConfigModule.forRoot({envFilePath: "../.env", isGlobal: true})
+	],
+  controllers: 
+  [
     AppController
   ],
-  providers: [
+  providers: 
+  [
     PrismaService,
     UserService,
     TechService,
     MessageService,
     AppGateway,
-    OauthService
+    OauthService,
+    ChannelService,
+    BanAndMuteService,
+	  TfaService
   ],
 })
 export class AppModule { }

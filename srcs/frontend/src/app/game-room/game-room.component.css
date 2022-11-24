@@ -155,50 +155,94 @@ h2{
     height: 40px;
 }
 
-.player_available{
+.pong_jouers{
+    /* background-color: blueviolet; */
+    width: 800px;
+    height: auto;
+    display: flex;
+    justify-content: space-evenly;
+
+}
+
+.bloc_players_anonyme{
+    width: 200px;
+    height: auto;
+}
+
+.bloc_just_play{
+ 
+    width: 180px;
+    height: 250px;
     color: rgb(144, 250, 6);
-    
     text-align: center;
-    width: 700px;
-    
     background-color: rgba(34, 158, 137, 0.281);
     border-radius: 10px;
-
     
+    align-items: center;
 }
 
-.env_player_available{
+.env_just_play{
     width: 120px;
+    
     background-color: rgb(51, 48, 38);
-    margin: 20px;
+    margin: auto;
+    margin-top: 20px;
+    display: flex;
+    flex-direction: column;
 }
 
-.user_photo{
+.just_play_photo{
     width: 120px;
     height:120px;
-    /* background-color: bisque; */
-    background-size: contain;
+    background-image: url("../../assets/imgs/faceleemen.jpg");
+    background-size: cover;
     background-repeat: no-repeat;
     background-position: center; 
+    background-color: aquamarine;
+  
 }
 
-.user_name{
-    background-color: rgb(0, 12, 8);
+.just_play_name{
+    background-color: rgb(2, 0, 0);
 
 }
 
-.playerdispo{
+.just_play_play{
     font-size: 16px;
     text-decoration: none;
 }
 
-.playerdispo:visited {
+.bloc_players_available{
+   
     color: rgb(144, 250, 6);
-  }
+    text-align: center;
+    width: 500px;
+    height: auto;
+    background-color: rgba(34, 158, 137, 0.281);
+    border-radius: 10px;
+    display: flex;
+    flex-direction: column;
+    
+}
 
-.playerdispo:link {
-    color: rgb(144, 250, 6);
-  }
+
+.env_player_available{
+    width: 100%;
+    height: auto;
+    /* background-color: rgb(175, 73, 13); */
+    display: flex;
+    justify-content: flex-start;
+}
+
+
+.player_available{
+    width: 120px;
+    /* background-color: rgb(51, 48, 38); */
+    margin: 20px;
+
+
+}
+
 
 
 
@@ -244,6 +288,7 @@ h2{
         flex-wrap:wrap;
         justify-content: center;
         /* margin-left: 200px; */
+        margin-bottom: 100px;
     
     
     }
@@ -354,54 +399,96 @@ h2{
     }
 
 
+   
     h2{
         background-color: black;
         height: 40px;
     }
+
+    .pong_jouers{
+        /* background-color: blueviolet; */
+        width: 280px;
+        height: auto;
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        align-items: center;
+
+    }
+    .bloc_players_anonyme{
+        width: 200px;
+        height: auto;
+    }
+
+    .bloc_just_play{
     
-    .player_available{
+        width: 180px;
+        height: 250px;
         color: rgb(144, 250, 6);
         text-align: center;
-        width: 500px;
-        margin-top: 100px;
         background-color: rgba(34, 158, 137, 0.281);
         border-radius: 10px;
         
-           
+        align-items: center;
     }
-    
-    .env_player_available{
+
+    .env_just_play{
         width: 120px;
+        height: 150px;
         background-color: rgb(51, 48, 38);
-        margin: 20px;
+        margin: auto;
+        margin-top: 20px;
+        display: flex;
+        flex-direction: column;
     }
-    
-    .user_photo{
+
+    .just_play_photo{
         width: 120px;
         height:120px;
-        /* background-color: bisque; */
-        background-size: contain;
+        background-image: url("../../assets/imgs/faceleemen.jpg");
+        background-size: cover;
         background-repeat: no-repeat;
         background-position: center; 
-    }
-    
-    .user_name{
-        background-color: rgb(0, 12, 8);
+        background-color: aquamarine;
     
     }
-    
-    .playerdispo{
+
+    .just_play_name{
+        background-color: rgb(39, 39, 39);
+
+    }
+
+    .just_play_play{
         font-size: 16px;
         text-decoration: none;
     }
+
+    .bloc_players_available{
     
-    .playerdispo:visited {
         color: rgb(144, 250, 6);
-      }
-    
-    .playerdispo:link {
-        color: rgb(144, 250, 6);
-      }
-    
+        text-align: center;
+        width: 400px;
+        height: auto;
+        background-color: rgba(34, 158, 137, 0.281);
+        border-radius: 10px;
+        display: flex;
+        flex-direction: column;
+        margin-bottom: 20px;
+       
+        
+    }
+
+
+    .env_player_available{
+        width: 100%;
+        height: auto;
+        display: flex;
+        justify-content: center;
+      
+        
+    }
+
+
+  
 
 }

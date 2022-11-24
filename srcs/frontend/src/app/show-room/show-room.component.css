@@ -13,7 +13,7 @@
 }
 .bloc_show{
     width: 500px;
-    height: 600px;
+   
     /* background-color: rgba(77, 156, 93, 0.274); */
 }
 
@@ -32,17 +32,19 @@
     background-color: rgb(11, 22, 13);
     text-align: center;
     padding-top: 5px;
+    border-radius: 5px;
   
 
 }
 
 .vs_show{
     width: 100%;
-    background-color: rgba(207, 193, 2, 0.212);
-    text-align: center;
-    
-    font-size: 20px;
-    margin-top: 5px;
+   
+    display: flex;
+    justify-content: center;
+    border-radius: 5px;
+    background-color: rgba(0, 255, 255, 0.171);
+    margin-top: 30px;
     
 
 }
@@ -56,68 +58,22 @@
 
 @media only screen and (max-width: 600px) {
 
-    .all_show{
-        width: 100%;
-        height: 100vh;
-        background-color: rgb(12, 17, 13);
-        background-image: url("../../assets/imgs/show_600px2.jpg");
-        background-size: cover;
-        background-repeat: no-repeat;
-        background-position: center; 
-        display: flex;
-        justify-content: center;
-    
-        
-    }
+  
     .bloc_show{
-        width: 350px;
-        height: 600px;
-        /* background-color: rgb(47, 100, 58); */
-    
-    
-    
+        width: 450px;
+       
+        /* background-color: rgba(77, 156, 93, 0.274); */
     }
-    
+
     .title_show{
-        width: 100%;
-        height: 50px;
+        width: 450px;
+        height: 200px;
         background-image: url("../../assets/imgs/show_title.png");
         background-size: contain;
         background-repeat: no-repeat;
         background-position: center; 
-        margin-top: 50px;
     
     }
-    
-    .onair_show{
-        width: 100%;
-        background-color: rgb(11, 22, 13);
-        text-align: center;
-        padding-top: 5px;
-        margin-top: 20px;
-      
-    
-    }
-    
-    .vs_show{
-        width: 100%;
-        background-color: rgba(207, 193, 2, 0.212);
-        text-align: center;
-        padding-top: 5px;
-        font-size: 20px;
-        margin-top: 5px;
-        
-    
-    }
-    #link{
-        color: rgb(141, 199, 146);
-        text-decoration: none;
-    
-    }
-    
-    
-
-
 
 
 }

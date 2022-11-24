@@ -1,23 +1,40 @@
 // This is your Prisma schema file,
 // learn more about it in the docs: https://pris.ly/d/prisma-schema
 
-generator     client {
+generator     		client {
   provider = "prisma-client-js"
 }
 
-datasource    db {
+datasource    		db {
   provider = "postgresql"
   url      = env("DATABASE_URL")
 }
 
-// model           Socket {
-//   id            Int     @default(autoincrement()) @id
-//   myUser        User @relation(fields: [userId], references: [id])
-//   userId        Int
-//   value         Int
-// }
+model           	Message {
+  id            	Int @default(autoincrement()) @id
+  channelName		String?
+  userId        	Int?
+  fromUserName  	String
+  fromUserId    	Int
+  content       	String
+  fromChannelId		Int?
+  fromChann			Channel? @relation(fields: [fromChannelId], references: [id])
+}
 
-model User {
+model				Channel {
+	id				Int @default(autoincrement()) @id
+	name			String @unique
+	creator			User @relation(fields: [creator_id], references: [id])
+	creator_id		Int
+	messages		Message[]
+	password		String?
+	joined			User[] @relation("users_in_channel")
+	muted			User[] @relation("muted_in_channel")
+	banned			User[] @relation("banned_in_channel")
+	admins			User[] @relation("admin_of")
+}
+
+model 				User {
 	id				Int @id
 	email			String?	@unique
 	login			String?	@unique
@@ -25,36 +42,47 @@ model User {
 	last_name		String?
 	url				String?
 	displayname		String?
-	image_url		String?
+	nickname		String?
+	image		String?
+	avatar		String?
 	online			Boolean @default(false)
 	oauth_id		Int @unique
-	oauth Oauth?	@relation(fields: [oauth_id], references: [id])
+	oauth 			Oauth? @relation(fields: [oauth_id], references: [id])
 	socket			String?
 	friends			User[] @relation("friends")
 	friendsof		User[] @relation("friends")
 	blocked			User[] @relation("blocked")
 	blockedby		User[] @relation("blocked")
+	creatorOf		Channel[]
+	channel_joined	Channel[] @relation("users_in_channel")
+	muted			Channel[] @relation("muted_in_channel")
+	banned			Channel[] @relation("banned_in_channel")
+	admin_of		Channel[] @relation("admin_of")
 }
 
-model           Tech {
-	id            Int @default(autoincrement()) @id
-	name          String @unique
-	category      String?
-	details       String?
-}
-
-model           Message {
-  id            Int @default(autoincrement()) @id
-  userId        Int
-  fromUserName  String
-  fromUserId    Int
-  content       String
+model           	Tech {
+	id            	Int @default(autoincrement()) @id
+	name          	String @unique
+	category      	String?
+	details       	String?
 }
 
 
 model Oauth {
 	id Int @default(autoincrement()) @id
+	code String? @unique
 	refresh_token String? @unique
 	access_token String? @unique
+	tfa_id Int @unique
 	user User?
+	tfa Tfa? @relation(fields: [tfa_id], references: [id])
+}
+
+model Tfa {
+	id Int @default(autoincrement()) @id
+	tfa_activated	Boolean @default(false)
+	tfa_temp_secret String? @unique
+	tfa_secret String? @unique
+	tfa_qr String? @unique
+	oauth Oauth?
 }
