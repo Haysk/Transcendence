@@ -16,10 +16,10 @@
         <div env_button>
           <button (click)="start()">Start</button>
           <button (click)="reset()">New Game</button>
-          <button (click)="resetAll()">Reset all params</button>
+          <!-- <button (click)="resetAll()">Reset all params</button> -->
         </div>
         <!--fin div env_button-->
-        <app-pong-player [player]="gameConfig.left"></app-pong-player>
+        <!-- <app-pong-player [player]="gameConfig.left"></app-pong-player>
         <app-pong-player [player]="gameConfig.right"></app-pong-player>
         <div class="customize">
           <div class="pong_ball">
@@ -28,7 +28,7 @@
           <div class="pong-game">
             <app-pong-game [game]="gameConfig"></app-pong-game>
           </div>
-        </div>
+        </div> -->
         <!--fin div customize-->
       </div>
       <div class="menu" *ngIf="gameConfig.states.start && win() != null">

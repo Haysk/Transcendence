@@ -42,6 +42,7 @@ import { InvitationRefuseComponent } from './widgets/invitation-refuse/invitatio
 import { AuthModule } from './auth/auth.module';
 import { GameSettingsComponent } from './widgets/game-settings/game-settings.component';
 import { AreYouReadyComponent } from './widgets/are-you-ready/are-you-ready.component';
+import { NotFoundComponent } from './not-found/not-found.component';
 
 @NgModule({
   declarations: [
@@ -80,7 +81,8 @@ import { AreYouReadyComponent } from './widgets/are-you-ready/are-you-ready.comp
     Vip2RoomComponent,
     InvitationRefuseComponent,
     GameSettingsComponent,
-    AreYouReadyComponent
+    AreYouReadyComponent,
+    NotFoundComponent
   ],
   imports: [
     BrowserModule,

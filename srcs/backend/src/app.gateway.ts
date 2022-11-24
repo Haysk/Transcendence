@@ -60,18 +60,6 @@ export class AppGateway
   server!: Server;
   private logger: Logger = new Logger('AppGateway');
 
-  /* LIST ID IN ROOM */
-  @SubscribeMessage("userInTotoRoom")
-  async listIdInRoom()
-  {
-    let i = 0;
-    await (await this.server.in("toto_channel").allSockets()).forEach((id) => {
-      console.log("socket " + i + " : ")
-      console.log(id);
-      i++;
-    })
-  
-  }
   /* SEARCH USER */
 
   @SubscribeMessage('SearchForThisUser')
