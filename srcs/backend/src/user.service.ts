@@ -130,17 +130,18 @@ export class UserService {
 	}
 
 	async userInfo(params: Prisma.OauthWhereUniqueInput) {
-		return new Promise<boolean>((resolve) => {
-			this.httpClient.get(`${this.INTRA_API}/oauth/token/info`, { params })
-			.pipe(take(1))
-			.subscribe(async (result) => {
-				if (result.data.expires_in_seconds > 0) {
-					resolve(true);
-				} else {
-					resolve(false);
-				}
-			})
-		});
+		if (params.access_token)
+			return new Promise<boolean>((resolve) => {
+				this.httpClient.get(`${this.INTRA_API}/oauth/token/info`, { params })
+					.pipe(take(1))
+					.subscribe(async (result) => {
+						if (result.data.expires_in_seconds > 0) {
+							resolve(true);
+						} else {
+							resolve(false);
+						}
+					})
+			});
 
 	}
 
