@@ -924,6 +924,16 @@ catch(err){
 
 /* PONG GAME */
 
+@SubscribeMessage('test1')
+handletTest1(client: Socket, payload: any): void {
+  this.pongService.addGame(payload)
+}
+
+@SubscribeMessage('test2')
+handletTest2(client: Socket, payload: any): void {
+  this.pongService.deleteGame(payload)
+}
+
   @SubscribeMessage('moveToServer')
   handleMove(client: Socket, payload: any): void {
     this.pongService.updateMove(payload)

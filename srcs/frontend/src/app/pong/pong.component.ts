@@ -250,6 +250,14 @@ export class PongComponent implements OnInit, OnDestroy {
     this.game.updateAll(structuredClone(defaultGameConfig));
   }
 
+  test1(): void {
+    this.socketService.sendTest1("bidule");
+  }
+
+  test2(): void {
+    this.socketService.sendTest2("bidule");
+  }
+
   roundRect(
     x: number,
     y: number,
