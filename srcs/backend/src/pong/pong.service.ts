@@ -11,6 +11,11 @@ const interval_tick = 8;
 @Injectable()
 export class PongService {
     tickSubscription!: Subscription;
+    games: {
+        name: string,
+        game: Game,
+        tickSubscription: Subscription
+    }[]
 
     constructor(
         private game: Game,
