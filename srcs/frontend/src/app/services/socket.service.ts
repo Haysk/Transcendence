@@ -7,6 +7,7 @@ import { Channel } from '../models/channel'
 import { environment } from 'src/environments/environment';
 import { IGameStates } from '../pong/game/interfaces/game-states.interface';
 import { IInput } from '../pong/game/interfaces/input.interface';
+import { GameMode, PlayerMode, IGame } from '../pong/game/interfaces/game.interface';
 
 
 @Injectable({
@@ -191,8 +192,6 @@ amIBanned()
   {
     return new Observable<User[]>((obs) => {
       this.socket.on('hereIsTheUserList', (res: User[]) => {
-        // console.log("HEREISTHEUSERLIST OK =>")
-        // console.log(res);
         obs.next(res);
       })
   })
@@ -358,8 +357,8 @@ amIBanned()
     })
   }
 
-  displayInvitation(target: User, target2:User){
-    this.socket.emit('initDisplayInvitation', target, target2);
+  displayInvitation(player2: User, player1:User, gameConfig: IGame){
+    this.socket.emit('initDisplayInvitation', player2, player1, gameConfig);
   }
 
   refuseInvitation(target: User, target2:string){
@@ -368,8 +367,8 @@ amIBanned()
 
   doIHaveToDisplay(){
     return new Observable<any>((obs) => {
-      this.socket.on('DisplayInvitation', (res:boolean, res2: User) => {
-        let data = {res, res2}
+      this.socket.on('DisplayInvitation', (res:boolean, res2: User, res3: User, res4: IGame) => {
+        let data = {res, res2, res3, res4}
         obs.next(data);
       })
     })
@@ -386,14 +385,15 @@ amIBanned()
   }
 
 
-  acceptInvitation(target: User){
-    this.socket.emit('invitationIsAccepted', target);
+  acceptInvitation(player2: User, player1: User){
+    this.socket.emit('invitationIsAccepted', player2, player1);
   }
 
   isGameAccepted(){
-    return new Observable<boolean>((obs) => {
-      this.socket.on('invitationAccepted', () => {
-        obs.next(true);
+    return new Observable<any>((obs) => {
+      this.socket.on('invitationAccepted', (res:boolean, res2:User, res3: User) => {
+        let data = {res, res2, res3}
+        obs.next(data);
       })
     })
   }

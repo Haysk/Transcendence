@@ -2,6 +2,8 @@
 
 <app-invitation-game 
 [fromWho]="this.invitationFromWho" 
+[to]="to"
+[gameConfig]="gameConfig"
 (showInvitationEvent)="receiveShowInivtationEvent($event)"
 *ngIf="invitation==true"></app-invitation-game>
 
@@ -10,6 +12,7 @@
 (refuseInvitationEvent)="receiverefueInvitationEvent($event)"></app-invitation-refuse>
 <app-bloc-chat *ngIf="getRoute() != '/'"></app-bloc-chat>
 <app-header  *ngIf="getRoute() != '/'" ></app-header>
+<app-pong *ngIf="showPong==true"></app-pong> 
 <router-outlet></router-outlet>
 
 

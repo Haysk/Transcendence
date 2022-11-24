@@ -31,6 +31,7 @@ export class DirectChatComponent implements OnInit {
   num!: number;
   old_messages: Message[] = [];
   friendList!: User[];
+  showGameSettings:boolean = false;
 
   constructor(private socketService: SocketService,
               private apiService: ApiService,
@@ -172,8 +173,9 @@ export class DirectChatComponent implements OnInit {
   }
 
   invite_game(){
-    this.socketService.displayInvitation(this.Dest, this.Me);
-
+    this.showGameSettings = true;
+    
+    // this.socketService.displayInvitation(this.Dest, this.Me);
   }
 
 
@@ -187,5 +189,10 @@ export class DirectChatComponent implements OnInit {
     if (this.comment)
       this.scrolltop = this.comment.nativeElement.scrollHeight;
   }
+
+  receiveShowGameSettings($event: boolean) {
+		this.showGameSettings = $event;
+		
+	}
 
 }

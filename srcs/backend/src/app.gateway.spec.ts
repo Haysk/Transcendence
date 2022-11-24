@@ -12,6 +12,7 @@ describe('AppGateway', () => {
     gateway = module.get<AppGateway>(AppGateway);
   });
 
+
   it('should be defined', () => {
     expect(gateway).toBeDefined();
   });
