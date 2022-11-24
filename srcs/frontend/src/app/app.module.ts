@@ -41,6 +41,7 @@ import { Vip2RoomComponent } from './vip2-room/vip2-room.component';
 import { InvitationRefuseComponent } from './widgets/invitation-refuse/invitation-refuse.component';
 import { AuthModule } from './auth/auth.module';
 import { GameSettingsComponent } from './widgets/game-settings/game-settings.component';
+import { AreYouReadyComponent } from './widgets/are-you-ready/are-you-ready.component';
 
 @NgModule({
   declarations: [
@@ -78,20 +79,21 @@ import { GameSettingsComponent } from './widgets/game-settings/game-settings.com
     BlocUserProfileComponent,
     Vip2RoomComponent,
     InvitationRefuseComponent,
-    GameSettingsComponent
+    GameSettingsComponent,
+    AreYouReadyComponent
   ],
   imports: [
     BrowserModule,
     AppRoutingModule,
     HttpClientModule,
     FormsModule,
-	AuthModule
+	  AuthModule
   ],
   providers: [
     HttpClient,
     ApiService,
-	StorageService,
-	Storage,
+	  StorageService,
+	  Storage,
   ],
   bootstrap: [AppComponent]
 })

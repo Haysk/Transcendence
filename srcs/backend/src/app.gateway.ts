@@ -20,6 +20,9 @@ import { PongService } from './pong/pong.service';
 })
 export class AppGateway
   implements OnGatewayInit, OnGatewayConnection, OnGatewayDisconnect {
+
+  TabReady = new Map<string, string[]>;
+
   constructor(
     private Prisma: PrismaService,
     private readonly userService: UserService,
@@ -902,10 +905,28 @@ catch(err){
         friendsof: true,
         muted:true
       }
-    
     })
-    if(data != null && data != undefined)
-      this.server.to(data.socket).emit('invitationAccepted', true, data, payload[1]);
+    let data2 = await this.Prisma.user.findFirst({
+      where: {
+        id: payload[1].id
+      },
+      include:{
+        banned:true,
+        channel_joined:true,
+        friends:true,
+        friendsof: true,
+        muted:true
+      }
+    })
+    if(data != null && data != undefined && data2 != null && data2 != undefined)
+    {
+      this.server.to(data.socket).emit('invitationAccepted', true, data, data2);
+      let roomName = this.createGameRoomName(data.login, data2.login);
+      this.server.in(data.socket).socketsJoin(roomName);
+      this.server.in(data2.socket).socketsJoin(roomName);
+      this.TabReady.set(roomName, ["", ""]);
+      this.server.to(roomName).emit('areYouReady', true);
+    }
   }
 
   @SubscribeMessage('initDisplayInvitation')
@@ -923,7 +944,7 @@ catch(err){
   }
 
   @SubscribeMessage('refuseInvitation')
-  async refuseInvitation(client:Socket, payload:any)
+  async refuseInvitation(client: Socket, payload: any)
   {
     let refuse:boolean =true;
     let data = await this.Prisma.user.findFirst({
@@ -934,6 +955,17 @@ catch(err){
     })
     if (data != null && data != undefined)
       this.server.to(data.socket).emit('refuseInvitation', refuse, data2);
+  }
+
+  @SubscribeMessage('ready')
+  async getReadyForGame(Client: Socket, payload: any) //PAYLOAD[0] = login1 PAYLOAD[1] = login2
+  {
+    let roomName = this.createGameRoomName(payload[0], payload[1]);
+    let room = this.TabReady.get(roomName);
+    if (room[0] != Client.id)
+    {
+      
+    }
   }
 
 /* PONG GAME */

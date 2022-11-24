@@ -349,13 +349,13 @@ amIBanned()
     this.socket.emit('CreateRoomToPlay', player1, player2);
   }
 
-  isGameReady(){
-    return new Observable<boolean>((obs) => {
-      this.socket.on('GameIsReady', () => {
-        obs.next(true);
-      })
-    })
-  }
+  // isGameReady(){
+  //   return new Observable<boolean>((obs) => {
+  //     this.socket.on('GameIsReady', () => {
+  //       obs.next(true);
+  //     })
+  //   })
+  // }
 
   displayInvitation(player2: User, player1:User, gameConfig: IGame){
     this.socket.emit('initDisplayInvitation', player2, player1, gameConfig);
@@ -384,6 +384,10 @@ amIBanned()
     })
   }
 
+  readySignal(login1: string, login2: string)
+  {
+    this.socket.emit('ready', login1, login2);
+  }
 
   acceptInvitation(player2: User, player1: User){
     this.socket.emit('invitationIsAccepted', player2, player1);
@@ -394,6 +398,14 @@ amIBanned()
       this.socket.on('invitationAccepted', (res:boolean, res2:User, res3: User) => {
         let data = {res, res2, res3}
         obs.next(data);
+      })
+    })
+  }
+
+  areYouReady(){
+    return new Observable<boolean>((obs) => {
+      this.socket.on('areYouReady', (res: boolean) => {
+        obs.next(res);
       })
     })
   }

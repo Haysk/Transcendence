@@ -71,8 +71,10 @@ export class AppComponent implements OnInit{
       }
     })
 
-    this.socketService.isGameReady().subscribe((res) => {
+    this.socketService.areYouReady().subscribe((res) => {
+      //lancer le jeu la
       this.gameIsReady = res;
+      this.invitation = false;
     })
 
     this.socketService.doIHaveToDisplay().subscribe({
