@@ -10,6 +10,7 @@ import {
 import { PrismaService } from './prisma.service';
 import { Server, Socket } from 'socket.io';
 import { UserService } from './user.service';
+import { PongService } from './pong/pong.service';
 
 @WebSocketGateway({
   cors: {
@@ -25,6 +26,10 @@ export class AppGateway
     private pongService: PongService
   ) {
   }
+
+  sleep(ms:number) {
+		return new Promise(resolve => setTimeout(resolve, ms));
+	}
 
   createRoomName(login1: string, login2: string): string
   {
