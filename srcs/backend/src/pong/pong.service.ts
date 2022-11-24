@@ -65,6 +65,6 @@ export class PongService {
   tick(name: string): void {
     const game = this.games.find((game) => game.name === name);
     game?.game.tick();
-    this.pongGateway.sendGameStates(game?.game.getGameStates());
+    this.pongGateway.sendGameStates(game?.game.getGameStates(), name);
   }
 }

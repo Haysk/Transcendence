@@ -34,6 +34,11 @@ export class PongComponent implements OnInit, OnDestroy {
   //une config doit etre envoyer pour configurer une partie
   @Input()
   gameConfig: IGame = structuredClone(defaultGameConfig);
+
+  //nom de la room pong (en cours de dev)
+  @Input()
+  gameName = "bidule";
+
   moveLeft: IInput;
   moveRight: IInput;
   prevMoveLeft: IInput;
@@ -112,7 +117,7 @@ export class PongComponent implements OnInit, OnDestroy {
       move.userId === this.gameConfig.left.id &&
       (move.down !== this.prevMoveLeft.down || move.up !== this.prevMoveLeft.up)
     ) {
-      this.socketService.sendMove(move, "bidule");
+      this.socketService.sendMove(move, this.gameName);
       this.prevMoveLeft.up = move.up;
       this.prevMoveLeft.down = move.down;
     } else if (
@@ -120,14 +125,14 @@ export class PongComponent implements OnInit, OnDestroy {
       (move.down !== this.prevMoveRight.down ||
         move.up !== this.prevMoveRight.up)
     ) {
-      this.socketService.sendMove(move, "bidule");
+      this.socketService.sendMove(move, this.gameName);
       this.prevMoveRight.up = move.up;
       this.prevMoveRight.down = move.down;
     }
   }
 
   sendStart() {
-    this.socketService.sendStart("bidule");
+    this.socketService.sendStart(this.gameName);
   }
 
   sendGameStates(gameStates: IGameStates) {
@@ -238,11 +243,11 @@ export class PongComponent implements OnInit, OnDestroy {
   }
 
   start(): void {
-    this.sendStart()
+    this.sendStart();
   }
 
   reset(): void {
-    this.socketService.sendReset("bidule");
+    this.socketService.sendReset(this.gameName);
     //this.game.updateStates(structuredClone(defaultGameConfig).states);
   }
 
@@ -251,11 +256,11 @@ export class PongComponent implements OnInit, OnDestroy {
   }
 
   test1(): void {
-    this.socketService.sendTest1("bidule");
+    this.socketService.sendTest1(this.gameName);
   }
 
   test2(): void {
-    this.socketService.sendTest2("bidule");
+    this.socketService.sendTest2(this.gameName);
   }
 
   roundRect(
