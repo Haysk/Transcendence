@@ -1,14 +1,14 @@
 import { IGame } from './interfaces/game.interface';
 
-const racketHeight = 200;
-const racketWidth = 50;
+const racketHeight = 160;
+const racketWidth = 30;
 const racketSpeed = 10;
 
 const gameHeight = 790;
 const gameWidth = 1000;
 const gameMargin = 10;
 
-const ballDiameter = 20;
+const ballDiameter = 22;
 const ballSpeed = 5;
 
 export const defaultGameConfig: IGame = {

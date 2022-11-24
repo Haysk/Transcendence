@@ -936,7 +936,7 @@ handletTest2(client: Socket, payload: any): void {
 
   @SubscribeMessage('moveToServer')
   handleMove(client: Socket, payload: any): void {
-    this.pongService.updateMove(payload)
+    this.pongService.updateMove(payload[0], payload[1])
   }
 
   @SubscribeMessage('gameStatesToServer')
@@ -947,12 +947,12 @@ handletTest2(client: Socket, payload: any): void {
 
   @SubscribeMessage('startToServer')
   handleStart(client: Socket, payload: any): void {
-    this.pongService.start()
+    this.pongService.start(payload)
   }
 
   @SubscribeMessage('resetToServer')
   handleReset(client: Socket, payload: any): void {
-    this.pongService.reset()
+    this.pongService.reset(payload)
   }
 
   afterInit(server: Server) {

@@ -112,7 +112,7 @@ export class PongComponent implements OnInit, OnDestroy {
       move.userId === this.gameConfig.left.id &&
       (move.down !== this.prevMoveLeft.down || move.up !== this.prevMoveLeft.up)
     ) {
-      this.socketService.sendMove(move);
+      this.socketService.sendMove(move, "bidule");
       this.prevMoveLeft.up = move.up;
       this.prevMoveLeft.down = move.down;
     } else if (
@@ -120,14 +120,14 @@ export class PongComponent implements OnInit, OnDestroy {
       (move.down !== this.prevMoveRight.down ||
         move.up !== this.prevMoveRight.up)
     ) {
-      this.socketService.sendMove(move);
+      this.socketService.sendMove(move, "bidule");
       this.prevMoveRight.up = move.up;
       this.prevMoveRight.down = move.down;
     }
   }
 
   sendStart() {
-    this.socketService.sendStart();
+    this.socketService.sendStart("bidule");
   }
 
   sendGameStates(gameStates: IGameStates) {
@@ -242,7 +242,7 @@ export class PongComponent implements OnInit, OnDestroy {
   }
 
   reset(): void {
-    this.socketService.sendReset();
+    this.socketService.sendReset("bidule");
     //this.game.updateStates(structuredClone(defaultGameConfig).states);
   }
 

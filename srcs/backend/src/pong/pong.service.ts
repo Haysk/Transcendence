@@ -1,6 +1,5 @@
 import { Injectable } from '@nestjs/common';
 import { interval, Subscription } from 'rxjs';
-import { AppGateway } from 'src/app.gateway';
 import { defaultGameConfig } from './game/config';
 import { Game } from './game/game';
 import { IInput } from './game/interfaces/input.interface';
@@ -16,80 +15,56 @@ interface ITest {
 
 @Injectable()
 export class PongService {
-  //tickSubscription!: Subscription;
   games: ITest[] = [];
 
-  constructor(/*private game: Game, */ private pongGateway: PongGateway) {}
+  constructor(private pongGateway: PongGateway) {}
 
-  /*
-  public start(): void {
-    if (this.tickSubscription == undefined) {
-      this.tickSubscription = interval(interval_tick).subscribe(() => {
-        this.tick();
-      });
-    }
-    this.game.start();
-  }
-*/
-
-  public start(): void {
-    // if (this.games[0].tickSubscription == undefined) {
-    //   console.log('ici');
-    //   this.games[0].tickSubscription = interval(interval_tick).subscribe(() => {
-    //     this.tick();
-    //   });
-    // }
-    this.games[0].game.start();
-    console.log('start');
+  public start(name: string): void {
+    this.games.find((game) => game.name === name)?.game.start();
   }
 
   public addGame(name: string): void {
-    const newGame: ITest = {
-      name: name,
-      game: new Game(),
-      tickSubscription: interval(interval_tick).subscribe(() => {
-        this.tick();
-      }),
-    };
-    this.games.push(newGame);
+    if (this.games.find((game) => game.name === name) == undefined) {
+      const newGame: ITest = {
+        name: name,
+        game: new Game(),
+        tickSubscription: interval(interval_tick).subscribe(() => {
+          this.tick(name);
+        }),
+      };
+      this.games.push(newGame);
+    }
     console.log('addGame len:', this.games.length);
   }
 
   public deleteGame(name: string): void {
-    //je ne sais pas
+    this.end(name);
+    this.games.splice(
+      this.games.findIndex((game) => game.name === name),
+      1,
+    );
+    console.log('deleteGame len:', this.games.length);
   }
 
-  /*public updateMove(move: IInput): void {
-    this.game.updateInput(move);
-  }*/
-
-  public updateMove(move: IInput): void {
-    this.games[0].game.updateInput(move);
+  public updateMove(move: IInput, name: string): void {
+    this.games.find((game) => game.name === name)?.game.updateInput(move);
   }
 
-  /*public reset(): void {
-    this.game.updateStates(structuredClone(defaultGameConfig.states));
-  }*/
-
-  public reset(): void {
-    this.games[0].game.updateStates(structuredClone(defaultGameConfig.states));
+  public reset(name: string): void {
+    this.games
+      .find((game) => game.name === name)
+      ?.game.updateStates(structuredClone(defaultGameConfig.states));
   }
 
-  /*end(): void {
-    this.tickSubscription.unsubscribe();
-  }*/
-
-  end(): void {
-    this.games[0].tickSubscription.unsubscribe();
+  end(name: string): void {
+    this.games
+      .find((game) => game.name === name)
+      ?.tickSubscription.unsubscribe();
   }
 
-  /*tick(): void {
-    this.game.tick();
-    this.pongGateway.sendGameStates(this.game.getGameStates());
-  }*/
-
-  tick(): void {
-    this.games[0].game.tick();
-    this.pongGateway.sendGameStates(this.games[0].game.getGameStates());
+  tick(name: string): void {
+    const game = this.games.find((game) => game.name === name);
+    game?.game.tick();
+    this.pongGateway.sendGameStates(game?.game.getGameStates());
   }
 }
