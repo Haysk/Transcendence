@@ -114,11 +114,14 @@ export class AuthService {
 
 	async userIsOnline() {
 		return new Promise<boolean>((resolve) => {
-			this.apiService.userInfo(this.code).subscribe({
-				next: (result) => {
-					resolve(result);
-				}
-			});
+			if (this.code)
+				this.apiService.userInfo(this.code).subscribe({
+					next: (result) => {
+						resolve(result);
+					}
+				});
+			else
+				resolve(false);
 		});
 	}
 }

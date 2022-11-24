@@ -68,7 +68,7 @@ export class ApiService {
     return this.httpClient.patch<User>(`${this.API_SERVER}/user/${code}`, user);
   }
 
-  userInfo(code: string | undefined) {
+  userInfo(code: string) {
 	return this.httpClient.get<boolean>(`${this.API_SERVER}/user/info/${code}`);
   }
 

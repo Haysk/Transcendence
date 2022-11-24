@@ -1,4 +1,4 @@
-	import { Component, OnInit } from '@angular/core';
+	import { Component, Input, OnInit } from '@angular/core';
 	import { ApiService } from '../services/api.service';
 	import { HttpClient } from '@angular/common/http';
 	import { HttpHeaders } from '@angular/common/http';
@@ -7,6 +7,7 @@
 
 	import { share } from 'rxjs';
 	import { StorageService } from '../services/storage.service'
+import { Router } from '@angular/router';
 
 	@Component({
 		selector: 'app-vip-room',
@@ -44,7 +45,8 @@
 	constructor(private apiService: ApiService,
 		private http: HttpClient,
 		private storage: StorageService,
-		private socketService: SocketService) {
+		private socketService: SocketService,
+		private router: Router) {
 			this.qrCode = this.storage.getQrCode();
 	}
 		tfa_auth: boolean = false;
@@ -116,15 +118,23 @@
 	}
 
 	changeNickname(){
-		this.apiService.updateNickName(Number(this.id), this.newNickName).subscribe();
-		this.storage.setNickName(this.newNickName)
+		if (this.newNickName)
+			this.apiService.updateNickName(Number(this.id), this.newNickName).subscribe((result) => {
+				if (result) {
+					this.storage.setNickName(result.nickname)
+					window.alert('***Nickname changed. Reload page ***');
+					this.userToShow.nickname = result.nickname;
+				} else
+					window.alert('*** Invalid Nickname ***');
+			});
 		this.newNickName = "";
-		window.alert('***Nickname changed. Reload page ***');
 
 	}
 
 	searchProfile(){
-		this.socketService.searchForAUser(this.searchName);
+		// this.socketService.searchForAUser(this.searchName);
+		// this.router.navigate(["vip2-room"], {queryParams: {user: this.searchName}});
+		this.router.navigate(["vip2-room"], { queryParams: { login: this.searchName }});
 	}
 
 	backtoMyself(){

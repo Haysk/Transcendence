@@ -205,7 +205,7 @@ export class AppController {
 		try {
 			const tmp = await this.oauthService.oauth({ code });
 			const result = await this.userService.userInfo(tmp);
-			return (result);
+			return result;
 		}
 		catch {
 			console.log("Error: getUserInfo:/n\

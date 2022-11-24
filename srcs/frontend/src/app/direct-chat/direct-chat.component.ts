@@ -190,7 +190,7 @@ export class DirectChatComponent implements OnInit {
 
   goToProfile() {
 
-    this.socketService.searchForAUser(this.Dest.login);
+	this.router.navigate(["vip2-room"], { queryParams: { login: this.Dest.login }});
   }
   
   updateScroll() {
