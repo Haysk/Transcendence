@@ -77,10 +77,7 @@ export class AppGateway
         muted: true,
       }
     })
-    if (data != null && data != undefined)
-    {
-      this.server.to(client.id).emit('hereIsTheUserYouAskedFor', data);
-    }
+    this.server.to(client.id).emit('hereIsTheUserYouAskedFor', data);
   }
 
   /* MUTE */

@@ -122,6 +122,17 @@ export class DirectChatComponent implements OnInit {
     })
 
   }
+
+	ngOnDestroy() {
+		this.socketService.unsubscribeSocket("DestActualisation");
+		this.socketService.unsubscribeSocket("PrivMsg");
+		this.socketService.unsubscribeSocket("findFriendsOrNot");
+		this.socketService.unsubscribeSocket("findBlockOrNot");
+		this.socketService.unsubscribeSocket("findBlockOrNot");
+		this.socketService.unsubscribeSocket("unblockedUser");
+		this.socketService.unsubscribeSocket("blockedUser");
+		this.socketService.unsubscribeSocket("addFriend");
+	}
   
   getRoomName(login1: string, login2 : string) : string
   {
@@ -181,7 +192,7 @@ export class DirectChatComponent implements OnInit {
 
   goToProfile() {
 
-    this.socketService.searchForAUser(this.Dest.login);
+	this.router.navigate(["vip2-room"], { queryParams: { login: this.Dest.login }});
   }
   
   updateScroll() {

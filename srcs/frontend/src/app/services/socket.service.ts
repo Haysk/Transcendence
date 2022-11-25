@@ -35,6 +35,10 @@ export class SocketService {
 	this.socket.off("msginchannel");
 	this.socket.off("youAreBanned");
   }
+
+  unsubscribeSocket(event: string) {
+	this.socket.off(event);
+  }
   //MUTE
 
   muteUserByTime(userToMute: number, channelConcerned: number, timeToMute: number)

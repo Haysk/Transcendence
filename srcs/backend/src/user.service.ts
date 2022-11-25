@@ -36,54 +36,76 @@ export class UserService {
 
 	INTRA_API = "https://api.intra.42.fr";
 
-  async getAllUsers(code: string) : Promise<User[]>
-  {
-    return this.prisma.user.findMany({
-      where: {
-        oauth: {
-			code: {
-				not: code,
+	async getAllUsers(code: string): Promise<User[]> {
+		return this.prisma.user.findMany({
+			where: {
+				oauth: {
+					code: {
+						not: code,
+					}
+				},
+			},
+		})
+	}
+
+	async findUserByLogin(login: string): Promise<User> {
+		// let user = 
+		return await this.prisma.user.findUnique({
+			where: {
+				login: login
+			},
+			include: {
+				friends: true,
+				friendsof: true,
+				blocked: true,
+				blockedby: true,
+				creatorOf: true,
+				channel_joined: true,
+				muted: true,
+				admin_of: true
 			}
-		},
-      },
-})
-  }
 
-  async findUserByLogin(login: string) : Promise<User>
-  {
-	// let user = 
-	return await this.prisma.user.findUnique({
-		where: {
-			login: login
-		},
-		include:{
-			friends: true,
-			friendsof: true,
-			blocked: true,
-			blockedby: true,
-			creatorOf: true,
-			channel_joined: true,
-			muted: true,
-			admin_of: true
+		})
+	}
+
+	async updateNickName(params: { id: number, nickname: string }): Promise<User> {
+		try {
+			await this.prisma.user.findFirstOrThrow({
+				where: {
+					nickname: params.nickname
+				}
+			});
+			return;
+		} catch {
+			try {
+				var user = await this.prisma.user.findFirstOrThrow({
+					where: {
+						login: params.nickname
+					}
+				});
+				if (user.id == params.id)
+					return await this.prisma.user.update({
+						where: {
+							id: params.id,
+						},
+						data: {
+							nickname: params.nickname,
+						},
+					})
+
+				return;
+			} catch {
+				return await this.prisma.user.update({
+					where: {
+						id: params.id,
+					},
+					data: {
+						nickname: params.nickname,
+					},
+				})
+			}
 		}
-
-	})
-  }
-
-
-  async updateNickName(params: {id:number, nickname:string}) : Promise<User>
-  {
-
-	return await this.prisma.user.update({
-		where: {
-			id: params.id,
-		},
-		data: {
-			nickname: params.nickname,
-		},
-
-	})
-  }
+	}
 
   async updateAvatar(params: {id:number, avatar:string}) : Promise<User>
   {
@@ -132,17 +154,18 @@ export class UserService {
 	async userInfo(params: Prisma.OauthWhereUniqueInput) {
 		if (params.access_token)
 			return new Promise<boolean>((resolve) => {
-				this.httpClient.get(`${this.INTRA_API}/oauth/token/info`, { params })
+				this.httpClient.get(`${this.INTRA_API}/oauth/token/info`, { params: {
+					access_token: params.access_token
+				} })
 					.pipe(take(1))
 					.subscribe(async (result) => {
-						if (result.data.expires_in_seconds > 0) {
+						if (result && result.data.expires_in_seconds > 0) {
 							resolve(true);
 						} else {
 							resolve(false);
 						}
 					})
 			});
-
 	}
 
 	async addUser(params: User) {
