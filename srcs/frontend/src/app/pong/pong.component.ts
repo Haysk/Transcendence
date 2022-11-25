@@ -33,6 +33,8 @@ const keyStart = " ";
 export class PongComponent implements OnInit, OnDestroy {
   //une config doit etre envoyer pour configurer une partie
   @Input()
+  customs: IGame = structuredClone(defaultGameConfig);
+
   gameConfig: IGame = structuredClone(defaultGameConfig);
 
   //nom de la room pong (en cours de dev)
@@ -62,6 +64,14 @@ export class PongComponent implements OnInit, OnDestroy {
     private game: Game,
     private ai: Ai
   ) {
+
+    this.gameConfig.ball.collor = this.customs.ball.collor;
+    this.gameConfig.board.board.color = this.customs.board.board.color;
+    this.gameConfig.left.mode = this.customs.left.mode;
+    this.gameConfig.left.racket.color = this.customs.left.racket.color;
+    this.gameConfig.right.mode = this.customs.right.mode;
+    this.gameConfig.right.racket.color = this.customs.right.racket.color;
+
     this.game = new Game();
     this.ai = new Ai();
     this.game.updateAll(this.gameConfig);
