@@ -1,0 +1,26 @@
+.all404{
+    background-color: antiquewhite;
+}
+.titre{
+
+    text-align: center;
+    color: rgb(77, 0, 80);
+    font-size: 50px;
+    position: fixed;
+    top:15%;
+    left:50%;
+    transform: translate(-50%, -50%);
+}
+
+
+
+.don{
+    width: 500px;
+    /* background-color: aqua; */
+    position: fixed;
+    top:30%;
+    left:50%;
+    transform: translate(-50%, -50%);
+    display: flex;
+    justify-content: center;
+}
