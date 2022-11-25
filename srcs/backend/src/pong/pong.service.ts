@@ -39,10 +39,6 @@ export class PongService {
 
   public deleteGame(name: string): void {
     this.end(name);
-    this.games.splice(
-      this.games.findIndex((game) => game.name === name),
-      1,
-    );
     console.log('deleteGame len:', this.games.length);
   }
 
@@ -60,11 +56,20 @@ export class PongService {
     this.games
       .find((game) => game.name === name)
       ?.tickSubscription.unsubscribe();
+    this.games.splice(
+      this.games.findIndex((game) => game.name === name),
+      1,
+    );
   }
 
   tick(name: string): void {
     const game = this.games.find((game) => game.name === name);
     game?.game.tick();
     this.pongGateway.sendGameStates(game?.game.getGameStates(), name);
+    if (game?.game.getWinner() != null) {
+      //TODO: fin de partie
+      console.log('end GAME');
+      this.end(name);
+    }
   }
 }
