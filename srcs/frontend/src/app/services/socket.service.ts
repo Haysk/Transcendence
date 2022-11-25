@@ -436,8 +436,8 @@ amIBanned()
 
   //PONG GAME
 
-  sendMove(move: IInput): void {
-    this.socket.emit('moveToServer', move);
+  sendMove(move: IInput, name: string): void {
+    this.socket.emit('moveToServer', move, name);
   }
 
   getMove(): Observable<IInput> {
@@ -452,9 +452,9 @@ amIBanned()
     this.socket.emit('gameStatesToServer', gameStates);
   }
 
-  getGameStates(): Observable<IGameStates> {
+  getGameStates(name: string): Observable<IGameStates> {
     return new Observable<IGameStates>((observer) => {
-      this.socket.on('gameStatesToClient', (message) => {
+      this.socket.on(name + '_gameStatesToClient', (message) => {
         observer.next(message);
       });
     });
@@ -462,12 +462,19 @@ amIBanned()
 
 //INIT
 
-  sendStart(): void {
-    this.socket.emit('startToServer');
+  sendStart(name: string): void {
+    this.socket.emit('startToServer', name);
   }
 
-  sendReset(): void {
-    this.socket.emit('resetToServer');
+  sendReset(name: string): void {
+    this.socket.emit('resetToServer', name);
+  }
+
+  sendTest1(name: string): void {
+    this.socket.emit('test1', name);
+  }
+  sendTest2(name: string): void {
+    this.socket.emit('test2', name);
   }
 
   getStart() {

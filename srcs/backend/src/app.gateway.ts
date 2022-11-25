@@ -970,10 +970,20 @@ catch(err){
   {
     this.pongService.addGame(payload[0]);
   }
+  
+@SubscribeMessage('test1')
+handletTest1(client: Socket, payload: any): void {
+  this.pongService.addGame(payload)
+}
+
+@SubscribeMessage('test2')
+handletTest2(client: Socket, payload: any): void {
+  this.pongService.deleteGame(payload)
+}
 
   @SubscribeMessage('moveToServer')
   handleMove(client: Socket, payload: any): void {
-    this.pongService.updateMove(payload)
+    this.pongService.updateMove(payload[0], payload[1])
   }
 
   @SubscribeMessage('gameStatesToServer')
@@ -984,17 +994,19 @@ catch(err){
 
   @SubscribeMessage('startToServer')
   handleStart(client: Socket, payload: any): void {
-    this.pongService.start()
+    this.pongService.start(payload)
   }
 
   @SubscribeMessage('resetToServer')
   handleReset(client: Socket, payload: any): void {
-    this.pongService.reset()
+    this.pongService.reset(payload)
   }
 
   afterInit(server: Server) {
     this.logger.log('Init');
   }
+
+//FRIEND BLOCK
 
   @SubscribeMessage('getAddFriend')
   async addingFriend(client: Socket, payload: any){

@@ -1,4 +1,4 @@
-import { SubscribeMessage, WebSocketGateway, WebSocketServer } from '@nestjs/websockets';
+import { WebSocketGateway, WebSocketServer } from '@nestjs/websockets';
 import { Server } from 'socket.io';
 import { IGameStates } from './game/interfaces/game-states.interface';
 
@@ -7,7 +7,7 @@ export class PongGateway {
   @WebSocketServer()
   server!: Server;
 
-  public sendGameStates(gameStates: IGameStates): void {
-    this.server.emit('gameStatesToClient', gameStates);
+  public sendGameStates(gameStates: IGameStates, name: string): void {
+    this.server.emit(name + '_gameStatesToClient', gameStates);
   }
 }
