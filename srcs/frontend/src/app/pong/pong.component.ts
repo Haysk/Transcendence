@@ -32,12 +32,14 @@ const keyStart = " ";
 })
 export class PongComponent implements OnInit, OnDestroy {
   //une config doit etre envoyer pour configurer une partie
-  @Input()
+  
   gameConfig: IGame = structuredClone(defaultGameConfig);
 
   //nom de la room pong (en cours de dev)
-  @Input()
+  @Input() 
   gameName = "bidule";
+  @Input()
+  customs: IGame = structuredClone(defaultGameConfig);
 
   moveLeft: IInput;
   moveRight: IInput;

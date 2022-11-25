@@ -869,11 +869,25 @@ catch(err){
 /* INVITATION GAME */
 
   @SubscribeMessage('CreateRoomToPlay')
-  createRoomToPlay(client: Socket, payload: any)
+  async createRoomToPlay(client: Socket, payload: any)
   {
     let RoomName: string = this.createGameRoomName(payload[0].login, payload[1].login);
-    this.server.in(client.id).socketsJoin(RoomName);
-    this.server.in(payload[1].socket).socketsJoin(RoomName); //Peut etre rechercher en BDD ce socket est mieux (actualisation)
+    let data = await this.Prisma.user.findFirst({
+      where: {
+        id: payload[0].id,
+      }
+    })
+    let data2 = await this.Prisma.user.findFirst({
+      where: {
+        id: payload[1].id,
+      }
+    })
+    if (data !== null && data !== undefined && data2 !== null && data2 !== undefined)
+    {
+      this.server.in(client.id).socketsJoin(RoomName);
+      this.server.in(data2.socket).socketsJoin(RoomName); //Peut etre rechercher en BDD ce socket est mieux (actualisation)
+    }
+    //this.server.in(client.id).socketsJoin(RoomName + "_gameStatesToClient");
   }
 
   @SubscribeMessage('invitationIsAccepted')
@@ -968,9 +982,11 @@ catch(err){
   @SubscribeMessage('createGamePlz')
   createGame(client: Socket, payload: any)
   {
+    console.log(payload[0]);
     this.pongService.addGame(payload[0]);
+    this.pongService.start(payload[0]);
   }
-  
+
 @SubscribeMessage('test1')
 handletTest1(client: Socket, payload: any): void {
   this.pongService.addGame(payload)

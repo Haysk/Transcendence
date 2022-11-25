@@ -20,6 +20,8 @@ export class PongService {
   constructor(private pongGateway: PongGateway) {}
 
   public start(name: string): void {
+    console.log("pongService :")
+    console.log(name)
     this.games.find((game) => game.name === name)?.game.start();
   }
 
@@ -34,6 +36,7 @@ export class PongService {
       };
       this.games.push(newGame);
     }
+    console.log("add game :", name)
     console.log('addGame len:', this.games.length);
   }
 

@@ -4,6 +4,7 @@ import { SocketService } from './services/socket.service';
 import { User } from './models/user';
 import { StorageService } from './services/storage.service';
 import { IGame } from './pong/game/interfaces/game.interface';
+import { defaultGameConfig } from './pong/game/config';
 
 @Component({
   selector: 'app-root',
@@ -31,6 +32,7 @@ export class AppComponent implements OnInit{
   showPong:boolean =false;
   global5!: {player1: User, player2:  User, gameConfig: IGame};
   roomName!:string;
+  redirectPong:boolean = false;
 
 
   to: User = {
@@ -61,18 +63,14 @@ export class AppComponent implements OnInit{
 
         this.showPong=true;
         this.invitation=false;
-        console.log("player1 : ");
-        console.log(data.res3);
-        console.log("player2 : ");
-        console.log(data.res2);
-       
-        
-        //lancer le jeu la
+        // console.log("player1 : ");
+        // console.log(data.res3);
+        // console.log("player2 : ");
+        // console.log(data.res2);
       }
     })
 
     this.socketService.areYouReady().subscribe((res) => {
-      //lancer le jeu la
       this.gameIsReady = res;
       this.invitation = false;
     })
@@ -101,8 +99,12 @@ export class AppComponent implements OnInit{
         this.player2 = data.res2;
         this.gameConfig = data.res3;
         this.setUpGameConfig();
+        this.gameConfig = structuredClone(defaultGameConfig);
         this.roomName = this.createGameRoomName(this.player1.login, this.player2.login);
-        this.socketService.createGame(this.roomName, this.gameConfig, this.player1, this.player2);
+        if(this.player1.id == Number(this.storageService.getId()))
+          this.socketService.createGame(this.roomName, this.gameConfig, this.player1, this.player2);
+        this.gameIsReady=false;
+        this.redirectPong=true;
         // console.log("LA LISTE :");
         // console.log("PLAYER 1 :");
         // console.log(this.player1);
