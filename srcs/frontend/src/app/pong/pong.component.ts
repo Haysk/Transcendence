@@ -24,6 +24,11 @@ const keyStart = " ";
 
 //si pause ne fonctionne pas : le desactiver
 
+//ajout des fonctions secrete:
+//1: passage du joueur left en mode local
+//2: passage du joueur left en mode ai easy
+//3: passage du joueur left en mode ai hard
+
 @Component({
   selector: "app-pong",
   templateUrl: "./pong.component.html",
@@ -185,6 +190,36 @@ export class PongComponent implements OnInit, OnDestroy {
     }
     if (key === keyStart) {
       this.sendStart();
+    }
+    if (this.gameConfig.left.mode.type !== 'remote') {
+      if (key === '1') {
+        this.gameConfig.left.mode = structuredClone(defaultGameConfig.left.mode)
+      } else if (key === '2') {
+        this.gameConfig.left.mode = {
+          type: 'ai',
+          level: 'easy'
+        };
+      } else if (key == '3') {
+        this.gameConfig.left.mode = {
+          type: 'ai',
+          level: 'hard'
+        };
+      }
+    }
+    if (this.gameConfig.right.mode.type !== 'remote') {
+      if (key === '4') {
+        this.gameConfig.right.mode = structuredClone(defaultGameConfig.right.mode)
+      } else if (key === '5') {
+        this.gameConfig.right.mode = {
+          type: 'ai',
+          level: 'easy'
+        };
+      } else if (key == '6') {
+        this.gameConfig.right.mode = {
+          type: 'ai',
+          level: 'hard'
+        };
+      }
     }
   }
 
