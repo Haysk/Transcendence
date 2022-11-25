@@ -35,6 +35,10 @@ export class SocketService {
 	this.socket.off("msginchannel");
 	this.socket.off("youAreBanned");
   }
+
+  unsubscribeSocket(event: string) {
+	this.socket.off(event);
+  }
   //MUTE
 
   muteUserByTime(userToMute: number, channelConcerned: number, timeToMute: number)
@@ -420,11 +424,14 @@ amIBanned()
     return new Observable<any>((obs) => {
       this.socket.on('bothPlayerAreReady', (res:User, res2:User, res3:IGame) => {
         let data = {res, res2, res3}
-        console.log("CONSOLE LOOOOOOG");
-        
         obs.next(data);
       })
     })
+  }
+
+  createGame(roomName: string, gameConfig: IGame, player1: User, player2: User)
+  {
+    this.socket.emit('createGamePlz', roomName, gameConfig);
   }
 
   //PONG GAME

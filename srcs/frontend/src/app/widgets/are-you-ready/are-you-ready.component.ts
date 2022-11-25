@@ -23,11 +23,10 @@ export class AreYouReadyComponent {
 
   imReady()
   {
-    console.log("IMREADY:");
-    console.log(this.player1);
-    console.log(this.player2);
-    console.log(this.gameConfig);
-    
+    // console.log("IMREADY:");
+    // console.log(this.player1);
+    // console.log(this.player2);
+    // console.log(this.gameConfig);
     this.socketService.readySignal(this.player1, this.player2, this.gameConfig);
   }
 

@@ -60,18 +60,6 @@ export class AppGateway
   server!: Server;
   private logger: Logger = new Logger('AppGateway');
 
-  /* LIST ID IN ROOM */
-  @SubscribeMessage("userInTotoRoom")
-  async listIdInRoom()
-  {
-    let i = 0;
-    await (await this.server.in("toto_channel").allSockets()).forEach((id) => {
-      console.log("socket " + i + " : ")
-      console.log(id);
-      i++;
-    })
-  
-  }
   /* SEARCH USER */
 
   @SubscribeMessage('SearchForThisUser')
@@ -89,10 +77,7 @@ export class AppGateway
         muted: true,
       }
     })
-    if (data != null && data != undefined)
-    {
-      this.server.to(client.id).emit('hereIsTheUserYouAskedFor', data);
-    }
+    this.server.to(client.id).emit('hereIsTheUserYouAskedFor', data);
   }
 
   /* MUTE */
@@ -979,6 +964,12 @@ catch(err){
   }
 
 /* PONG GAME */
+
+  @SubscribeMessage('createGamePlz')
+  createGame(client: Socket, payload: any)
+  {
+    this.pongService.addGame(payload[0]);
+  }
 
   @SubscribeMessage('moveToServer')
   handleMove(client: Socket, payload: any): void {

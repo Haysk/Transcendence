@@ -4,8 +4,6 @@ import { StorageService } from './storage.service';
 import { environment } from 'src/environments/environment';
 import { User } from '../models/user';
 import { ApiService } from './api.service';
-import { SocketService } from './socket.service';
-import { Observable } from 'rxjs';
 
 @Injectable({
 	providedIn: 'root'
@@ -16,8 +14,7 @@ export class AuthService {
 	constructor(private route: ActivatedRoute,
 				private router: Router,
 				private storageService: StorageService,
-				private apiService: ApiService,
-				private socketService: SocketService) {}
+				private apiService: ApiService) {}
 
 	INTRA_API_AUTH = "https://api.intra.42.fr/oauth/authorize";
 	private code: string = this.storageService.getCode();
@@ -117,11 +114,14 @@ export class AuthService {
 
 	async userIsOnline() {
 		return new Promise<boolean>((resolve) => {
-			this.apiService.userInfo(this.code).subscribe({
-				next: (result) => {
-					resolve(result);
-				}
-			});
+			if (this.code)
+				this.apiService.userInfo(this.code).subscribe({
+					next: (result) => {
+						resolve(result);
+					}
+				});
+			else
+				resolve(false);
 		});
 	}
 }

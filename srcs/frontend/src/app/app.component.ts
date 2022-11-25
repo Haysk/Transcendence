@@ -30,6 +30,7 @@ export class AppComponent implements OnInit{
   gameIsReady:boolean = false;
   showPong:boolean =false;
   global5!: {player1: User, player2:  User, gameConfig: IGame};
+  roomName!:string;
 
 
   to: User = {
@@ -78,6 +79,7 @@ export class AppComponent implements OnInit{
 
     this.socketService.doIHaveToDisplay().subscribe({
       next: (data: {res: boolean, res2:User, res3:User, res4: IGame;}) =>{
+      console.log("toto")
       this.invitation = data.res;
       this.invitationFromWho = data.res2;
       this.player1 = data.res2;
@@ -98,15 +100,50 @@ export class AppComponent implements OnInit{
         this.player1 = data.res;
         this.player2 = data.res2;
         this.gameConfig = data.res3;
-        console.log("LA LISTE :");
-        console.log("PLAYER 1 :");
-        console.log(this.player1);
-        console.log("PLAYER 2 :");
-        console.log(this.player2);
-        console.log("GAME CONFIG : ");
-        console.log(this.gameConfig);
+        this.setUpGameConfig();
+        this.roomName = this.createGameRoomName(this.player1.login, this.player2.login);
+        this.socketService.createGame(this.roomName, this.gameConfig, this.player1, this.player2);
+        // console.log("LA LISTE :");
+        // console.log("PLAYER 1 :");
+        // console.log(this.player1);
+        // console.log("PLAYER 2 :");
+        // console.log(this.player2);
+        // console.log("GAME CONFIG : ");
+        // console.log(this.gameConfig);
+        
       }
     })
+  }
+
+  ngOnDestroy() {
+	this.socketService.unsubscribeSocket("DisplayInvitation");
+	this.socketService.unsubscribeSocket("refuseInvitation");
+  }
+
+  createGameRoomName(login1: string, login2: string): string{
+    let result: string;
+
+    if (login1 < login2)
+      result = login1 + login2;
+    else
+      result = login2 + login1;
+    result = result + "_game"
+    return result;
+  }
+
+  setUpGameConfig() //PLAYER 1 EST A GAUCHE
+  {
+    let id = Number(this.storageService.getId());
+    if (id == this.player1.id)
+    {
+      this.gameConfig.left.mode.type = "local";
+      this.gameConfig.right.mode.type = "remote";
+    }
+    else if (id == this.player2.id)
+    {
+      this.gameConfig.left.mode.type = "remote";
+      this.gameConfig.right.mode.type = "local";
+    }
   }
 
   public getLogin(): string | null{

@@ -10,11 +10,12 @@
 <app-invitation-refuse *ngIf="refuse==true" 
 [refuseFromWho]="this.refuseFromWho"
 (refuseInvitationEvent)="receiverefueInvitationEvent($event)"></app-invitation-refuse>
-<app-bloc-chat *ngIf="getRoute() != '/'"
+<!-- <app-bloc-chat *ngIf="getRoute() != '/'"
 (global4Event)="receiveGlobal4Event($event)"
-></app-bloc-chat>
-<app-header  *ngIf="getRoute() != '/'" ></app-header>
+></app-bloc-chat> -->
 <!-- <app-pong *ngIf="showPong==true"></app-pong>  -->
+<app-bloc-chat (global4Event)="receiveGlobal4Event($event)" *ngIf="getRoute() != '/' && getRoute() != '/404'"></app-bloc-chat>
+<app-header  *ngIf="getRoute() != '/' && getRoute() != '/404'" ></app-header>
 <router-outlet></router-outlet>
 
 <app-are-you-ready *ngIf="gameIsReady==true" [player1]="this.player1" [player2]="this.player2" [gameConfig]="gameConfig"></app-are-you-ready>

@@ -102,6 +102,17 @@ export class ChatComponent implements OnInit {
 	})
 	}
 
+	ngOnDestroy() {
+		this.socketService.unsubscribeSocket("userListUpdated");
+		this.socketService.unsubscribeSocket("hereIsTheUserList");
+		this.socketService.unsubscribeSocket("addFriend");
+		this.socketService.unsubscribeSocket("removeFriend");
+		this.socketService.unsubscribeSocket("listFriends");
+		this.socketService.unsubscribeSocket("DestActualisation");
+		this.socketService.unsubscribeSocket("youHaveBeenBlocked");
+		this.socketService.unsubscribeSocket("youHaveBeenUnblocked");
+	}
+
 	userFiltred() {
 		this.User_filtred_list = this.User_list.filter((elem, index, arr) => {
 		let i = 0;
@@ -196,7 +207,7 @@ export class ChatComponent implements OnInit {
 		this.showFormulePassword = false;
 	}
 
-	receiveGlobalEvent($event:any){
+	receiveGlobal2Event($event:any){
 		this.global2 =$event;
 		this.global3Event.emit(this.global2);
 	}
