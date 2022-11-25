@@ -55,6 +55,8 @@ export class PongComponent implements OnInit, OnDestroy {
   upSubscription!: Subscription;
   downSubscription!: Subscription;
 
+  testGameStatesSubscription!: Subscription;
+
   constructor(
     private socketService: SocketService,
     private game: Game,
@@ -82,7 +84,7 @@ export class PongComponent implements OnInit, OnDestroy {
     //   this.game.start();
     // });
     this.gameStatesSubscription = this.socketService
-      .getGameStates()
+      .getGameStates(this.gameName)
       .subscribe((states: IGameStates) => {
         this.game.updateStates(states);
       });

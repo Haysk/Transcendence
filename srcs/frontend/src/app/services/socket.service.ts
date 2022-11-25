@@ -416,9 +416,9 @@ amIBanned()
     this.socket.emit('gameStatesToServer', gameStates);
   }
 
-  getGameStates(): Observable<IGameStates> {
+  getGameStates(name: string): Observable<IGameStates> {
     return new Observable<IGameStates>((observer) => {
-      this.socket.on('gameStatesToClient', (message) => {
+      this.socket.on(name + '_gameStatesToClient', (message) => {
         observer.next(message);
       });
     });

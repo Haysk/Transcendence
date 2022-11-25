@@ -8,10 +8,6 @@ export class PongGateway {
   server!: Server;
 
   public sendGameStates(gameStates: IGameStates, name: string): void {
-    //a faire:
-    // envoie de la gameState uniquement au salon concerne
-    this.server.emit('gameStatesToClient', gameStates);
-
-    //this.server.emit(name + 'gameStatesToClient', gameStates);
+    this.server.emit(name + '_gameStatesToClient', gameStates);
   }
 }
