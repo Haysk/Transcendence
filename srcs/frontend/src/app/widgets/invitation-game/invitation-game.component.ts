@@ -52,7 +52,7 @@ export class InvitationGameComponent implements OnInit {
 
   Yesplease(){
     this.socketService.acceptInvitation(this.to, this.fromWho);
-    //this.showInvitationEvent.emit(false);
+    this.showInvitationEvent.emit(false);
     // console.log("IMPORTANT");
     // console.log(this.fromWho);
     // console.log(this.to);

@@ -3,7 +3,7 @@ import { Injectable } from '@nestjs/common';
 import { SGame } from './game/interfaces/save-game.interface';
 
 @Injectable()
-export class SaveGameService 
+export class saveGameService 
 {
 	constructor(private Prisma: PrismaService){}
 
