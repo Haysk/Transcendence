@@ -979,11 +979,12 @@ catch(err){
 
 /* PONG GAME */
 
-  @SubscribeMessage('createGamePlz')
+  @SubscribeMessage('createGamePlz') //payload[1] IGame, payload[2] player1, payload[3] player2
   createGame(client: Socket, payload: any)
   {
     console.log(payload[0]);
     this.pongService.addGame(payload[0]);
+    //TODO: addGamers
   }
 
 @SubscribeMessage('test1')
