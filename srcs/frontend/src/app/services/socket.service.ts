@@ -7,6 +7,7 @@ import { Channel } from '../models/channel'
 import { environment } from 'src/environments/environment';
 import { IGameStates } from '../pong/game/interfaces/game-states.interface';
 import { IInput } from '../pong/game/interfaces/input.interface';
+import { GameMode, PlayerMode, IGame } from '../pong/game/interfaces/game.interface';
 
 
 @Injectable({
@@ -33,6 +34,10 @@ export class SocketService {
 	this.socket.off("newAdminInChannel");
 	this.socket.off("msginchannel");
 	this.socket.off("youAreBanned");
+  }
+
+  unsubscribeSocket(event: string) {
+	this.socket.off(event);
   }
   //MUTE
 
@@ -191,8 +196,6 @@ amIBanned()
   {
     return new Observable<User[]>((obs) => {
       this.socket.on('hereIsTheUserList', (res: User[]) => {
-        // console.log("HEREISTHEUSERLIST OK =>")
-        // console.log(res);
         obs.next(res);
       })
   })
@@ -350,16 +353,16 @@ amIBanned()
     this.socket.emit('CreateRoomToPlay', player1, player2);
   }
 
-  isGameReady(){
-    return new Observable<boolean>((obs) => {
-      this.socket.on('GameIsReady', () => {
-        obs.next(true);
-      })
-    })
-  }
+  // isGameReady(){
+  //   return new Observable<boolean>((obs) => {
+  //     this.socket.on('GameIsReady', () => {
+  //       obs.next(true);
+  //     })
+  //   })
+  // }
 
-  displayInvitation(target: User, target2:User){
-    this.socket.emit('initDisplayInvitation', target, target2);
+  displayInvitation(player2: User, player1:User, gameConfig: IGame){
+    this.socket.emit('initDisplayInvitation', player2, player1, gameConfig);
   }
 
   refuseInvitation(target: User, target2:string){
@@ -368,8 +371,8 @@ amIBanned()
 
   doIHaveToDisplay(){
     return new Observable<any>((obs) => {
-      this.socket.on('DisplayInvitation', (res:boolean, res2: User) => {
-        let data = {res, res2}
+      this.socket.on('DisplayInvitation', (res:boolean, res2: User, res3: User, res4: IGame) => {
+        let data = {res, res2, res3, res4}
         obs.next(data);
       })
     })
@@ -385,17 +388,50 @@ amIBanned()
     })
   }
 
+  readySignal(player1: User, player2: User, gameConfig: IGame)
+  {
+    this.socket.emit('ready', player1, player2, gameConfig);
+  }
 
-  acceptInvitation(target: User){
-    this.socket.emit('invitationIsAccepted', target);
+  acceptInvitation(player2: User, player1: User){
+    // console.log("ACCEPT INVITATION :");
+    
+    // console.log(player1);
+    // console.log(player2);
+    
+    this.socket.emit('invitationIsAccepted', player2, player1);
   }
 
   isGameAccepted(){
-    return new Observable<boolean>((obs) => {
-      this.socket.on('invitationAccepted', () => {
-        obs.next(true);
+    return new Observable<any>((obs) => {
+      this.socket.on('invitationAccepted', (res:boolean, res2:User, res3: User) => {
+        let data = {res, res2, res3}
+        obs.next(data);
       })
     })
+  }
+
+  areYouReady(){
+    return new Observable<boolean>((obs) => {
+      this.socket.on('areYouReady', (res: boolean) => {
+        obs.next(res);
+      })
+    })
+  }
+
+  isGameReady()
+  {
+    return new Observable<any>((obs) => {
+      this.socket.on('bothPlayerAreReady', (res:User, res2:User, res3:IGame) => {
+        let data = {res, res2, res3}
+        obs.next(data);
+      })
+    })
+  }
+
+  createGame(roomName: string, gameConfig: IGame, player1: User, player2: User)
+  {
+    this.socket.emit('createGamePlz', roomName, gameConfig);
   }
 
   //PONG GAME

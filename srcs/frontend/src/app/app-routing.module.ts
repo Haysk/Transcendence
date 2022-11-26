@@ -11,6 +11,8 @@ import { ChatComponent } from './chat/chat.component';
 import { SalonComponent } from './salon/salon.component';
 import { FriendUserComponent } from './friend-user/friend-user.component';
 import { AuthGuard } from './auth/auth.guard';
+import { NotFoundComponent } from './not-found/not-found.component';
+import { LoginComponent } from './login/login.component';
 
 
 
@@ -19,6 +21,7 @@ import { AuthGuard } from './auth/auth.guard';
 
 const routes: Routes = [
 
+  	{ path: '', component: LoginComponent },
 	{ path: 'game-room', component: GameRoomComponent,
 		canActivate: [AuthGuard]
 	},
@@ -48,6 +51,10 @@ const routes: Routes = [
 	},
 	{ path: 'friend', component: FriendUserComponent,
 		canActivate: [AuthGuard]
+	},
+	{ path: '404', component: NotFoundComponent,
+	},
+	{ path: '**', redirectTo: '/404',
 	}
 ];
 

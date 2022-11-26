@@ -32,10 +32,15 @@ export class InvitationRefuseComponent implements OnInit {
       this.gameAccepted = res;
     })
 
-    this.socketService.isGameReady().subscribe((res) => {
+    this.socketService.areYouReady().subscribe((res) => {
       this.gameIsReady = res;
     })
   }
+
+	ngOnDestroy() {
+		this.socketService.unsubscribeSocket("invitationAccepted");
+		this.socketService.unsubscribeSocket("GameIsReady");
+	}
 
   okGotIt(){
 

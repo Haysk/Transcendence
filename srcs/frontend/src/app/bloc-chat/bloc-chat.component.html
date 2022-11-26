@@ -1,6 +1,6 @@
 <div class="all_bloc_chat" >
     <div class="page_input">
-    <app-chat *ngIf="visible"></app-chat>
+    <app-chat *ngIf="visible" (global3Event) = "receiveGlobal3Event($event)"></app-chat>
     
     </div>
     <div class="env_chat" >

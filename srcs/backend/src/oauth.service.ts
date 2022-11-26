@@ -24,15 +24,10 @@ export class OauthService {
 	async oauth(
 		oauthWhereUniqueInput: Prisma.OauthWhereUniqueInput,
 	): Promise<Oauth | null> {
-		try{
-			return this.prisma.oauth.findUnique({
+			var oauth = this.prisma.oauth.findUniqueOrThrow({
 				where: oauthWhereUniqueInput,
 			});
-		}
-		catch(err){
-			console.log("error dans oauth :");
-			console.log(err);
-		}
+			return oauth;
 	}
 
 	async oauths(params: {
@@ -42,7 +37,6 @@ export class OauthService {
 		where?: Prisma.OauthWhereInput;
 		orderBy?: Prisma.OauthOrderByWithRelationInput;
 	}): Promise<Oauth[]> {
-		try{
 			const { skip, take, cursor, where, orderBy } = params;
 			return this.prisma.oauth.findMany({
 				skip,
@@ -51,11 +45,7 @@ export class OauthService {
 				where,
 				orderBy,
 			});
-		}
-		catch(err){
-			console.log("error dans oauths :");
-			console.log(err);
-		}
+
 	}
 
 	async getToken(code: string | null): Promise<Oauth | null> {

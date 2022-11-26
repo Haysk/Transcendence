@@ -43,7 +43,7 @@ export class PongComponent implements OnInit, OnDestroy {
   gameConfig: IGame = structuredClone(defaultGameConfig);
 
   //nom de la room pong (en cours de dev)
-  @Input()
+  @Input() 
   gameName = "bidule";
 
   moveLeft: IInput;
@@ -423,5 +423,9 @@ export class PongComponent implements OnInit, OnDestroy {
       this.gameConfig.board.board.width * 0.6,
       this.gameConfig.board.board.height * 0.05
     );
+  }
+
+  go(){
+    
   }
 }

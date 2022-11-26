@@ -20,6 +20,9 @@ import { PongService } from './pong/pong.service';
 })
 export class AppGateway
   implements OnGatewayInit, OnGatewayConnection, OnGatewayDisconnect {
+
+  TabReady = new Map<string, string[]>;
+
   constructor(
     private Prisma: PrismaService,
     private readonly userService: UserService,
@@ -57,18 +60,6 @@ export class AppGateway
   server!: Server;
   private logger: Logger = new Logger('AppGateway');
 
-  /* LIST ID IN ROOM */
-  @SubscribeMessage("userInTotoRoom")
-  async listIdInRoom()
-  {
-    let i = 0;
-    await (await this.server.in("toto_channel").allSockets()).forEach((id) => {
-      console.log("socket " + i + " : ")
-      console.log(id);
-      i++;
-    })
-  
-  }
   /* SEARCH USER */
 
   @SubscribeMessage('SearchForThisUser')
@@ -86,10 +77,7 @@ export class AppGateway
         muted: true,
       }
     })
-    if (data != null && data != undefined)
-    {
-      this.server.to(client.id).emit('hereIsTheUserYouAskedFor', data);
-    }
+    this.server.to(client.id).emit('hereIsTheUserYouAskedFor', data);
   }
 
   /* MUTE */
@@ -881,17 +869,67 @@ catch(err){
 /* INVITATION GAME */
 
   @SubscribeMessage('CreateRoomToPlay')
-  createRoomToPlay(client: Socket, payload: any)
+  async createRoomToPlay(client: Socket, payload: any)
   {
     let RoomName: string = this.createGameRoomName(payload[0].login, payload[1].login);
-    this.server.in(client.id).socketsJoin(RoomName);
-    this.server.in(payload[1].socket).socketsJoin(RoomName); //Peut etre rechercher en BDD ce socket est mieux (actualisation)
+    let data = await this.Prisma.user.findFirst({
+      where: {
+        id: payload[0].id,
+      }
+    })
+    let data2 = await this.Prisma.user.findFirst({
+      where: {
+        id: payload[1].id,
+      }
+    })
+    if (data !== null && data !== undefined && data2 !== null && data2 !== undefined)
+    {
+      this.server.in(client.id).socketsJoin(RoomName);
+      this.server.in(data2.socket).socketsJoin(RoomName); //Peut etre rechercher en BDD ce socket est mieux (actualisation)
+    }
+    //this.server.in(client.id).socketsJoin(RoomName + "_gameStatesToClient");
   }
 
   @SubscribeMessage('invitationIsAccepted')
-  acceptInvitation(client: Socket, payload: any)
+  async acceptInvitation(client: Socket, payload: any)
   {
-    this.server.to(payload[0].socket).emit('invitationAccepted');
+    let data = await this.Prisma.user.findFirst({
+      where: {
+        id: payload[0].id,
+      },
+      include:{
+        banned:true,
+        channel_joined:true,
+        friends:true,
+        friendsof: true,
+        muted:true
+      }
+    })
+    let data2 = await this.Prisma.user.findFirst({
+      where: {
+        id: payload[1].id
+      },
+      include:{
+        banned:true,
+        channel_joined:true,
+        friends:true,
+        friendsof: true,
+        muted:true
+      }
+    })
+    if(data != null && data != undefined && data2 != null && data2 != undefined)
+    {
+      // console.log("GATEWAY ACCEPT INVITATION :")
+      // console.log(data);
+      // console.log(data2);
+      this.server.to(data.socket).emit('invitationAccepted', true, data, data2);
+      let roomName = this.createGameRoomName(data.login, data2.login);
+      this.server.in(data.socket).socketsJoin(roomName);
+      this.server.in(data2.socket).socketsJoin(roomName);
+      this.server.to(roomName).emit('invitationAccepted', true, data, data2);
+      this.TabReady.set(roomName, ["", ""]);
+      this.server.to(roomName).emit('areYouReady', true);
+    }
   }
 
   @SubscribeMessage('initDisplayInvitation')
@@ -904,12 +942,12 @@ catch(err){
     let data2 = await this.Prisma.user.findFirst({
       where: {login: payload[1].login},
     })
-    if (data != null && data != undefined)
-      this.server.to(data.socket).emit('DisplayInvitation', invitation, data2); //AJOUTER ICI LES INFOS DE LA PARTIE
+    if (data != null && data != undefined && data2 != null && data2 != undefined)
+      this.server.to(data.socket).emit('DisplayInvitation', invitation, data2, data, payload[2]); //PAYLOAD[2] = LES INFOS DE LA PARTIE
   }
 
   @SubscribeMessage('refuseInvitation')
-  async refuseInvitation(client:Socket, payload:any)
+  async refuseInvitation(client: Socket, payload: any)
   {
     let refuse:boolean =true;
     let data = await this.Prisma.user.findFirst({
@@ -922,7 +960,32 @@ catch(err){
       this.server.to(data.socket).emit('refuseInvitation', refuse, data2);
   }
 
+  @SubscribeMessage('ready')
+  async getReadyForGame(Client: Socket, payload: any) //PAYLOAD[0] = player1 PAYLOAD[1] = player2 PAYLOAD[2] = gameConfig
+  {
+    let roomName = this.createGameRoomName(payload[0].login, payload[1].login);
+    let room = this.TabReady.get(roomName);
+    if (room[0] != Client.id && room[1] != Client.id)
+    {
+      if (room[0] == "")
+        room[0] = Client.id;
+      else{
+        room[1] = Client.id;
+      }
+    }
+    if (room[0] != "" && room[1] != "")
+      this.server.to(roomName).emit('bothPlayerAreReady', payload[0], payload[1], payload[2]);
+  }
+
 /* PONG GAME */
+
+  @SubscribeMessage('createGamePlz')
+  createGame(client: Socket, payload: any)
+  {
+    console.log(payload[0]);
+    this.pongService.addGame(payload[0]);
+    this.pongService.start(payload[0]);
+  }
 
 @SubscribeMessage('test1')
 handletTest1(client: Socket, payload: any): void {
@@ -958,6 +1021,8 @@ handletTest2(client: Socket, payload: any): void {
   afterInit(server: Server) {
     this.logger.log('Init');
   }
+
+//FRIEND BLOCK
 
   @SubscribeMessage('getAddFriend')
   async addingFriend(client: Socket, payload: any){
@@ -1098,6 +1163,7 @@ handletTest2(client: Socket, payload: any): void {
     console.log(err);
     }
   }
+
 
    
   @SubscribeMessage('getBlockUser')

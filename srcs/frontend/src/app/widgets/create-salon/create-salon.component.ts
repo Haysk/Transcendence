@@ -56,6 +56,7 @@ export class CreateSalonComponent implements OnInit {
     this.socketService.iAmReady().subscribe(() => {
       this.ShowSalonEvent.emit(this.show_salon);
       this.SendChannelNameEvent.emit(this.channel_name);
+	  this.socketService.unsubscribeSocket("youAreReady");
     })
     }else{
       window.alert('Channel Name Please!!');
@@ -68,6 +69,7 @@ export class CreateSalonComponent implements OnInit {
     this.socketService.iAmReady().subscribe(() => {
       this.ShowSalonEvent.emit(this.show_salon);
       this.SendChannelNameEvent.emit(this.channel_name);
+	  this.socketService.unsubscribeSocket("youAreReady");
     })
     }else{
       window.alert('Channel Name or Password Please !!');

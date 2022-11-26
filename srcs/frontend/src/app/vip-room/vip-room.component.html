@@ -52,24 +52,20 @@
             </div>
 		</div>
     </div>
-        
     
         <!--Change nickname-->
         <div class="champ_nickname" *ngIf="visible_nickname">
-            New nickname:&nbsp; <input type="text" id="new_nickname" value="Your new nickname" [(ngModel)]="newNickName">
-            <app-button-v2 [text]="'Reset'" (click)="changeNickname()"></app-button-v2>
+            New nickname:&nbsp; <input type="text" id="new_nickname" value="Your new nickname" (keydown.enter)="changeNickname()" [(ngModel)]="newNickName">
         </div>
         
-
         <!--Search profile-->
         <div class="search">
 
          
-
-            <input type="text"  [(ngModel)]="searchName">
-            <a routerLink="/vip2-room">
+            <input type="text" (keydown.enter)="searchProfile()" placeholder="Search Profile" [(ngModel)]="searchName">
+            <!-- <a routerLink="/vip2-room">
             <app-button-v2 [text]="'Search Profile'" (click)="searchProfile()"></app-button-v2>
-            </a>
+            </a> -->
         
             </div><!--fin div search-->
 

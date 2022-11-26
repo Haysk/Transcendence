@@ -23,7 +23,7 @@ export const defaultGameConfig: IGame = {
       width: racketWidth,
       height: racketHeight,
       speed: racketSpeed,
-      color: '#5a74c4',
+      color: '#04EBB2',
     },
     input: {
       userId: 0,
@@ -42,7 +42,7 @@ export const defaultGameConfig: IGame = {
       width: racketWidth,
       height: racketHeight,
       speed: racketSpeed,
-      color: '#a43737',
+      color: '#FFBB33',
     },
     input: {
       userId: 1,

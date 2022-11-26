@@ -1,4 +1,6 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, Output, EventEmitter } from '@angular/core';
+import { GameMode, PlayerMode, IGame } from 'src/app/pong/game/interfaces/game.interface';
+import { User } from '../models/user';
 
 @Component({
   selector: 'app-bloc-chat',
@@ -8,7 +10,9 @@ import { Component, OnInit } from '@angular/core';
 export class BlocChatComponent implements OnInit {
 
   
+  @Output() global4Event = new EventEmitter<any>();
   constructor() { }
+
 
   ngOnInit(): void {
   }
@@ -18,6 +22,7 @@ export class BlocChatComponent implements OnInit {
   visible2:boolean = true;
   color:string= "rgb(50, 53, 60)";
   lien: string = "../../assets/icons/chatroom-f.jpg"
+  global4!: {player1: User, player2:  User, gameConfig: IGame};
   
   showhide(){
     this.visible = this.visible?false:true;
@@ -27,6 +32,10 @@ export class BlocChatComponent implements OnInit {
     this.visible2 = this.visible2?false:true;
   }
 
+  receiveGlobal3Event($event:any){
+    this.global4=$event;
+    this.global4Event.emit(this.global4);
+  }
   // ouvre_popup() {
   //   window.open("index.html", "", "width=400, height=600");
   //  }
