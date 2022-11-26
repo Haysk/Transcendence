@@ -18,7 +18,6 @@ export class AppComponent implements OnInit{
     private socketService: SocketService,
     private storageService: StorageService){
   }
-  
 
   invitationFromWho! :User;
   refuseFromWho! : User;
