@@ -42,6 +42,19 @@ export class PongService {
     console.log('deleteGame len:', this.games.length);
   }
 
+  public getGames(): any[] {
+    let games = [];
+    for (let index = 0; index < this.games.length; index++) {
+      const element = this.games[index];
+      games.push({
+        name: element.name,
+        scoreLeft: element.game.getGameStates().scoreLeft,
+        scoreRight: element.game.getGameStates().scoreRight
+      });
+    }
+    return games;
+  }
+
   public updateMove(move: IInput, name: string): void {
     this.games.find((game) => game.name === name)?.game.updateInput(move);
   }
