@@ -35,6 +35,7 @@ export class PongService {
         }),
       };
       this.games.push(newGame);
+      this.start(name);
     }
     console.log("add game :", name)
     console.log('addGame len:', this.games.length);

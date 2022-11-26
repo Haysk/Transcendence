@@ -984,7 +984,6 @@ catch(err){
   {
     console.log(payload[0]);
     this.pongService.addGame(payload[0]);
-    this.pongService.start(payload[0]);
   }
 
 @SubscribeMessage('test1')
