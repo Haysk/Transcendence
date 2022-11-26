@@ -61,7 +61,7 @@ export class AppComponent implements OnInit{
       if(this.gameAccepted == true)
       {
 
-        this.showPong=true;
+        // this.showPong=true;
         this.invitation=false;
         // console.log("player1 : ");
         // console.log(data.res3);

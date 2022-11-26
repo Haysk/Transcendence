@@ -183,18 +183,18 @@ h2{
 
 .env_just_play{
     width: 120px;
-    
     background-color: rgb(51, 48, 38);
     margin: auto;
     margin-top: 20px;
     display: flex;
     flex-direction: column;
+    cursor: pointer;
 }
 
 .just_play_photo{
     width: 120px;
     height:120px;
-    background-image: url("../../assets/imgs/faceleemen.jpg");
+    background-image: url("../../assets/imgs/match.gif");
     background-size: cover;
     background-repeat: no-repeat;
     background-position: center; 

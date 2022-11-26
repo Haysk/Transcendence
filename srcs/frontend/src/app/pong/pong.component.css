@@ -1,18 +1,25 @@
 .game {
-    position: relative;
-    text-align: center;
     
+    /* position: relative; */
+    text-align: center;
+
     
   }
-  .test{
-    margin-top: 50px;
+  .canvas{
+    position: fixed;
+    top:50%;
+    left: 50%;
+    transform: translate(-50%,-50%);
+
+    width : 80%;
+    height : auto;
    
     
   }
 
   .menu {
    position: absolute;
-   top: 35%;
+   top: 50%;
    right: 0;
    left: 0;
    display: flex;
@@ -148,7 +155,36 @@ button{
 
 
 @media only screen and (max-width: 600px) {
-    .game {
+
+    .canvas{
+        position: fixed;
+        top:25%;
+        left: 50%;
+        transform: translate(-50%,-50%);
+    
+        width : 100%;
+        height : auto;
+       
+        
+      }
+    
+      .menu {
+       position: fixed;
+       top: 25%;
+       right: 0;
+       left: 0;
+       display: flex;
+       flex-direction: column;
+       align-items: center;
+       color: white;
+    }
+
+
+
+
+
+}
+   /*  .game {
         position: relative;
         text-align: center;
         
@@ -156,14 +192,13 @@ button{
       
       .menu {
         position: absolute;
-        /* text-align: center;
-        align-items: center; */
+
         top: 35%;
         left:0;
         right: 0;
         
         color: white;
-        /* background-color: aquamarine; */
+     
       
     }
 
@@ -178,7 +213,7 @@ button{
         color: white;
      }
     .customize{
-        /* background-color: rgba(190, 6, 214, 0.336); */
+      
         display: flex;
         justify-content:space-between;
         width: 400px;
@@ -214,7 +249,6 @@ button{
         z-index:-99;
         background-color: rgba(10, 1, 1, 0.486);
     
-    }
+    } */
 
 
-}

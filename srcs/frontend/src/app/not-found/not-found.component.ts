@@ -1,4 +1,5 @@
 import { Component, OnInit } from '@angular/core';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-not-found-',
@@ -7,9 +8,19 @@ import { Component, OnInit } from '@angular/core';
 })
 export class NotFoundComponent implements OnInit {
 
-  constructor() { }
+  show:boolean =false;
+  constructor(public router:Router) { }
 
   ngOnInit(): void {
   }
 
+  showWFT(){
+    this.show=!this.show;
+    
+  }
+
+
+  home(){
+    this.router.navigate(["home"]);
+  }
 }
