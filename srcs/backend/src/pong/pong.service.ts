@@ -1,12 +1,12 @@
 import { Injectable } from '@nestjs/common';
 import { User } from '@prisma/client';
 import { interval, Subscription } from 'rxjs';
+import { SaveGameService } from 'src/save-game/save-game.service';
 import { defaultGameConfig } from './game/config';
 import { Game } from './game/game';
 import { IInput } from './game/interfaces/input.interface';
 import { SGame } from './game/interfaces/save-game.interface';
 import { PongGateway } from './pong.gateway';
-//import { SaveGameService } from './saveGame.service';
 
 const interval_tick = 8;
 
@@ -24,7 +24,7 @@ export class PongService {
 
   constructor(
     private pongGateway: PongGateway,
-    //private saveGame: SaveGameService,
+    private saveGame: SaveGameService,
   ) {}
 
   public start(name: string): void {
@@ -99,7 +99,7 @@ export class PongService {
         player1_score: game.game.getGameStates().scoreLeft,
         player2_score: game.game.getGameStates().scoreRight,
       };
-      //this.saveGame.createGame(sgame);
+      this.saveGame.createGame(sgame);
     }
   }
 
