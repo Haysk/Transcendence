@@ -32,6 +32,7 @@ export class PongService {
   }
 
   public addGame(name: string): void;
+  public addGame(name: string, playerLeft?: User, playerRight?: User): void;
   public addGame(name: string, playerLeft?: User, playerRight?: User): void {
     if (this.games.find((game) => game.name === name) == undefined) {
       const newGame: ITest = {
@@ -73,9 +74,14 @@ export class PongService {
   }
 
   public reset(name: string): void {
-    this.games
-      .find((game) => game.name === name)
-      ?.game.updateStates(structuredClone(defaultGameConfig.states));
+    const game = this.games.find((game) => game.name === name);
+    if (game != undefined) {
+      this.deleteGame(name);
+      this.addGame(name, game.playerLeft, game.playerRight);
+    }
+    // this.games
+    //   .find((game) => game.name === name)
+    //   ?.game.updateStates(structuredClone(defaultGameConfig.states));
   }
 
   end(name: string): void {
