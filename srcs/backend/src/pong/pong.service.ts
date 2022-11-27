@@ -78,6 +78,8 @@ export class PongService {
     if (game != undefined) {
       this.deleteGame(name);
       this.addGame(name, game.playerLeft, game.playerRight);
+    } else {
+      this.addGame(name);
     }
     // this.games
     //   .find((game) => game.name === name)
