@@ -9,6 +9,8 @@ const interval_tick = 8;
 
 interface ITest {
   name: string;
+  playerLeft: any;
+  playerRight: any;
   game: Game;
   tickSubscription: Subscription;
 }
@@ -20,30 +22,29 @@ export class PongService {
   constructor(private pongGateway: PongGateway) {}
 
   public start(name: string): void {
-    console.log("pongService :")
-    console.log(name)
     this.games.find((game) => game.name === name)?.game.start();
   }
 
-  public addGame(name: string): void {
+  public addGame(name: string): void;
+  public addGame(name: string, playerLeft?: any, playerRight?: any): void {
     if (this.games.find((game) => game.name === name) == undefined) {
       const newGame: ITest = {
         name: name,
         game: new Game(),
+        playerLeft: playerLeft,
+        playerRight: playerRight,
         tickSubscription: interval(interval_tick).subscribe(() => {
           this.tick(name);
         }),
       };
       this.games.push(newGame);
+      //TODO: sleep 1 seconde le temps que la partie soit charger pour tout les clients
       this.start(name);
     }
-    console.log("add game :", name)
-    console.log('addGame len:', this.games.length);
   }
 
   public deleteGame(name: string): void {
     this.end(name);
-    console.log('deleteGame len:', this.games.length);
   }
 
   public getGames(): any[] {
@@ -52,8 +53,10 @@ export class PongService {
       const element = this.games[index];
       games.push({
         name: element.name,
+        playerLeft: element.playerLeft,
+        playerRight: element.playerRight,
         scoreLeft: element.game.getGameStates().scoreLeft,
-        scoreRight: element.game.getGameStates().scoreRight
+        scoreRight: element.game.getGameStates().scoreRight,
       });
     }
     return games;
@@ -85,7 +88,6 @@ export class PongService {
     this.pongGateway.sendGameStates(game?.game.getGameStates(), name);
     if (game?.game.getWinner() != null) {
       //TODO: fin de partie
-      console.log('end GAME');
       this.end(name);
     }
   }
