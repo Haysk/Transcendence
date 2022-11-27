@@ -1,16 +1,18 @@
 import { Injectable } from '@nestjs/common';
+import { User } from '@prisma/client';
 import { interval, Subscription } from 'rxjs';
 import { defaultGameConfig } from './game/config';
 import { Game } from './game/game';
 import { IInput } from './game/interfaces/input.interface';
+import { SGame } from './game/interfaces/save-game.interface';
 import { PongGateway } from './pong.gateway';
 
 const interval_tick = 8;
 
 interface ITest {
   name: string;
-  playerLeft: any;
-  playerRight: any;
+  playerLeft: User;
+  playerRight: User;
   game: Game;
   tickSubscription: Subscription;
 }
@@ -26,7 +28,7 @@ export class PongService {
   }
 
   public addGame(name: string): void;
-  public addGame(name: string, playerLeft?: any, playerRight?: any): void {
+  public addGame(name: string, playerLeft?: User, playerRight?: User): void {
     if (this.games.find((game) => game.name === name) == undefined) {
       const newGame: ITest = {
         name: name,
@@ -47,16 +49,16 @@ export class PongService {
     this.end(name);
   }
 
-  public getGames(): any[] {
-    let games = [];
+  public getGames(): SGame[] {
+    const games: SGame[] = [];
     for (let index = 0; index < this.games.length; index++) {
       const element = this.games[index];
       games.push({
-        name: element.name,
-        playerLeft: element.playerLeft,
-        playerRight: element.playerRight,
-        scoreLeft: element.game.getGameStates().scoreLeft,
-        scoreRight: element.game.getGameStates().scoreRight,
+        roomName: element.name,
+        player1: element.playerLeft,
+        player2: element.playerRight,
+        player1_score: element.game.getGameStates().scoreLeft,
+        player2_score: element.game.getGameStates().scoreRight,
       });
     }
     return games;
