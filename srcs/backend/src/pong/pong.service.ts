@@ -6,6 +6,7 @@ import { Game } from './game/game';
 import { IInput } from './game/interfaces/input.interface';
 import { SGame } from './game/interfaces/save-game.interface';
 import { PongGateway } from './pong.gateway';
+//import { SaveGameService } from './saveGame.service';
 
 const interval_tick = 8;
 
@@ -22,7 +23,8 @@ export class PongService {
   games: ITest[] = [];
 
   constructor(
-    private pongGateway: PongGateway, //private saveGame: SaveGameService,
+    private pongGateway: PongGateway,
+    //private saveGame: SaveGameService,
   ) {}
 
   public start(name: string): void {
