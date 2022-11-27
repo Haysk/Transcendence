@@ -1,6 +1,6 @@
 .all_ready{
     
-        background-color: rgba(3, 156, 194, 0.664);
+        background-color: rgba(11, 59, 71, 0.664);
         width: 100%;
         height: 100%;
         position: fixed;
@@ -17,7 +17,24 @@
 .goplay{
     width: 300px;
     height: 300px;
-    background-image: url(../../../assets/imgs/startGame.png);
+    background-image: url(../../../assets/imgs/game_ready.png);
+    background-size: cover;
+    background-repeat: no-repeat;
+    background-position: center; 
+    /* background-color: rgb(177, 218, 33); */
+    border-radius: 50%;
+    color: rgb(0, 0, 0);
+    font-size: 30px;
+    cursor: pointer;
+    border :0px;
+    /* border: 1px solid rgb(7, 161, 189); */
+}
+
+
+.goplay:focus{
+    width: 300px;
+    height: 300px;
+    background-image: url(../../../assets/imgs/gameStart.png);
     background-size: cover;
     background-repeat: no-repeat;
     background-position: center; 

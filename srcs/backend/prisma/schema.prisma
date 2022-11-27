@@ -58,6 +58,15 @@ model 				User {
 	muted			Channel[] @relation("muted_in_channel")
 	banned			Channel[] @relation("banned_in_channel")
 	admin_of		Channel[] @relation("admin_of")
+	games			Game[] @relation("games")
+}
+
+model Game {
+	id 				Int @default(autoincrement()) @id
+	roomName		String
+	players			User[] @relation("games")
+	scorePlayer1	Int @default(0)
+	scorePlayer2	Int @default(0)
 }
 
 model           	Tech {

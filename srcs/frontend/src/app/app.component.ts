@@ -61,7 +61,7 @@ export class AppComponent implements OnInit{
       if(this.gameAccepted == true)
       {
 
-        this.showPong=true;
+        // this.showPong=true;
         this.invitation=false;
         // console.log("player1 : ");
         // console.log(data.res3);
@@ -77,7 +77,6 @@ export class AppComponent implements OnInit{
 
     this.socketService.doIHaveToDisplay().subscribe({
       next: (data: {res: boolean, res2:User, res3:User, res4: IGame;}) =>{
-      console.log("toto")
       this.invitation = data.res;
       this.invitationFromWho = data.res2;
       this.player1 = data.res2;

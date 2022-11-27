@@ -76,9 +76,9 @@ import { Router } from '@angular/router';
 		let reader = new FileReader();
 		reader.readAsDataURL(event.target.files[0]);
 		reader.onload = (event: any) => {
-			this.userToShow.url = event.target.result;
-			console.log("avatar url:" + this.avatar);
-			console.log("new avatar url" + this.userToShow.url);
+			this.userToShow.avatar = event.target.result;
+			// console.log("avatar url:" + this.avatar);
+			// console.log("new avatar url" + this.userToShow.url);
 			// console.log(event);
 		};
 		} else {
@@ -89,10 +89,10 @@ import { Router } from '@angular/router';
 	onUpload(){
 		
 		if (this.selectedFile.size < 75000){
-		this.apiService.updateAvatar(Number(this.id), String(this.userToShow.url)).subscribe();
+		this.apiService.updateAvatar(Number(this.id), String(this.userToShow.avatar)).subscribe();
 		console.log("this.url")
-		this.storage.setAvatar(String(this.userToShow.url));
-		window.alert('***Update down***');
+		this.storage.setAvatar(String(this.userToShow.avatar));
+		window.alert('***Update done***');
 		}
 		else{
 			window.alert('***image too large only < 75kb ***');

@@ -431,7 +431,7 @@ amIBanned()
 
   createGame(roomName: string, gameConfig: IGame, player1: User, player2: User)
   {
-    this.socket.emit('createGamePlz', roomName, gameConfig);
+    this.socket.emit('createGamePlz', roomName, gameConfig, player1, player2);
   }
 
   //PONG GAME

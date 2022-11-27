@@ -11,6 +11,7 @@ import { StorageService } from '../services/storage.service';
 export class GameRoomComponent implements OnInit {
   visible:boolean =false;
   list_user!: User[];
+  show:boolean=false;
 
   
   user: User={
@@ -125,5 +126,12 @@ export class GameRoomComponent implements OnInit {
     else
       return false
   }
+
+  justPlay(){
+
+    this.show=true;
+  }
+
+
 
 }
