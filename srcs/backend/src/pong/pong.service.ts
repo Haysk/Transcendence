@@ -21,7 +21,9 @@ interface ITest {
 export class PongService {
   games: ITest[] = [];
 
-  constructor(private pongGateway: PongGateway) {}
+  constructor(
+    private pongGateway: PongGateway, //private saveGame: SaveGameService,
+  ) {}
 
   public start(name: string): void {
     this.games.find((game) => game.name === name)?.game.start();
@@ -75,6 +77,7 @@ export class PongService {
   }
 
   end(name: string): void {
+    this.save(name);
     this.games
       .find((game) => game.name === name)
       ?.tickSubscription.unsubscribe();
@@ -82,6 +85,20 @@ export class PongService {
       this.games.findIndex((game) => game.name === name),
       1,
     );
+  }
+
+  save(name: string): void {
+    const game = this.games.find((game) => game.name === name);
+    if (game != undefined) {
+      const sgame: SGame = {
+        roomName: game.name,
+        player1: game.playerLeft,
+        player2: game.playerRight,
+        player1_score: game.game.getGameStates().scoreLeft,
+        player2_score: game.game.getGameStates().scoreRight,
+      };
+      //this.saveGame.createGame(sgame);
+    }
   }
 
   tick(name: string): void {
