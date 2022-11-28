@@ -378,7 +378,6 @@ amIBanned()
     })
   }
 
-
   showrefuseInvitation(){
     return new Observable<any>((obs) => {
       this.socket.on('refuseInvitation', (res:boolean, res2: User) => {
@@ -468,13 +467,6 @@ amIBanned()
 
   sendReset(name: string): void {
     this.socket.emit('resetToServer', name);
-  }
-
-  sendTest1(name: string): void {
-    this.socket.emit('test1', name);
-  }
-  sendTest2(name: string): void {
-    this.socket.emit('test2', name);
   }
 
   getStart() {

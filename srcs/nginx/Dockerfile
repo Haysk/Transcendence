@@ -12,3 +12,5 @@ RUN apk add openssl \
 		-subj "/C=FR/ST=France/L=Paris/O=42/CN=anclarma"
 
 COPY nginx.conf /etc/nginx/conf.d/default.conf
+ARG domain_name=localhost
+RUN sed -i 's/DOMAIN_NAME/'${domain_name}'/' /etc/nginx/conf.d/default.conf

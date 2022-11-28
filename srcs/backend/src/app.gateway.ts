@@ -983,19 +983,9 @@ catch(err){
   createGame(client: Socket, payload: any)
   {
     console.log(payload[0]);
-    this.pongService.addGame(payload[0]);
+    this.pongService.addGame(payload[0], payload[2], payload[3]);
     //TODO: addGamers
   }
-
-@SubscribeMessage('test1')
-handletTest1(client: Socket, payload: any): void {
-  this.pongService.addGame(payload)
-}
-
-@SubscribeMessage('test2')
-handletTest2(client: Socket, payload: any): void {
-  this.pongService.deleteGame(payload)
-}
 
   @SubscribeMessage('moveToServer')
   handleMove(client: Socket, payload: any): void {

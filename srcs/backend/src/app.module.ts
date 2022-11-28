@@ -12,6 +12,7 @@ import { ScheduleModule } from '@nestjs/schedule';
 import { BanAndMuteService } from './banAndMute.service';
 import { TfaService } from './tfa.service';
 import { ConfigModule } from '@nestjs/config';import { PongModule } from './pong/pong.module';
+import { SaveGameModule } from './save-game/save-game.module';
 
 @Module({
   imports: 
@@ -19,7 +20,8 @@ import { ConfigModule } from '@nestjs/config';import { PongModule } from './pong
     HttpModule, 
     PongModule,
     ScheduleModule.forRoot(),
-    ConfigModule.forRoot({envFilePath: "../.env", isGlobal: true})
+    ConfigModule.forRoot({envFilePath: "../.env", isGlobal: true}),
+    SaveGameModule
 	],
   controllers: 
   [

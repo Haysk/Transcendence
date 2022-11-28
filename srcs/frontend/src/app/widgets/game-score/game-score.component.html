@@ -3,10 +3,10 @@
     <div class="env_photo">
         <div class="texte">
             The Winner is <br>
-            <b>ade-temm </b><br>
-            score "11:7"
+            <b>{{Winner}} </b><br>
+            score "{{scorePlayer1}}:{{scorePlayer2}}"
             <div class="btn">
-                <app-button-v4 [text]="'I got it'"></app-button-v4>
+                <app-button-v4 [text]="'I got it'" (click)="closeGameScore()"></app-button-v4>
             </div>
         </div>
     <div class="photo">  </div>

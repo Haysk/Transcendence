@@ -1,10 +1,9 @@
-<app-game-score *ngIf="showscore==true"></app-game-score>
+<app-game-score *ngIf="showscore==true" (closeScoreEvent)="receiveCloseScoreEvent($event)"></app-game-score>
 
 <div class="bloc" >
 
   <div class="game">
-    <canvas class="canvas" id="stage" width="{{ gameConfig.board.board.width }}"
-      height="{{ gameConfig.board.board.height }}" [ngStyle]="{
+    <canvas #canvas class="canvas" id="stage" [ngStyle]="{
       'max-width': '100vw',
       'max-height': '100vh',
       'background-color': gameConfig.board.board.color,
@@ -18,10 +17,6 @@
         <div env_button>
           <button (click)="start()">Start</button>
           <button (click)="reset()">New Game</button>
-          <!-- <button (click)="resetAll()">Reset all params</button> -->
-          <button (click)="resetAll()">Reset all params</button>
-          <button (click)="test1()">Bouton de test 1</button>
-          <button (click)="test2()">Bouton de test 2</button>
         </div>
         <!--fin div env_button-->
         <!-- <app-pong-player [player]="gameConfig.left"></app-pong-player>
