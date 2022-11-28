@@ -3,6 +3,7 @@ import { Observable } from 'rxjs';
 import { io } from 'socket.io-client';
 import { ApiService } from '../services/api.service';
 import { User } from '../models/user';
+import { SGame } from '../models/savedGame';
 import { Channel } from '../models/channel'
 import { environment } from 'src/environments/environment';
 import { IGameStates } from '../pong/game/interfaces/game-states.interface';
@@ -457,6 +458,16 @@ amIBanned()
         observer.next(message);
       });
     });
+  }
+
+  isGameFinished()
+  {
+    return new Observable<SGame> ((res) => {
+      this.socket.on('gameIsFinished', (obs) =>
+      {
+        res.next(obs);
+      })
+    })
   }
 
 //INIT

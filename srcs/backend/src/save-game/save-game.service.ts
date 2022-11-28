@@ -8,6 +8,11 @@ export class SaveGameService {
 
   async createGame(game: SGame) {
     if (game.player1 != undefined && game.player2 != undefined) {
+      if (game.player1_score > game.player2_score)
+        game.winner = game.player1;
+      else {
+        game.winner = game.player2;
+      }
       let result = await this.Prisma.game.create({
         data: {
           roomName: game.roomName,
@@ -19,6 +24,7 @@ export class SaveGameService {
         },
       });
       if (result !== null && result !== undefined) {
+
         console.log('data game created');
       }
     }
