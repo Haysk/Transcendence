@@ -1,4 +1,4 @@
-import { Component, Input, OnDestroy, OnInit } from "@angular/core";
+import { Component, ElementRef, Input, OnDestroy, OnInit, ViewChild } from "@angular/core";
 import { filter, fromEvent, interval, Subscription } from "rxjs";
 import { SocketService } from "../services/socket.service";
 import { Ai } from "./game/ai";
@@ -62,7 +62,9 @@ export class PongComponent implements OnInit, OnDestroy {
   upSubscription!: Subscription;
   downSubscription!: Subscription;
 
-  testGameStatesSubscription!: Subscription;
+  canvasMouseUpSubscription!: Subscription;
+  canvasMouseDownSubscription!: Subscription;
+  canvasMouseLeaveSubscription!: Subscription;
 
   constructor(
     private socketService: SocketService,
@@ -118,6 +120,51 @@ export class PongComponent implements OnInit, OnDestroy {
       });
     this.canvas = <HTMLCanvasElement>document.getElementById("stage");
     this.ctx = <CanvasRenderingContext2D>this.canvas.getContext("2d");
+
+    // set the width and height
+    this.canvas.width = this.gameConfig.board.board.width;
+    this.canvas.height = this.gameConfig.board.board.height;
+
+    // we'll implement this method to start capturing mouse events
+    this.canvasMouseUpSubscription = fromEvent<MouseEvent>(this.canvas, "mouseup")
+      .subscribe(() => {
+        this.setMouseMove();
+      });
+    this.canvasMouseDownSubscription = fromEvent<MouseEvent>(this.canvas, "mousedown")
+      .subscribe((event) => {
+        this.unsetMouseMove(event);
+      });
+    this.canvasMouseLeaveSubscription = fromEvent<MouseEvent>(this.canvas, "mouseleave")
+      .subscribe(() => {
+        this.setMouseMove();
+      });
+  }
+
+  unsetMouseMove(event: MouseEvent): void {
+    if (event.offsetX < this.canvas.clientWidth / 2 && this.gameConfig.left.mode.type === 'local') {
+      if (event.offsetY < this.canvas.clientHeight / 2) {
+        this.moveLeft.up = true;
+      } else {
+        this.moveLeft.down = true;
+      }
+    } else if (this.gameConfig.right.mode.type === 'local') {
+      if (event.offsetY < this.canvas.clientHeight / 2) {
+        this.moveRight.up = true;
+      } else {
+        this.moveRight.down = true;
+      }
+    }
+  }
+
+  setMouseMove(): void {
+    if (this.gameConfig.left.mode.type === 'local') {
+        this.moveLeft.up = false;
+        this.moveLeft.down = false;
+    }
+    if (this.gameConfig.right.mode.type === 'local') {
+        this.moveRight.up = false;
+        this.moveRight.down = false;
+    }
   }
 
   ngOnDestroy(): void {
@@ -127,6 +174,9 @@ export class PongComponent implements OnInit, OnDestroy {
     this.tickSubscription.unsubscribe();
     this.upSubscription.unsubscribe();
     this.downSubscription.unsubscribe();
+    this.canvasMouseUpSubscription.unsubscribe();
+    this.canvasMouseDownSubscription.unsubscribe();
+    this.canvasMouseLeaveSubscription.unsubscribe();
   }
 
   sendMove(move: IInput) {
