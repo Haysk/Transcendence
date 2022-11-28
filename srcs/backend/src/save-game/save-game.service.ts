@@ -13,19 +13,24 @@ export class SaveGameService {
       else {
         game.winner = game.player2;
       }
-      let result = await this.Prisma.game.create({
-        data: {
-          roomName: game.roomName,
-          scorePlayer1: game.player1_score,
-          scorePlayer2: game.player2_score,
-          players: {
-            connect: [{ id: game.player1.id }, { id: game.player2.id }],
+      try{
+        let result = await this.Prisma.game.create({
+          data: {
+            roomName: game.roomName,
+            scorePlayer1: game.player1_score,
+            scorePlayer2: game.player2_score,
+            players: {
+              connect: [{ id: game.player1.id }, { id: game.player2.id }],
+            },
           },
-        },
       });
       if (result !== null && result !== undefined) {
-
         console.log('data game created');
+      }
+      }
+      catch(err){
+        console.log("erreur dans saveGame :")
+        console.log(err)
       }
     }
   }

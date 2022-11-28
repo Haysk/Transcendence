@@ -463,7 +463,7 @@ amIBanned()
   isGameFinished()
   {
     return new Observable<SGame> ((res) => {
-      this.socket.on('gameIsFinished', (obs) =>
+      this.socket.on('gameIsFinished', (obs: any) =>
       {
         res.next(obs);
       })

@@ -109,7 +109,8 @@ export class PongService {
         player2_score: game.game.getGameStates().scoreRight,
         winner: null,
       };
-      this.saveGame.createGame(sgame);
+      this.pongGateway.gameIsFinished(sgame);
+      // this.saveGame.createGame(sgame);
     }
   }
 
