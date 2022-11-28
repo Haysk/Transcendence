@@ -64,6 +64,7 @@ export class PongService {
         player2: element.playerRight,
         player1_score: element.game.getGameStates().scoreLeft,
         player2_score: element.game.getGameStates().scoreRight,
+        winner: null
       });
     }
     return games;
@@ -106,8 +107,10 @@ export class PongService {
         player2: game.playerRight,
         player1_score: game.game.getGameStates().scoreLeft,
         player2_score: game.game.getGameStates().scoreRight,
+        winner: null,
       };
-      this.saveGame.createGame(sgame);
+      this.pongGateway.gameIsFinished(sgame);
+      // this.saveGame.createGame(sgame);
     }
   }
 

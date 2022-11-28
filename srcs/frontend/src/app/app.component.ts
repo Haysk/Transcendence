@@ -5,6 +5,7 @@ import { User } from './models/user';
 import { StorageService } from './services/storage.service';
 import { IGame } from './pong/game/interfaces/game.interface';
 import { defaultGameConfig } from './pong/game/config';
+import { SGame } from '../app/models/savedGame';
 
 @Component({
   selector: 'app-root',
@@ -34,6 +35,8 @@ export class AppComponent implements OnInit{
   roomName!:string;
   redirectPong:boolean = false;
 
+  GameData!: SGame;
+  showGameScore:boolean = false;
 
   to: User = {
 		id: this.storageService.getId(),
@@ -113,6 +116,11 @@ export class AppComponent implements OnInit{
         // console.log(this.gameConfig);
         
       }
+    })
+    this.socketService.isGameFinished().subscribe((res) => {
+      this.GameData = res;
+      this.showPong = false;
+      this.showGameScore = true;
     })
   }
 
