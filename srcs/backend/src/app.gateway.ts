@@ -10,7 +10,6 @@ import {
 import { PrismaService } from './prisma.service';
 import { Server, Socket } from 'socket.io';
 import { UserService } from './user.service';
-import { BanAndMuteService } from './banAndMute.service'
 import { log } from 'console';
 
 @WebSocketGateway({
@@ -22,7 +21,11 @@ import { log } from 'console';
 export class AppGateway
   implements OnGatewayInit, OnGatewayConnection, OnGatewayDisconnect
 {
-  constructor(private BaM: BanAndMuteService, private Prisma : PrismaService, private readonly userService: UserService,){}
+  constructor(private Prisma : PrismaService, private readonly userService: UserService,){}
+
+  sleep(ms:number) {
+		return new Promise(resolve => setTimeout(resolve, ms));
+	}
 
   createRoomName(login1: string, login2: string): string
   {
@@ -50,6 +53,18 @@ export class AppGateway
   server!: Server;
   private logger: Logger = new Logger('AppGateway');
 
+  /* LIST ID IN ROOM */
+  @SubscribeMessage("userInTotoRoom")
+  async listIdInRoom()
+  {
+    let i = 0;
+    await (await this.server.in("toto_channel").allSockets()).forEach((id) => {
+      console.log("socket " + i + " : ")
+      console.log(id);
+      i++;
+    })
+  
+  }
   /* SEARCH USER */
 
   @SubscribeMessage('SearchForThisUser')
@@ -78,27 +93,253 @@ export class AppGateway
   @SubscribeMessage('muteUserByTime')
   async muteUserByTime(client: any, payload: any)
   {
-    let data = await this.BaM.muteUserDuringDelay(payload[0], payload[1], payload[2]);
-    if(data != null && data != undefined)
-      this.server.emit('channelIsUpdated', data)
+    try{
+			let data = await this.Prisma.channel.update({
+				where: {
+					id: Number(payload[1])
+				},
+				data: {
+					muted: {
+						connect: [{id: Number(payload[0])}],
+					}
+				},
+				include: {
+					joined: true,
+					muted: true,
+					banned: true,
+					admins: true
+				}
+			  })
+			  if (data != null && data != undefined)
+        {
+          this.server.emit('channelIsUpdated', data);
+          data = null;
+          let time_to_sleep = Number(payload[2]) * 1000;
+          await this.sleep(time_to_sleep);
+          data = await this.Prisma.channel.update({
+            where: {
+              id: Number(payload[1])
+            },
+            data: {
+              muted: {
+                disconnect: [{id: Number(payload[0])}],
+              }
+            },
+            include: {
+              joined: true,
+              muted: true,
+              banned: true,
+              admins: true
+            }
+          })
+          if (data != null && data != undefined)
+            {
+              this.server.emit('channelIsUpdated', data);
+              return data
+            }
+      }
+    }
+    catch(err)
+		{
+		  console.log("error dans muteUserFromChannel :");
+			console.log(err);
+		}
   }
 
   @SubscribeMessage('muteUser')
   async muteUser(client: any, payload: any)
   {
-    let data = await this.BaM.muteUserFromChannel(payload[0], payload[1]);
-    if(data != null && data != undefined)
-      this.server.emit('channelIsUpdated', data)
+    try{
+			let data = await this.Prisma.channel.update({
+				where: {
+					id: Number(payload[1])
+				},
+				data: {
+					muted: {
+						connect: [{id: Number(payload[0])}],
+					}
+				},
+				include: {
+					joined: true,
+					muted: true,
+					banned: true,
+					admins: true
+				}
+			})
+			if (data != null && data != undefined)
+      { 
+        this.server.emit('channelIsUpdated', data);
+        return data
+      }
+      }
+		catch(err)
+		{
+			console.log("error dans muteUserFromChannel :");
+			console.log(err);
+		}
   }
   
   @SubscribeMessage('unmuteUser')
   async unmuteUser(client: any, payload: any)
   {
-    let data = await this.BaM.unmuteUserFromChannel(payload[0], payload[1]);
-    if(data != null && data != undefined)
-      this.server.emit('channelIsUpdated', data)
+  try{
+    let data = await this.Prisma.channel.update({
+      where: {
+        id: Number(payload[1])
+      },
+      data: {
+        muted: {
+          disconnect: [{id: Number(payload[0])}],
+        }
+      },
+      include: {
+        joined: true,
+        muted: true,
+        banned: true,
+        admins: true
+      }
+    })
+    if (data != null && data != undefined)
+      {
+        this.server.emit('channelIsUpdated', data);
+				return data
+      }
+  }
+  catch(err)
+  {
+    console.log("error dans unmuteUserFromChannel :");
+    console.log(err);
+  }
   }
 
+/* BAN */
+
+@SubscribeMessage('banUserByTime')
+async banUserByTime(client: any, payload: any)
+{
+  // let data = await this.BaM.banUserDuringDelay(payload[0], payload[1], payload[2]);
+  // if (data != null && data != undefined)
+  //   this.server.emit('youAreBanned', payload[0], data);
+  try{
+    let data = await this.Prisma.channel.update({
+      where: {
+        id: Number(payload[1])
+      },
+      data: {
+        banned: {
+          connect: [{id: Number(payload[0])}],
+        },
+        joined: {
+          disconnect: [{id: Number(payload[0])}],
+        }
+      },
+      include: {
+        joined: true,
+        muted: true,
+        banned: true,
+        admins: true
+      }
+    })
+    if (data != null && data != undefined)
+    {
+      this.server.emit('youAreBanned', payload[0], data);
+      data = null;
+      let time_to_sleep = Number(payload[2]) * 1000;
+      await this.sleep(time_to_sleep);
+      data = await this.Prisma.channel.update({
+        where: {
+          id: Number(payload[1])
+        },
+        data: {
+          banned: {
+            disconnect: [{id: Number(payload[0])}],
+          }
+        },
+        include: {
+          joined: true,
+          muted: true,
+          banned: true,
+          admins: true
+        }
+      })
+      if (data != null && data != undefined)
+      {
+        return data
+      }
+    }
+  }
+  catch(err){
+    console.log("error dans banUserFromChannel :");
+    console.log(err);
+  }
+}
+
+@SubscribeMessage('banUser')
+async banUser(client: any, payload: any)
+{
+  try{
+    let data = await this.Prisma.channel.update({
+      where: {
+        id: Number(payload[1])
+      },
+      data: {
+        banned: {
+          connect: [{id: Number(payload[0])}],
+        },
+        joined: {
+          disconnect: [{id: Number(payload[0])}],
+        }
+      },
+      include: {
+        joined: true,
+        muted: true,
+        banned: true,
+        admins: true
+      }
+    })
+    if (data != null && data != undefined)
+    {
+      this.server.emit('youAreBanned', payload[0], data);
+      return data
+    }
+  }
+  catch(err){
+    console.log("error dans banUserFromChannel :");
+    console.log(err);
+  }
+}
+
+@SubscribeMessage('unbanUser')
+async unbanUser(client: any, payload: any)
+{
+  // this.BaM.unbanUserFromChannel(payload[0], payload[1]);
+  try{
+    let data = await this.Prisma.channel.update({
+      where: {
+        id: Number(payload[1])
+      },
+      data: {
+        banned: {
+          disconnect: [{id: Number(payload[0])}],
+        }
+      },
+      include: {
+        joined: true,
+        muted: true,
+        banned: true,
+        admins: true
+      }
+    })
+    if (data != null && data != undefined)
+    {
+      return data
+    }
+  }
+  catch(err){
+    console.log("error dans unbanUserFromChannel :");
+    console.log(err);
+  }
+}
 
   /* Be Admin Del Admin*/
   @SubscribeMessage('beAdminSalon')
@@ -137,7 +378,6 @@ export class AppGateway
   @SubscribeMessage('delAdminSalon')
   async delAdminSalon(client: any, payload: any)
   {
-    console.log(3)
     try {
       let data = await this.Prisma.channel.update({
       where: {
@@ -165,32 +405,6 @@ export class AppGateway
     console.log("error dans isOnline");
     console.log(err)
   }
-  }
-
-
-
-  /* BAN */
-
-  @SubscribeMessage('banUserByTime')
-  async banUserByTime(client: any, payload: any)
-  {
-    let data = await this.BaM.banUserDuringDelay(payload[0], payload[1], payload[2]);
-    if (data != null && data != undefined)
-      this.server.emit('youAreBanned', payload[0], data);
-  }
-
-  @SubscribeMessage('banUser')
-  async banUser(client: any, payload: any)
-  {
-    let data = await this.BaM.banUserFromChannel(payload[0], payload[1]);
-    if (data != null && data != undefined)
-      this.server.emit('youAreBanned', payload[0], data);
-  }
-  
-  @SubscribeMessage('unbanUser')
-  unbanUser(client: any, payload: any)
-  {
-    this.BaM.unbanUserFromChannel(payload[0], payload[1]);
   }
 
   /* CONNECTION */
@@ -260,8 +474,6 @@ async handleDisconnect(client: Socket): Promise<void> {
     })
     if (data != null && data != undefined)
     {
-      //console.log("DECONNEXION =>");
-      console.log(data)
       this.isOffline(client, data.login);
       this.server.emit('userListUpdated');
     }
@@ -301,6 +513,32 @@ catch(err){
 }
 
   /* USER LIST ACTUALISATION */
+
+  @SubscribeMessage('updateUser')
+  async updateUser(client: any, payload: any)
+  {
+    try{
+      let data = await this.Prisma.user.findFirst({
+        where : {
+          id: Number(payload.id)
+        },
+        include : {
+          banned: true,
+          friends: true,
+          blocked: true,
+          muted: true,
+          blockedby: true,
+          friendsof: true
+        }
+      })
+      if (data != null && data != undefined)
+        this.server.to(client.id).emit('userUpdated', data);
+    }
+    catch(err){
+      console.log("error in updateUser : ")
+      console.log(err);
+    }
+  }
 
   @SubscribeMessage('userListPlz')
   async sendUserList(client: any, payload: any)
@@ -387,6 +625,9 @@ catch(err){
             connect: [{id: Number(payload[1])}],
           }
         },
+        include : {
+          joined: true,
+        }
 		  })
       const data = await this.Prisma.channel.findMany({
         include: {
@@ -480,7 +721,7 @@ catch(err){
           joined: true,
           muted: true,
           banned: true,
-          admins: true
+          admins: true,
         },
       })
       if (data != null && data != undefined)
@@ -498,6 +739,49 @@ catch(err){
   }
 
   /* JOIN/LEAVE CHANNEL */
+
+  @SubscribeMessage('verifyPassword')
+  async verifyPassword(client: Socket, payload:any)
+  {
+    let data = await this.Prisma.channel.findFirst({
+      where: {
+        name: payload[1]
+      }
+    })
+    if (data != null && data != undefined)
+    {
+      if(data.password == payload[0])
+        this.server.to(client.id).emit('goodPassword', true);
+      else
+        this.server.to(client.id).emit('wrongPassword', false);
+    }
+  }
+
+  @SubscribeMessage('resetChannelPassword')
+  async resetChannelPassword(client: Socket, payload: any)
+  {
+    try{
+    let data = await this.Prisma.channel.update({
+      where:{
+        name: String(payload[0].name)
+      },
+      data:{
+        password: payload[1]
+      },
+      include: {
+        joined: true,
+        muted: true,
+        banned: true,
+        admins: true
+      },
+    })
+    }
+    catch(error){
+    console.log(error);
+    }
+  }
+
+
 
   @SubscribeMessage('joinChannel')
   async joinChannel(client: Socket, payload: any)
@@ -621,6 +905,20 @@ catch(err){
       this.server.to(data.socket).emit('DisplayInvitation', invitation, data2); //AJOUTER ICI LES INFOS DE LA PARTIE
   }
 
+  @SubscribeMessage('refuseInvitation')
+  async refuseInvitation(client:Socket, payload:any)
+  {
+    let refuse:boolean =true;
+    let data = await this.Prisma.user.findFirst({
+      where: {login: payload[0].login},
+    })
+    let data2 = await this.Prisma.user.findFirst({
+      where: {login: payload[1]},
+    })
+    if (data != null && data != undefined)
+      this.server.to(data.socket).emit('refuseInvitation', refuse, data2);
+  }
+
 /* PONG GAME */
 
   @SubscribeMessage('moveToServer')
@@ -738,7 +1036,6 @@ catch(err){
       })
       if (data != null && data != undefined)
       {
-        console.log(data);
         this.server.to(client.id).emit('listFriends', data.friends);
       }
     }

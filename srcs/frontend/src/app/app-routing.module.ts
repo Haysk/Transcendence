@@ -5,6 +5,7 @@ import { PongComponent } from './pong/pong.component';
 import { GameRoomComponent } from './game-room/game-room.component';
 import { ShowRoomComponent } from './show-room/show-room.component';
 import { VipRoomComponent } from './vip-room/vip-room.component';
+import { Vip2RoomComponent } from './vip2-room/vip2-room.component';
 import { RestRoomComponent } from './rest-room/rest-room.component';
 import { ChatComponent } from './chat/chat.component';
 import { SalonComponent } from './salon/salon.component';
@@ -25,6 +26,9 @@ const routes: Routes = [
 		canActivate: [AuthGuard]
 	},
 	{ path: 'vip-room', component: VipRoomComponent,
+		canActivate: [AuthGuard]
+	},
+	{ path: 'vip2-room', component: Vip2RoomComponent,
 		canActivate: [AuthGuard]
 	},
 	{ path: 'rest-room', component: RestRoomComponent,

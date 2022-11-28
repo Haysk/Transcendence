@@ -6,12 +6,15 @@ import { User } from '../models/user';
 import { Message } from '../models/message';
 
 
+
 @Component({
   selector: 'app-salon',
   templateUrl: './salon.component.html',
   styleUrls: ['./salon.component.css']
 })
 export class SalonComponent implements OnInit {
+
+  
 
   // guests:string[] = [];
   conversation: string[] = [];
@@ -49,13 +52,10 @@ export class SalonComponent implements OnInit {
         if (this.current_channel != null && this.current_channel.admins !== undefined)
         {
           this.usersAdmin=this.current_channel.admins;
-         //this.usersInGuest.pop()
         }  
         if (this.current_channel != null && this.current_channel.creator_id !== undefined)
         {
           this.CreatorId=this.current_channel.creator_id;
-          
-         //this.usersInGuest.pop()
         }
         
 
@@ -67,15 +67,19 @@ export class SalonComponent implements OnInit {
     (await this.socketService.getUpdateChannel()).subscribe((res) => {
       this.current_channel = res;
     })
-    //console.log("findChannelByName finished");
+
     this.socketService.joinChannel(this.channel_name, this.current_user.id);
-   
+
     this.socketService.updateUserList().subscribe({
       next: (result) => {
+        console.log("triggered")
+        console.log(result)
         this.usersInGuest = result;
       }
     });
 
+    this.socketService.socketInTotoRoom();
+    
     this.socketService.updateAdminList().subscribe({
       next: (result) => {
         this.usersAdmin = result;
@@ -85,7 +89,7 @@ export class SalonComponent implements OnInit {
     this.apiService.getChannelMessages(this.channel_name).subscribe({
       next:(result) => {
         this.historiqueConv = result;
-        // console.log("ici chat history : " + result[0].content)
+        
         },
         error: (err) =>{},
         complete:() => {}
@@ -104,18 +108,21 @@ export class SalonComponent implements OnInit {
       next: (data: {res : Number, res2 : Channel;}) => {
         if (Number(data.res) == Number(localStorage.getItem("id")))
         {
-          //this.socketService.updateUserInSalonList(this.channel_name);
-          this.quitSalon()
+          this.socketService.updateUser(this.current_user);
+           this.quitSalon();
           window.alert("You just got banned from this channel.")
         }
         else{
           this.usersInGuest = data.res2.joined;
         }
-        //this.socketService.updateUserInSalonList(this.channel_name);
       }
     })
   }
   
+  ngOnDestroy(){
+	this.socketService.unsubsribeChannelEvent();
+  }
+
   isCreator(current:User){
     if (this.current_channel.creator_id==current.id)
       return 1;
@@ -155,7 +162,8 @@ export class SalonComponent implements OnInit {
     this.content.fromUserName = this.current_user.nickname;
   }
 
-  sendMessage(){
+  sendMessage()
+  {
     if(this.isMuted(this.current_user) != 1)
     {
       console.log(this.message);
@@ -181,4 +189,5 @@ export class SalonComponent implements OnInit {
     this.QuitSalonEvent.emit(this.quit_salon);
     
   }
+  
 }

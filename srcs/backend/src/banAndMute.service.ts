@@ -19,7 +19,6 @@ export class BanAndMuteService {
 
 	async test(){
 		await this.sleep(this._delay * 1000);
-		console.log("test termine");
 	}
 
 	/* 
@@ -28,9 +27,15 @@ export class BanAndMuteService {
 
 	async muteUserDuringDelay(userToMute: number, channelToMute: number, time: number)
 	{
-		this.muteUserFromChannel(userToMute, channelToMute);
-		await this.sleep(time * 1000);
-		this.unmuteUserFromChannel(userToMute, channelToMute)
+		let data = await this.muteUserFromChannel(userToMute, channelToMute);
+		if (data != null && data != undefined)
+		{
+			await this.sleep(time * 1000);
+			data = null;
+			data = await this.unmuteUserFromChannel(userToMute, channelToMute)
+			if (data != null && data != undefined)
+				return data
+		}
 	}
 
 

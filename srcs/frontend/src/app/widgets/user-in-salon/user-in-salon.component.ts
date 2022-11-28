@@ -14,7 +14,9 @@ export class UserInSalonComponent implements OnInit {
 
   @Input() guest!: User;
   @Input() current_channel !: Channel;
- 
+  @Input() usersAdmin:User[] =[];
+  @Input() AdminOrNot:boolean=false;
+
   ifAdmin:boolean=false;
   ifMuet:boolean=false;
   ifBanne:boolean=false;
@@ -25,19 +27,16 @@ export class UserInSalonComponent implements OnInit {
   color1:string="rgb(44, 136, 125)";
   color2:string="rgb(44, 136, 125)";
   color3:string="rgb(44, 136, 125)";
-  time_ban:number = 0;
   countTimeMuet:boolean= true;
   countTimeBan:boolean=true;
   time_muet:number = 0;
-  
+  time_ban:number = 0;
 
-  
-  @Input() usersAdmin:User[] =[];
-  @Input() AdminOrNot:boolean=false;
   constructor(private socketService: SocketService) {
    }
 
-  ngOnInit(): void {}
+  ngOnInit(): void {
+  }
 
   isAdmin2()
   {
@@ -72,40 +71,48 @@ export class UserInSalonComponent implements OnInit {
   
   beMuet(){
     this.ifMuet=!this.ifMuet;
-    this.val_muet=this.ifMuet?"Not Muet":"Muet(secondes)";
     this.color2=this.ifMuet?"rgb(76, 80, 79)":"rgb(44, 136, 125)";
     this.countTimeMuet=!this.countTimeMuet;
-    if (this.val_muet == "Not Muet")
+    if (this.val_muet == "Muet(Secondes)")
     {
       if (this.time_muet != 0)
+      {
         this.socketService.muteUserByTime(this.guest.id, Number(this.current_channel.id), this.time_muet);
+      }
       else
+      {
         this.socketService.muteUser(this.guest.id, Number(this.current_channel.id));
+      }
     }
     else{
       this.socketService.unmuteUser(this.guest.id, Number(this.current_channel.id));
     }
+    this.val_muet=this.ifMuet?"Not Muet":"Muet(Secondes)";
     this.socketService.updateChannel();
     this.socketService.updateChannels();
+    this.time_muet = 0;
   }
 
   beBanne(){
     this.ifBanne=!this.ifBanne;
-    this.val_banne=this.ifBanne?"Unban":"Ban(Secondes)";
     this.color3=this.ifBanne?"rgb(76, 80, 79)":"rgb(44, 136, 125)";
     this.countTimeBan=!this.countTimeBan;
-    if(this.val_banne == "Unban"){
+    console.log("val ban = " + this.val_banne);
+    if(this.val_banne == "Ban(Secondes)"){
+      console.log("val time ban = " + this.time_ban);
       if (this.time_ban != 0)
         this.socketService.banUserByTime(this.guest.id, Number(this.current_channel.id), this.time_ban);
       else
         this.socketService.banUser(this.guest.id, Number(this.current_channel.id));
-      this.socketService.leaveChannel(this.current_channel.name, this.guest.id);
+    //   this.socketService.leaveChannel(this.current_channel.name, this.guest.id);
     }
     else{
       this.socketService.unbanUser(this.guest.id, Number(this.current_channel.id));
     }
+    this.val_banne=this.ifBanne?"Unban":"Ban(Secondes)";
     this.socketService.updateChannel();
     this.socketService.updateChannels();
+    this.time_ban = 0;
     // this.socketService.updateUserInSalonList(this.current_channel.name);
   }
 

@@ -101,7 +101,6 @@ export class ChatComponent implements OnInit {
 		this.socketService.askForUserList(this.Me.id)
 		this.socketService.getFriendList(this.Me.id);
 	})
-
 	}
 
 	userFiltred() {
@@ -159,7 +158,8 @@ export class ChatComponent implements OnInit {
 	}
 
 	receiveShowchat($event: boolean) {
-		this.showchat = true;
+		this.showFormulePassword = false;
+		this.showchat = $event;
 	}
 
 
@@ -177,10 +177,12 @@ export class ChatComponent implements OnInit {
 
 	receiveShowFormulePassword($event: boolean) {
 		this.showFormulePassword = $event;
+		
 	}
 
 	receiveShowSalon($event: boolean) {
 		this.privatOrpublic = $event;
+		
 	}
 
 	receiveQuitSalon($event: boolean) {

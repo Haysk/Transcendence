@@ -23,10 +23,17 @@ export class SocketService {
     this.socket = io(this.url);
   }
 
+  socketInTotoRoom(){
+    this.socket.emit('userInTotoRoom');
+  }
 
-
-
-
+  unsubsribeChannelEvent() {
+	this.socket.off("channelIsUpdated");
+	this.socket.off("someoneJoinedTheChannel");
+	this.socket.off("newAdminInChannel");
+	this.socket.off("msginchannel");
+	this.socket.off("youAreBanned");
+  }
   //MUTE
 
   muteUserByTime(userToMute: number, channelConcerned: number, timeToMute: number)
@@ -113,8 +120,10 @@ amIBanned()
   {
     this.socket.emit('createChannel', channel_name, creator_id, () => { 
       this.socket.emit('joinChannel', channel_name, creator_id);
+      // this.socket.emit('userInChannelListPlz', channel_name);
     });
   }
+
   getConnectionSignal(current_id: number)
   {
     return new Observable((obs) => {
@@ -123,6 +132,29 @@ amIBanned()
       obs.next();
       })
     })
+  }
+
+  verifyPassword(password: string, channel_name: string)
+  {
+    this.socket.emit('verifyPassword', password, channel_name);
+  }
+
+  getPassVerifResponse()
+  {
+    return new Observable<boolean>((obs) => {
+      this.socket.on('goodPassword', (res: boolean) => {
+        obs.next(res);
+      })
+      this.socket.on('wrongPassword', (res: boolean) => {
+        obs.next(res);
+      })
+    })
+  }
+
+  stopListeningPassVerifResponse()
+  {
+    this.socket.off('goodPassword');
+    this.socket.off('wrongPassword');
   }
 
 //UPDATE CHANNEL
@@ -180,6 +212,11 @@ amIBanned()
         observer.next(data);
       })
     })
+  }
+
+  resetChannelPassword(channel:Channel, new_pwd:string){
+
+    this.socket.emit('resetChannelPassword', channel, new_pwd); 
   }
 
   joinChannel(channel_name: string, id: number)
@@ -251,6 +288,20 @@ amIBanned()
     })
   }
 
+  updateUser(current: User)
+  {
+    this.socket.emit('updateUser', current);
+  }
+
+  getUserUpdated()
+  {
+    return new Observable<User> ((obs) => {
+      this.socket.on("userUpdated", (res) => {
+        obs.next(res);
+      })
+    })
+  }
+
 //START COMPONENT
 
   iAmReady()
@@ -311,6 +362,10 @@ amIBanned()
     this.socket.emit('initDisplayInvitation', target, target2);
   }
 
+  refuseInvitation(target: User, target2:string){
+    this.socket.emit('refuseInvitation', target, target2);
+  }
+
   doIHaveToDisplay(){
     return new Observable<any>((obs) => {
       this.socket.on('DisplayInvitation', (res:boolean, res2: User) => {
@@ -319,6 +374,17 @@ amIBanned()
       })
     })
   }
+
+
+  showrefuseInvitation(){
+    return new Observable<any>((obs) => {
+      this.socket.on('refuseInvitation', (res:boolean, res2: User) => {
+        let data = {res, res2}
+        obs.next(data);
+      })
+    })
+  }
+
 
   acceptInvitation(target: User){
     this.socket.emit('invitationIsAccepted', target);

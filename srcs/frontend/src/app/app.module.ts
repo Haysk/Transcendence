@@ -31,11 +31,14 @@ import { PongGameComponent } from './pong-game/pong-game.component';
 import { PlayerPongComponent } from './widgets/player-pong/player-pong.component';
 import { PasswordComponent } from './widgets/password/password.component';
 import { AdminInSalonComponent } from './widgets/admin-in-salon/admin-in-salon.component';
-import { InvitationJouerComponent } from './invitation-jouer/invitation-jouer.component';
 import { CreatorInSalonComponent } from './widgets/creator-in-salon/creator-in-salon.component';
 import { FriendUserComponent } from './friend-user/friend-user.component';
 import { BlockUserComponent } from './block-user/block-user.component';
 import { InvitationGameComponent } from './widgets/invitation-game/invitation-game.component';
+import { ButtonV4Component } from './widgets/button-v4/button-v4.component';
+import { BlocUserProfileComponent } from './widgets/bloc-user-profile/bloc-user-profile.component';
+import { Vip2RoomComponent } from './vip2-room/vip2-room.component';
+import { InvitationRefuseComponent } from './widgets/invitation-refuse/invitation-refuse.component';
 import { AuthModule } from './auth/auth.module';
 
 @NgModule({
@@ -65,12 +68,15 @@ import { AuthModule } from './auth/auth.module';
     PlayerPongComponent,
     PasswordComponent,
     AdminInSalonComponent,
-    InvitationJouerComponent,
     CreatorInSalonComponent,
     PlayerPongComponent,
     FriendUserComponent,
     BlockUserComponent,
-    InvitationGameComponent
+    InvitationGameComponent,
+    ButtonV4Component,
+    BlocUserProfileComponent,
+    Vip2RoomComponent,
+    InvitationRefuseComponent
   ],
   imports: [
     BrowserModule,

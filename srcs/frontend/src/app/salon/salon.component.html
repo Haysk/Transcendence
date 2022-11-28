@@ -19,11 +19,10 @@
 
         <div class="env_conversation" style="overflow-y: auto; height: xyz;" #scrollMe [scrollTop]="scrollMe.scrollHeight">
             <div class="conversation_salon" *ngFor="let histoMsg of historiqueConv"> {{histoMsg.fromUserName}}: {{histoMsg.content}} </div>
-            <div class="conversation_salon" *ngFor="let userMessage of conversation"> {{ userMessage }}
+            <div class="conversation_salon" *ngFor="let userMessage of conversation" > {{ userMessage }}
             </div><!-- fin de conversation_salon -->
         </div><!-- fin de env_conversation -->
 
-        
         
 <!-- ######users in salon #####-->
         <div class="guest_salon">
@@ -31,8 +30,9 @@
             <div class="titre_administrator">
                 Creator
             </div>
+            
             <div class="userInSalon" *ngFor ="let userAdmin of usersAdmin" > 
-                <app-creator-in-salon  [usersAdmin]="usersAdmin" [guest]=userAdmin *ngIf="isCreator(userAdmin)==1"></app-creator-in-salon>
+                <app-creator-in-salon  [current_user]="current_user" [current_channel] ="current_channel" [guest]=userAdmin *ngIf="isCreator(userAdmin)==1"></app-creator-in-salon>
             </div>
 
 

@@ -46,14 +46,12 @@ export class AppController {
 	@Post('addChannel')
 	async addChannel(@Body() ChannelData: {name: string, creator_id: number},): Promise<ChannelModel>
 	{
-		console.log("addChannel");
 		return await this.channelService.addChannel(ChannelData);
 	}
 
 	@Post('addPrivateChannel')
 	async addPrivateChannel(@Body() ChannelData: {name: string, creator_id: number, password: string},): Promise<ChannelModel>
 	{
-		console.log("addPrivateChannel");
 		return await this.channelService.addChannel(ChannelData);
 	}
 
@@ -84,7 +82,6 @@ export class AppController {
 	@Get('userByLogin/:login')
 	async getUserByLogin(@Param('login') login: string)
 	{
-		//console.log("getUserByLogin : " + login);
 		return await this.userService.findUserByLogin(login);
 	}
 
@@ -94,14 +91,12 @@ export class AppController {
 	async addMessage(
 		@Body() messageData: { userId: number, fromUserName: string, fromUserId: number, content: string },
 	): Promise<MessageModel> {
-		console.log("@Post message dans app.controller backend");
 		return await this.messageService.createMessage(messageData);
 	}
 
 	@Post('channelMessage')
 	async channelMessage(
 		@Body() messageData: {channel_name: string, fromUserName: string, fromUserId: number, content: string}) : Promise<MessageModel> {
-		console.log("addChannelMessage is okay");
 		return await this.messageService.createChannelMessage(messageData);
 	}
 	
@@ -113,7 +108,6 @@ export class AppController {
 	@Get('checkIfFriend/:data')
 	async checkIfFriend(@Param('data') id: {id: number, id1: number} ) : Promise<number>
 	{
-		console.log("123456");
 //		return await this.userService.checkIfFriend(id);
 		return 1;
 	}
@@ -123,7 +117,6 @@ export class AppController {
 		@Param('fromUserId') fromUserId: Number, @Param('userId') userId: Number
 		): Promise<MessageModel[]> {
 			let data  = {fromUserId, userId};
-			// console.log("app.controller : data.fromUserId : " + data.fromUserId + " data.userId : " + data.userId);
 			return await this.messageService.getMessages(data);
 		}
 	
@@ -180,7 +173,6 @@ export class AppController {
 			else
 				throw Prisma.PrismaClientKnownRequestError
 		} catch (e) {
-			console.log("User Init fail");
 		}
 	}
 
