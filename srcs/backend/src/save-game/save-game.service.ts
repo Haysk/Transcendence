@@ -17,8 +17,8 @@ export class SaveGameService {
         let result = await this.Prisma.game.create({
           data: {
             roomName: game.roomName,
-            scorePlayer1: game.player1_score,
-            scorePlayer2: game.player2_score,
+            player1_score: game.player1_score,
+            player2_score: game.player2_score,
             players: {
               connect: [{ id: game.player1.id }, { id: game.player2.id }],
             },

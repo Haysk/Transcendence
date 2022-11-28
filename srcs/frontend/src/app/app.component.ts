@@ -36,7 +36,7 @@ export class AppComponent implements OnInit{
   redirectPong:boolean = false;
 
   GameData!: SGame;
-  showGameScore:boolean = true;
+  showGameScore:boolean = false;
 
   to: User = {
 		id: this.storageService.getId(),
