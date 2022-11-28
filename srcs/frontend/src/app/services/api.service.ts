@@ -16,24 +16,15 @@ export class ApiService {
 
   }
 
-//   joinChannel(target: Channel, user :User)
-//   {
-//     const data = {target, user}
-//     //console.log("api service : channel name : " + target.name + " | user name : " + user.login);
-//     return this.httpClient.post<Channel>(`${this.API_SERVER}/joinChannel`, data);
-//   }
-
   addPrivateChannel(name: string, creator_id: number, password: string)
   {
     const data = {name, creator_id, password};
-    //console.log("API SERVICE : addPrivateChannel");
     return this.httpClient.post<Channel>(`${this.API_SERVER}/addPrivateChannel`, data);
   }
 
   addChannel(name: string, creator_id: number)
   {
     const data = {name, creator_id};
-    //console.log("API SERVICE : addChannel");
     return this.httpClient.post<Channel>(`${this.API_SERVER}/addChannel`, data);
   }
 
@@ -89,9 +80,7 @@ export class ApiService {
 
   getMessages(fromUserId: Number, userId: Number)
   {
-    // console.log("api service : fromUserId : " + fromUserId + " userId : " + userId);
     const data = {fromUserId, userId};
-    //console.log("api service : data.fromUserId : " + data.fromUserId + " data.userId : " + data.userId);
     return this.httpClient.get<Message[]>(`${this.API_SERVER}/messages/${fromUserId}/${userId}`);
   }
 
@@ -107,7 +96,6 @@ export class ApiService {
 
   createMessage(message: Message)
   {    
-    // console.log("post message api service called");
     return this.httpClient.post<Message>(`${this.API_SERVER}/message`, message);
   }
 
@@ -142,7 +130,6 @@ export class ApiService {
 
   addFriend(id: number, id1: number){
     const data = {id, id1};
-    //console.log("add friend hoho");
     return this.httpClient.post<User>(`${this.API_SERVER}/addFriend`, data);
   }
 
@@ -150,7 +137,6 @@ export class ApiService {
   
   removeFriend(id: number, id1: number){
     const data = {id, id1};
-    //console.log("remove friend hoho");
     return this.httpClient.post<User>(`${this.API_SERVER}/removeFriend`, data);
   }
 
@@ -158,7 +144,6 @@ export class ApiService {
 
   checkIfFriend(user: User[], id1: number){
     const data = {user, id1};
-    console.log ("check if friend or not");
     return this.httpClient.get<User>(`${this.API_SERVER}/checkIfFriend/${data}`);
   }
 }

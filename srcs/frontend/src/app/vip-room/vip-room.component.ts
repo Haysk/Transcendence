@@ -55,17 +55,6 @@
 		url = this.avatar;
 		selectedFile! : File;
 
-		//fileToUpload: File | null = null;
-
-
-		// selectedFile!:File ;
-		// onFileSelected(event){
-		//  console.log(event);
-		//  this.selectedFile = event.target.files[0];
-		// }
-
-	// url = this.userToShow.avatar;
-	
 	onSelect(event) {
 		
 		this.selectedFile =event.target.files[0];
@@ -75,9 +64,6 @@
 		reader.readAsDataURL(event.target.files[0]);
 		reader.onload = (event: any) => {
 			this.userToShow.url = event.target.result;
-			console.log("avatar url:" + this.avatar);
-			console.log("new avatar url" + this.userToShow.url);
-			// console.log(event);
 		};
 		} else {
 		window.alert('Please select correct image format');
@@ -88,7 +74,6 @@
 		
 		if (this.selectedFile.size < 75000){
 		this.apiService.updateAvatar(Number(this.id), String(this.userToShow.url)).subscribe();
-		console.log("this.url")
 		this.storage.setAvatar(String(this.userToShow.url));
 		window.alert('***Update down***');
 		}

@@ -75,7 +75,6 @@ export class DirectChatComponent implements OnInit {
     
     this.socketService.findFriendsOrNot().subscribe((result) => {
       this.num = result;
-      // console.log(this.num);
       if (this.num == 1)
       {
         this.friendOrNot=false;

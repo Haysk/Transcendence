@@ -36,15 +36,11 @@ export class GameRoomComponent implements OnInit {
       (result=>{
         this.list_user =result;
       }));
-    
-    console.log("User Online = " + this.user.login );
-    console.log("User url = " + this.user.image );
+
   }
 
   showavailable(){
     this.visible= !this.visible;
-    console.log("playeronline:" + this.visible);
-
   }
 
   getId(): number{

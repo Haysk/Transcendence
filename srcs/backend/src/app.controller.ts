@@ -36,13 +36,6 @@ export class AppController {
 		private readonly tfaService: TfaService
 	) { }
 
-	// @Post('joinChannel')
-	// async joinChannel(@Body() data : {target: ChannelModel, user: UserModel})
-	// {
-	// 	console.log("App Controller : channel name : " + data.target.name + " | user name : " + data.user.login);
-	// 	return await this.channelService.joinChannel(data);
-	// }
-
 	@Post('addChannel')
 	async addChannel(@Body() ChannelData: {name: string, creator_id: number},): Promise<ChannelModel>
 	{
@@ -199,21 +192,4 @@ export class AppController {
 		@Body() param: { code: string, tfa_key: string }): Promise<UserModel | boolean> {
 		return (await this.tfaService.validateTfa(param));
 	}
-
-	// @Post('upload/')
-	// async uploadAvatar(
-	// 	@Body() param: {name: Blob}
-	// ) {
-		
-	// 	const fs = require('fs');
-	// 	let filePath= './upload/${Date.now()_$test}';
-	// 	console.log("nom:" + param.name);
-	// 	// let buffer=Buffer.from(param.name.split(',')[1],"base64");
-	// 	// console.log("hello" + buffer);
-	// 	fs.writeFiles(filePath, param.name);
-		
-
-
-
-		// }
 }

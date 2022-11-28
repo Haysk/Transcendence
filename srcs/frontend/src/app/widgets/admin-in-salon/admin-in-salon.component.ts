@@ -55,12 +55,8 @@ export class AdminInSalonComponent implements OnInit {
 
   delAdmin() {
     this.ifAdmin = !this.ifAdmin;
-
-    console.log(22)
     this.socketService.delAdminSalon(this.guest.id, Number(this.current_channel.id));
-
     this.socketService.updateUserInSalonList(this.current_channel.name);
-
     this.val_admin = this.ifAdmin ? "Del Admin" : "Be Admin";
     this.color1 = this.ifAdmin ? "rgb(76, 80, 79)" : "rgb(44, 136, 125)";
 
@@ -94,13 +90,11 @@ export class AdminInSalonComponent implements OnInit {
         this.socketService.banUserByTime(this.guest.id, Number(this.current_channel.id), this.time_ban);
       else
         this.socketService.banUser(this.guest.id, Number(this.current_channel.id));
-    //   this.socketService.leaveChannel(this.current_channel.name, this.guest.id);
     }
     else {
       this.socketService.unbanUser(this.guest.id, Number(this.current_channel.id));
     }
     this.socketService.updateChannel();
     this.socketService.updateChannels();
-    //this.socketService.updateUserInSalonList(this.current_channel.name);
   }
 }

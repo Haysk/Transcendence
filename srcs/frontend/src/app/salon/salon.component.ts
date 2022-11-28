@@ -45,8 +45,6 @@ export class SalonComponent implements OnInit {
     await this.apiService.findChannelByName(this.channel_name).subscribe({
       next: (result) => {
         this.current_channel = result;
-        // if (undefined != this.guest.joined)
-        // console.log(result);
         if (this.current_channel != null && this.current_channel.joined !== undefined)
           this.usersInGuest=this.current_channel.joined;
         if (this.current_channel != null && this.current_channel.admins !== undefined)
@@ -72,8 +70,6 @@ export class SalonComponent implements OnInit {
 
     this.socketService.updateUserList().subscribe({
       next: (result) => {
-        console.log("triggered")
-        console.log(result)
         this.usersInGuest = result;
       }
     });
@@ -166,11 +162,9 @@ export class SalonComponent implements OnInit {
   {
     if(this.isMuted(this.current_user) != 1)
     {
-      console.log(this.message);
       this.setUpContent();
       this.apiService.createChannelMessage(this.content).subscribe();
       this.socketService.sendMsgToChannel(this.channel_name, this.message, this.current_user.nickname)
-      // this.conversation.push(this.message);
       this.message= '';
       this.content = {content: "", fromUserId: 0, fromUserName: ""};
     }

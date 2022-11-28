@@ -55,12 +55,10 @@ export class SocketService {
   //Be Admin
   BeAdminSalon(guestToBeAdmin: number, channelConcerned: number){
       this.socket.emit('beAdminSalon', guestToBeAdmin, channelConcerned)
-      console.log(2)
   }
 
   delAdminSalon(guestToDelAdmin: number, channelConcerned: number){
     this.socket.emit('delAdminSalon', guestToDelAdmin, channelConcerned)
-    console.log(2)
 }
   
 
@@ -191,8 +189,6 @@ amIBanned()
   {
     return new Observable<User[]>((obs) => {
       this.socket.on('hereIsTheUserList', (res: User[]) => {
-        // console.log("HEREISTHEUSERLIST OK =>")
-        // console.log(res);
         obs.next(res);
       })
   })
@@ -504,7 +500,6 @@ amIBanned()
     return new Observable<number>((obs) => {
       this.socket.on('findFriendsOrNot', (index: number) => {
         obs.next(index);
-        // console.log(`find friend or not ${index}`);
       })
     })
   }
@@ -559,7 +554,6 @@ amIBanned()
     return new Observable<number>((obs) => {
       this.socket.on('findBlockOrNot', (index: number) => {
         obs.next(index);
-        // console.log(`find block or not ${index}`);
       })
     })
   }
