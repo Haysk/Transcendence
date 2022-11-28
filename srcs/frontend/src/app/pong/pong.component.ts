@@ -58,6 +58,7 @@ export class PongComponent implements OnInit, OnDestroy {
   downSubscription!: Subscription;
 
   testGameStatesSubscription!: Subscription;
+  showscore:boolean=false;
 
   constructor(
     private socketService: SocketService,

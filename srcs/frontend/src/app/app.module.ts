@@ -43,6 +43,7 @@ import { AuthModule } from './auth/auth.module';
 import { GameSettingsComponent } from './widgets/game-settings/game-settings.component';
 import { AreYouReadyComponent } from './widgets/are-you-ready/are-you-ready.component';
 import { NotFoundComponent } from './not-found/not-found.component';
+import { GameScoreComponent } from './widgets/game-score/game-score.component';
 
 @NgModule({
   declarations: [
@@ -82,7 +83,8 @@ import { NotFoundComponent } from './not-found/not-found.component';
     InvitationRefuseComponent,
     GameSettingsComponent,
     AreYouReadyComponent,
-    NotFoundComponent
+    NotFoundComponent,
+    GameScoreComponent
   ],
   imports: [
     BrowserModule,
