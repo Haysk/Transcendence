@@ -53,7 +53,7 @@ export class PongComponent implements OnInit, OnDestroy {
   @Input()
   gameName = "bidule";
 
-  showscore:boolean=false;
+  // showscore:boolean=false;
 
   moveLeft: IInput;
   moveRight: IInput;
@@ -536,8 +536,8 @@ export class PongComponent implements OnInit, OnDestroy {
     );
   }
 
-  receiveCloseScoreEvent($event:boolean){
-    this.showscore= $event;
+  // receiveCloseScoreEvent($event:boolean){
+  //   this.showscore= $event;
 
-  }
+  // }
 }

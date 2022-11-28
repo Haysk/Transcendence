@@ -1,5 +1,5 @@
 import { Component, Input, Output, EventEmitter } from '@angular/core';
-import { Game } from 'src/app/pong/game/game';
+import { SGame } from 'src/app/models/savedGame';
 
 @Component({
   selector: 'app-game-score',
@@ -9,13 +9,13 @@ import { Game } from 'src/app/pong/game/game';
 
 
 
-
 export class GameScoreComponent {
 
+  @Input() GameData!: SGame;
   @Output() closeScoreEvent = new EventEmitter<boolean>();
   Winner!:string;
-  scorePlayer1!: number;
-  scorePlayer2!: number;
+  // scorePlayer1!: number;
+  // scorePlayer2!: number;
   
 
   closeGameScore(){

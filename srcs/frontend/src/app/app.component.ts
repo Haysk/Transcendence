@@ -36,7 +36,7 @@ export class AppComponent implements OnInit{
   redirectPong:boolean = false;
 
   GameData!: SGame;
-  showGameScore:boolean = false;
+  showGameScore:boolean = true;
 
   to: User = {
 		id: this.storageService.getId(),
@@ -119,7 +119,7 @@ export class AppComponent implements OnInit{
     })
     this.socketService.isGameFinished().subscribe((res) => {
       this.GameData = res;
-      this.showPong = false;
+      this.redirectPong= false;
       this.showGameScore = true;
     })
   }
@@ -182,5 +182,10 @@ export class AppComponent implements OnInit{
     this.player2 = this.global5.player2;
     this.gameConfig = this.global5.gameConfig;
   }
+
+  receiveCloseScoreEvent($event:boolean){
+       this.showGameScore= $event;
+  }
+
 }
 

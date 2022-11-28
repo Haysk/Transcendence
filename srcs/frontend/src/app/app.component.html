@@ -22,3 +22,4 @@
 <app-are-you-ready *ngIf="gameIsReady==true" [player1]="this.player1" [player2]="this.player2" [gameConfig]="gameConfig"></app-are-you-ready>
 </div>
 <app-pong *ngIf="redirectPong==true" [customs]="gameConfig" [gameName]="roomName"></app-pong>
+<app-game-score *ngIf="showGameScore==true" [GameData]="GameData" (closeScoreEvent)="receiveCloseScoreEvent($event)"></app-game-score>
