@@ -98,7 +98,7 @@ export class AuthService {
 	}
 
 	logout() {
-		this.storageService.clear();
+		//this.storageService.clear();
 		this.code = "";
 		this.router.navigate(["../"], {relativeTo: this.route}); 
 		this.locked = true;

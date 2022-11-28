@@ -378,7 +378,6 @@ amIBanned()
     })
   }
 
-
   showrefuseInvitation(){
     return new Observable<any>((obs) => {
       this.socket.on('refuseInvitation', (res:boolean, res2: User) => {

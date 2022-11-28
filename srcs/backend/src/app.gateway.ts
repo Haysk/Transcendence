@@ -983,7 +983,7 @@ catch(err){
   createGame(client: Socket, payload: any)
   {
     console.log(payload[0]);
-    this.pongService.addGame(payload[0]);
+    this.pongService.addGame(payload[0], payload[2], payload[3]);
     //TODO: addGamers
   }
 
