@@ -29,7 +29,7 @@ export class Ai {
     this.game.states = states;
   }
 
-  public setUserId(userId : number) {
+  public setUserId(userId: number) {
     this.userId = userId;
   }
 
@@ -55,17 +55,17 @@ export class Ai {
   private getRacket(): IRacket | null {
     if (this.userId === this.game.left.id) {
       return {
-        left: this.game.states.racketLeft.left,
-        top: this.game.states.racketLeft.top,
-        width: this.game.left.racket.width,
-        height: this.game.left.racket.height,
+        left: this.game.states.racketLeft.position.left,
+        top: this.game.states.racketLeft.position.top,
+        width: this.game.states.racketLeft.width,
+        height: this.game.states.racketLeft.height,
       };
     } else if (this.userId === this.game.right.id) {
       return {
-        left: this.game.states.racketRight.left,
-        top: this.game.states.racketRight.top,
-        width: this.game.right.racket.width,
-        height: this.game.right.racket.height,
+        left: this.game.states.racketRight.position.left,
+        top: this.game.states.racketRight.position.top,
+        width: this.game.states.racketRight.width,
+        height: this.game.states.racketRight.height,
       };
     } else {
       return null;
@@ -74,38 +74,44 @@ export class Ai {
 
   private aiV0(racket: IRacket): IInput {
     return this.ketToCenter(
-      this.game.states.ball.top + this.game.ball.diammeter / 2,
+      this.game.states.ball.position.top + this.game.states.ball.diammeter / 2,
       racket.top + racket.height / 2,
-      racket.height
+      racket.height,
     );
   }
 
   private aiV1(racket: IRacket): IInput {
     if (
-      (this.game.states.ballDirection[0] > 0 &&
-        this.game.states.ball.left > racket.left + racket.width) ||
-      (this.game.states.ballDirection[0] < 0 &&
-        this.game.states.ball.left + this.game.ball.diammeter < racket.left)
+      (this.game.states.ball.direction[0] > 0 &&
+        this.game.states.ball.position.left > racket.left + racket.width) ||
+      (this.game.states.ball.direction[0] < 0 &&
+        this.game.states.ball.position.left + this.game.states.ball.diammeter <
+          racket.left)
     ) {
       return this.ketToCenter(
         this.game.board.board.height / 2,
         racket.top + racket.height / 2,
-        racket.height
+        racket.height,
       );
     } else {
       const ball: Point = [
-        this.game.states.ball.left + this.game.ball.diammeter / 2,
-        this.game.states.ball.top + this.game.ball.diammeter / 2,
+        this.game.states.ball.position.left +
+          this.game.states.ball.diammeter / 2,
+        this.game.states.ball.position.top +
+          this.game.states.ball.diammeter / 2,
       ];
       const angle = lineAngle([
         [0, 0],
-        [this.game.states.ballDirection[0], this.game.states.ballDirection[1]],
+        [
+          this.game.states.ball.direction[0],
+          this.game.states.ball.direction[1],
+        ],
       ]);
       const test = pointTranslate([0, 0], angle, 10000);
       return this.ketToCenter(
         this.predictCenter(racket, ball, test),
         racket.top + racket.height / 2,
-        racket.height
+        racket.height,
       );
     }
   }
@@ -113,7 +119,7 @@ export class Ai {
   private predictCenter(
     racket: IRacket,
     ball: Point,
-    ballDirection: Point
+    ballDirection: Point,
   ): number {
     const racketCenter: Point = [
       racket.left + racket.width / 2,
@@ -127,7 +133,7 @@ export class Ai {
       racketCenter[0],
       0,
       racketCenter[0],
-      this.game.board.board.height
+      this.game.board.board.height,
     );
     const wall: Point =
       ballDirection[1] < 0 ? [0, 0] : [0, this.game.board.board.height];
@@ -139,7 +145,7 @@ export class Ai {
       wall[0],
       wall[1],
       this.game.board.board.width,
-      wall[1]
+      wall[1],
     );
     if (
       racketColision.type === 'intersecting' &&
@@ -149,7 +155,7 @@ export class Ai {
         racketCenter[0],
         0,
         racketCenter[0],
-        this.game.board.board.height
+        this.game.board.board.height,
       )
     ) {
       return racketColision.point.y;
@@ -157,7 +163,7 @@ export class Ai {
       return this.predictCenter(
         racket,
         [wallColision.point.x, wallColision.point.y],
-        [ballDirection[0], ballDirection[1] * -1]
+        [ballDirection[0], ballDirection[1] * -1],
       );
     } else {
       return this.game.board.board.height / 2;
@@ -167,7 +173,7 @@ export class Ai {
   private ketToCenter(
     centerBall: number,
     centerRacket: number,
-    heightRacket: number
+    heightRacket: number,
   ): IInput {
     const input: IInput = {
       userId: this.userId,

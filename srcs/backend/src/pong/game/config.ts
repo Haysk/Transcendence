@@ -9,7 +9,7 @@ const gameWidth = 1000;
 const gameMargin = 10;
 
 const ballDiameter = 22;
-const ballSpeed = 5;
+export const ballSpeed = 5;
 
 export const defaultGameConfig: IGame = {
   left: {
@@ -18,12 +18,6 @@ export const defaultGameConfig: IGame = {
       type: 'local',
       upKey: 'w',
       downKey: 's',
-    },
-    racket: {
-      width: racketWidth,
-      height: racketHeight,
-      speed: racketSpeed,
-      color: '#04EBB2',
     },
     input: {
       userId: 0,
@@ -37,12 +31,6 @@ export const defaultGameConfig: IGame = {
       type: 'local',
       upKey: 'ArrowUp',
       downKey: 'ArrowDown',
-    },
-    racket: {
-      width: racketWidth,
-      height: racketHeight,
-      speed: racketSpeed,
-      color: '#FFBB33',
     },
     input: {
       userId: 1,
@@ -63,29 +51,41 @@ export const defaultGameConfig: IGame = {
     },
     scoreToWin: 11,
   },
-  ball: {
-    diammeter: ballDiameter,
-    speed: ballSpeed,
-    collor: '#e5e83b',
-  },
   states: {
     gameId: 0,
-    racketLeft: {
-      left: gameMargin,
-      top: gameMargin,
-    },
-    racketRight: {
-      left: gameWidth - gameMargin - racketWidth,
-      top: gameMargin,
-    },
-    ball: {
-      left: (gameWidth - ballDiameter) / 2,
-      top: (gameHeight - ballDiameter) / 2,
-    },
-    ballDirection: [ballSpeed / 2, 0],
-    ballSpeed: ballSpeed,
     scoreLeft: 0,
     scoreRight: 0,
     start: false,
+    powerUps: [],
+    racketLeft: {
+      width: racketWidth,
+      height: racketHeight,
+      speed: racketSpeed,
+      color: '#04EBB2',
+      position: {
+        left: gameMargin,
+        top: gameMargin,
+      },
+    },
+    racketRight: {
+      width: racketWidth,
+      height: racketHeight,
+      speed: racketSpeed,
+      color: '#FFBB33',
+      position: {
+        left: gameWidth - gameMargin - racketWidth,
+        top: gameMargin,
+      },
+    },
+    ball: {
+      diammeter: ballDiameter,
+      speed: ballSpeed,
+      collor: '#e5e83b',
+      position: {
+        left: (gameWidth - ballDiameter) / 2,
+        top: (gameHeight - ballDiameter) / 2,
+      },
+      direction: [ballSpeed / 2, 0],
+    },
   },
 };

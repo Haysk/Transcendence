@@ -1,11 +1,4 @@
-import {
-  Component,
-  ElementRef,
-  Input,
-  OnDestroy,
-  OnInit,
-  ViewChild,
-} from "@angular/core";
+import { Component, Input, OnDestroy, OnInit } from "@angular/core";
 import { filter, fromEvent, interval, Subscription } from "rxjs";
 import { SocketService } from "../services/socket.service";
 import { Ai } from "./game/ai";
@@ -87,12 +80,14 @@ export class PongComponent implements OnInit, OnDestroy {
     private game: Game,
     private ai: Ai
   ) {
-    this.gameConfig.ball.collor = this.customs.ball.collor;
+    this.gameConfig.states.ball.collor = this.customs.states.ball.collor;
     this.gameConfig.board.board.color = this.customs.board.board.color;
     this.gameConfig.left.mode = this.customs.left.mode;
-    this.gameConfig.left.racket.color = this.customs.left.racket.color;
+    this.gameConfig.states.racketLeft.color =
+      this.customs.states.racketLeft.color;
     this.gameConfig.right.mode = this.customs.right.mode;
-    this.gameConfig.right.racket.color = this.customs.right.racket.color;
+    this.gameConfig.states.racketRight.color =
+      this.customs.states.racketRight.color;
 
     this.game = new Game();
     this.ai = new Ai();
@@ -339,10 +334,10 @@ export class PongComponent implements OnInit, OnDestroy {
   }
 
   tick(): void {
-    this.gameConfig.states.racketRight.left =
+    this.gameConfig.states.racketRight.position.left =
       this.gameConfig.board.board.width -
       this.gameConfig.board.board.margin -
-      this.gameConfig.right.racket.width;
+      this.gameConfig.states.racketRight.width;
 
     if (this.gameConfig.left.mode.type !== "remote") {
       const move = this.getInput(
@@ -457,11 +452,13 @@ export class PongComponent implements OnInit, OnDestroy {
 
   drawBall() {
     this.ctx.beginPath();
-    this.ctx.fillStyle = this.gameConfig.ball.collor;
+    this.ctx.fillStyle = this.gameConfig.states.ball.collor;
     this.ctx.arc(
-      this.gameConfig.states.ball.left + this.gameConfig.ball.diammeter / 2,
-      this.gameConfig.states.ball.top + this.gameConfig.ball.diammeter / 2,
-      this.gameConfig.ball.diammeter / 2,
+      this.gameConfig.states.ball.position.left +
+        this.gameConfig.states.ball.diammeter / 2,
+      this.gameConfig.states.ball.position.top +
+        this.gameConfig.states.ball.diammeter / 2,
+      this.gameConfig.states.ball.diammeter / 2,
       0,
       2 * Math.PI
     );
@@ -490,28 +487,43 @@ export class PongComponent implements OnInit, OnDestroy {
 
     // draw left racket
 
-    this.ctx.fillStyle = this.gameConfig.left.racket.color;
+    this.ctx.fillStyle = this.gameConfig.states.racketLeft.color;
     this.roundRect(
-      this.gameConfig.states.racketLeft.left,
-      this.gameConfig.states.racketLeft.top,
-      this.gameConfig.left.racket.width,
-      this.gameConfig.left.racket.height,
+      this.gameConfig.states.racketLeft.position.left,
+      this.gameConfig.states.racketLeft.position.top,
+      this.gameConfig.states.racketLeft.width,
+      this.gameConfig.states.racketLeft.height,
       10,
       true,
       false
     );
 
     // draw left racket
-    this.ctx.fillStyle = this.gameConfig.right.racket.color;
+    this.ctx.fillStyle = this.gameConfig.states.racketRight.color;
     this.roundRect(
-      this.gameConfig.states.racketRight.left,
-      this.gameConfig.states.racketRight.top,
-      this.gameConfig.right.racket.width,
-      this.gameConfig.right.racket.height,
+      this.gameConfig.states.racketRight.position.left,
+      this.gameConfig.states.racketRight.position.top,
+      this.gameConfig.states.racketRight.width,
+      this.gameConfig.states.racketRight.height,
       10,
       true,
       false
     );
+
+    // draw power-ups
+    for (const powerUp of this.gameConfig.states.powerUps) {
+      console.log(powerUp);
+      this.ctx.fillStyle = powerUp.color;
+      this.roundRect(
+        powerUp.position.left,
+        powerUp.position.top,
+        powerUp.width,
+        powerUp.height,
+        0,
+        true,
+        false
+      );
+    }
 
     // draw ball
     this.drawBall();
@@ -531,6 +543,4 @@ export class PongComponent implements OnInit, OnDestroy {
       this.gameConfig.board.board.height * 0.05
     );
   }
-
-  go() {}
 }

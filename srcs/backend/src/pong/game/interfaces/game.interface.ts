@@ -27,9 +27,8 @@ export type PlayerMode =
     };
 
 export interface IGame {
-  left: IPlayer,
-  right: IPlayer,
-  board: IBoard,
-  ball: IBallConfig;
+  left: IPlayer;
+  right: IPlayer;
+  board: IBoard;
   states: IGameStates;
 }

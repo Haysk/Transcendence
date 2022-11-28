@@ -9,7 +9,7 @@ import { IBallConfig } from '../pong/game/interfaces/ball-config.interface';
 })
 export class PongBallComponent implements OnInit {
   @Input()
-  ball: IBallConfig = structuredClone(defaultGameConfig.ball);
+  ball: IBallConfig = structuredClone(defaultGameConfig.states.ball);
 
   constructor() { }
 
