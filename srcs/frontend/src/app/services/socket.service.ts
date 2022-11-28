@@ -306,6 +306,15 @@ amIBanned()
     })
   }
 
+  getMatchHistory()
+  {
+    return new Observable<SGame[]> ((obs) => {
+      this.socket.on("hereIsTheMatchHistory", (res) => {
+        obs.next(res);
+      })
+    })
+  }
+
 //START COMPONENT
 
   iAmReady()

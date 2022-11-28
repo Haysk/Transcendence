@@ -11,6 +11,7 @@ import { PrismaService } from './prisma.service';
 import { Server, Socket } from 'socket.io';
 import { UserService } from './user.service';
 import { PongService } from './pong/pong.service';
+import { User } from '@prisma/client';
 
 @WebSocketGateway({
   cors: {
@@ -563,6 +564,21 @@ catch(err){
     console.log(err); 
   }
 }
+
+  /* MATCH HISTORY */
+
+  @SubscribeMessage('matchHistoryPlz')
+  async returnMatchHistory(client: Socket, payload: any)
+  {
+    try{
+
+    }
+    catch(err)
+    {
+      console.log("erreur dans get match history:")
+      console.log(err)
+    }
+  }
 
   /* MESSAGE */
 
