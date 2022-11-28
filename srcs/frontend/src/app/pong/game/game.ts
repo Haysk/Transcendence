@@ -149,6 +149,9 @@ export class Game {
       racketColision,
     ]);
 
+    //gestion des powerUp
+    this.powerUpColision(posBall, posNextBall);
+
     if (collision.type === 'intersecting') {
       if (collision == wallColision) {
         this.game.states.ball.position.left = collision.point.x;
@@ -170,6 +173,27 @@ export class Game {
     } else {
       this.game.states.ball.position.left += this.game.states.ball.direction[0];
       this.game.states.ball.position.top += this.game.states.ball.direction[1];
+    }
+  }
+
+  private powerUpColision(posBall: Point, posNextBall: Point): void {
+    for (let index = 0; index < this.game.states.powerUps.length; index++) {
+      const powerUp = this.game.states.powerUps[index];
+      //TODO: calcul de l'intersection avec le powerUp
+      if (
+        this.rectangleColision(
+          posBall,
+          posNextBall,
+          powerUp.position.left,
+          powerUp.position.left + powerUp.width,
+          powerUp.position.top,
+          powerUp.position.top + powerUp.height,
+        ).type === 'intersecting'
+      ) {
+        //aplly effect
+        //delete powerUp
+        this.game.states.powerUps.splice(index, 1);
+      }
     }
   }
 

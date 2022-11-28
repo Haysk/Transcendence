@@ -512,7 +512,6 @@ export class PongComponent implements OnInit, OnDestroy {
 
     // draw power-ups
     for (const powerUp of this.gameConfig.states.powerUps) {
-      console.log(powerUp);
       this.ctx.fillStyle = powerUp.color;
       this.roundRect(
         powerUp.position.left,
