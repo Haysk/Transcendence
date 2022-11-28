@@ -470,13 +470,6 @@ amIBanned()
     this.socket.emit('resetToServer', name);
   }
 
-  sendTest1(name: string): void {
-    this.socket.emit('test1', name);
-  }
-  sendTest2(name: string): void {
-    this.socket.emit('test2', name);
-  }
-
   getStart() {
     return new Observable<void>((observer) => {
       this.socket.on('startToClient', (payload) => {
