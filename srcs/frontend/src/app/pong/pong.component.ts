@@ -1,4 +1,11 @@
-import { Component, ElementRef, Input, OnDestroy, OnInit, ViewChild } from "@angular/core";
+import {
+  Component,
+  ElementRef,
+  Input,
+  OnDestroy,
+  OnInit,
+  ViewChild,
+} from "@angular/core";
 import { filter, fromEvent, interval, Subscription } from "rxjs";
 import { SocketService } from "../services/socket.service";
 import { Ai } from "./game/ai";
@@ -43,7 +50,7 @@ export class PongComponent implements OnInit, OnDestroy {
   gameConfig: IGame = structuredClone(defaultGameConfig);
 
   //nom de la room pong (en cours de dev)
-  @Input() 
+  @Input()
   gameName = "bidule";
 
   moveLeft: IInput;
@@ -59,19 +66,27 @@ export class PongComponent implements OnInit, OnDestroy {
   //startSubscription!: Subscription;
   gameStatesSubscription!: Subscription;
   tickSubscription!: Subscription;
+
+  //event clavier
   upSubscription!: Subscription;
   downSubscription!: Subscription;
 
+  //event souri
   canvasMouseUpSubscription!: Subscription;
   canvasMouseDownSubscription!: Subscription;
   canvasMouseLeaveSubscription!: Subscription;
+
+  //event tactil
+  //https://developer.mozilla.org/fr/docs/Web/API/Touch_events
+  canvasTouchStartSubscription!: Subscription;
+  canvasTouchEndSubscription!: Subscription;
+  canvasTouchCancelSubscription!: Subscription;
 
   constructor(
     private socketService: SocketService,
     private game: Game,
     private ai: Ai
   ) {
-
     this.gameConfig.ball.collor = this.customs.ball.collor;
     this.gameConfig.board.board.color = this.customs.board.board.color;
     this.gameConfig.left.mode = this.customs.left.mode;
@@ -126,29 +141,72 @@ export class PongComponent implements OnInit, OnDestroy {
     this.canvas.height = this.gameConfig.board.board.height;
 
     // we'll implement this method to start capturing mouse events
-    this.canvasMouseUpSubscription = fromEvent<MouseEvent>(this.canvas, "mouseup")
-      .subscribe(() => {
-        this.setMouseMove();
-      });
-    this.canvasMouseDownSubscription = fromEvent<MouseEvent>(this.canvas, "mousedown")
-      .subscribe((event) => {
-        this.unsetMouseMove(event);
-      });
-    this.canvasMouseLeaveSubscription = fromEvent<MouseEvent>(this.canvas, "mouseleave")
-      .subscribe(() => {
-        this.setMouseMove();
-      });
+    this.canvasMouseUpSubscription = fromEvent<MouseEvent>(
+      this.canvas,
+      "mouseup"
+    ).subscribe(() => {
+      this.unsetMove();
+    });
+    this.canvasMouseDownSubscription = fromEvent<MouseEvent>(
+      this.canvas,
+      "mousedown"
+    ).subscribe((event) => {
+      this.setMouseMove(event);
+    });
+    this.canvasMouseLeaveSubscription = fromEvent<MouseEvent>(
+      this.canvas,
+      "mouseleave"
+    ).subscribe(() => {
+      this.unsetMove();
+    });
+    this.canvasTouchStartSubscription = fromEvent<TouchEvent>(
+      this.canvas,
+      "touchstart"
+    ).subscribe((event) => {
+      this.setTouchMove(event);
+    });
+    this.canvasTouchEndSubscription = fromEvent<TouchEvent>(
+      this.canvas,
+      "touchend"
+    ).subscribe(() => {
+      this.unsetMove();
+    });
+    this.canvasTouchCancelSubscription = fromEvent<TouchEvent>(
+      this.canvas,
+      "touchcancel"
+    ).subscribe(() => {
+      this.unsetMove();
+    });
   }
 
-  unsetMouseMove(event: MouseEvent): void {
-    if (event.offsetX < this.canvas.clientWidth / 2 && this.gameConfig.left.mode.type === 'local') {
-      if (event.offsetY < this.canvas.clientHeight / 2) {
+  setMouseMove(event: MouseEvent): void {
+    this.setMove(
+      event.offsetX,
+      event.offsetY,
+      this.canvas.clientWidth,
+      this.canvas.clientHeight
+    );
+  }
+
+  setTouchMove(event: TouchEvent): void {
+    const r = this.canvas.getBoundingClientRect();
+    this.setMove(
+      event.touches[0].clientX - r.left,
+      event.touches[0].clientY - r.y,
+      r.right - r.left,
+      r.bottom - r.y
+    );
+  }
+
+  setMove(x: number, y: number, width: number, height: number): void {
+    if (x < width / 2) {
+      if (y < height / 2 && this.gameConfig.left.mode.type === "local") {
         this.moveLeft.up = true;
       } else {
         this.moveLeft.down = true;
       }
-    } else if (this.gameConfig.right.mode.type === 'local') {
-      if (event.offsetY < this.canvas.clientHeight / 2) {
+    } else if (this.gameConfig.right.mode.type === "local") {
+      if (y < height / 2) {
         this.moveRight.up = true;
       } else {
         this.moveRight.down = true;
@@ -156,14 +214,14 @@ export class PongComponent implements OnInit, OnDestroy {
     }
   }
 
-  setMouseMove(): void {
-    if (this.gameConfig.left.mode.type === 'local') {
-        this.moveLeft.up = false;
-        this.moveLeft.down = false;
+  unsetMove(): void {
+    if (this.gameConfig.left.mode.type === "local") {
+      this.moveLeft.up = false;
+      this.moveLeft.down = false;
     }
-    if (this.gameConfig.right.mode.type === 'local') {
-        this.moveRight.up = false;
-        this.moveRight.down = false;
+    if (this.gameConfig.right.mode.type === "local") {
+      this.moveRight.up = false;
+      this.moveRight.down = false;
     }
   }
 
@@ -177,6 +235,9 @@ export class PongComponent implements OnInit, OnDestroy {
     this.canvasMouseUpSubscription.unsubscribe();
     this.canvasMouseDownSubscription.unsubscribe();
     this.canvasMouseLeaveSubscription.unsubscribe();
+    this.canvasTouchStartSubscription.unsubscribe();
+    this.canvasTouchEndSubscription.unsubscribe();
+    this.canvasTouchCancelSubscription.unsubscribe();
   }
 
   sendMove(move: IInput) {
@@ -241,33 +302,37 @@ export class PongComponent implements OnInit, OnDestroy {
     if (key === keyStart) {
       this.sendStart();
     }
-    if (this.gameConfig.left.mode.type !== 'remote') {
-      if (key === '1') {
-        this.gameConfig.left.mode = structuredClone(defaultGameConfig.left.mode)
-      } else if (key === '2') {
+    if (this.gameConfig.left.mode.type !== "remote") {
+      if (key === "1") {
+        this.gameConfig.left.mode = structuredClone(
+          defaultGameConfig.left.mode
+        );
+      } else if (key === "2") {
         this.gameConfig.left.mode = {
-          type: 'ai',
-          level: 'easy'
+          type: "ai",
+          level: "easy",
         };
-      } else if (key == '3') {
+      } else if (key == "3") {
         this.gameConfig.left.mode = {
-          type: 'ai',
-          level: 'hard'
+          type: "ai",
+          level: "hard",
         };
       }
     }
-    if (this.gameConfig.right.mode.type !== 'remote') {
-      if (key === '4') {
-        this.gameConfig.right.mode = structuredClone(defaultGameConfig.right.mode)
-      } else if (key === '5') {
+    if (this.gameConfig.right.mode.type !== "remote") {
+      if (key === "4") {
+        this.gameConfig.right.mode = structuredClone(
+          defaultGameConfig.right.mode
+        );
+      } else if (key === "5") {
         this.gameConfig.right.mode = {
-          type: 'ai',
-          level: 'easy'
+          type: "ai",
+          level: "easy",
         };
-      } else if (key == '6') {
+      } else if (key == "6") {
         this.gameConfig.right.mode = {
-          type: 'ai',
-          level: 'hard'
+          type: "ai",
+          level: "hard",
         };
       }
     }
@@ -467,7 +532,5 @@ export class PongComponent implements OnInit, OnDestroy {
     );
   }
 
-  go(){
-    
-  }
+  go() {}
 }
