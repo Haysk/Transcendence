@@ -1,12 +1,19 @@
-import { IGameStates } from "./interfaces/game-states.interface";
-import { IGame } from "./interfaces/game.interface";
-import { IInput } from "./interfaces/input.interface";
-import { checkIntersection, IntersectionCheckResult } from "line-intersect";
-import { lineAngle, Point, pointTranslate } from "geometric";
-import { ballDiameter, ballSpeed, DefaultGame } from "./config";
-import { Injectable } from "@angular/core";
-import { ICircle } from "./interfaces/circle.interface";
-import { IRectangle } from "./interfaces/rectangle.interface";
+import { IGameStates } from './interfaces/game-states.interface';
+import { IGame } from './interfaces/game.interface';
+import { IInput } from './interfaces/input.interface';
+import { checkIntersection, IntersectionCheckResult } from 'line-intersect';
+import { lineAngle, Point, pointTranslate } from 'geometric';
+import {
+  baball,
+  baballEffect,
+  ballDiameter,
+  ballSpeed,
+  DefaultGame,
+  DefaultPowerUps,
+} from './config';
+import { Injectable } from '@angular/core';
+import { ICircle } from './interfaces/circle.interface';
+import { IRectangle } from './interfaces/rectangle.interface';
 
 @Injectable()
 export class Game {
@@ -133,17 +140,17 @@ export class Game {
       posBall,
       posNextBall,
       wallDown,
-      wallUp
+      wallUp,
     );
     const goalColision: IntersectionCheckResult = this.goalColision(
       posBall,
       posNextBall,
       goalLeft,
-      goalRight
+      goalRight,
     );
     const racketColision: IntersectionCheckResult = this.racketColision(
       posBall,
-      posNextBall
+      posNextBall,
     );
     const collision = this.nearestCollision(posBall, [
       wallColision,
@@ -153,7 +160,7 @@ export class Game {
 
     this.powerUpColision(posBall);
 
-    if (collision.type === "intersecting") {
+    if (collision.type === 'intersecting') {
       if (collision == wallColision) {
         this.wallBounce(collision.point.x, collision.point.y);
       } else if (collision == goalColision) {
@@ -180,6 +187,13 @@ export class Game {
       this.game.states.scoreLeft++;
     }
     this.newBall();
+    //ajoue d'un nouveau bonus
+    this.game.states.powerUps.push(
+      new DefaultPowerUps().powerUps[
+        (this.game.states.scoreRight + this.game.states.scoreLeft) %
+          new DefaultPowerUps().powerUps.length
+      ],
+    );
   }
 
   private racketBounce(pointX: number, pointY: number): void {
@@ -228,7 +242,7 @@ export class Game {
             y: powerUp.position.top + powerUp.height / 2,
             width: powerUp.width,
             height: powerUp.height,
-          }
+          },
         )
       ) {
         this.game.effects
@@ -291,7 +305,7 @@ export class Game {
     posBall: Point,
     posNextBall: Point,
     wallDown: Point,
-    wallUp: Point
+    wallUp: Point,
   ): IntersectionCheckResult {
     let colision: IntersectionCheckResult;
     if (posBall[1] < posNextBall[1]) {
@@ -303,7 +317,7 @@ export class Game {
         wallDown[0],
         wallDown[1] - this.game.states.ball.diammeter,
         this.game.board.board.width,
-        wallDown[1] - this.game.states.ball.diammeter
+        wallDown[1] - this.game.states.ball.diammeter,
       );
     } else {
       colision = checkIntersection(
@@ -314,13 +328,13 @@ export class Game {
         wallUp[0],
         wallUp[1],
         this.game.board.board.width,
-        wallUp[1]
+        wallUp[1],
       );
     }
-    if (colision.type !== "intersecting") {
+    if (colision.type !== 'intersecting') {
       if (posNextBall[1] < wallUp[1]) {
         colision = {
-          type: "intersecting",
+          type: 'intersecting',
           point: {
             x: posNextBall[0],
             y: wallUp[1],
@@ -331,7 +345,7 @@ export class Game {
         wallDown[1] - this.game.states.ball.diammeter
       ) {
         colision = {
-          type: "intersecting",
+          type: 'intersecting',
           point: {
             x: posNextBall[0],
             y: wallDown[1] - this.game.states.ball.diammeter,
@@ -346,7 +360,7 @@ export class Game {
     posBall: Point,
     posNextBall: Point,
     goalLeft: Point,
-    goalRight: Point
+    goalRight: Point,
   ): IntersectionCheckResult {
     let colision: IntersectionCheckResult;
     if (posBall[0] > posNextBall[0]) {
@@ -358,7 +372,7 @@ export class Game {
         goalLeft[0],
         goalLeft[1],
         goalLeft[0],
-        this.game.board.board.height
+        this.game.board.board.height,
       );
     } else {
       colision = checkIntersection(
@@ -369,13 +383,13 @@ export class Game {
         goalRight[0],
         goalRight[1],
         goalRight[0],
-        this.game.board.board.height
+        this.game.board.board.height,
       );
     }
-    if (colision.type !== "intersecting") {
+    if (colision.type !== 'intersecting') {
       if (posBall[0] < -this.game.states.ball.diammeter) {
         colision = {
-          type: "intersecting",
+          type: 'intersecting',
           point: {
             x: -this.game.states.ball.diammeter,
             y: posBall[1],
@@ -383,7 +397,7 @@ export class Game {
         };
       } else if (posBall[0] > this.game.board.board.width) {
         colision = {
-          type: "intersecting",
+          type: 'intersecting',
           point: {
             x: this.game.board.board.width,
             y: posBall[1],
@@ -404,7 +418,7 @@ export class Game {
     recLeft: number,
     recRight: number,
     recTop: number,
-    recDown: number
+    recDown: number,
   ): IntersectionCheckResult {
     const leftColistion: IntersectionCheckResult =
       posBall[0] <= posNextBall[0]
@@ -416,9 +430,9 @@ export class Game {
             recLeft,
             recTop,
             recLeft,
-            recDown
+            recDown,
           )
-        : { type: "none" };
+        : { type: 'none' };
     const rightColistion: IntersectionCheckResult =
       posBall[0] >= posNextBall[0]
         ? checkIntersection(
@@ -429,9 +443,9 @@ export class Game {
             recRight,
             recTop,
             recRight,
-            recDown
+            recDown,
           )
-        : { type: "none" };
+        : { type: 'none' };
     let topColistion: IntersectionCheckResult =
       posBall[1] <= posNextBall[1]
         ? checkIntersection(
@@ -442,9 +456,9 @@ export class Game {
             recLeft,
             recTop,
             recRight,
-            recTop
+            recTop,
           )
-        : { type: "none" };
+        : { type: 'none' };
     let downColistion: IntersectionCheckResult =
       posBall[1] >= posNextBall[1]
         ? checkIntersection(
@@ -455,16 +469,16 @@ export class Game {
             recLeft,
             recDown,
             recRight,
-            recDown
+            recDown,
           )
-        : { type: "none" };
+        : { type: 'none' };
     if (
-      topColistion.type === "colinear" &&
+      topColistion.type === 'colinear' &&
       recLeft <= posBall[0] &&
       posBall[0] <= recRight
     ) {
       topColistion = {
-        type: "intersecting",
+        type: 'intersecting',
         point: {
           x: posBall[0],
           y: posBall[1],
@@ -472,12 +486,12 @@ export class Game {
       };
     }
     if (
-      downColistion.type === "colinear" &&
+      downColistion.type === 'colinear' &&
       recLeft <= posBall[0] &&
       posBall[0] <= recRight
     ) {
       downColistion = {
-        type: "intersecting",
+        type: 'intersecting',
         point: {
           x: posBall[0],
           y: posBall[1],
@@ -486,15 +500,15 @@ export class Game {
     }
     //test
     if (
-      leftColistion.type === "none" &&
-      rightColistion.type === "none" &&
+      leftColistion.type === 'none' &&
+      rightColistion.type === 'none' &&
       recLeft < posNextBall[0] &&
       posNextBall[0] < recRight &&
       recTop < posNextBall[1] &&
       posNextBall[1] < recDown
     ) {
       const collision: IntersectionCheckResult = {
-        type: "intersecting",
+        type: 'intersecting',
         point: {
           x: posNextBall[0],
           y: posNextBall[1],
@@ -520,18 +534,18 @@ export class Game {
   // colision la plus proche
   private nearestCollision(
     posBall: Point,
-    collisions: IntersectionCheckResult[]
+    collisions: IntersectionCheckResult[],
   ): IntersectionCheckResult {
-    let collisionMin: IntersectionCheckResult = { type: "none" };
+    let collisionMin: IntersectionCheckResult = { type: 'none' };
     let distanceMin = Number.MAX_VALUE;
     for (let index = 0; index < collisions.length; index++) {
       const collision = collisions[index];
-      if (collision.type === "intersecting") {
+      if (collision.type === 'intersecting') {
         const distance = this.distance(
           posBall[0],
           collision.point.x,
           posBall[1],
-          collision.point.y
+          collision.point.y,
         );
         if (distance < distanceMin) {
           distanceMin = distance;
@@ -544,7 +558,7 @@ export class Game {
 
   private racketColision(
     posBall: Point,
-    posNextBall: Point
+    posNextBall: Point,
   ): IntersectionCheckResult {
     if (posNextBall[0] < this.game.board.board.width / 2) {
       return this.rectangleColision(
@@ -557,7 +571,7 @@ export class Game {
         this.game.states.racketLeft.position.top -
           this.game.states.ball.diammeter,
         this.game.states.racketLeft.position.top +
-          this.game.states.racketLeft.height
+          this.game.states.racketLeft.height,
       );
     } else {
       return this.rectangleColision(
@@ -570,7 +584,7 @@ export class Game {
         this.game.states.racketRight.position.top -
           this.game.states.ball.diammeter,
         this.game.states.racketRight.position.top +
-          this.game.states.racketRight.height
+          this.game.states.racketRight.height,
       );
     }
   }

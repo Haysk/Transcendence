@@ -120,6 +120,21 @@ export const racketSizeDown: IPowerUp = {
   width: sidePowerUp,
 };
 
+export class DefaultPowerUps {
+  powerUps: IPowerUp[];
+
+  public constructor() {
+    this.powerUps = [
+      baball,
+      flashingBall,
+      racketSpeedUp,
+      racketSpeedDown,
+      racketSizeUp,
+      racketSizeDown,
+    ];
+  }
+}
+
 export class DefaultGame implements IGame {
   left: IPlayer;
   right: IPlayer;
@@ -172,14 +187,7 @@ export class DefaultGame implements IGame {
       scoreLeft: 0,
       scoreRight: 0,
       start: false,
-      powerUps: [
-        baball,
-        flashingBall,
-        racketSpeedUp,
-        racketSpeedDown,
-        racketSizeUp,
-        racketSizeDown,
-      ],
+      powerUps: [],
       racketLeft: {
         width: racketWidth,
         height: racketHeight,

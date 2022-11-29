@@ -3,7 +3,14 @@ import { IGame } from './interfaces/game.interface';
 import { IInput } from './interfaces/input.interface';
 import { checkIntersection, IntersectionCheckResult } from 'line-intersect';
 import { lineAngle, Point, pointTranslate } from 'geometric';
-import { ballDiameter, ballSpeed, DefaultGame } from './config';
+import {
+  baball,
+  baballEffect,
+  ballDiameter,
+  ballSpeed,
+  DefaultGame,
+  DefaultPowerUps,
+} from './config';
 import { Injectable } from '@nestjs/common';
 import { ICircle } from './interfaces/circle.interface';
 import { IRectangle } from './interfaces/rectangle.interface';
@@ -180,6 +187,13 @@ export class Game {
       this.game.states.scoreLeft++;
     }
     this.newBall();
+    //ajoue d'un nouveau bonus
+    this.game.states.powerUps.push(
+      new DefaultPowerUps().powerUps[
+        (this.game.states.scoreRight + this.game.states.scoreLeft) %
+          new DefaultPowerUps().powerUps.length
+      ],
+    );
   }
 
   private racketBounce(pointX: number, pointY: number): void {
