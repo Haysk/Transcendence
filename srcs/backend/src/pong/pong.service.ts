@@ -2,7 +2,6 @@ import { Injectable } from '@nestjs/common';
 import { User } from '@prisma/client';
 import { interval, Subscription } from 'rxjs';
 import { SaveGameService } from 'src/save-game/save-game.service';
-import { defaultGameConfig } from './game/config';
 import { Game } from './game/game';
 import { IInput } from './game/interfaces/input.interface';
 import { SGame } from './game/interfaces/save-game.interface';

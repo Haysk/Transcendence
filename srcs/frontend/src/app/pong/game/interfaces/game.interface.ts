@@ -1,6 +1,6 @@
 import { LevelAi } from '../ai';
-import { IBallConfig } from './ball-config.interface';
 import { IBoard } from './board.interface';
+import { IEffect } from './effect.interface';
 import { IGameStates } from './game-states.interface';
 import { IPlayer } from './player.interface';
 
@@ -31,4 +31,5 @@ export interface IGame {
   right: IPlayer;
   board: IBoard;
   states: IGameStates;
+  effects: IEffect[];
 }

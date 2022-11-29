@@ -4,7 +4,7 @@ import { SocketService } from './services/socket.service';
 import { User } from './models/user';
 import { StorageService } from './services/storage.service';
 import { IGame } from './pong/game/interfaces/game.interface';
-import { defaultGameConfig } from './pong/game/config';
+import { DefaultGame } from './pong/game/config';
 
 @Component({
   selector: 'app-root',
@@ -98,7 +98,7 @@ export class AppComponent implements OnInit{
         this.player2 = data.res2;
         this.gameConfig = data.res3;
         this.setUpGameConfig();
-        this.gameConfig = structuredClone(defaultGameConfig);
+        this.gameConfig = new DefaultGame();
         this.roomName = this.createGameRoomName(this.player1.login, this.player2.login);
         if(this.player1.id == Number(this.storageService.getId()))
           this.socketService.createGame(this.roomName, this.gameConfig, this.player1, this.player2);

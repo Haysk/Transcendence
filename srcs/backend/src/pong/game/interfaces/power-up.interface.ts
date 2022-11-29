@@ -1,7 +1,7 @@
 import { IPosition } from './position.interface';
 
 export interface IPowerUp {
-  effect: string;
+  effectName: string;
   color: string;
   position: IPosition;
   height: number;

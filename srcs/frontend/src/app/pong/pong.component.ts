@@ -2,7 +2,7 @@ import { Component, Input, OnDestroy, OnInit } from "@angular/core";
 import { filter, fromEvent, interval, Subscription } from "rxjs";
 import { SocketService } from "../services/socket.service";
 import { Ai } from "./game/ai";
-import { defaultGameConfig } from "./game/config";
+import { DefaultGame } from "./game/config";
 import { Game } from "./game/game";
 import { IGameStates } from "./game/interfaces/game-states.interface";
 import { IGame, PlayerMode } from "./game/interfaces/game.interface";
@@ -38,9 +38,9 @@ const keyStart = " ";
 export class PongComponent implements OnInit, OnDestroy {
   //une config doit etre envoyer pour configurer une partie
   @Input()
-  customs: IGame = structuredClone(defaultGameConfig);
+  customs: IGame = new DefaultGame();
 
-  gameConfig: IGame = structuredClone(defaultGameConfig);
+  gameConfig: IGame = new DefaultGame();
 
   //nom de la room pong (en cours de dev)
   @Input()
@@ -299,9 +299,7 @@ export class PongComponent implements OnInit, OnDestroy {
     }
     if (this.gameConfig.left.mode.type !== "remote") {
       if (key === "1") {
-        this.gameConfig.left.mode = structuredClone(
-          defaultGameConfig.left.mode
-        );
+        this.gameConfig.left.mode = new DefaultGame().left.mode;
       } else if (key === "2") {
         this.gameConfig.left.mode = {
           type: "ai",
@@ -316,9 +314,7 @@ export class PongComponent implements OnInit, OnDestroy {
     }
     if (this.gameConfig.right.mode.type !== "remote") {
       if (key === "4") {
-        this.gameConfig.right.mode = structuredClone(
-          defaultGameConfig.right.mode
-        );
+        this.gameConfig.right.mode = new DefaultGame().right.mode;
       } else if (key === "5") {
         this.gameConfig.right.mode = {
           type: "ai",
@@ -406,10 +402,6 @@ export class PongComponent implements OnInit, OnDestroy {
   reset(): void {
     this.socketService.sendReset(this.gameName);
     //this.game.updateStates(structuredClone(defaultGameConfig).states);
-  }
-
-  resetAll(): void {
-    this.game.updateAll(structuredClone(defaultGameConfig));
   }
 
   roundRect(

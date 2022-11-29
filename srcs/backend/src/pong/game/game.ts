@@ -3,12 +3,14 @@ import { IGame } from './interfaces/game.interface';
 import { IInput } from './interfaces/input.interface';
 import { checkIntersection, IntersectionCheckResult } from 'line-intersect';
 import { lineAngle, Point, pointTranslate } from 'geometric';
-import { ballSpeed, defaultGameConfig } from './config';
+import { ballDiameter, ballSpeed, DefaultGame } from './config';
 import { Injectable } from '@nestjs/common';
+import { ICircle } from './interfaces/circle.interface';
+import { IRectangle } from './interfaces/rectangle.interface';
 
 @Injectable()
 export class Game {
-  private game: IGame = structuredClone(defaultGameConfig);
+  private game: IGame = new DefaultGame();
 
   public constructor() {}
 
@@ -149,26 +151,15 @@ export class Game {
       racketColision,
     ]);
 
-    //gestion des powerUp
-    this.powerUpColision(posBall, posNextBall);
+    this.powerUpColision(posBall);
 
     if (collision.type === 'intersecting') {
       if (collision == wallColision) {
-        this.game.states.ball.position.left = collision.point.x;
-        this.game.states.ball.position.top = collision.point.y;
-        this.game.states.ball.direction[1] *= -1;
+        this.wallBounce(collision.point.x, collision.point.y);
       } else if (collision == goalColision) {
-        if (collision.point.x < this.game.board.board.width / 2) {
-          this.game.states.scoreRight++;
-        } else {
-          this.game.states.scoreLeft++;
-        }
-        this.newBall();
+        this.goal(collision.point.x);
       } else if (collision == racketColision) {
-        this.game.states.ball.position.left = collision.point.x;
-        this.game.states.ball.position.top = collision.point.y;
-        this.game.states.ball.speed *= 1.01;
-        this.game.states.ball.direction = this.bounceTrajectory();
+        this.racketBounce(collision.point.x, collision.point.y);
       }
     } else {
       this.game.states.ball.position.left += this.game.states.ball.direction[0];
@@ -176,22 +167,73 @@ export class Game {
     }
   }
 
-  private powerUpColision(posBall: Point, posNextBall: Point): void {
+  private wallBounce(pointX: number, pointY: number): void {
+    this.game.states.ball.position.left = pointX;
+    this.game.states.ball.position.top = pointY;
+    this.game.states.ball.direction[1] *= -1;
+  }
+
+  private goal(pointX: number): void {
+    if (pointX < this.game.board.board.width / 2) {
+      this.game.states.scoreRight++;
+    } else {
+      this.game.states.scoreLeft++;
+    }
+    this.newBall();
+  }
+
+  private racketBounce(pointX: number, pointY: number): void {
+    this.game.states.ball.position.left = pointX;
+    this.game.states.ball.position.top = pointY;
+    this.game.states.ball.speed *= 1.01;
+    this.game.states.ball.direction = this.bounceTrajectory();
+  }
+
+  private intersects(circle: ICircle, rect: IRectangle): boolean {
+    const circleDistanceX = Math.abs(circle.x - rect.x);
+    const circleDistanceY = Math.abs(circle.y - rect.y);
+
+    if (
+      circleDistanceX > rect.width / 2 + circle.r ||
+      circleDistanceY > rect.height / 2 + circle.r
+    ) {
+      return false;
+    }
+    if (
+      circleDistanceX <= rect.width / 2 ||
+      circleDistanceY <= rect.height / 2
+    ) {
+      return true;
+    }
+    const cornerDistance_sq =
+      Math.pow(circleDistanceX - rect.width / 2, 2) +
+      Math.pow(circleDistanceY - rect.height / 2, 2);
+    return cornerDistance_sq <= Math.pow(circle.r, 2);
+  }
+
+  //TODO: remplacer toute les ball et les rectangle par des interfaces
+
+  private powerUpColision(posBall: Point): void {
     for (let index = 0; index < this.game.states.powerUps.length; index++) {
       const powerUp = this.game.states.powerUps[index];
-      //TODO: calcul de l'intersection avec le powerUp
       if (
-        this.rectangleColision(
-          posBall,
-          posNextBall,
-          powerUp.position.left,
-          powerUp.position.left + powerUp.width,
-          powerUp.position.top,
-          powerUp.position.top + powerUp.height,
-        ).type === 'intersecting'
+        this.intersects(
+          {
+            x: posBall[0] + this.game.states.ball.diammeter / 2,
+            y: posBall[1] + this.game.states.ball.diammeter / 2,
+            r: this.game.states.ball.diammeter / 2,
+          },
+          {
+            x: powerUp.position.left + powerUp.width / 2,
+            y: powerUp.position.top + powerUp.height / 2,
+            width: powerUp.width,
+            height: powerUp.height,
+          },
+        )
       ) {
-        //aplly effect
-        //delete powerUp
+        this.game.effects
+          .find((effect) => effect.effectName === powerUp.effectName)
+          ?.effect(this.game.states);
         this.game.states.powerUps.splice(index, 1);
       }
     }
@@ -232,6 +274,7 @@ export class Game {
   }
 
   private newBall(): void {
+    this.game.states.ball.diammeter = ballDiameter;
     this.game.states.ball.speed = ballSpeed;
     this.game.states.ball.position.left =
       (this.game.board.board.width - this.game.states.ball.diammeter) / 2;

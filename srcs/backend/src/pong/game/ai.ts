@@ -5,7 +5,7 @@ import {
   colinearPointWithinSegment,
   IntersectionCheckResult,
 } from 'line-intersect';
-import { defaultGameConfig } from './config';
+import { DefaultGame } from './config';
 import { IGameStates } from './interfaces/game-states.interface';
 import { IGame } from './interfaces/game.interface';
 import { IInput } from './interfaces/input.interface';
@@ -15,7 +15,7 @@ export type LevelAi = 'easy' | 'hard';
 
 @Injectable()
 export class Ai {
-  private game: IGame = structuredClone(defaultGameConfig);
+  private game: IGame = new DefaultGame();
   private level: LevelAi = 'easy';
   private userId = 0;
 
