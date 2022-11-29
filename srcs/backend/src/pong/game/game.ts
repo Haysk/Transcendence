@@ -8,6 +8,8 @@ import {
   ballSpeed,
   DefaultGame,
   DefaultPowerUps,
+  gameWidth,
+  sidePowerUp,
 } from './config';
 import { Injectable } from '@nestjs/common';
 import { ICircle } from './interfaces/circle.interface';
@@ -185,13 +187,26 @@ export class Game {
       this.game.states.scoreLeft++;
     }
     this.newBall();
-    //ajoue d'un nouveau bonus
-    this.game.states.powerUps.push(
+    this.newPowerUp();
+  }
+
+  private newPowerUp(): void {
+    const score = this.game.states.scoreRight + this.game.states.scoreLeft;
+    const powerUp = structuredClone(
       new DefaultPowerUps().powerUps[
-        (this.game.states.scoreRight + this.game.states.scoreLeft) %
-          new DefaultPowerUps().powerUps.length
+        score % new DefaultPowerUps().powerUps.length
       ],
     );
+    if (score % 4 === 0) {
+      powerUp.position.left = (1 * gameWidth) / 5 - sidePowerUp / 2;
+    } else if (score % 4 === 1) {
+      powerUp.position.left = (3 * gameWidth) / 5 - sidePowerUp / 2;
+    } else if (score % 4 === 2) {
+      powerUp.position.left = (2 * gameWidth) / 5 - sidePowerUp / 2;
+    } else {
+      powerUp.position.left = (4 * gameWidth) / 5 - sidePowerUp / 2;
+    }
+    this.game.states.powerUps.push(powerUp);
   }
 
   private racketBounce(pointX: number, pointY: number): void {

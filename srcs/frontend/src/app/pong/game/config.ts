@@ -5,18 +5,18 @@ import { IGame } from './interfaces/game.interface';
 import { IPlayer } from './interfaces/player.interface';
 import { IPowerUp } from './interfaces/power-up.interface';
 
-const racketHeight = 160;
-const racketWidth = 30;
-const racketSpeed = 10;
+export const racketHeight = 160;
+export const racketWidth = 30;
+export const racketSpeed = 10;
 
-const gameHeight = 790;
-const gameWidth = 1000;
-const gameMargin = 10;
+export const gameHeight = 790;
+export const gameWidth = 1000;
+export const gameMargin = 10;
 
 export const ballDiameter = 22;
 export const ballSpeed = 5;
 
-const sidePowerUp = 42;
+export const sidePowerUp = 42;
 
 export function baballEffect(gameStates: IGameStates): void {
   gameStates.ball.diammeter += ballDiameter;
