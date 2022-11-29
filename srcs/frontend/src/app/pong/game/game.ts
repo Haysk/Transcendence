@@ -4,8 +4,6 @@ import { IInput } from './interfaces/input.interface';
 import { checkIntersection, IntersectionCheckResult } from 'line-intersect';
 import { lineAngle, Point, pointTranslate } from 'geometric';
 import {
-  baball,
-  baballEffect,
   ballDiameter,
   ballSpeed,
   DefaultGame,
