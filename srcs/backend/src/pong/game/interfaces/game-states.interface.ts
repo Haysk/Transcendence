@@ -7,6 +7,7 @@ export interface IGameStates {
   scoreLeft: number;
   scoreRight: number;
   start: boolean;
+  activatePowerUp: boolean;
   powerUps: IPowerUp[];
   racketLeft: IRacketConfig;
   racketRight: IRacketConfig;

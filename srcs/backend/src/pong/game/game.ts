@@ -49,6 +49,10 @@ export class Game {
     this.game.states = states;
   }
 
+  public updatePowerUp(activate: boolean): void {
+    this.game.states.activatePowerUp = activate;
+  }
+
   public getGameStates(): IGameStates {
     return this.game.states;
   }
@@ -187,7 +191,9 @@ export class Game {
       this.game.states.scoreLeft++;
     }
     this.newBall();
-    this.newPowerUp();
+    if (this.game.states.activatePowerUp) {
+      this.newPowerUp();
+    }
   }
 
   private newPowerUp(): void {

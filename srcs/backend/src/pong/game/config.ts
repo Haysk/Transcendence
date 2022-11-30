@@ -187,6 +187,7 @@ export class DefaultGame implements IGame {
       scoreLeft: 0,
       scoreRight: 0,
       start: false,
+      activatePowerUp: false,
       powerUps: [],
       racketLeft: {
         width: racketWidth,
