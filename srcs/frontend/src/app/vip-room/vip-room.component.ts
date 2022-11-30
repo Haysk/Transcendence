@@ -71,14 +71,15 @@
 	}
 
 	onUpload(){
-		
-		if (this.selectedFile.size < 75000){
-		this.apiService.updateAvatar(Number(this.id), String(this.userToShow.url)).subscribe();
-		this.storage.setAvatar(String(this.userToShow.url));
-		window.alert('***Update down***');
-		}
-		else{
-			window.alert('***image too large only < 75kb ***');
+		if (this.selectedFile) {
+			if (this.selectedFile.size < 75000) {
+				this.apiService.updateAvatar(Number(this.id), String(this.userToShow.url)).subscribe();
+				this.storage.setAvatar(String(this.userToShow.url));
+				window.alert('***Update down***');
+			}
+			else {
+				window.alert('***image too large only < 75kb ***');
+			}
 		}
 	}
 
