@@ -1,9 +1,9 @@
-import { IBoard } from './interfaces/board.interface';
-import { IEffect } from './interfaces/effect.interface';
-import { IGameStates } from './interfaces/game-states.interface';
-import { IGame } from './interfaces/game.interface';
-import { IPlayer } from './interfaces/player.interface';
-import { IPowerUp } from './interfaces/power-up.interface';
+import { IBoard } from "./interfaces/board.interface";
+import { IEffect } from "./interfaces/effect.interface";
+import { IGameStates } from "./interfaces/game-states.interface";
+import { IGame } from "./interfaces/game.interface";
+import { IPlayer } from "./interfaces/player.interface";
+import { IPowerUp } from "./interfaces/power-up.interface";
 
 export const racketHeight = 160;
 export const racketWidth = 30;
@@ -55,8 +55,8 @@ export function racketSizeDownEffect(gameStates: IGameStates): void {
 }
 
 export const baball: IPowerUp = {
-  effectName: 'baball',
-  color: 'yelow',
+  effectName: "baball",
+  color: "yelow",
   position: {
     left: gameWidth / 5 - sidePowerUp / 2,
     top: gameHeight / 10 - sidePowerUp / 2,
@@ -66,8 +66,8 @@ export const baball: IPowerUp = {
 };
 
 export const flashingBall: IPowerUp = {
-  effectName: 'flashingBall',
-  color: 'pink',
+  effectName: "flashingBall",
+  color: "pink",
   position: {
     left: (2 * gameWidth) / 5 - sidePowerUp / 2,
     top: gameHeight / 10 - sidePowerUp / 2,
@@ -77,8 +77,8 @@ export const flashingBall: IPowerUp = {
 };
 
 export const racketSpeedUp: IPowerUp = {
-  effectName: 'racketSpeedUp',
-  color: 'blue',
+  effectName: "racketSpeedUp",
+  color: "blue",
   position: {
     left: gameWidth / 5 - sidePowerUp / 2,
     top: (4 * gameHeight) / 10 - sidePowerUp / 2,
@@ -88,8 +88,8 @@ export const racketSpeedUp: IPowerUp = {
 };
 
 export const racketSpeedDown: IPowerUp = {
-  effectName: 'racketSpeedDown',
-  color: 'orange',
+  effectName: "racketSpeedDown",
+  color: "orange",
   position: {
     left: (2 * gameWidth) / 5 - sidePowerUp / 2,
     top: (6 * gameHeight) / 10 - sidePowerUp / 2,
@@ -99,8 +99,8 @@ export const racketSpeedDown: IPowerUp = {
 };
 
 export const racketSizeUp: IPowerUp = {
-  effectName: 'racketSizeUp',
-  color: 'green',
+  effectName: "racketSizeUp",
+  color: "green",
   position: {
     left: gameWidth / 5 - sidePowerUp / 2,
     top: (9 * gameHeight) / 10 - sidePowerUp / 2,
@@ -110,8 +110,8 @@ export const racketSizeUp: IPowerUp = {
 };
 
 export const racketSizeDown: IPowerUp = {
-  effectName: 'racketSizeDown',
-  color: 'red',
+  effectName: "racketSizeDown",
+  color: "red",
   position: {
     left: (2 * gameWidth) / 5 - sidePowerUp / 2,
     top: (9 * gameHeight) / 10 - sidePowerUp / 2,
@@ -146,9 +146,9 @@ export class DefaultGame implements IGame {
     this.left = {
       id: 0,
       mode: {
-        type: 'local',
-        upKey: 'w',
-        downKey: 's',
+        type: "local",
+        upKey: "w",
+        downKey: "s",
       },
       input: {
         userId: 0,
@@ -159,9 +159,9 @@ export class DefaultGame implements IGame {
     this.right = {
       id: 1,
       mode: {
-        type: 'local',
-        upKey: 'ArrowUp',
-        downKey: 'ArrowDown',
+        type: "local",
+        upKey: "ArrowUp",
+        downKey: "ArrowDown",
       },
       input: {
         userId: 1,
@@ -172,13 +172,13 @@ export class DefaultGame implements IGame {
     this.board = {
       id: 0,
       mode: {
-        type: 'local',
+        type: "local",
       },
       board: {
         width: gameWidth,
         height: gameHeight,
         margin: gameMargin,
-        color: '#000000',
+        color: "#000000",
       },
       scoreToWin: 11,
     };
@@ -187,12 +187,13 @@ export class DefaultGame implements IGame {
       scoreLeft: 0,
       scoreRight: 0,
       start: false,
+      activatePowerUp: false,
       powerUps: [],
       racketLeft: {
         width: racketWidth,
         height: racketHeight,
         speed: racketSpeed,
-        color: '#04EBB2',
+        color: "#04EBB2",
         position: {
           left: gameMargin,
           top: gameMargin,
@@ -202,7 +203,7 @@ export class DefaultGame implements IGame {
         width: racketWidth,
         height: racketHeight,
         speed: racketSpeed,
-        color: '#FFBB33',
+        color: "#FFBB33",
         position: {
           left: gameWidth - gameMargin - racketWidth,
           top: gameMargin,
@@ -211,7 +212,7 @@ export class DefaultGame implements IGame {
       ball: {
         diammeter: ballDiameter,
         speed: ballSpeed,
-        collor: '#e5e83b',
+        collor: "#e5e83b",
         position: {
           left: (gameWidth - ballDiameter) / 2,
           top: (gameHeight - ballDiameter) / 2,
@@ -221,23 +222,23 @@ export class DefaultGame implements IGame {
     };
     this.effects = [
       {
-        effectName: 'baball',
+        effectName: "baball",
         effect: baballEffect,
       },
       {
-        effectName: 'racketSpeedUp',
+        effectName: "racketSpeedUp",
         effect: racketSpeedUpEffect,
       },
       {
-        effectName: 'racketSpeedDown',
+        effectName: "racketSpeedDown",
         effect: racketSpeedDownEffect,
       },
       {
-        effectName: 'racketSizeUp',
+        effectName: "racketSizeUp",
         effect: racketSizeUpEffect,
       },
       {
-        effectName: 'racketSizeDown',
+        effectName: "racketSizeDown",
         effect: racketSizeDownEffect,
       },
     ];

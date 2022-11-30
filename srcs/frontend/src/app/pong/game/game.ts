@@ -49,6 +49,10 @@ export class Game {
     this.game.states = states;
   }
 
+  public updatePowerUp(activate: boolean): void {
+    this.game.states.activatePowerUp = activate;
+  }
+
   public getGameStates(): IGameStates {
     return this.game.states;
   }
@@ -187,7 +191,9 @@ export class Game {
       this.game.states.scoreLeft++;
     }
     this.newBall();
-    this.newPowerUp();
+    if (this.game.states.activatePowerUp) {
+      this.newPowerUp();
+    }
   }
 
   private newPowerUp(): void {
@@ -200,13 +206,12 @@ export class Game {
     if (score % 4 === 0) {
       powerUp.position.left = (1 * gameWidth) / 5 - sidePowerUp / 2;
     } else if (score % 4 === 1) {
-      powerUp.position.left = (9 * gameWidth) / 5 - sidePowerUp / 2;
+      powerUp.position.left = (3 * gameWidth) / 5 - sidePowerUp / 2;
     } else if (score % 4 === 2) {
       powerUp.position.left = (2 * gameWidth) / 5 - sidePowerUp / 2;
     } else {
-      powerUp.position.left = (8 * gameWidth) / 5 - sidePowerUp / 2;
+      powerUp.position.left = (4 * gameWidth) / 5 - sidePowerUp / 2;
     }
-    powerUp.position.left = this.game.board.board.width;
     this.game.states.powerUps.push(powerUp);
   }
 
