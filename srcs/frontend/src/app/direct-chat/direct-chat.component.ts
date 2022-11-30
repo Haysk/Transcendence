@@ -75,7 +75,6 @@ export class DirectChatComponent implements OnInit {
     
     this.socketService.findFriendsOrNot().subscribe((result) => {
       this.num = result;
-      // console.log(this.num);
       if (this.num == 1)
       {
         this.friendOrNot=false;
@@ -103,23 +102,16 @@ export class DirectChatComponent implements OnInit {
     })
 
     this.socketService.unblockedUser().subscribe((result) => {
-      // this.friendList = result;
       this.bloqueOrNot = true;
       this.socketService.hasBeenUnblocked(this.Dest, this.Me);
     })
 
     this.socketService.blockedUser().subscribe((result) => {
-      // this.friendList = result;
       this.bloqueOrNot = false;
       this.socketService.hasBeenBlocked(this.Dest, this.Me);
     })
 
-    this.socketService.getFriend().subscribe((result) => {      
-    })
-
-    this.socketService.removeFriend().subscribe((result) => {
-    })
-
+    this.socketService.addFriend(this.Me.id).subscribe();
   }
 
 	ngOnDestroy() {
