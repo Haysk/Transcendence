@@ -40,6 +40,7 @@ import { BlocUserProfileComponent } from './widgets/bloc-user-profile/bloc-user-
 import { Vip2RoomComponent } from './vip2-room/vip2-room.component';
 import { InvitationRefuseComponent } from './widgets/invitation-refuse/invitation-refuse.component';
 import { AuthModule } from './auth/auth.module';
+import { NotFoundComponent } from './not-found/not-found.component';
 
 @NgModule({
   declarations: [
@@ -76,7 +77,8 @@ import { AuthModule } from './auth/auth.module';
     ButtonV4Component,
     BlocUserProfileComponent,
     Vip2RoomComponent,
-    InvitationRefuseComponent
+    InvitationRefuseComponent,
+    NotFoundComponent
   ],
   imports: [
     BrowserModule,

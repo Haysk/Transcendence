@@ -61,7 +61,7 @@ export class SalonAvailableComponent implements OnInit {
       }
     })
     this.socketService.updateChannel();
-    ;(await this.socketService.getUpdateChannels()).subscribe({
+    (await this.socketService.getUpdateChannels()).subscribe({
       next: (result) => {
         this.salons_dispos = result;
       }
@@ -74,6 +74,12 @@ export class SalonAvailableComponent implements OnInit {
     this.socketService.updateUser(this.current_user);
 
     this.socketService.updateChannels();
+  }
+
+  ngOnDestroy() {
+	this.socketService.unsubscribeSocket("aChannelHasBeenCreated");
+	this.socketService.unsubscribeSocket("channelsAreUpdated");
+	this.socketService.unsubscribeSocket("userUpdated");
   }
 
   isBanned(current_user: User, current_channel : Channel)

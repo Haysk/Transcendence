@@ -36,6 +36,11 @@ export class InvitationGameComponent implements OnInit {
     })
   }
 
+	ngOnDestroy() {
+		this.socketService.unsubscribeSocket("invitationAccepted");
+		this.socketService.unsubscribeSocket("GameIsReady");
+	}
+
   Nothanks(){
 
     this.socketService.refuseInvitation(this.fromWho, String(this.storageService.getLogin()));

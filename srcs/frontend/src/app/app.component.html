@@ -8,8 +8,8 @@
 <app-invitation-refuse *ngIf="refuse==true" 
 [refuseFromWho]="this.refuseFromWho"
 (refuseInvitationEvent)="receiverefueInvitationEvent($event)"></app-invitation-refuse>
-<app-bloc-chat *ngIf="getRoute() != '/'"></app-bloc-chat>
-<app-header  *ngIf="getRoute() != '/'" ></app-header>
+<app-bloc-chat *ngIf="getRoute() != '/' && getRoute() != '/404'"></app-bloc-chat>
+<app-header  *ngIf="getRoute() != '/' && getRoute() != '/404'" ></app-header>
 <router-outlet></router-outlet>
 
 

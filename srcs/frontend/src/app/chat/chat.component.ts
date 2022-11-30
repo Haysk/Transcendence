@@ -77,10 +77,8 @@ export class ChatComponent implements OnInit {
 
     })
 
-	this.socketService.getConnectionSignalFriend(this.Me.id).subscribe();
     this.socketService.getFriendList(this.Me.id);
     this.socketService.listFriend().subscribe((result) => {
-		// this.socketService.askForUserList(this.Me.id);
     	this.Friend_list = result;
 		this.friendFiltred();
     })    
@@ -101,6 +99,17 @@ export class ChatComponent implements OnInit {
 		this.socketService.askForUserList(this.Me.id)
 		this.socketService.getFriendList(this.Me.id);
 	})
+	}
+
+	ngOnDestroy() {
+		this.socketService.unsubscribeSocket("userListUpdated");
+		this.socketService.unsubscribeSocket("hereIsTheUserList");
+		this.socketService.unsubscribeSocket("getFriend");
+		this.socketService.unsubscribeSocket("removeFriend");
+		this.socketService.unsubscribeSocket("listFriends");
+		this.socketService.unsubscribeSocket("DestActualisation");
+		this.socketService.unsubscribeSocket("youHaveBeenBlocked");
+		this.socketService.unsubscribeSocket("youHaveBeenUnblocked");
 	}
 
 	userFiltred() {

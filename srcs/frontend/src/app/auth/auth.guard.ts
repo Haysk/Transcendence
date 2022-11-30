@@ -21,12 +21,10 @@ export class AuthGuard implements CanActivate {
 		this.locked = false;
 	} 
 	async canActivate(route: ActivatedRouteSnapshot, state: RouterStateSnapshot): Promise<boolean> {
-		if (this.auth.getLocked() === false) {
+		if (this.auth.getLocked() === false)
 			return true;
-		}
-		else if (await this.auth.userIsOnline()) {
+		else if (await this.auth.userIsOnline() == true)
 			return true;
-		}
 		this.auth.logout();
 		this.router.navigateByUrl('');
 		return false

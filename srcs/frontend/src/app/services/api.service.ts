@@ -104,32 +104,4 @@ export class ApiService {
 	validateTfa(data: { code: string, tfa_key: string }) {
 		return this.httpClient.post<User | boolean>(`${this.API_SERVER}/tfa/validate`, data);
 	}
-
-
-	//get friend 
-
-	getFriend(current: number) {
-		return this.httpClient.get<User>(`${this.API_SERVER}/user/friends/${current}`);
-	}
-
-	//add friend
-
-	addFriend(id: number, id1: number) {
-		const data = { id, id1 };
-		return this.httpClient.post<User>(`${this.API_SERVER}/addFriend`, data);
-	}
-
-	//remove friend
-
-	removeFriend(id: number, id1: number) {
-		const data = { id, id1 };
-		return this.httpClient.post<User>(`${this.API_SERVER}/removeFriend`, data);
-	}
-
-	//check if friend
-
-	checkIfFriend(user: User[], id1: number) {
-		const data = { user, id1 };
-		return this.httpClient.get<User>(`${this.API_SERVER}/checkIfFriend/${data}`);
-	}
 }

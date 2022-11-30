@@ -41,6 +41,11 @@ export class AppComponent implements OnInit{
     })
   }
 
+  ngOnDestroy() {
+	this.socketService.unsubscribeSocket("DisplayInvitation");
+	this.socketService.unsubscribeSocket("refuseInvitation");
+  }
+
   public getLogin(): string | null{
 	var login = localStorage.getItem("login");
   this.socketService.sendLogin(String(login)); //mettre son socket a jour

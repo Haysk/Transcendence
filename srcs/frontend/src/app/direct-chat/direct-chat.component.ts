@@ -102,24 +102,28 @@ export class DirectChatComponent implements OnInit {
     })
 
     this.socketService.unblockedUser().subscribe((result) => {
-      // this.friendList = result;
       this.bloqueOrNot = true;
       this.socketService.hasBeenUnblocked(this.Dest, this.Me);
     })
 
     this.socketService.blockedUser().subscribe((result) => {
-      // this.friendList = result;
       this.bloqueOrNot = false;
       this.socketService.hasBeenBlocked(this.Dest, this.Me);
     })
 
-    this.socketService.getFriend(this.Me.id).subscribe((result) => {      
-    })
-
-    this.socketService.removeFriend().subscribe((result) => {
-    })
-
+    this.socketService.addFriend(this.Me.id).subscribe();
   }
+
+	ngOnDestroy() {
+		this.socketService.unsubscribeSocket("DestActualisation");
+		this.socketService.unsubscribeSocket("PrivMsg");
+		this.socketService.unsubscribeSocket("findFriendsOrNot");
+		this.socketService.unsubscribeSocket("findBlockOrNot");
+		this.socketService.unsubscribeSocket("findBlockOrNot");
+		this.socketService.unsubscribeSocket("unblockedUser");
+		this.socketService.unsubscribeSocket("blockedUser");
+		this.socketService.unsubscribeSocket("addFriend");
+	}
   
   getRoomName(login1: string, login2 : string) : string
   {
@@ -178,7 +182,7 @@ export class DirectChatComponent implements OnInit {
 
   goToProfile() {
 
-    this.socketService.searchForAUser(this.Dest.login);
+	this.router.navigate(["vip2-room"], { queryParams: { login: this.Dest.login }});
   }
   
   updateScroll() {

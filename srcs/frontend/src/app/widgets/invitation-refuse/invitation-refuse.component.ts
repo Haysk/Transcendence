@@ -37,6 +37,11 @@ export class InvitationRefuseComponent implements OnInit {
     })
   }
 
+	ngOnDestroy() {
+		this.socketService.unsubscribeSocket("invitationAccepted");
+		this.socketService.unsubscribeSocket("GameIsReady");
+	}
+
   okGotIt(){
 
     this.refuseInvitationEvent.emit(false);

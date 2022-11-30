@@ -34,6 +34,10 @@ export class SocketService {
 	this.socket.off("msginchannel");
 	this.socket.off("youAreBanned");
   }
+
+  unsubscribeSocket(event: string) {
+	this.socket.off(event);
+  }
   //MUTE
 
   muteUserByTime(userToMute: number, channelConcerned: number, timeToMute: number)
@@ -127,6 +131,7 @@ amIBanned()
     return new Observable((obs) => {
       this.socket.on('userListUpdated', () => {
       this.socket.emit('userListPlz', current_id);
+      this.socket.emit('getFriendList', current_id);
       obs.next();
       })
     })
@@ -437,11 +442,18 @@ amIBanned()
   //Add Friend
 
   getAddFriend(id: number, id1: number){
-    //this.socket.on('getAddFriend');
     this.socket.emit('getAddFriend', id, id1);
   }
 
   getFriend(current_id: number): Observable<User[]> {
+    return new Observable<User[]>((observer) => {
+      this.socket.on('getFriend', (tab: User[]) => {
+        observer.next(tab);
+      });
+    });
+  }
+
+  addFriend(current_id: number): Observable<User[]> {
     return new Observable<User[]>((observer) => {
       this.socket.on('addFriend', (tab: User[]) => {
         this.socket.emit('userListPlz', current_id)
@@ -462,18 +474,6 @@ amIBanned()
         obs.next(tab);
       });
     });
-  }
-
-  //Get Friend List
-
-  getConnectionSignalFriend(current_id: number)
-  {
-    return new Observable((obs) => {
-      this.socket.on('userListUpdated', () => {
-      this.socket.emit('getFriendList', current_id);
-      obs.next();
-      })
-    })
   }
 
   getFriendList(id: number){
