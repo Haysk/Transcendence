@@ -23,3 +23,4 @@
 </div>
 <app-pong *ngIf="redirectPong==true" [customs]="gameConfig" [gameName]="roomName"></app-pong>
 <app-game-score *ngIf="showGameScore==true" [GameData]="GameData" (closeScoreEvent)="receiveCloseScoreEvent($event)"></app-game-score>
+<app-searching-player *ngIf="showSearchingPlayer==true" (showSearchingPlayerEvent)="receiveShowSearchingPlayerEvent($event)"></app-searching-player>

@@ -44,6 +44,7 @@ import { GameSettingsComponent } from './widgets/game-settings/game-settings.com
 import { AreYouReadyComponent } from './widgets/are-you-ready/are-you-ready.component';
 import { NotFoundComponent } from './not-found/not-found.component';
 import { GameScoreComponent } from './widgets/game-score/game-score.component';
+import { SearchingPlayerComponent } from './widgets/searching-player/searching-player.component';
 
 @NgModule({
   declarations: [
@@ -84,7 +85,8 @@ import { GameScoreComponent } from './widgets/game-score/game-score.component';
     GameSettingsComponent,
     AreYouReadyComponent,
     NotFoundComponent,
-    GameScoreComponent
+    GameScoreComponent,
+    SearchingPlayerComponent
   ],
   imports: [
     BrowserModule,

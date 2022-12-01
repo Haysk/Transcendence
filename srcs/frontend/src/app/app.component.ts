@@ -34,7 +34,7 @@ export class AppComponent implements OnInit{
   global5!: {player1: User, player2:  User, gameConfig: IGame};
   roomName!:string;
   redirectPong:boolean = false;
-
+  showSearchingPlayer:boolean =false;
   GameData!: SGame;
   showGameScore:boolean = false;
 
@@ -186,6 +186,10 @@ export class AppComponent implements OnInit{
   receiveCloseScoreEvent($event:boolean){
        this.showGameScore= $event;
   }
+
+  receiveShowSearchingPlayerEvent($event:boolean){
+    this.showSearchingPlayer= $event;
+}
 
 }
 
