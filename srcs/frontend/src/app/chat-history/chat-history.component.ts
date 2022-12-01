@@ -26,7 +26,6 @@ export class ChatHistoryComponent implements OnInit {
     {
       next:(result) => {
       this.messages = result;
-      // console.log("ici chat history : " + result[0].content)
       },
       error: (err) =>{},
       complete:() => {}

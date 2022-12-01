@@ -32,7 +32,6 @@ export class CreateSalonComponent implements OnInit {
     this.apiService.findUserByLogin(String(localStorage.getItem("login"))).subscribe(
       {
         next:(result) => {
-          //console.log("findUserByLogin response : " + result.login);
           this.channel_creator = result;
         },
         error: (err) => {},

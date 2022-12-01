@@ -57,17 +57,6 @@ import { Router } from '@angular/router';
 		url = this.avatar;
 		selectedFile! : File;
 
-		//fileToUpload: File | null = null;
-
-
-		// selectedFile!:File ;
-		// onFileSelected(event){
-		//  console.log(event);
-		//  this.selectedFile = event.target.files[0];
-		// }
-
-	// url = this.userToShow.avatar;
-	
 	onSelect(event) {
 		
 		this.selectedFile =event.target.files[0];
@@ -76,10 +65,7 @@ import { Router } from '@angular/router';
 		let reader = new FileReader();
 		reader.readAsDataURL(event.target.files[0]);
 		reader.onload = (event: any) => {
-			this.userToShow.avatar = event.target.result;
-			// console.log("avatar url:" + this.avatar);
-			// console.log("new avatar url" + this.userToShow.url);
-			// console.log(event);
+			this.userToShow.url = event.target.result;
 		};
 		} else {
 		window.alert('Please select correct image format');
@@ -87,15 +73,15 @@ import { Router } from '@angular/router';
 	}
 
 	onUpload(){
-		
-		if (this.selectedFile.size < 75000){
-		this.apiService.updateAvatar(Number(this.id), String(this.userToShow.avatar)).subscribe();
-		console.log("this.url")
-		this.storage.setAvatar(String(this.userToShow.avatar));
-		window.alert('***Update done***');
-		}
-		else{
-			window.alert('***image too large only < 75kb ***');
+		if (this.selectedFile) {
+			if (this.selectedFile.size < 75000) {
+				this.apiService.updateAvatar(Number(this.id), String(this.userToShow.url)).subscribe();
+				this.storage.setAvatar(String(this.userToShow.url));
+				window.alert('***Update down***');
+			}
+			else {
+				window.alert('***image too large only < 75kb ***');
+			}
 		}
 	}
 

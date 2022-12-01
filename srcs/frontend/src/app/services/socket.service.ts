@@ -60,12 +60,10 @@ export class SocketService {
   //Be Admin
   BeAdminSalon(guestToBeAdmin: number, channelConcerned: number){
       this.socket.emit('beAdminSalon', guestToBeAdmin, channelConcerned)
-      console.log(2)
   }
 
   delAdminSalon(guestToDelAdmin: number, channelConcerned: number){
     this.socket.emit('delAdminSalon', guestToDelAdmin, channelConcerned)
-    console.log(2)
 }
   
 
@@ -134,6 +132,7 @@ amIBanned()
     return new Observable((obs) => {
       this.socket.on('userListUpdated', () => {
       this.socket.emit('userListPlz', current_id);
+      this.socket.emit('getFriendList', current_id);
       obs.next();
       })
     })
@@ -478,18 +477,30 @@ amIBanned()
     });
   }
 
+  //Add Friend
+
   getAddFriend(id: number, id1: number){
-    //this.socket.on('getAddFriend');
     this.socket.emit('getAddFriend', id, id1);
   }
 
-  getFriend(): Observable<User[]> {
+  getFriend(current_id: number): Observable<User[]> {
     return new Observable<User[]>((observer) => {
-      this.socket.on('addFriend', (tab: User[]) => {
+      this.socket.on('getFriend', (tab: User[]) => {
         observer.next(tab);
       });
     });
   }
+
+  addFriend(current_id: number): Observable<User[]> {
+    return new Observable<User[]>((observer) => {
+      this.socket.on('addFriend', (tab: User[]) => {
+        this.socket.emit('userListPlz', current_id)
+        observer.next(tab);
+      });
+    });
+  }
+
+  //Delete Friend
 
   getRemoveFriend(id: number, id1: number){
     this.socket.emit('getRemoveFriend', id, id1);
@@ -527,7 +538,6 @@ amIBanned()
     return new Observable<number>((obs) => {
       this.socket.on('findFriendsOrNot', (index: number) => {
         obs.next(index);
-        // console.log(`find friend or not ${index}`);
       })
     })
   }
@@ -582,7 +592,6 @@ amIBanned()
     return new Observable<number>((obs) => {
       this.socket.on('findBlockOrNot', (index: number) => {
         obs.next(index);
-        // console.log(`find block or not ${index}`);
       })
     })
   }

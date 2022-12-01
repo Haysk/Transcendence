@@ -97,14 +97,11 @@ export class UserInSalonComponent implements OnInit {
     this.ifBanne=!this.ifBanne;
     this.color3=this.ifBanne?"rgb(76, 80, 79)":"rgb(44, 136, 125)";
     this.countTimeBan=!this.countTimeBan;
-    console.log("val ban = " + this.val_banne);
     if(this.val_banne == "Ban(Secondes)"){
-      console.log("val time ban = " + this.time_ban);
       if (this.time_ban != 0)
         this.socketService.banUserByTime(this.guest.id, Number(this.current_channel.id), this.time_ban);
       else
         this.socketService.banUser(this.guest.id, Number(this.current_channel.id));
-    //   this.socketService.leaveChannel(this.current_channel.name, this.guest.id);
     }
     else{
       this.socketService.unbanUser(this.guest.id, Number(this.current_channel.id));
@@ -113,7 +110,6 @@ export class UserInSalonComponent implements OnInit {
     this.socketService.updateChannel();
     this.socketService.updateChannels();
     this.time_ban = 0;
-    // this.socketService.updateUserInSalonList(this.current_channel.name);
   }
 
 }

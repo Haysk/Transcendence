@@ -10,8 +10,6 @@ import { SocketService } from '../services/socket.service';
 export class SelectUserComponent implements OnInit {
   @Input() Me!: User;
   @Input() user!: User;
-  // userList!: User[];
-  // @Input() show_chat: Boolean = false;
 
   @Output() showchatEvent = new EventEmitter<boolean>();
   
@@ -37,23 +35,11 @@ export class SelectUserComponent implements OnInit {
   }
 
   sendBtn(dest : User): void {
-    // if (this.Me.login != dest.login){
-    // console.log("Me = " + this.Me.login + " | dest : " + dest.login);
+
     this.show_chat = true;
     this.showchatEvent.emit(this.show_chat);
     this.socketService.initDestActualisation(dest);
- 
-
-
     this.socketService.checkIfFriend(this.Me.id, this.user.id);
     this.socketService.checkIfBlock(this.Me.id, this.user.id);
-    // }
-    // else{
-    //   this.show_chat = false;
-    //   this.show_hide = this.show_chat?"close":"chat";
-    //   this.showchatEvent.emit(this.show_chat);
-     
-    // }
-
   }
 }

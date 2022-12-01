@@ -84,7 +84,6 @@ export class SalonAvailableComponent implements OnInit {
 
   isBanned(current_user: User, current_channel : Channel)
   {
-    console.log(current_user);
     let i = 0;
     while(current_user.banned != null && current_user.banned != undefined
       && current_user.banned[i] != null && current_user.banned[i] != undefined)
@@ -93,7 +92,6 @@ export class SalonAvailableComponent implements OnInit {
           return 1
         i++;
       }
-      console.log("pas ban")
       return 0
   }
 
@@ -102,7 +100,6 @@ export class SalonAvailableComponent implements OnInit {
     this.socketService.updateUser(this.current_user);
     if(this.isBanned(current_user, current_channel) != 1)
     {
-      console.log("console log la")
       this.socketService.joinChannel(current_channel.name, this.current_user.id);
       this.ShowChannelPublicEvent.emit(this.show_salon);
       this.SendJoinChannelNameEvent.emit(current_channel.name);
@@ -120,8 +117,6 @@ export class SalonAvailableComponent implements OnInit {
     this.ShowFormulePasswordEvent.emit(this.show_formulePassword);
     this.SendChannelEvent.emit(current_channel);
     this.SendJoinChannelNameEvent.emit(current_channel.name);
-    
-    // this.showchatEvent.emit(false);
     this.showFormuleEvent.emit(false);
   }
 }

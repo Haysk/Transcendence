@@ -551,6 +551,7 @@ catch(err){
           creatorOf: true,
           blocked: true,
           blockedby: true,
+          friendsof: true,
       }
     })
     if(data != null && data != undefined)
@@ -1040,6 +1041,7 @@ catch(err){
       if (data != null && data != undefined)
       {
         this.server.to(client.id).emit('addFriend', data.friends);
+        this.server.to(client.id).emit('getFriend', data.friends);
       }
     }
     catch(err){
