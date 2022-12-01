@@ -450,7 +450,7 @@ amIBanned()
 
   stopMatchmaking(bonus: boolean)
   {
-    this.socket.emit('stopMatchmaking', bonus);
+    this.socket.emit('stopMatchmaking', false);
   }
 
   matchmaking(player: User, bonus: boolean)

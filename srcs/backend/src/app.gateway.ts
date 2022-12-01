@@ -1009,7 +1009,7 @@ catch(err){
   @SubscribeMessage('stopMatchmaking')
   stopMatchmaking(client: Socket, payload: any)
   {
-    if (payload[0] == false)
+    if (payload == false)
     {
       this.TabMatchmaking[0] = null;
     }
