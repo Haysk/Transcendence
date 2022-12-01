@@ -22,7 +22,7 @@ export class AuthService {
 	private tfa: boolean = false;
 
 	goToIntraLoginPage() {
-			window.location.href = `${this.INTRA_API_AUTH}?client_id=${environment.INTRA_UID}&redirect_uri=https%3A%2F%2Flocalhost%3A8081&response_type=code`;
+			window.location.href = `${this.INTRA_API_AUTH}?client_id=${environment.INTRA_UID}&redirect_uri=https%3A%2F%2F${environment.HOST_NAME}%3A${environment.HOST_PORT}&response_type=code`;
 	}
 
 	async getCode(): Promise<boolean> {

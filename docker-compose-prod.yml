@@ -39,12 +39,14 @@ services:
   frontend:
     container_name: frontend
     build:
+      args:
+        - IP_HOST=${IP_HOST}
+        - PORT_HTTPS_HOST=${PORT_HTTPS_HOST}
+        - INTRA_UID=${CLIENT_ID}
       context: ./srcs/frontend
       dockerfile: Dockerfile.production
     image: frontend
     restart: always
-    environment:
-      IP_HOST: ${IP_HOST}
     expose:
       - 4200
     networks:
