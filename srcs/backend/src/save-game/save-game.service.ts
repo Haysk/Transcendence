@@ -1,4 +1,5 @@
 import { Injectable } from '@nestjs/common';
+import { Prisma } from '@prisma/client';
 import { SGame } from 'src/pong/game/interfaces/save-game.interface';
 import { PrismaService } from 'src/prisma.service';
 
@@ -8,20 +9,15 @@ export class SaveGameService {
 
   async createGame(game: SGame) {
     if (game.player1 != undefined && game.player2 != undefined) {
-      if (game.player1_score > game.player2_score)
-        game.winner = game.player1;
-      else {
-        game.winner = game.player2;
-      }
       try{
         let result = await this.Prisma.game.create({
           data: {
             roomName: game.roomName,
-            player1_score: game.player1_score,
-            player2_score: game.player2_score,
             players: {
-              connect: [{ id: game.player1.id }, { id: game.player2.id }],
+              connect:  [{id: game.player1.id}, {id: game.player2.id}]
             },
+            player1_score: game.player1_score,
+            player2_score: game.player2_score
           },
       });
       if (result !== null && result !== undefined) {

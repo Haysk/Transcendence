@@ -570,8 +570,14 @@ catch(err){
   @SubscribeMessage('matchHistoryPlz')
   async returnMatchHistory(client: Socket, payload: any)
   {
-    try{
-
+    try
+    {
+      let data = await this.Prisma.game.findMany({
+        where: {
+          OR: [
+          ]
+        }
+      })
     }
     catch(err)
     {

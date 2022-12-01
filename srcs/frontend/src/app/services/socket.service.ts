@@ -306,6 +306,11 @@ amIBanned()
     })
   }
 
+  askMatchHistory(current: User)
+  {
+    this.socket.emit('matchHistoryPlz', current);
+  }
+
   getMatchHistory()
   {
     return new Observable<SGame[]> ((obs) => {
