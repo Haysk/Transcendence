@@ -23,7 +23,7 @@ export class AppGateway
   implements OnGatewayInit, OnGatewayConnection, OnGatewayDisconnect {
 
   TabReady = new Map<string, string[]>;
-  TabMatchmaking = new Map<number, User[]>;
+  TabMatchmaking = new Map<number, User>;
   
   constructor(
     private Prisma: PrismaService,
@@ -32,8 +32,8 @@ export class AppGateway
   ) {}
 
   ngOnInit(){
-    this.TabMatchmaking[0] = null;
-    this.TabMatchmaking[1] = null;
+    this.TabMatchmaking[0][0] = null;
+    this.TabMatchmaking[1][0] = null;
   }
 
   sleep(ms:number) {
@@ -1009,40 +1009,73 @@ catch(err){
   @SubscribeMessage('stopMatchmaking')
   stopMatchmaking(client: Socket, payload: any)
   {
-    if (payload[1] == false)
+    if (payload[0] == false)
     {
-      this.TabMatchmaking[0][0] = null;
+      this.TabMatchmaking[0] = null;
     }
     else
     {
-      this.TabMatchmaking[0][1] = null;
+      this.TabMatchmaking[1] = null;
     }
   }
 
   @SubscribeMessage('matchmaking')
-  matchmaking(client: Socket, payload: any) //payload[0] = player, payload[1] = bonus
+  async matchmaking(client: Socket, payload: any) //payload[0] = player, payload[1] = bonus
   {
     // TabMatchmaking
-    if(payload[1] == false) //sans bonus
-    {
-      if(this.TabMatchmaking[0][0] === null)
-        this.TabMatchmaking[0][0] = payload[0];
-      else{
-        let gameName = this.createGameRoomName(this.TabMatchmaking[0][0].login, payload[0].login)
-        this.pongService.addGame(gameName, payload[1],  this.TabMatchmaking[0][0], payload[0]);
-        this.TabMatchmaking[0][0] = null;
-        this.server.to(gameName).emit('matchmakingDone');
+    let data = await this.Prisma.user.findFirst({
+      where: {
+        id: payload[0].id
       }
-    }
-    else //avec bonus 
+    })
+    if(data != null && data != undefined)
     {
-      if(this.TabMatchmaking[1][0] === null)
-        this.TabMatchmaking[1][0] = payload[0];
-      else{
-        let gameName = this.createGameRoomName(this.TabMatchmaking[1][0].login, payload[0].login)
-        this.pongService.addGame(gameName, payload[1],  this.TabMatchmaking[1][0], payload[0]);
-        this.TabMatchmaking[1][0] = null;
-        this.server.to(gameName).emit('matchmakingDone');
+      if(payload[1] == false) //sans bonus
+      {
+        if(this.TabMatchmaking[0] === null || this.TabMatchmaking[0] === undefined)
+        {
+          this.TabMatchmaking[0] = data;
+        }
+        else
+        {
+          let data2 = await this.Prisma.user.findFirst({
+            where: {
+              id: this.TabMatchmaking[0].id
+            }
+          })
+          if (data2 != null && data2 != undefined)
+          {
+            let gameName = this.createGameRoomName(this.TabMatchmaking[0].login, payload[0].login)
+            this.server.in(data2.socket).socketsJoin(gameName);
+            this.server.in(client.id).socketsJoin(gameName);
+            this.pongService.addGame(gameName, payload[1],  this.TabMatchmaking[0], payload[0]);
+            this.server.to(gameName).emit('matchmakingDone', gameName, this.TabMatchmaking[0], payload[0]);
+            this.TabMatchmaking[0] = null;
+          }
+        }
+      }
+      else //avec bonus 
+      {
+        if(this.TabMatchmaking[1] === null || this.TabMatchmaking[1] === undefined)
+        {
+          this.TabMatchmaking[1] = data;
+        }
+        else{
+          let data2 = await this.Prisma.user.findFirst({
+            where: {
+              id: this.TabMatchmaking[0].id
+            }
+          })
+          if (data2 != null && data2 != undefined)
+          {
+            let gameName = this.createGameRoomName(this.TabMatchmaking[1].login, payload[0].login)
+            this.server.in(data2.socket).socketsJoin(gameName);
+            this.server.in(client.id).socketsJoin(gameName);
+            this.pongService.addGame(gameName, payload[1],  this.TabMatchmaking[1], payload[0]);
+            this.TabMatchmaking[1] = null;
+            this.server.to(gameName).emit('matchmakingDone', gameName);
+          }
+        }
       }
     }
   }

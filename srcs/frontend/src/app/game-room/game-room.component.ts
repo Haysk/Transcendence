@@ -4,7 +4,8 @@ import { User } from '../models/user'
 import { StorageService } from '../services/storage.service';
 import { TitleStrategy } from '@angular/router';
 import { SocketService } from '../services/socket.service';
-
+import { IGame } from '../pong/game/interfaces/game.interface';
+import { DefaultGame } from '../pong/game/config';
 
 @Component({
   selector: 'app-game-room',
@@ -16,9 +17,13 @@ export class GameRoomComponent implements OnInit {
   list_user!: User[];
   show:boolean=false;
   showSearching:boolean=false;
+  redirectPong:boolean=false;
+
+  gameName!:string;
+  gameConfig: IGame =  new DefaultGame();;
 
   
-  user: User={
+  user: User = {
     id: this.getId(),
     login: this.getLogin(),
     email: this.getEmail(),
@@ -34,7 +39,7 @@ export class GameRoomComponent implements OnInit {
 
 
   constructor(private apiService: ApiService,
-	private storageService: StorageService,private socketService: SocketService) { }
+	private storageService: StorageService, private socketService: SocketService) { }
 
   async ngOnInit(): Promise<void> {
   this.apiService.getAllUsers(this.storageService.getCode()).subscribe(
@@ -42,6 +47,16 @@ export class GameRoomComponent implements OnInit {
         this.list_user =result;
       }));
     
+  this.socketService.listenForMatchmaking().subscribe((res) => {
+    //res.res2 = player1
+    //res.res3 = player2
+    console.log("MATCHMAKING OK")
+    this.setUpGameConfig(res.res2, res.res3);
+    this.gameName = res.res;
+    this.redirectPong = true;
+    this.showSearching = false;
+  })
+
     console.log("User Online = " + this.user.login );
     console.log("User url = " + this.user.image );
   }
@@ -50,6 +65,21 @@ export class GameRoomComponent implements OnInit {
     this.visible= !this.visible;
     console.log("playeronline:" + this.visible);
 
+  }
+
+  setUpGameConfig(player1: User, player2: User) //PLAYER 1 EST A GAUCHE
+  {
+    let id = Number(this.storageService.getId());
+    if (id == player1.id)
+    {
+      this.gameConfig.left.mode.type = "local";
+      this.gameConfig.right.mode.type = "remote";
+    }
+    else if (id == player2.id)
+    {
+      this.gameConfig.left.mode.type = "remote";
+      this.gameConfig.right.mode.type = "local";
+    }
   }
 
   getId(): number{

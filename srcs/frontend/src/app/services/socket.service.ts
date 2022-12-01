@@ -448,9 +448,9 @@ amIBanned()
     this.socket.emit('createGamePlz', roomName, gameConfig, player1, player2, bonus);
   }
 
-  stopMatchmaking(player: User, bonus: boolean)
+  stopMatchmaking(bonus: boolean)
   {
-    this.socket.emit('stopMatchmaking', player, bonus);
+    this.socket.emit('stopMatchmaking', bonus);
   }
 
   matchmaking(player: User, bonus: boolean)
@@ -460,9 +460,10 @@ amIBanned()
 
   listenForMatchmaking()
   {
-    return new Observable<boolean> ((obs) => {
-      this.socket.on('matchmakingDone', () => {
-        obs.next(true);
+    return new Observable<any> ((obs) => {
+      this.socket.on('matchmakingDone', (res, res2, res3) => {
+        let data = {res, res2, res3}
+        obs.next(data);
       })
     })
   }
