@@ -239,7 +239,7 @@
 
     .bloc video{
         position: absolute;
-    min-width: 100%;
+        min-width: 100%;
         min-height: 100%;
         top: 50%;
         left: 50%;
@@ -298,76 +298,29 @@
        color: white;
     }
 
-
-
-
-
 }
-   /*  .game {
-        position: relative;
+
+@media screen and (orientation: landscape){
+
+    .game {
+    
+        /* position: relative; */
         text-align: center;
+        position: fixed;
+        top:40%;
+        left: 50%;
+        transform: translate(-50%,-50%);
+        margin-top: 100px;
+        width : 100%;
         
       }
-      
-      .menu {
-        position: absolute;
-
-        top: 35%;
-        left:0;
-        right: 0;
+      .canvas{
+       width: 50%;
+       height: auto;
+    
+       
         
-        color: white;
-     
-      
-    }
+      }
 
-    .menu {
-        position: absolute;
-        top: 20%;
-        right: 0;
-        left: 0;
-        display: flex;
-        flex-direction: column;
-        align-items: center;
-        color: white;
-     }
-    .customize{
-      
-        display: flex;
-        justify-content:space-between;
-        width: 400px;
-    
-       
-    }
-    .bloc{
-        position: fixed;
-       
-        height: 100vh;
-        width: 100%;
-        overflow: hidden;
-    
-    
-    }
-    
-    .bloc video{
-        position: absolute;
-       min-width: 100%;
-        min-height: 100%;
-        top: 50%;
-        left: 50%;
-        z-index:-100;
-        transform: translate(-50%, -50%); 
-    
-    }
-    
-    .bloc::before{
-        position: absolute;
-        content: "";
-        min-width: 100%;
-        min-height: 100%;
-        z-index:-99;
-        background-color: rgba(10, 1, 1, 0.486);
-    
-    } */
-
-
+        
+}

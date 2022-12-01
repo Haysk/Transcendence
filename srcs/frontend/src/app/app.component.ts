@@ -17,7 +17,7 @@ export class AppComponent implements OnInit{
 	constructor(
     public route: ActivatedRoute,
 		public router: Router,
-    private socketService: SocketService,
+    private socketService: SocketService, 
     private storageService: StorageService){
   }
   
