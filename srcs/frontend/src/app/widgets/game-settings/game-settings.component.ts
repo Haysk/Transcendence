@@ -13,8 +13,8 @@ import { IBoardConfig } from '../../pong/game/interfaces/board-config.interface'
 import { GameMode, PlayerMode, IGame } from 'src/app/pong/game/interfaces/game.interface';
 import { Game } from "../../pong/game/game";
 import { Ai } from "../../pong/game/ai";
-import { defaultGameConfig } from "../../pong/game/config";
 import { SocketService } from "../../services/socket.service";
+import { DefaultGame } from 'src/app/pong/game/config';
 
 
 @Component({
@@ -58,7 +58,7 @@ export class GameSettingsComponent implements OnInit, OnDestroy {
     private game: Game,
     private ai: Ai) 
     {
-      this.gameConfig = structuredClone(defaultGameConfig);
+      this.gameConfig = new DefaultGame();
       this.game = new Game();
       this.ai = new Ai();
       this.game.updateAll(this.gameConfig);
@@ -78,7 +78,7 @@ export class GameSettingsComponent implements OnInit, OnDestroy {
 
   sendInvitation(): void {
     this.showGameSettingsEvent.emit(this.showGameSettings);
-    this.game.updateStates(structuredClone(defaultGameConfig).states);
+    this.game.updateStates(new DefaultGame().states);
     this.socketService.displayInvitation(this.player2, this.player1, this.gameConfig);
     this.global = {player1: this.player1,player2: this.player2, gameConfig: this.gameConfig};
     this.globalEvent.emit(this.global);
@@ -86,7 +86,7 @@ export class GameSettingsComponent implements OnInit, OnDestroy {
   }
 
   resetAll(): void {
-    this.game.updateAll(structuredClone(defaultGameConfig));
+    this.game.updateAll(new DefaultGame());
   }
 
   goBack()

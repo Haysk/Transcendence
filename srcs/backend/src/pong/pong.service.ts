@@ -2,7 +2,6 @@ import { Injectable } from '@nestjs/common';
 import { User } from '@prisma/client';
 import { interval, Subscription } from 'rxjs';
 import { SaveGameService } from 'src/save-game/save-game.service';
-import { defaultGameConfig } from './game/config';
 import { Game } from './game/game';
 import { IInput } from './game/interfaces/input.interface';
 import { SGame } from './game/interfaces/save-game.interface';
@@ -15,6 +14,7 @@ interface ITest {
   playerLeft: User;
   playerRight: User;
   game: Game;
+  activatePowerUp: boolean | undefined;
   tickSubscription: Subscription;
 }
 
@@ -32,18 +32,33 @@ export class PongService {
   }
 
   public addGame(name: string): void;
-  public addGame(name: string, playerLeft?: User, playerRight?: User): void;
-  public addGame(name: string, playerLeft?: User, playerRight?: User): void {
+  public addGame(name: string, powerUp?: boolean): void;
+  public addGame(
+    name: string,
+    powerUp?: boolean,
+    playerLeft?: User,
+    playerRight?: User,
+  ): void;
+  public addGame(
+    name: string,
+    activatePowerUp?: boolean,
+    playerLeft?: User,
+    playerRight?: User,
+  ): void {
     if (this.games.find((game) => game.name === name) == undefined) {
       const newGame: ITest = {
         name: name,
         game: new Game(),
+        activatePowerUp: activatePowerUp,
         playerLeft: playerLeft,
         playerRight: playerRight,
         tickSubscription: interval(interval_tick).subscribe(() => {
           this.tick(name);
         }),
       };
+      if (activatePowerUp === true) {
+        newGame.game.updatePowerUp(true);
+      }
       this.games.push(newGame);
       //TODO: sleep 1 seconde le temps que la partie soit charger pour tout les clients
       this.start(name);
@@ -78,7 +93,12 @@ export class PongService {
     const game = this.games.find((game) => game.name === name);
     if (game != undefined) {
       this.deleteGame(name);
-      this.addGame(name, game.playerLeft, game.playerRight);
+      this.addGame(
+        name,
+        game.activatePowerUp,
+        game.playerLeft,
+        game.playerRight,
+      );
     } else {
       this.addGame(name);
     }

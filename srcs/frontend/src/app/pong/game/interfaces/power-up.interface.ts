@@ -1,9 +1,9 @@
 import { IPosition } from './position.interface';
 
-export interface IRacketConfig {
-  width: number;
-  height: number;
-  speed: number;
+export interface IPowerUp {
+  effectName: string;
   color: string;
   position: IPosition;
+  height: number;
+  width: number;
 }
