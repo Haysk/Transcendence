@@ -443,9 +443,19 @@ amIBanned()
     })
   }
 
-  createGame(roomName: string, gameConfig: IGame, player1: User, player2: User)
+  createGame(roomName: string, gameConfig: IGame, player1: User, player2: User, bonus: boolean)
   {
-    this.socket.emit('createGamePlz', roomName, gameConfig, player1, player2);
+    this.socket.emit('createGamePlz', roomName, gameConfig, player1, player2, bonus);
+  }
+
+  stopMatchmaking(player: User, bonus: boolean)
+  {
+    this.socket.emit('stopMatchmaking', player, bonus);
+  }
+
+  matchmaking(player: User, bonus: boolean)
+  {
+    this.socket.emit('matchmaking', player, bonus);
   }
 
   //PONG GAME

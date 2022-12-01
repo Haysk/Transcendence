@@ -129,7 +129,7 @@ export class GameRoomComponent implements OnInit {
 
   justPlay(){
 
-    this.show=true;
+   
   }
 
 

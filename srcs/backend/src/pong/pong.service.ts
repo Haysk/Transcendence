@@ -33,18 +33,17 @@ export class PongService {
 
   public addGame(name: string): void;
   public addGame(name: string, powerUp?: boolean): void;
-  public addGame(
-    name: string,
-    powerUp?: boolean,
-    playerLeft?: User,
-    playerRight?: User,
-  ): void;
+  public addGame(name: string, activatePowerUp?: boolean, playerLeft?: User, playerRight?: User): void;
   public addGame(
     name: string,
     activatePowerUp?: boolean,
     playerLeft?: User,
     playerRight?: User,
   ): void {
+    console.log("addGame Activate powerUp :")
+    if (activatePowerUp){
+      console.log("powr");
+    }
     if (this.games.find((game) => game.name === name) == undefined) {
       const newGame: ITest = {
         name: name,

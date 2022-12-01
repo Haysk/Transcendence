@@ -42,6 +42,13 @@ export class PongComponent implements OnInit, OnDestroy {
 
   gameConfig: IGame = new DefaultGame();
 
+  // initGameConfig(): IGame{
+  //   let data = new DefaultGame();
+  //   data.left = this.customs.left;
+  //   data.right = this.customs.right;
+  //   return data;
+  // }
+
   //nom de la room pong (en cours de dev)
   @Input()
   gameName = "bidule";
@@ -103,7 +110,28 @@ export class PongComponent implements OnInit, OnDestroy {
     this.prevMoveRight = { userId: 1, up: false, down: false };
   }
 
+  initGame(){
+    this.gameConfig.states.ball.collor = this.customs.states.ball.collor;
+    this.gameConfig.board.board.color = this.customs.board.board.color;
+    this.gameConfig.left.mode = this.customs.left.mode;
+    this.gameConfig.states.racketLeft.color =
+      this.customs.states.racketLeft.color;
+    this.gameConfig.right.mode = this.customs.right.mode;
+    this.gameConfig.states.racketRight.color =
+      this.customs.states.racketRight.color;
+
+    this.game = new Game();
+    this.ai = new Ai();
+    this.game.updateAll(this.gameConfig);
+    this.ai.setAll(this.gameConfig);
+    this.moveLeft = { userId: 0, up: false, down: false };
+    this.moveRight = { userId: 1, up: false, down: false };
+    this.prevMoveLeft = { userId: 0, up: false, down: false };
+    this.prevMoveRight = { userId: 1, up: false, down: false };
+  }
+
   ngOnInit(): void {
+    this.initGame();
     this.moveSubscription = this.socketService
       .getMove()
       .subscribe((move: IInput) => {

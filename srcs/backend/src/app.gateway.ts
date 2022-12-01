@@ -23,12 +23,17 @@ export class AppGateway
   implements OnGatewayInit, OnGatewayConnection, OnGatewayDisconnect {
 
   TabReady = new Map<string, string[]>;
-
+  TabMatchmaking = new Map<number, User[]>;
+  
   constructor(
     private Prisma: PrismaService,
     private readonly userService: UserService,
     private pongService: PongService
-  ) {
+  ) {}
+
+  ngOnInit(){
+    this.TabMatchmaking[0] = null;
+    this.TabMatchmaking[1] = null;
   }
 
   sleep(ms:number) {
@@ -1001,11 +1006,49 @@ catch(err){
 
 /* PONG GAME */
 
-  @SubscribeMessage('createGamePlz') //payload[1] IGame, payload[2] player1, payload[3] player2
+  @SubscribeMessage('stopMatchmaking')
+  stopMatchmaking(client: Socket, payload: any)
+  {
+    if (payload[1] == false)
+    {
+      this.TabMatchmaking[0][0] = null;
+    }
+    else
+    {
+      this.TabMatchmaking[0][1] = null;
+    }
+  }
+
+  @SubscribeMessage('matchmaking')
+  matchmaking(client: Socket, payload: any) //payload[0] = player, payload[1] = bonus
+  {
+    // TabMatchmaking
+    if(payload[1] == false) //sans bonus
+    {
+      if(this.TabMatchmaking[0][0] === null)
+        this.TabMatchmaking[0][0] = payload[0];
+      else{
+        let gameName = this.createGameRoomName(this.TabMatchmaking[0][0].login, payload[0].login)
+        this.pongService.addGame(gameName, payload[1],  this.TabMatchmaking[0][0], payload[0]);
+        this.TabMatchmaking[0][0] = null;
+      }
+    }
+    else //avec bonus 
+    {
+      if(this.TabMatchmaking[1][0] === null)
+        this.TabMatchmaking[1][0] = payload[0];
+      else{
+        let gameName = this.createGameRoomName(this.TabMatchmaking[1][0].login, payload[0].login)
+        this.pongService.addGame(gameName, payload[1],  this.TabMatchmaking[1][0], payload[0]);
+        this.TabMatchmaking[1][0] = null;
+      }
+    }
+  }
+
+  @SubscribeMessage('createGamePlz') //payload[1] IGame, payload[2] player1, payload[3] player2, payload[4] bonus
   createGame(client: Socket, payload: any)
   {
-    console.log(payload[0]);
-    this.pongService.addGame(payload[0], payload[2], payload[3]);
+    this.pongService.addGame(payload[0], payload[4], payload[2], payload[3]);
     //TODO: addGamers
   }
 
