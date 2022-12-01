@@ -458,6 +458,15 @@ amIBanned()
     this.socket.emit('matchmaking', player, bonus);
   }
 
+  listenForMatchmaking()
+  {
+    return new Observable<boolean> ((obs) => {
+      this.socket.on('matchmakingDone', () => {
+        obs.next(true);
+      })
+    })
+  }
+
   //PONG GAME
 
   sendMove(move: IInput, name: string): void {

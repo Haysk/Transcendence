@@ -2,6 +2,9 @@ import { Component, OnInit } from '@angular/core';
 import { ApiService } from '../services/api.service';
 import { User } from '../models/user'
 import { StorageService } from '../services/storage.service';
+import { TitleStrategy } from '@angular/router';
+import { SocketService } from '../services/socket.service';
+
 
 @Component({
   selector: 'app-game-room',
@@ -12,6 +15,7 @@ export class GameRoomComponent implements OnInit {
   visible:boolean =false;
   list_user!: User[];
   show:boolean=false;
+  showSearching:boolean=false;
 
   
   user: User={
@@ -30,7 +34,7 @@ export class GameRoomComponent implements OnInit {
 
 
   constructor(private apiService: ApiService,
-	private storageService: StorageService) { }
+	private storageService: StorageService,private socketService: SocketService) { }
 
   async ngOnInit(): Promise<void> {
   this.apiService.getAllUsers(this.storageService.getCode()).subscribe(
@@ -128,10 +132,13 @@ export class GameRoomComponent implements OnInit {
   }
 
   justPlay(){
+    this.socketService.matchmaking(this.user, false);
+    this.showSearching=true;
 
-   
   }
 
-
+  receiveShowSearching($event){
+    this.showSearching=$event;
+  }
 
 }

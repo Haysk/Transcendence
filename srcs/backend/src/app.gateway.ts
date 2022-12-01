@@ -1031,6 +1031,7 @@ catch(err){
         let gameName = this.createGameRoomName(this.TabMatchmaking[0][0].login, payload[0].login)
         this.pongService.addGame(gameName, payload[1],  this.TabMatchmaking[0][0], payload[0]);
         this.TabMatchmaking[0][0] = null;
+        this.server.to(gameName).emit('matchmakingDone');
       }
     }
     else //avec bonus 
@@ -1041,6 +1042,7 @@ catch(err){
         let gameName = this.createGameRoomName(this.TabMatchmaking[1][0].login, payload[0].login)
         this.pongService.addGame(gameName, payload[1],  this.TabMatchmaking[1][0], payload[0]);
         this.TabMatchmaking[1][0] = null;
+        this.server.to(gameName).emit('matchmakingDone');
       }
     }
   }
