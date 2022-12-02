@@ -8,6 +8,7 @@
 	import { share } from 'rxjs';
 	import { StorageService } from '../services/storage.service'
 import { Router } from '@angular/router';
+import { SGame } from '../models/savedGame';
 
 	@Component({
 		selector: 'app-vip-room',
@@ -41,6 +42,7 @@ import { Router } from '@angular/router';
 	id = this.storage.getId();
 	newNickName!:string;
 	searchName:string = "";
+	games!:any;
 	
 	constructor(private apiService: ApiService,
 		private http: HttpClient,
@@ -105,6 +107,10 @@ import { Router } from '@angular/router';
 		})
 		this.tfa_auth = this.storage.getTwoFactorAuth();
 		this.qrCode = this.storage.getQrCode();
+		this.socketService.receiveGameHistory().subscribe((res) => {
+			this.games = res;
+		})
+		this.socketService.askForGameHistory(this.userToShow);
 	}
 
 	ngOnDestroy() {

@@ -520,6 +520,27 @@ amIBanned()
     })
   }
 
+// GAME HISTORY
+
+  askFor3GameHistory(current: User)
+  {
+    this.socket.emit('3matchHistoryPlz', current);
+  }
+
+  askForGameHistory(current: User)
+  {
+    this.socket.emit('matchHistoryPlz', current);
+  }
+
+  receiveGameHistory()
+  {
+    return new Observable<SGame>((obs) => {
+      this.socket.on('hereIsGameHistory', (data) => {
+        obs.next(data);
+      })
+    })
+  }
+
 //INIT
 
   sendStart(name: string): void {
