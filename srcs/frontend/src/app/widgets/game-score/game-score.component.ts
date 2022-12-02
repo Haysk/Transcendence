@@ -12,16 +12,15 @@ import { SGame } from 'src/app/models/savedGame';
 
 export class GameScoreComponent {
 
-  @Input() GameData!: SGame;
+  @Input() GameData!: any;
   @Output() closeScoreEvent = new EventEmitter<boolean>();
-  Winner!:string;
   scorePlayer1!: number;
   scorePlayer2!: number;
   winner!:User;
   
 
   ngOnInit(): void {
-      this.winnerIs();
+      this.winner = this.winnerIs();
   }
 
 
@@ -29,16 +28,16 @@ export class GameScoreComponent {
       this.closeScoreEvent.emit(false);
     }
 
-  winnerIs(){
+  winnerIs(): User{
       this.scorePlayer1=this.GameData.player1_score;
       this.scorePlayer2=this.GameData.player2_score;
       if(this.scorePlayer1>this.scorePlayer2){
-        this.winner=this.GameData.players[0];        
+        return this.GameData.player1;        
       }
       else{
-        this.winner=this.GameData.players[1];
+        return this.GameData.player2;
       }
-
+      console.log("ssdfdfssdfs" + this.scorePlayer1);
   }
     
 }

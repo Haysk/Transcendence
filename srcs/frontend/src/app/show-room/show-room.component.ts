@@ -25,4 +25,9 @@ export class ShowRoomComponent implements OnInit {
     })
     this.socketService.getMatches()
   }
+
+  reload(){
+    this.socketService.getMatches()
+  }
+
 }

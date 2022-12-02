@@ -9,11 +9,12 @@ import { SGame } from 'src/app/models/savedGame';
 })
 export class BlocUserProfileComponent implements OnInit {
   @Input() user!: User;
-  @Input() match!: SGame;
+  @Input() match!: any;
 
   constructor() { }
 
   ngOnInit(): void {
+    console.log(this.match)
   }
 
 }
