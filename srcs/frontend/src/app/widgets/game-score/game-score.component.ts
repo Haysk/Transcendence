@@ -33,10 +33,10 @@ export class GameScoreComponent {
       this.scorePlayer1=this.GameData.player1_score;
       this.scorePlayer2=this.GameData.player2_score;
       if(this.scorePlayer1>this.scorePlayer2){
-        this.winner=this.GameData.player1;        
+        this.winner=this.GameData.players[0];        
       }
       else{
-        this.winner=this.GameData.player2;
+        this.winner=this.GameData.players[1];
       }
 
   }
