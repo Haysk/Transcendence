@@ -12,15 +12,15 @@ import { SocketService } from '../services/socket.service';
 
 
 export class ShowRoomComponent implements OnInit {
-
-  matches!: SGame; 
+ 
+  matches!: SGame[]; 
   constructor(service: ApiService, private socketService: SocketService) { 
     //  this.matches = service.getMatches();
     
   }
 
   ngOnInit(): void {
-    this.socketService.receiveMatches().subscribe((res) => {
+    this.socketService.receiveMatches().subscribe((res : any) => {
       this.matches = res;
     })
     this.socketService.getMatches()

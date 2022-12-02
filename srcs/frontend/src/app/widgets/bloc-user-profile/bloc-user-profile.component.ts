@@ -1,5 +1,6 @@
 import { Component, OnInit,Input } from '@angular/core';
 import { User } from '../../models/user';
+import { SGame } from 'src/app/models/savedGame';
 
 @Component({
   selector: 'app-bloc-user-profile',
@@ -8,6 +9,8 @@ import { User } from '../../models/user';
 })
 export class BlocUserProfileComponent implements OnInit {
   @Input() user!: User;
+  @Input() match!: SGame;
+
   constructor() { }
 
   ngOnInit(): void {

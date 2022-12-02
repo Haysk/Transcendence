@@ -136,7 +136,15 @@
     background-position: center; 
 }
 
+@media only screen and (max-width: 600px) {
 
+
+}
+
+
+
+
+/* 
 @media only screen and (max-width: 600px) {
 
    
@@ -150,19 +158,16 @@
         background-size: cover;
         background-repeat: no-repeat;
         background-position: center;
-        /* padding-bottom: 200px;     */
+      
     
     }
   
     .bloc_item_home{
         
-        /* background-color: rgb(112, 175, 175); */
+        
         width: 100%;
         height: auto;
-        /* margin-left: 50px; */
-
-    
-    
+   
     }
     
     .bloc_game_home{
@@ -280,4 +285,4 @@
 
 
 
-}
+} */
