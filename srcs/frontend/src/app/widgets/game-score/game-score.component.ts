@@ -37,7 +37,7 @@ export class GameScoreComponent {
       else{
         return this.GameData.player2;
       }
-      console.log("ssdfdfssdfs" + this.scorePlayer1);
+     
   }
     
 }
