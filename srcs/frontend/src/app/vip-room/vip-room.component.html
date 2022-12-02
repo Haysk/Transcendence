@@ -72,8 +72,11 @@
 
         <!--History Match-->
         <div class="title_historique">Match History</div>
-        <div class="bloc_vip_historique"></div>
-
+        <div class="bloc_vip_historique">
+            <div *ngFor="let game of games">
+                {{this.game.roomName}}
+            </div>
+        </div>
 
 
     </div><!-- fin de div bloc_vip  -->

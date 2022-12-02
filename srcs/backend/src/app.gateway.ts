@@ -11,7 +11,7 @@ import { PrismaService } from './prisma.service';
 import { Server, Socket } from 'socket.io';
 import { UserService } from './user.service';
 import { PongService } from './pong/pong.service';
-import { User } from '@prisma/client';
+import { Game, User } from '@prisma/client';
 
 @WebSocketGateway({
   cors: {
@@ -1106,6 +1106,32 @@ catch(err){
 
     if (data != undefined && data != null)
       this.server.to(client.id).emit('hereIsMatchesList', data);
+  }
+
+  /* GAME HISTORY */
+
+  @SubscribeMessage('matchHistoryPlz')
+  async getMatchHistory(client: Socket, payload: User)
+  {
+    try{
+      let data = await this.Prisma.user.findFirst({
+        where: {
+          id: payload.id
+        }, 
+        include: {
+          games: true
+        }
+      })
+      
+      if (data != null && data != undefined)
+      {
+        this.server.to(client.id).emit('hereIsGameHistory', data.games);
+      }
+    }
+    catch(err){
+      console.log("erreur dans getMatchHistory")
+      console.log(err);
+    }
   }
 
 /* INIT */
