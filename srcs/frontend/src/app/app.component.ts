@@ -172,7 +172,7 @@ export class AppComponent implements OnInit{
     this.invitation = $event;
   }
 
-  receiverefueInvitationEvent($event: boolean){
+  receiverefuseInvitationEvent($event: boolean){
     this.refuse = $event;
   }
 
