@@ -1,10 +1,8 @@
 import { User } from './user';
 
 export interface SGame {
-  roomName: string;
-  player1: User;
-  player2: User;
-  player1_score: number;
-  player2_score: number;
-  winner: User;
+  roomName:       string;
+  players:        User[];
+  player1_score:  number;
+  player2_score:  number;
 }

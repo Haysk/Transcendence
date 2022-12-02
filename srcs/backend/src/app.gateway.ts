@@ -1036,7 +1036,7 @@ catch(err){
         {
           this.TabMatchmaking[0] = data;
         }
-        else
+        else if (data.id != this.TabMatchmaking[0].id)
         {
           let data2 = await this.Prisma.user.findFirst({
             where: {
@@ -1060,7 +1060,8 @@ catch(err){
         {
           this.TabMatchmaking[1] = data;
         }
-        else{
+        else if (data.id != this.TabMatchmaking[1].id)
+        {
           let data2 = await this.Prisma.user.findFirst({
             where: {
               id: this.TabMatchmaking[0].id
@@ -1094,6 +1095,17 @@ catch(err){
 
   @SubscribeMessage('gameStatesToServer')
   handleGameStates(client: Socket, payload: any): void {
+  }
+
+/* SHOW ROOM */
+
+  @SubscribeMessage('gamesPlz')
+  getMatches(client: Socket)
+  {
+    let data = this.pongService.getGames();
+
+    if (data != undefined && data != null)
+      this.server.to(client.id).emit('hereIsMatchesList', data);
   }
 
 /* INIT */

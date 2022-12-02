@@ -504,6 +504,22 @@ amIBanned()
     })
   }
 
+//SHOW ROOM
+
+  getMatches()
+  {
+    this.socket.emit("gamesPlz");
+  }
+
+  receiveMatches()
+  {
+    return new Observable<SGame> ((obs) => {
+      this.socket.on('hereIsMatchesList', (res) => {
+        obs.next(res);
+      })
+    })
+  }
+
 //INIT
 
   sendStart(name: string): void {
