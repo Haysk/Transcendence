@@ -1110,39 +1110,6 @@ catch(err){
 
   /* GAME HISTORY */
 
-  @SubscribeMessage('3matchHistoryPlz')
-  async get3MatchHistory(client: Socket, payload: User)
-  {
-    try{
-      let data = await this.Prisma.user.findFirst({
-        where: {
-          id: payload.id
-        }, 
-        include: {
-          games: true
-        }
-      })
-      if (data != null && data != undefined)
-      {
-        let data2 : Game[];
-        if (data.games[0] && data.games[1] && data.games[2])
-        {
-          data2[0] = data.games[0];
-          data2[1] = data.games[1];
-          data2[2] = data.games[2];
-        }
-        else{
-          data2 = data.games;
-        }
-        this.server.to(client.id).emit('hereIsGameHistory', data2);
-      }
-    }
-    catch(err){
-        console.log("erreur dans get3MatchHistory")
-        console.log(err);
-      }
-  }
-
   @SubscribeMessage('matchHistoryPlz')
   async getMatchHistory(client: Socket, payload: User)
   {

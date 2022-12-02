@@ -522,11 +522,6 @@ amIBanned()
 
 // GAME HISTORY
 
-  askFor3GameHistory(current: User)
-  {
-    this.socket.emit('3matchHistoryPlz', current);
-  }
-
   askForGameHistory(current: User)
   {
     this.socket.emit('matchHistoryPlz', current);
