@@ -536,6 +536,20 @@ amIBanned()
     })
   }
 
+  gameIsReadyToSpectate()
+  {
+    return new Observable<boolean> ((obs) => {
+      this.socket.on('gameIsReadyToSpectate', (data) => {
+        obs.next(data);
+      })
+    })
+  }
+
+  spectateGame(roomName: string)
+  {
+    this.socket.emit('iWantToWatchThis', roomName);
+  }
+
 //INIT
 
   sendStart(name: string): void {

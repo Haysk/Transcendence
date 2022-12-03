@@ -1122,7 +1122,6 @@ catch(err){
           games: true
         }
       })
-      
       if (data != null && data != undefined)
       {
         this.server.to(client.id).emit('hereIsGameHistory', data.games);
@@ -1134,7 +1133,14 @@ catch(err){
     }
   }
 
-/* INIT */
+  @SubscribeMessage('iWantToWatchThis')
+  spectateGame(client: Socket, payload: any)
+  {
+    this.server.in(client.id).socketsJoin(payload);
+    this.server.to(client.id).emit('gameIsReadyToSpectate', true);
+  }
+
+  /* INIT */
 
   @SubscribeMessage('startToServer')
   handleStart(client: Socket, payload: any): void {
