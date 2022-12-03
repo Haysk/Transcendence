@@ -63,8 +63,6 @@ export class GameRoomComponent implements OnInit {
 
   showavailable(){
     this.visible= !this.visible;
-    console.log("playeronline:" + this.visible);
-
   }
 
   setUpGameConfig(player1: User, player2: User) //PLAYER 1 EST A GAUCHE

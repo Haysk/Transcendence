@@ -57,7 +57,7 @@ export class OauthService {
 				client_id: process.env.CLIENT_ID,
 				client_secret: process.env.CLIENT_SECRET,
 				code,
-				redirect_uri: "https://localhost:8081",
+				redirect_uri: process.env.REDIRECT_URI,
 				}).pipe(take(1)).subscribe({
 					next: async result => {
 						resolve(result.data);
