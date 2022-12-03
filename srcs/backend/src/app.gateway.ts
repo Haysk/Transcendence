@@ -1134,7 +1134,6 @@ catch(err){
     }
   }
   
-
   @SubscribeMessage('iWantToWatchThis')
   spectateGame(client: Socket, payload: any)
   {
