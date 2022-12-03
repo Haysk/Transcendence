@@ -45,6 +45,7 @@ import { AreYouReadyComponent } from './widgets/are-you-ready/are-you-ready.comp
 import { NotFoundComponent } from './not-found/not-found.component';
 import { GameScoreComponent } from './widgets/game-score/game-score.component';
 import { SearchingPlayerComponent } from './widgets/searching-player/searching-player.component';
+import { MatchHistoryComponent } from './widgets/match-history/match-history.component';
 
 @NgModule({
   declarations: [
@@ -86,7 +87,8 @@ import { SearchingPlayerComponent } from './widgets/searching-player/searching-p
     AreYouReadyComponent,
     NotFoundComponent,
     GameScoreComponent,
-    SearchingPlayerComponent
+    SearchingPlayerComponent,
+    MatchHistoryComponent
   ],
   imports: [
     BrowserModule,

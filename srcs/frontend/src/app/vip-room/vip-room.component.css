@@ -24,7 +24,12 @@
 }
 
 .bloc_vip_historique{
+    width: 100%;
+    height: auto;
     color:aliceblue;
+    text-align: center;
+    /* background-color: aqua; */
+    
 }
 .titre_modify{
  
