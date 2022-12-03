@@ -1133,6 +1133,7 @@ catch(err){
       console.log(err);
     }
   }
+  
 
   @SubscribeMessage('iWantToWatchThis')
   spectateGame(client: Socket, payload: any)
