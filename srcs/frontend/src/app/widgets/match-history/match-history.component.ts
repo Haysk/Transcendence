@@ -29,10 +29,18 @@ export class MatchHistoryComponent {
   ngOnInit(): void {
     this.socketService.receiveGamePlayers(this.match).subscribe((res) => {
       this.match = res;
-      this.player1_avatar = this.match.players[0].avatar;
-      this.player1_login = this.match.players[0].login;
-      this.player2_avatar = this.match.players[1].avatar;
-      this.player2_login = this.match.players[1].login;
+      if (this.match.player1_id == this.match.players[0].id) {
+        this.player1_avatar = this.match.players[0].avatar;
+        this.player1_login = this.match.players[0].login;
+        this.player2_avatar = this.match.players[1].avatar;
+        this.player2_login = this.match.players[1].login;  
+      }
+      else {
+        this.player1_avatar = this.match.players[1].avatar;
+        this.player1_login = this.match.players[1].login;
+        this.player2_avatar = this.match.players[0].avatar;
+        this.player2_login = this.match.players[0].login;   
+      }
   })
     this.socketService.getGamePlayers(this.match);
    
@@ -48,6 +56,10 @@ export class MatchHistoryComponent {
 
   
     
+  }
+  ngOnDestroy() {
+		this.socketService.unsubscribeSocket('hereAreTheGame' + this.match.id + 'Infos');
+
   }
 }
 

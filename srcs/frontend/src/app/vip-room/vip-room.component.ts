@@ -68,9 +68,6 @@ import { SGame } from '../models/savedGame';
 		reader.readAsDataURL(event.target.files[0]);
 		reader.onload = (event: any) => {
 			this.userToShow.avatar = event.target.result;
-			// console.log("avatar url:" + this.avatar);
-			// console.log("new avatar url" + this.userToShow.url);
-			// console.log(event);
 		};
 		} else {
 		window.alert('Please select correct image format');
@@ -103,6 +100,7 @@ import { SGame } from '../models/savedGame';
 	}
 
 	ngOnDestroy() {
+		this.socketService.unsubscribeSocket("hereIsGameHistory");
 		this.socketService.unsubscribeSocket("hereIsTheUserYouAskedFor");
 	}
 

@@ -73,14 +73,8 @@
         <!--History Match-->
         <div class="title_historique">Match History</div>
         <div class="bloc_vip_historique">
-          
             <div *ngFor="let game of games; let i=index">
                 <app-match-history [match]="game"></app-match-history>
-                <!-- <div >{{this.game.roomName}}<br>
-                    {{this.game.player1_score}}<br>
-                    {{this.game.player2_score}}<br>
-                   
-               </div>  -->
             </div>
         </div>
 

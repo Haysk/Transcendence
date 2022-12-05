@@ -17,7 +17,9 @@ export class SaveGameService {
               connect:  [{id: game.player1.id}, {id: game.player2.id}]
             },
             player1_score: game.player1_score,
-            player2_score: game.player2_score
+            player2_score: game.player2_score,
+            player1_id: game.player1.id,
+            player2_id: game.player2.id
           },
       });
       if (result !== null && result !== undefined) {

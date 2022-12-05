@@ -1155,6 +1155,8 @@ catch(err){
           players: true,
         }
       })
+      console.log(data);
+      
       if (data != null && data != undefined)
       {
         let answer = 'hereAreTheGame' + data.id + 'Infos'
