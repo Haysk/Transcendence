@@ -1,3 +1,4 @@
+import { R3TargetBinder } from '@angular/compiler';
 import { Component, Input } from '@angular/core';
 import { SGame } from 'src/app/models/savedGame';
 import { User } from 'src/app/models/user';
@@ -10,32 +11,45 @@ import { SocketService } from 'src/app/services/socket.service';
 
 export class MatchHistoryComponent {
   @Input() match!: SGame;
-  scorePlayer1!: number;
-  scorePlayer2!: number;
   winner!:User;
+  opacity_player1!:number;
+  opacity_player2!:number;
+  winner_player1:string="";
+  winner_player2:string="";
+
+  player1_avatar = "";
+  player2_avatar = "";
+  player1_login = "";
+  player2_login = "";
+ 
   
-  constructor(private socketService: SocketService){}
+  constructor(private socketService: SocketService){
+  }
 
   ngOnInit(): void {
     this.socketService.receiveGamePlayers(this.match).subscribe((res) => {
       this.match = res;
-    })
+      this.player1_avatar = this.match.players[0].avatar;
+      this.player1_login = this.match.players[0].login;
+      this.player2_avatar = this.match.players[1].avatar;
+      this.player2_login = this.match.players[1].login;
+  })
     this.socketService.getGamePlayers(this.match);
-      // this.winner = this.winnerIs();
+   
+    if(this.match.player1_score>this.match.player2_score)
+    {
+      this.opacity_player1=0;
+      this.winner_player1="../../../assets/imgs/Winner.png";
+    } else{
+      this.opacity_player2 =0;
+      this.winner_player2="../../../assets/imgs/Winner.png";
+
+    }
+
+  
+    
   }
-
-
-
-  // winnerIs(): User{
-  //     this.scorePlayer1=this.match.player1_score;
-  //     this.scorePlayer2=this.match.player2_score;
-  //     if(this.scorePlayer1>this.scorePlayer2){
-  //       return this.match.player1;        
-  //     }
-  //     else{
-  //       return this.match.player2;
-  //     }
-     
-  // }
-
 }
+
+
+
