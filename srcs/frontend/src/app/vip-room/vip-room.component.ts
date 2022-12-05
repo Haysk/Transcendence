@@ -109,6 +109,8 @@ import { SGame } from '../models/savedGame';
 		this.qrCode = this.storage.getQrCode();
 		this.socketService.receiveGameHistory().subscribe((res) => {
 			this.games = res;
+			console.log("ici")
+			console.log(this.games)
 		})
 		this.socketService.askForGameHistory(this.userToShow);
 	}

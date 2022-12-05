@@ -107,7 +107,8 @@ export class AppGateway
 					banned: true,
 					admins: true
 				}
-			  })
+			  })      
+      
 			  if (data != null && data != undefined)
         {
           this.server.emit('channelIsUpdated', data);
@@ -1122,7 +1123,6 @@ catch(err){
           games: true
         }
       })
-      
       if (data != null && data != undefined)
       {
         this.server.to(client.id).emit('hereIsGameHistory', data.games);
