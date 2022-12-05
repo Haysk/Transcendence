@@ -179,7 +179,6 @@ export class DirectChatComponent implements OnInit {
 
   }
 
-
   goToProfile() {
 
 	this.router.navigate(["vip2-room"], { queryParams: { login: this.Dest.login }});

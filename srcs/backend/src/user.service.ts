@@ -152,20 +152,30 @@ export class UserService {
 	}
 
 	async userInfo(params: Prisma.OauthWhereUniqueInput) {
-		if (params.access_token)
-			return new Promise<boolean>((resolve) => {
-				this.httpClient.get(`${this.INTRA_API}/oauth/token/info`, { params: {
-					access_token: params.access_token
-				} })
-					.pipe(take(1))
-					.subscribe(async (result) => {
-						if (result && result.data.expires_in_seconds > 0) {
-							resolve(true);
-						} else {
-							resolve(false);
-						}
-					})
-			});
+		if (params.code)
+			try {
+				this.prisma.oauth.findFirstOrThrow({
+					where: {
+						code: params.code
+					}
+				});
+				return true;
+			} catch {
+				return false;
+			}
+			// return new Promise<boolean>((resolve) => {
+			// 	this.httpClient.get(`${this.INTRA_API}/oauth/token/info`, { params: {
+			// 		access_token: params.access_token
+			// 	} })
+			// 		.pipe(take(1))
+			// 		.subscribe(async (result) => {
+			// 			if (result && result.data.expires_in_seconds > 0) {
+			// 				resolve(true);
+			// 			} else {
+			// 				resolve(false);
+			// 			}
+			// 		})
+			// });
 	}
 
 	async addUser(params: User) {
