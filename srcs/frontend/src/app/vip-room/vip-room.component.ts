@@ -59,17 +59,6 @@ import { SGame } from '../models/savedGame';
 		url = this.avatar;
 		selectedFile! : File;
 
-		//fileToUpload: File | null = null;
-
-
-		// selectedFile!:File ;
-		// onFileSelected(event){
-		//  console.log(event);
-		//  this.selectedFile = event.target.files[0];
-		// }
-
-	// url = this.userToShow.avatar;
-	
 	onSelect(event) {
 		
 		this.selectedFile =event.target.files[0];

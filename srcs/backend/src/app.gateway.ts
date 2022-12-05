@@ -558,6 +558,7 @@ catch(err){
           creatorOf: true,
           blocked: true,
           blockedby: true,
+          friendsof: true,
       }
     })
     if(data != null && data != undefined)
@@ -1133,8 +1134,41 @@ catch(err){
       console.log(err);
     }
   }
+  
+  @SubscribeMessage('iWantToWatchThis')
+  spectateGame(client: Socket, payload: any)
+  {
+    this.server.in(client.id).socketsJoin(payload);
+    this.server.to(client.id).emit('gameIsReadyToSpectate', true);
+  }
 
-/* INIT */
+  @SubscribeMessage('gameInfosPlz')
+  async getGameInfos(client: Socket, payload: any)
+  {
+    try
+    {
+      let data = await this.Prisma.game.findFirst({
+        where: {
+          id: payload.id,
+        },
+        include: {
+          players: true,
+        }
+      })
+      if (data != null && data != undefined)
+      {
+        let answer = 'hereAreTheGame' + data.id + 'Infos'
+        this.server.to(client.id).emit(answer, data);
+      }
+    }
+    catch(err)
+    {
+      console.log("error dans getGameInfos :")
+      console.log(err);
+    }
+  }
+
+  /* INIT */
 
   @SubscribeMessage('startToServer')
   handleStart(client: Socket, payload: any): void {
@@ -1178,6 +1212,7 @@ catch(err){
       if (data != null && data != undefined)
       {
         this.server.to(client.id).emit('addFriend', data.friends);
+        this.server.to(client.id).emit('getFriend', data.friends);
       }
     }
     catch(err){

@@ -7,109 +7,101 @@ import { Tfa } from '../models/tfa'
 import { environment } from 'src/environments/environment';
 
 @Injectable({
-  providedIn: 'root'
+	providedIn: 'root'
 })
 export class ApiService {
-  API_SERVER = "https://" + environment.IP_HOST + "/api";
+	API_SERVER = "https://" + environment.IP_HOST + "/api";
 
 	constructor(private httpClient: HttpClient,) {
 
-  }
-  addPrivateChannel(name: string, creator_id: number, password: string)
-  {
-    const data = {name, creator_id, password};
-    return this.httpClient.post<Channel>(`${this.API_SERVER}/addPrivateChannel`, data);
-  }
+	}
 
-  addChannel(name: string, creator_id: number)
-  {
-    const data = {name, creator_id};
-    return this.httpClient.post<Channel>(`${this.API_SERVER}/addChannel`, data);
-  }
+	addPrivateChannel(name: string, creator_id: number, password: string) {
+		const data = { name, creator_id, password };
+		return this.httpClient.post<Channel>(`${this.API_SERVER}/addPrivateChannel`, data);
+	}
 
-  findChannelByName(name: string)
-  {
-    return this.httpClient.get<Channel>(`${this.API_SERVER}/findChannelByName/${name}`)
-  }
+	addChannel(name: string, creator_id: number) {
+		const data = { name, creator_id };
+		return this.httpClient.post<Channel>(`${this.API_SERVER}/addChannel`, data);
+	}
 
-  getAllChannels()
-  {
-    return this.httpClient.get<Channel[]>(`${this.API_SERVER}/getAllChannels`)
-  }
+	findChannelByName(name: string) {
+		return this.httpClient.get<Channel>(`${this.API_SERVER}/findChannelByName/${name}`)
+	}
 
-  getSocket(login: string)
-  {
-    return this.httpClient.get<User>(`${this.API_SERVER}/getSocket/${login}`)
-  }
+	getAllChannels() {
+		return this.httpClient.get<Channel[]>(`${this.API_SERVER}/getAllChannels`)
+	}
 
-  findUserByLogin(login: string)
-  {
-    return this.httpClient.get<User>(`${this.API_SERVER}/userByLogin/${login}`);
-  }
+	getSocket(login: string) {
+		return this.httpClient.get<User>(`${this.API_SERVER}/getSocket/${login}`)
+	}
 
-  updateNickName(id:number, nickname:string)
-  {
-    let data = {id, nickname};
-    return this.httpClient.post<User>(`${this.API_SERVER}/updateNickName`, data);
-  }
+	getUser(code: string) {
+		return this.httpClient.get<User>(`${this.API_SERVER}/user/${code}`);
+	}
 
-  updateAvatar(id:number, avatar:string)
-  {
-    let data = {id, avatar};
-    return this.httpClient.post<User>(`${this.API_SERVER}/updateAvatar`, data);
-  }
+	findUserByLogin(login: string) {
+		return this.httpClient.get<User>(`${this.API_SERVER}/userByLogin/${login}`);
+	}
 
-  getAllUsers(code: string)
-  {
-    return this.httpClient.get<User[]>(`${this.API_SERVER}/users/${code}`);
-  }
+	updateNickName(id: number, nickname: string) {
+		let data = { id, nickname };
+		return this.httpClient.post<User>(`${this.API_SERVER}/updateNickName`, data);
+	}
 
-  updateUser(code: string, user: User) {
-    return this.httpClient.patch<User>(`${this.API_SERVER}/user/${code}`, user);
-  }
+	updateAvatar(id: number, avatar: string) {
+		let data = { id, avatar };
+		return this.httpClient.post<User>(`${this.API_SERVER}/updateAvatar`, data);
+	}
 
-  userInfo(code: string) {
-	return this.httpClient.get<boolean>(`${this.API_SERVER}/user/info/${code}`);
-  }
+	getAllUsers(code: string) {
+		return this.httpClient.get<User[]>(`${this.API_SERVER}/users/${code}`);
+	}
 
-  getMessages(fromUserId: Number, userId: Number)
-  {
-    const data = {fromUserId, userId};
-    return this.httpClient.get<Message[]>(`${this.API_SERVER}/messages/${fromUserId}/${userId}`);
-  }
+	updateUser(code: string, user: User) {
+		return this.httpClient.patch<User>(`${this.API_SERVER}/user/${code}`, user);
+	}
 
-  getChannelMessages(channelName: string)
-  {
-    return this.httpClient.get<Message[]>(`${this.API_SERVER}/channelMessages/${channelName}`);
-  }
+	userInfo(code: string | undefined) {
+		return this.httpClient.get<boolean>(`${this.API_SERVER}/user/info/${code}`);
+	}
 
-  createChannelMessage(message: Message)
-  {
-    return this.httpClient.post<Message>(`${this.API_SERVER}/channelMessage`, message);
-  }
+	getMessages(fromUserId: Number, userId: Number) {
+		const data = { fromUserId, userId };
+		return this.httpClient.get<Message[]>(`${this.API_SERVER}/messages/${fromUserId}/${userId}`);
+	}
 
-  createMessage(message: Message)
-  {    
-    return this.httpClient.post<Message>(`${this.API_SERVER}/message`, message);
-  }
+	getChannelMessages(channelName: string) {
+		return this.httpClient.get<Message[]>(`${this.API_SERVER}/channelMessages/${channelName}`);
+	}
 
-  signup(code: string) {
-	return this.httpClient.post<User | boolean>(`${this.API_SERVER}/auth/`, {code});
-  }
+	createChannelMessage(message: Message) {
+		return this.httpClient.post<Message>(`${this.API_SERVER}/channelMessage`, message);
+	}
 
-  signupTfa(code: string) {
-	return this.httpClient.post<Tfa>(`${this.API_SERVER}/tfa/signup`, {code});
-  }
+	createMessage(message: Message) {
+		return this.httpClient.post<Message>(`${this.API_SERVER}/message`, message);
+	}
 
-  disableTfa(code: string) {
-	return this.httpClient.patch(`${this.API_SERVER}/tfa/disable`, {code});
-  }
+	signup(code: string) {
+		return this.httpClient.post<User | boolean>(`${this.API_SERVER}/auth/`, { code });
+	}
 
-  verifyTfa(data: {code: string, tfa_key: string}) {
-	return this.httpClient.post(`${this.API_SERVER}/tfa/verify`, data);
-  }
+	signupTfa(code: string) {
+		return this.httpClient.post<Tfa>(`${this.API_SERVER}/tfa/signup`, { code });
+	}
 
-  validateTfa(data: {code: string, tfa_key: string}) {
-	return this.httpClient.post<User | boolean>(`${this.API_SERVER}/tfa/validate`, data);
-  }
+	disableTfa(code: string) {
+		return this.httpClient.patch(`${this.API_SERVER}/tfa/disable`, { code });
+	}
+
+	verifyTfa(data: { code: string, tfa_key: string }) {
+		return this.httpClient.post(`${this.API_SERVER}/tfa/verify`, data);
+	}
+
+	validateTfa(data: { code: string, tfa_key: string }) {
+		return this.httpClient.post<User | boolean>(`${this.API_SERVER}/tfa/validate`, data);
+	}
 }

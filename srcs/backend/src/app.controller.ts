@@ -212,7 +212,6 @@ export class AppController {
 			/n/tcode: " + code);
 			return false;
 		}
-
 	}
 
 	@Post('auth/')
@@ -222,8 +221,9 @@ export class AppController {
 			var oauth = await this.oauthService.getToken(auth.code);
 			if (oauth != null)
 				return await this.userService.createUser(oauth, auth.code);
-			else
+			else {
 				throw Prisma.PrismaClientKnownRequestError
+			}
 		} catch (e) {
 			console.log("Error: signup:/n\
 			/n/tcode: " + auth.code);

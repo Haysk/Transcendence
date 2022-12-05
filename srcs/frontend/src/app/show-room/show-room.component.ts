@@ -23,7 +23,9 @@ export class ShowRoomComponent implements OnInit {
     this.socketService.receiveMatches().subscribe((res : any) => {
       this.matches = res;
     })
-    this.socketService.getMatches()
+    this.socketService.isGameFinished().subscribe((res) => {
+      this.socketService.getMatches()
+    })
   }
 
   reload(){

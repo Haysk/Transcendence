@@ -1,4 +1,4 @@
-<div class="all_players">
+<div class="all_players" *ngIf="redirectPong==false">
 
     <div class="env_players">
         <div class="user">
@@ -17,7 +17,9 @@
         </div>
     </div><!--fin div env_players-->
     <div class="btn">
-        <app-button-v4 [text]="'Watch Now'"></app-button-v4>
+        <app-button-v4 [text]="'Watch Now'" (click)="spectate()"></app-button-v4>
     </div>
-
+</div>
+<div *ngIf="redirectPong==true">
+    <app-pong [customs]="gameConfig" [gameName]="match.roomName"></app-pong>
 </div>

@@ -47,4 +47,34 @@
     margin-left: 3px;
     margin-right: 5px ;
    
-}   
+}
+
+.firendoffline{
+    
+    background-color: rgb(52, 53, 52);
+    width: 100%;
+    text-align: left;
+    color: rgb(138, 140, 141);
+    border: 0px;
+    cursor: pointer;
+    margin-top: 0px;
+    display: flex;
+    justify-content: flex-start;
+    font-size: 13px;
+
+}
+
+.firendoffline:hover{
+
+background-color: rgb(45, 151, 238);
+width: 100%;
+text-align: left;
+color: rgb(0, 0, 0);
+border: 0px;
+cursor: pointer;
+margin-top: 1px;
+display: flex;
+justify-content: flex-start;
+font-size: 13px;
+
+}

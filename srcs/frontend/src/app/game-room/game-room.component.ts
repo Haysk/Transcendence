@@ -50,21 +50,15 @@ export class GameRoomComponent implements OnInit {
   this.socketService.listenForMatchmaking().subscribe((res) => {
     //res.res2 = player1
     //res.res3 = player2
-    console.log("MATCHMAKING OK")
     this.setUpGameConfig(res.res2, res.res3);
     this.gameName = res.res;
     this.redirectPong = true;
     this.showSearching = false;
   })
-
-    console.log("User Online = " + this.user.login );
-    console.log("User url = " + this.user.image );
   }
 
   showavailable(){
     this.visible= !this.visible;
-    console.log("playeronline:" + this.visible);
-
   }
 
   setUpGameConfig(player1: User, player2: User) //PLAYER 1 EST A GAUCHE
