@@ -27,6 +27,11 @@ export class PongService {
     private saveGame: SaveGameService,
   ) {}
 
+  public returnGames()
+  {
+    return this.games;
+  }
+
   public start(name: string): void {
     this.games.find((game) => game.name === name)?.game.start();
   }
@@ -74,8 +79,7 @@ export class PongService {
       const element = this.games[index];
       games.push({
         roomName: element.name,
-        player1: element.playerLeft,
-        player2: element.playerRight,
+        players: [element.playerLeft,element.playerRight],
         player1_score: element.game.getGameStates().scoreLeft,
         player2_score: element.game.getGameStates().scoreRight,
         winner: null
@@ -122,8 +126,7 @@ export class PongService {
     if (game != undefined) {
       const sgame: SGame = {
         roomName: game.name,
-        player1: game.playerLeft,
-        player2: game.playerRight,
+        players: [game.playerLeft, game.playerRight],
         player1_score: game.game.getGameStates().scoreLeft,
         player2_score: game.game.getGameStates().scoreRight,
         winner: null,

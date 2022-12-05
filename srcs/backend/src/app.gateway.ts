@@ -1167,6 +1167,32 @@ catch(err){
     }
   }
 
+  @SubscribeMessage('closeThisRoom')
+  closeGameRoom(client: Socket, payload: any)
+  {
+    this.server.in(payload).disconnectSockets();
+  }
+
+  // @SubscribeMessage('amIInTheRoom')
+  // async isInTheRoom(client: Socket, payload: any)
+  // {
+  //   let check = false;
+  //   let data = await this.server.in(payload).fetchSockets();
+  //   data.forEach((res) => {
+  //     if (res.id == client.id)
+  //     {
+  //       check = true;
+  //     }
+  //   })
+  //   this.server.to(client.id).emit('responseAreYouInTheRoom', check);
+  // }
+
+  @SubscribeMessage('getGames')
+  getGames(client: Socket)
+  {
+    this.server.to(client.id).emit('hereIsGames', this.pongService.getGames());
+  }
+
   /* INIT */
 
   @SubscribeMessage('startToServer')

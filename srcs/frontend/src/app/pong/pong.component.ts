@@ -395,6 +395,7 @@ export class PongComponent implements OnInit, OnDestroy {
     }
     this.draw();
     if (!this.gameConfig.states.start || this.game.getWinner != null) {
+      this.socketService.closeGameRoom(this.gameName);
       this.darken();
     }
   }

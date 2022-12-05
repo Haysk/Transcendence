@@ -8,13 +8,13 @@ export class SaveGameService {
   constructor(private Prisma: PrismaService) {}
 
   async createGame(game: SGame) {
-    if (game.player1 != undefined && game.player2 != undefined) {
+    if (game.players[0] != undefined && game.players[1] != undefined) {
       try{
         let result = await this.Prisma.game.create({
           data: {
             roomName: game.roomName,
             players: {
-              connect:  [{id: game.player1.id}, {id: game.player2.id}]
+              connect:  [{id: game.players[0].id}, {id: game.players[1].id}]
             },
             player1_score: game.player1_score,
             player2_score: game.player2_score
