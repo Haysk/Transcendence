@@ -549,6 +549,21 @@ amIBanned()
     this.socket.emit('iWantToWatchThis', roomName);
   }
 
+  getGamePlayers(game: SGame)
+  {
+    this.socket.emit('gameInfosPlz', game);
+  }
+
+  receiveGamePlayers(game: SGame)
+  {
+    let answer = 'hereAreTheGame' + game.id + 'Infos'
+    return new Observable<SGame> ((obs) => {
+      this.socket.on(answer, (res) => {
+        obs.next(res);
+      })
+    })
+  }
+
 //INIT
 
   sendStart(name: string): void {

@@ -28,7 +28,6 @@ export class BlocUserProfileComponent implements OnInit {
     this.socketService.isGameFinished().subscribe((res) => {
       this.redirectPong= false;
     })
-    console.log(this.match)
   }
 
   spectate()

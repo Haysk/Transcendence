@@ -1,6 +1,7 @@
 import { Component, Input } from '@angular/core';
 import { SGame } from 'src/app/models/savedGame';
 import { User } from 'src/app/models/user';
+import { SocketService } from 'src/app/services/socket.service';
 @Component({
   selector: 'app-match-history',
   templateUrl: './match-history.component.html',
@@ -13,9 +14,13 @@ export class MatchHistoryComponent {
   scorePlayer2!: number;
   winner!:User;
   
+  constructor(private socketService: SocketService){}
 
   ngOnInit(): void {
-
+    this.socketService.receiveGamePlayers(this.match).subscribe((res) => {
+      this.match = res;
+    })
+    this.socketService.getGamePlayers(this.match);
       // this.winner = this.winnerIs();
   }
 

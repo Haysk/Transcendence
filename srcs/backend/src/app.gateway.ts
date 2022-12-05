@@ -1141,6 +1141,32 @@ catch(err){
     this.server.to(client.id).emit('gameIsReadyToSpectate', true);
   }
 
+  @SubscribeMessage('gameInfosPlz')
+  async getGameInfos(client: Socket, payload: any)
+  {
+    try
+    {
+      let data = await this.Prisma.game.findFirst({
+        where: {
+          id: payload.id,
+        },
+        include: {
+          players: true,
+        }
+      })
+      if (data != null && data != undefined)
+      {
+        let answer = 'hereAreTheGame' + data.id + 'Infos'
+        this.server.to(client.id).emit(answer, data);
+      }
+    }
+    catch(err)
+    {
+      console.log("error dans getGameInfos :")
+      console.log(err);
+    }
+  }
+
   /* INIT */
 
   @SubscribeMessage('startToServer')
