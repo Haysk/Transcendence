@@ -14,11 +14,6 @@ import { AuthGuard } from './auth/auth.guard';
 import { NotFoundComponent } from './not-found/not-found.component';
 import { LoginComponent } from './login/login.component';
 
-
-
-
-
-
 const routes: Routes = [
 
   	{ path: '', component: LoginComponent },
