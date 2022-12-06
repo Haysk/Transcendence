@@ -1,5 +1,7 @@
 import { Component, OnInit } from '@angular/core';
+import { SGame } from '../models/savedGame';
 import { ApiService } from '../services/api.service';
+import { SocketService } from '../services/socket.service';
 
 
 @Component({
@@ -10,14 +12,24 @@ import { ApiService } from '../services/api.service';
 
 
 export class ShowRoomComponent implements OnInit {
-
-  matches: string[] = []; 
-  constructor(service: ApiService) { 
+ 
+  matches!: SGame[]; 
+  constructor(service: ApiService, private socketService: SocketService) { 
     //  this.matches = service.getMatches();
     
   }
 
   ngOnInit(): void {
+    this.socketService.receiveMatches().subscribe((res : any) => {
+      this.matches = res;
+    })
+    this.socketService.isGameFinished().subscribe((res) => {
+      this.socketService.getMatches()
+    })
+  }
+
+  reload(){
+    this.socketService.getMatches()
   }
 
 }

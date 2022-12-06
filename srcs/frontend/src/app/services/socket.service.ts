@@ -3,6 +3,7 @@ import { Observable } from 'rxjs';
 import { io } from 'socket.io-client';
 import { ApiService } from '../services/api.service';
 import { User } from '../models/user';
+import { SGame } from '../models/savedGame';
 import { Channel } from '../models/channel'
 import { environment } from 'src/environments/environment';
 import { IGameStates } from '../pong/game/interfaces/game-states.interface';
@@ -304,6 +305,20 @@ amIBanned()
     })
   }
 
+  askMatchHistory(current: User)
+  {
+    this.socket.emit('matchHistoryPlz', current);
+  }
+
+  getMatchHistory()
+  {
+    return new Observable<SGame[]> ((obs) => {
+      this.socket.on("hereIsTheMatchHistory", (res) => {
+        obs.next(res);
+      })
+    })
+  }
+
 //START COMPONENT
 
   iAmReady()
@@ -377,7 +392,6 @@ amIBanned()
     })
   }
 
-
   showrefuseInvitation(){
     return new Observable<any>((obs) => {
       this.socket.on('refuseInvitation', (res:boolean, res2: User) => {
@@ -428,9 +442,29 @@ amIBanned()
     })
   }
 
-  createGame(roomName: string, gameConfig: IGame, player1: User, player2: User)
+  createGame(roomName: string, gameConfig: IGame, player1: User, player2: User, bonus: boolean)
   {
-    this.socket.emit('createGamePlz', roomName, gameConfig, player1, player2);
+    this.socket.emit('createGamePlz', roomName, gameConfig, player1, player2, bonus);
+  }
+
+  stopMatchmaking(bonus: boolean)
+  {
+    this.socket.emit('stopMatchmaking', false);
+  }
+
+  matchmaking(player: User, bonus: boolean)
+  {
+    this.socket.emit('matchmaking', player, bonus);
+  }
+
+  listenForMatchmaking()
+  {
+    return new Observable<any> ((obs) => {
+      this.socket.on('matchmakingDone', (res, res2, res3) => {
+        let data = {res, res2, res3}
+        obs.next(data);
+      })
+    })
   }
 
   //PONG GAME
@@ -457,6 +491,77 @@ amIBanned()
         observer.next(message);
       });
     });
+  }
+
+  isGameFinished()
+  {
+    return new Observable<SGame> ((res) => {
+      this.socket.on('gameIsFinished', (obs: any) =>
+      {
+        res.next(obs);
+      })
+    })
+  }
+
+//SHOW ROOM
+
+  getMatches()
+  {
+    this.socket.emit("gamesPlz");
+  }
+
+  receiveMatches()
+  {
+    return new Observable<SGame> ((obs) => {
+      this.socket.on('hereIsMatchesList', (res) => {
+        obs.next(res);
+      })
+    })
+  }
+
+// GAME HISTORY
+
+  askForGameHistory(current: User)
+  {
+    this.socket.emit('matchHistoryPlz', current);
+  }
+
+  receiveGameHistory()
+  {
+    return new Observable<SGame>((obs) => {
+      this.socket.on('hereIsGameHistory', (data) => {
+        obs.next(data);
+      })
+    })
+  }
+
+  gameIsReadyToSpectate()
+  {
+    return new Observable<boolean> ((obs) => {
+      this.socket.on('gameIsReadyToSpectate', (data) => {
+        obs.next(data);
+      })
+    })
+  }
+
+  spectateGame(roomName: string)
+  {
+    this.socket.emit('iWantToWatchThis', roomName);
+  }
+
+  getGamePlayers(game: SGame)
+  {
+    this.socket.emit('gameInfosPlz', game);
+  }
+
+  receiveGamePlayers(game: SGame)
+  {
+    let answer = 'hereAreTheGame' + game.id + 'Infos'
+    return new Observable<SGame> ((obs) => {
+      this.socket.on(answer, (res) => {
+        obs.next(res);
+      })
+    })
   }
 
 //INIT

@@ -1,3 +1,4 @@
+<div *ngIf="redirectPong==false">
 <div class="all_game" *ngIf="show==false">
 
     <div class="titre_game"></div>
@@ -16,7 +17,7 @@
             <h2>Players available for PONG</h2>    
             <div class="env_player_available">
                 <div class="player_available" *ngFor="let user of list_user"> 
-                    <app-player-pong [user]="user" ></app-player-pong>
+                    <app-player-pong [user]="user" > </app-player-pong>
                 </div>
             </div>
         </div>fin de div bloc_player_available  -->
@@ -37,6 +38,6 @@
     
 </div><!-- fin de div all_game  -->
 
-
-
-<app-pong *ngIf="show==true"></app-pong>
+<app-searching-player *ngIf="showSearching==true" (showSearchingPlayerEvent)="receiveShowSearching($event)"></app-searching-player>
+</div>
+<app-pong *ngIf="redirectPong==true" [customs]="gameConfig" [gameName]="gameName"></app-pong>

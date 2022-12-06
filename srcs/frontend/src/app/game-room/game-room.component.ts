@@ -2,6 +2,10 @@ import { Component, OnInit } from '@angular/core';
 import { ApiService } from '../services/api.service';
 import { User } from '../models/user'
 import { StorageService } from '../services/storage.service';
+import { TitleStrategy } from '@angular/router';
+import { SocketService } from '../services/socket.service';
+import { IGame } from '../pong/game/interfaces/game.interface';
+import { DefaultGame } from '../pong/game/config';
 
 @Component({
   selector: 'app-game-room',
@@ -12,9 +16,14 @@ export class GameRoomComponent implements OnInit {
   visible:boolean =false;
   list_user!: User[];
   show:boolean=false;
+  showSearching:boolean=false;
+  redirectPong:boolean=false;
+
+  gameName!:string;
+  gameConfig: IGame =  new DefaultGame();;
 
   
-  user: User={
+  user: User = {
     id: this.getId(),
     login: this.getLogin(),
     email: this.getEmail(),
@@ -30,18 +39,41 @@ export class GameRoomComponent implements OnInit {
 
 
   constructor(private apiService: ApiService,
-	private storageService: StorageService) { }
+	private storageService: StorageService, private socketService: SocketService) { }
 
   async ngOnInit(): Promise<void> {
   this.apiService.getAllUsers(this.storageService.getCode()).subscribe(
       (result=>{
         this.list_user =result;
       }));
-
+    
+  this.socketService.listenForMatchmaking().subscribe((res) => {
+    //res.res2 = player1
+    //res.res3 = player2
+    this.setUpGameConfig(res.res2, res.res3);
+    this.gameName = res.res;
+    this.redirectPong = true;
+    this.showSearching = false;
+  })
   }
 
   showavailable(){
     this.visible= !this.visible;
+  }
+
+  setUpGameConfig(player1: User, player2: User) //PLAYER 1 EST A GAUCHE
+  {
+    let id = Number(this.storageService.getId());
+    if (id == player1.id)
+    {
+      this.gameConfig.left.mode.type = "local";
+      this.gameConfig.right.mode.type = "remote";
+    }
+    else if (id == player2.id)
+    {
+      this.gameConfig.left.mode.type = "remote";
+      this.gameConfig.right.mode.type = "local";
+    }
   }
 
   getId(): number{
@@ -124,10 +156,13 @@ export class GameRoomComponent implements OnInit {
   }
 
   justPlay(){
+    this.socketService.matchmaking(this.user, false);
+    this.showSearching=true;
 
-    this.show=true;
   }
 
-
+  receiveShowSearching($event){
+    this.showSearching=$event;
+  }
 
 }

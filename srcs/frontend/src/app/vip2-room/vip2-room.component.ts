@@ -23,35 +23,44 @@ export class Vip2RoomComponent implements OnInit {
 	login:string = "";
 	avatar:string = "";
 	searchName:string = "";
-	// login = this.storage.getLogin();
+	games!:any;
+	user!: User;
 	
 	constructor(private storage: StorageService,
 				private socketService: SocketService,
 				private router: Router,
 				private route: ActivatedRoute
 				 ) {
-		this.socketService.waitForAUser().subscribe((res) => {
-			if (res) {
-				this.nickname = res.nickname;
-				this.login = res.login;
-				this.avatar = res.avatar;
-			} else if (!res && !this.login)
-				this.router.navigateByUrl("vip-room");
-			this.searchName = "";
-		})
+
 		this.route.queryParams.subscribe(async (params) => {
 			if (params['login']) {
 				this.socketService.searchForAUser(params['login']);
 			} else
 				this.router.navigateByUrl("vip-room");
 		});
-	}
+}
 
 	ngOnInit(): void {
+		this.socketService.receiveGameHistory().subscribe((res) => {
+		this.games = res;
+	});
+		this.socketService.waitForAUser().subscribe((res) => {
+			if (res) {
+				this.nickname = res.nickname;
+				this.login = res.login;
+				this.avatar = res.avatar;
+				this.user = res;
+				this.socketService.askForGameHistory(this.user);
+			} else if (!res && !this.login)
+				this.router.navigateByUrl("vip-room");
+			this.searchName = "";
+		})
 	}
 
 	ngOnDestroy() {
 		this.socketService.unsubscribeSocket("hereIsTheUserYouAskedFor");
+		this.socketService.unsubscribeSocket("hereIsGameHistory");
+
 	}
 
 	showhide() {

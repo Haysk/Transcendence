@@ -11,6 +11,7 @@ import { PrismaService } from './prisma.service';
 import { Server, Socket } from 'socket.io';
 import { UserService } from './user.service';
 import { PongService } from './pong/pong.service';
+import { Game, User } from '@prisma/client';
 
 @WebSocketGateway({
   cors: {
@@ -22,12 +23,17 @@ export class AppGateway
   implements OnGatewayInit, OnGatewayConnection, OnGatewayDisconnect {
 
   TabReady = new Map<string, string[]>;
-
+  TabMatchmaking = new Map<number, User>;
+  
   constructor(
     private Prisma: PrismaService,
     private readonly userService: UserService,
     private pongService: PongService
-  ) {
+  ) {}
+
+  ngOnInit(){
+    this.TabMatchmaking[0][0] = null;
+    this.TabMatchmaking[1][0] = null;
   }
 
   sleep(ms:number) {
@@ -101,7 +107,8 @@ export class AppGateway
 					banned: true,
 					admins: true
 				}
-			  })
+			  })      
+      
 			  if (data != null && data != undefined)
         {
           this.server.emit('channelIsUpdated', data);
@@ -565,6 +572,27 @@ catch(err){
   }
 }
 
+  /* MATCH HISTORY */
+
+  @SubscribeMessage('matchHistoryPlz')
+  async returnMatchHistory(client: Socket, payload: any)
+  {
+    try
+    {
+      let data = await this.Prisma.game.findMany({
+        where: {
+          OR: [
+          ]
+        }
+      })
+    }
+    catch(err)
+    {
+      console.log("erreur dans get match history:")
+      console.log(err)
+    }
+  }
+
   /* MESSAGE */
 
   @SubscribeMessage('sendMsgTo')
@@ -980,11 +1008,85 @@ catch(err){
 
 /* PONG GAME */
 
-  @SubscribeMessage('createGamePlz') //payload[1] IGame, payload[2] player1, payload[3] player2
+  @SubscribeMessage('stopMatchmaking')
+  stopMatchmaking(client: Socket, payload: any)
+  {
+    if (payload == false)
+    {
+      this.TabMatchmaking[0] = null;
+    }
+    else
+    {
+      this.TabMatchmaking[1] = null;
+    }
+  }
+
+  @SubscribeMessage('matchmaking')
+  async matchmaking(client: Socket, payload: any) //payload[0] = player, payload[1] = bonus
+  {
+    // TabMatchmaking
+    let data = await this.Prisma.user.findFirst({
+      where: {
+        id: payload[0].id
+      }
+    })
+    if(data != null && data != undefined)
+    {
+      if(payload[1] == false) //sans bonus
+      {
+        if(this.TabMatchmaking[0] === null || this.TabMatchmaking[0] === undefined)
+        {
+          this.TabMatchmaking[0] = data;
+        }
+        else if (data.id != this.TabMatchmaking[0].id)
+        {
+          let data2 = await this.Prisma.user.findFirst({
+            where: {
+              id: this.TabMatchmaking[0].id
+            }
+          })
+          if (data2 != null && data2 != undefined)
+          {
+            let gameName = this.createGameRoomName(this.TabMatchmaking[0].login, payload[0].login)
+            this.server.in(data2.socket).socketsJoin(gameName);
+            this.server.in(client.id).socketsJoin(gameName);
+            this.pongService.addGame(gameName, payload[1],  this.TabMatchmaking[0], payload[0]);
+            this.server.to(gameName).emit('matchmakingDone', gameName, this.TabMatchmaking[0], payload[0]);
+            this.TabMatchmaking[0] = null;
+          }
+        }
+      }
+      else //avec bonus 
+      {
+        if(this.TabMatchmaking[1] === null || this.TabMatchmaking[1] === undefined)
+        {
+          this.TabMatchmaking[1] = data;
+        }
+        else if (data.id != this.TabMatchmaking[1].id)
+        {
+          let data2 = await this.Prisma.user.findFirst({
+            where: {
+              id: this.TabMatchmaking[0].id
+            }
+          })
+          if (data2 != null && data2 != undefined)
+          {
+            let gameName = this.createGameRoomName(this.TabMatchmaking[1].login, payload[0].login)
+            this.server.in(data2.socket).socketsJoin(gameName);
+            this.server.in(client.id).socketsJoin(gameName);
+            this.pongService.addGame(gameName, payload[1],  this.TabMatchmaking[1], payload[0]);
+            this.TabMatchmaking[1] = null;
+            this.server.to(gameName).emit('matchmakingDone', gameName);
+          }
+        }
+      }
+    }
+  }
+
+  @SubscribeMessage('createGamePlz') //payload[1] IGame, payload[2] player1, payload[3] player2, payload[4] bonus
   createGame(client: Socket, payload: any)
   {
-    console.log(payload[0]);
-    this.pongService.addGame(payload[0]);
+    this.pongService.addGame(payload[0], payload[4], payload[2], payload[3]);
     //TODO: addGamers
   }
 
@@ -997,7 +1099,78 @@ catch(err){
   handleGameStates(client: Socket, payload: any): void {
   }
 
-/* INIT */
+/* SHOW ROOM */
+
+  @SubscribeMessage('gamesPlz')
+  getMatches(client: Socket)
+  {
+    let data = this.pongService.getGames();
+
+    if (data != undefined && data != null)
+      this.server.to(client.id).emit('hereIsMatchesList', data);
+  }
+
+  /* GAME HISTORY */
+
+  @SubscribeMessage('matchHistoryPlz')
+  async getMatchHistory(client: Socket, payload: User)
+  {
+    try{
+      let data = await this.Prisma.user.findFirst({
+        where: {
+          id: payload.id
+        }, 
+        include: {
+          games: true
+        }
+      })
+      if (data != null && data != undefined)
+      {
+        this.server.to(client.id).emit('hereIsGameHistory', data.games);
+      }
+    }
+    catch(err){
+      console.log("erreur dans getMatchHistory")
+      console.log(err);
+    }
+  }
+  
+  @SubscribeMessage('iWantToWatchThis')
+  spectateGame(client: Socket, payload: any)
+  {
+    this.server.in(client.id).socketsJoin(payload);
+    this.server.to(client.id).emit('gameIsReadyToSpectate', true);
+  }
+
+  @SubscribeMessage('gameInfosPlz')
+  async getGameInfos(client: Socket, payload: any)
+  {
+    try
+    {
+      let data = await this.Prisma.game.findFirst({
+        where: {
+          id: payload.id,
+        },
+        include: {
+          players: true,
+        }
+      })
+      console.log(data);
+      
+      if (data != null && data != undefined)
+      {
+        let answer = 'hereAreTheGame' + data.id + 'Infos'
+        this.server.to(client.id).emit(answer, data);
+      }
+    }
+    catch(err)
+    {
+      console.log("error dans getGameInfos :")
+      console.log(err);
+    }
+  }
+
+  /* INIT */
 
   @SubscribeMessage('startToServer')
   handleStart(client: Socket, payload: any): void {

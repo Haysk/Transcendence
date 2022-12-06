@@ -445,7 +445,7 @@ h2{
     .just_play_photo{
         width: 120px;
         height:120px;
-        background-image: url("../../assets/imgs/faceleemen.jpg");
+        background-image: url("../../assets/imgs/match.gif");
         background-size: cover;
         background-repeat: no-repeat;
         background-position: center; 

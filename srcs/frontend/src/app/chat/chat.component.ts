@@ -8,7 +8,6 @@ import { StorageService } from '../services/storage.service';
 import { GameMode, PlayerMode, IGame } from 'src/app/pong/game/interfaces/game.interface';
 
 
-
 @Component({
 	selector: 'app-chat',
 	templateUrl: './chat.component.html',

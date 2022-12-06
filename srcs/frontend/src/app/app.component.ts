@@ -4,6 +4,7 @@ import { SocketService } from './services/socket.service';
 import { User } from './models/user';
 import { StorageService } from './services/storage.service';
 import { IGame } from './pong/game/interfaces/game.interface';
+import { SGame } from '../app/models/savedGame';
 import { DefaultGame } from './pong/game/config';
 
 @Component({
@@ -16,7 +17,7 @@ export class AppComponent implements OnInit{
 	constructor(
     public route: ActivatedRoute,
 		public router: Router,
-    private socketService: SocketService,
+    private socketService: SocketService, 
     private storageService: StorageService){
   }
   
@@ -33,7 +34,9 @@ export class AppComponent implements OnInit{
   global5!: {player1: User, player2:  User, gameConfig: IGame};
   roomName!:string;
   redirectPong:boolean = false;
-
+ 
+  GameData!: SGame;
+  showGameScore:boolean = false;
 
   to: User = {
 		id: this.storageService.getId(),
@@ -98,10 +101,10 @@ export class AppComponent implements OnInit{
         this.player2 = data.res2;
         this.gameConfig = data.res3;
         this.setUpGameConfig();
-        this.gameConfig = new DefaultGame();
+        // this.gameConfig = new DefaultGame();
         this.roomName = this.createGameRoomName(this.player1.login, this.player2.login);
         if(this.player1.id == Number(this.storageService.getId()))
-          this.socketService.createGame(this.roomName, this.gameConfig, this.player1, this.player2);
+          this.socketService.createGame(this.roomName, this.gameConfig, this.player1, this.player2, false);
         this.gameIsReady=false;
         this.redirectPong=true;
         // console.log("LA LISTE :");
@@ -113,6 +116,11 @@ export class AppComponent implements OnInit{
         // console.log(this.gameConfig);
         
       }
+    })
+    this.socketService.isGameFinished().subscribe((res) => {
+      this.GameData = res;
+      this.redirectPong= false;
+      this.showGameScore = true;
     })
   }
 
@@ -174,5 +182,12 @@ export class AppComponent implements OnInit{
     this.player2 = this.global5.player2;
     this.gameConfig = this.global5.gameConfig;
   }
+
+  receiveCloseScoreEvent($event:boolean){
+       this.showGameScore= $event;
+  }
+
+
+
 }
 
