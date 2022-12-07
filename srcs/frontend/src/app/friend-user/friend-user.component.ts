@@ -21,6 +21,7 @@ export class FriendUserComponent implements OnInit {
   userList!: User[];
 
   show_chat: boolean = false;
+
  
   @Output() showchatEvent = new EventEmitter<boolean>();
   @Output() sendDestEvent = new EventEmitter<User>();

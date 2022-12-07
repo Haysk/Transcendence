@@ -15,6 +15,7 @@ export class PongGateway {
     this.server.emit(name + '_gameStatesToClient', gameStates);
   }
 
+
   public gameIsFinished(game: SGame)
   {
     this.saveGame.createGame(game);

@@ -15,6 +15,7 @@ export class AreYouReadyComponent {
   @Input() player1 !: User;
   @Input() player2 !: User;
   @Input() gameConfig !: IGame;
+  ready:string= "../../../assets/imgs/game_ready.png";
 
   constructor(private socketService: SocketService, private storageService: StorageService){}
 
@@ -27,7 +28,9 @@ export class AreYouReadyComponent {
     // console.log(this.player1);
     // console.log(this.player2);
     // console.log(this.gameConfig);
+    
     this.socketService.readySignal(this.player1, this.player2, this.gameConfig);
+    this.ready="../../../assets/imgs/gameStart.png";
   }
 
 }
