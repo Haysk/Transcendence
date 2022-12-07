@@ -3,5 +3,5 @@ export const environment = {
   HOST_NAME: 'localhost',
   HOST_PORT: '8081',
   IP_HOST: 'localhost:8081',
-  INTRA_UID: 'u-s4t2ud-a12d1cbf26c9741ea29713c23b1abf8cbeccf7215bda48dcac1e563873ccda41',
+  INTRA_UID: 'bfeae857f60a395fd5665c74d4bedbdcd827cc466384460f5e05cb451e9e4ad0',
 };
