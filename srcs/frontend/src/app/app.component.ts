@@ -25,7 +25,7 @@ export class AppComponent implements OnInit{
   refuseFromWho! : User;
   player1!: User;
   player2!: User;
-  gameConfig!: IGame;
+  gameConfig = new DefaultGame();
   invitation:boolean=false;
   refuse:boolean=false;
   gameAccepted:boolean = false;
@@ -101,20 +101,11 @@ export class AppComponent implements OnInit{
         this.player2 = data.res2;
         this.gameConfig = data.res3;
         this.setUpGameConfig();
-        // this.gameConfig = new DefaultGame();
         this.roomName = this.createGameRoomName(this.player1.login, this.player2.login);
         if(this.player1.id == Number(this.storageService.getId()))
           this.socketService.createGame(this.roomName, this.gameConfig, this.player1, this.player2, false);
         this.gameIsReady=false;
         this.redirectPong=true;
-        // console.log("LA LISTE :");
-        // console.log("PLAYER 1 :");
-        // console.log(this.player1);
-        // console.log("PLAYER 2 :");
-        // console.log(this.player2);
-        // console.log("GAME CONFIG : ");
-        // console.log(this.gameConfig);
-        
       }
     })
     this.socketService.isGameFinished().subscribe((res) => {
@@ -122,6 +113,17 @@ export class AppComponent implements OnInit{
       this.redirectPong= false;
       this.showGameScore = true;
     })
+    this.socketService.askForGames(this.storageService.getId()).subscribe((res) => {
+      if(res != null)
+      {
+        this.player1 = res.players[0];
+        this.player2 = res.players[1];
+        this.setUpGameConfig();
+        this.roomName =  this.createGameRoomName(this.player1.login, this.player2.login)
+        this.redirectPong=true;
+      }
+    })
+    this.socketService.getGames();
   }
 
   ngOnDestroy() {
@@ -142,7 +144,7 @@ export class AppComponent implements OnInit{
 
   setUpGameConfig() //PLAYER 1 EST A GAUCHE
   {
-    let id = Number(this.storageService.getId());
+    let id = this.storageService.getId();
     if (id == this.player1.id)
     {
       this.gameConfig.left.mode.type = "local";

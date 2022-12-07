@@ -49,6 +49,8 @@ services:
     restart: always
     environment:
       IP_HOST: ${IP_HOST}
+      PORT_HTTPS_HOST: ${PORT_HTTPS_HOST}
+      INTRA_UID: ${CLIENT_ID}
     expose:
       - 4200
     networks:
