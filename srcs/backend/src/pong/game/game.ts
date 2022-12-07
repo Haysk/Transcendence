@@ -191,7 +191,6 @@ export class Game {
       this.game.states.scoreLeft++;
     }
     this.newBall();
-    console.log("powerup PRESQUE OK")
     if (this.game.states.activatePowerUp) {
       this.newPowerUp();
     }
@@ -204,7 +203,6 @@ export class Game {
         score % new DefaultPowerUps().powerUps.length
       ],
     );
-    console.log("powerup OK")
     if (score % 4 === 0) {
       powerUp.position.left = (1 * gameWidth) / 5 - sidePowerUp / 2;
     } else if (score % 4 === 1) {

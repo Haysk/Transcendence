@@ -67,6 +67,7 @@ export class PongService {
 
   public deleteGame(name: string): void {
     this.end(name);
+    // this.socketService.closeGameRoom(this.name);
   }
 
   public getGames(): SGame[] {

@@ -18,6 +18,7 @@ export class GameRoomComponent implements OnInit {
   show:boolean=false;
   showSearching:boolean=false;
   redirectPong:boolean=false;
+  bonus:boolean=false;
 
   gameName!:string;
   gameConfig: IGame =  new DefaultGame();;
@@ -63,6 +64,8 @@ export class GameRoomComponent implements OnInit {
 
   setUpGameConfig(player1: User, player2: User) //PLAYER 1 EST A GAUCHE
   {
+    console.log(player1)
+    console.log(player2)
     let id = Number(this.storageService.getId());
     if (id == player1.id)
     {
@@ -156,13 +159,19 @@ export class GameRoomComponent implements OnInit {
   }
 
   justPlay(){
-    this.socketService.matchmaking(this.user, false);
+    this.socketService.matchmaking(this.user, this.bonus);
     this.showSearching=true;
 
   }
 
   receiveShowSearching($event){
     this.showSearching=$event;
+  }
+
+  activateBonus()
+  {
+    this.bonus = !this.bonus;
+    console.log("bonus: " + this.bonus)
   }
 
 }
