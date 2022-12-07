@@ -186,7 +186,6 @@ export class DirectChatComponent implements OnInit {
     // this.socketService.displayInvitation(this.Dest, this.Me);
   }
 
-
   goToProfile() {
 
 	this.router.navigate(["vip2-room"], { queryParams: { login: this.Dest.login }});
