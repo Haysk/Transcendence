@@ -49,11 +49,6 @@ export class GameRoomComponent implements OnInit {
       }));
     
   this.socketService.listenForMatchmaking().subscribe((res) => {
-    //res.res2 = player1
-    //res.res3 = player2
-    this.setUpGameConfig(res.res2, res.res3);
-    this.gameName = res.res;
-    this.redirectPong = true;
     this.showSearching = false;
   })
   }
@@ -64,8 +59,6 @@ export class GameRoomComponent implements OnInit {
 
   setUpGameConfig(player1: User, player2: User) //PLAYER 1 EST A GAUCHE
   {
-    console.log(player1)
-    console.log(player2)
     let id = Number(this.storageService.getId());
     if (id == player1.id)
     {

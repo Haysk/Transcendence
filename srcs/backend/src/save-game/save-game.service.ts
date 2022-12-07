@@ -18,12 +18,15 @@ export class SaveGameService {
             },
             player1_score: game.player1_score,
             player2_score: game.player2_score,
-            // player1_id: game.player1.id,
-            // player2_id: game.player2.id
-          },
+            player1_id: game.players[0].id,
+            player2_id: game.players[1].id
+          }, include: {
+			players: true
+		  }
       });
       if (result !== null && result !== undefined) {
         console.log('data game created');
+		return result;
       }
       }
       catch(err){

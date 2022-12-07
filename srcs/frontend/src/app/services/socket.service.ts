@@ -446,8 +446,8 @@ amIBanned()
   isGameReady()
   {
     return new Observable<any>((obs) => {
-      this.socket.on('bothPlayerAreReady', (res:User, res2:User, res3:IGame) => {
-        let data = {res, res2, res3}
+      this.socket.on('bothPlayerAreReady', (res:User, res2:User, bonus: boolean) => {
+        let data = {res, res2, bonus}
         obs.next(data);
       })
     })
@@ -508,7 +508,7 @@ amIBanned()
 
   isGameFinished()
   {
-    return new Observable<SGame> ((res) => {
+    return new Observable<any> ((res) => {
       this.socket.on('gameIsFinished', (obs: any) =>
       {
         res.next(obs);
@@ -601,7 +601,6 @@ amIBanned()
     let returnValue: any = null;
     return new Observable<any>((obs) => {
       this.socket.on('hereIsGames', (res) => {
-        console.log(res);
         if (res) {
           this.games = res;
           this.games.forEach((data) => {

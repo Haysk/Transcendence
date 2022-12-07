@@ -138,5 +138,4 @@ export class TfaService {
 				}));
 		return (verify);
 	}
-
 }

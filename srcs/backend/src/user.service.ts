@@ -321,13 +321,6 @@ export class UserService {
 		})
     }
 
-	// async checkIfFriend(params : {id: number, id1: number}) : Promise<boolean>
-	// {
-	// 	return await Boolean({
-
-	// 	})
-	// }
-
 	async blockUser(params : {id: number, id1: number}) : Promise<User>
     {
         return await this.prisma.user.update({
