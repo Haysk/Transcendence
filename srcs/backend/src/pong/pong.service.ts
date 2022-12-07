@@ -40,10 +40,6 @@ export class PongService {
     playerLeft?: User,
     playerRight?: User,
   ): void {
-    console.log("addGame Activate powerUp :")
-    if (activatePowerUp){
-      console.log("powr");
-    }
     if (this.games.find((game) => game.name === name) == undefined) {
       const newGame: ITest = {
         name: name,
