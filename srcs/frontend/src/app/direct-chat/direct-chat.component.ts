@@ -1,10 +1,12 @@
-import { Component, OnInit, Input } from '@angular/core';
+import { Component, OnInit, Input, Output, EventEmitter } from '@angular/core';
 import { SocketService } from '../services/socket.service';
 import { ApiService } from '../services/api.service';
 import { User } from '../models/user'
 import { Message } from '../models/message';
 import { Router } from '@angular/router';
 import { ViewChild, ElementRef } from '@angular/core';
+import { GameMode, PlayerMode, IGame } from 'src/app/pong/game/interfaces/game.interface';
+
 
 @Component({
   selector: 'app-direct-chat',
@@ -21,6 +23,7 @@ export class DirectChatComponent implements OnInit {
   @Input() Dest!: User;
   @Input() friendOrNot:boolean=true;
   @Input() messages: String[] = [];
+  @Output() global2Event = new EventEmitter<any>();
 
   message: string = '';
   to_create!: Message;
@@ -31,6 +34,9 @@ export class DirectChatComponent implements OnInit {
   num!: number;
   old_messages: Message[] = [];
   friendList!: User[];
+  showGameSettings:boolean = false;
+  global!: {player1: User, player2:  User, gameConfig: IGame};
+
 
   constructor(private socketService: SocketService,
               private apiService: ApiService,
@@ -175,8 +181,9 @@ export class DirectChatComponent implements OnInit {
   }
 
   invite_game(){
-    this.socketService.displayInvitation(this.Dest, this.Me);
-
+    this.showGameSettings = true;
+    
+    // this.socketService.displayInvitation(this.Dest, this.Me);
   }
 
   goToProfile() {
@@ -188,6 +195,18 @@ export class DirectChatComponent implements OnInit {
    
     if (this.comment)
       this.scrolltop = this.comment.nativeElement.scrollHeight;
+  }
+
+  receiveShowGameSettings($event: boolean) {
+		this.showGameSettings = $event;
+		
+	}
+
+  receiveGlobalEvent($event:any){
+    this.global= $event;
+    this.global2Event.emit(this.global);
+
+    
   }
 
 }

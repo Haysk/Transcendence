@@ -8,6 +8,7 @@
 	import { share } from 'rxjs';
 	import { StorageService } from '../services/storage.service'
 import { Router } from '@angular/router';
+import { SGame } from '../models/savedGame';
 
 	@Component({
 		selector: 'app-vip-room',
@@ -41,6 +42,7 @@ import { Router } from '@angular/router';
 	id = this.storage.getId();
 	newNickName!:string;
 	searchName:string = "";
+	games!:any;
 	
 	constructor(private apiService: ApiService,
 		private http: HttpClient,
@@ -65,7 +67,7 @@ import { Router } from '@angular/router';
 		let reader = new FileReader();
 		reader.readAsDataURL(event.target.files[0]);
 		reader.onload = (event: any) => {
-			this.userToShow.url = event.target.result;
+			this.userToShow.avatar = event.target.result;
 		};
 		} else {
 		window.alert('Please select correct image format');
@@ -73,15 +75,15 @@ import { Router } from '@angular/router';
 	}
 
 	onUpload(){
-		if (this.selectedFile) {
-			if (this.selectedFile.size < 75000) {
-				this.apiService.updateAvatar(Number(this.id), String(this.userToShow.url)).subscribe();
-				this.storage.setAvatar(String(this.userToShow.url));
-				window.alert('***Update down***');
-			}
-			else {
-				window.alert('***image too large only < 75kb ***');
-			}
+		
+		if (this.selectedFile.size < 75000){
+		this.apiService.updateAvatar(Number(this.id), String(this.userToShow.avatar)).subscribe();
+		console.log("this.url")
+		this.storage.setAvatar(String(this.userToShow.avatar));
+		window.alert('***Update done***');
+		}
+		else{
+			window.alert('***image too large only < 75kb ***');
 		}
 	}
 
@@ -91,9 +93,14 @@ import { Router } from '@angular/router';
 		})
 		this.tfa_auth = this.storage.getTwoFactorAuth();
 		this.qrCode = this.storage.getQrCode();
+		this.socketService.receiveGameHistory().subscribe((res) => {
+			this.games = res;
+		})
+		this.socketService.askForGameHistory(this.userToShow);
 	}
 
 	ngOnDestroy() {
+		this.socketService.unsubscribeSocket("hereIsGameHistory");
 		this.socketService.unsubscribeSocket("hereIsTheUserYouAskedFor");
 	}
 

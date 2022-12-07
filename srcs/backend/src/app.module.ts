@@ -11,13 +11,17 @@ import { ChannelService } from './channel.service';
 import { ScheduleModule } from '@nestjs/schedule';
 import { BanAndMuteService } from './banAndMute.service';
 import { TfaService } from './tfa.service';
-import { ConfigModule } from '@nestjs/config';
+import { ConfigModule } from '@nestjs/config';import { PongModule } from './pong/pong.module';
+import { SaveGameModule } from './save-game/save-game.module';
+
 @Module({
   imports: 
   [
-    HttpModule,
+    HttpModule, 
+    PongModule,
     ScheduleModule.forRoot(),
-	ConfigModule.forRoot({envFilePath: "../.env", isGlobal: true})
+    ConfigModule.forRoot({envFilePath: "../.env", isGlobal: true}),
+    SaveGameModule
 	],
   controllers: 
   [
@@ -25,15 +29,15 @@ import { ConfigModule } from '@nestjs/config';
   ],
   providers: 
   [
-    PrismaService, 
-    UserService, 
-    TechService, 
-    MessageService, 
-    AppGateway, 
+    PrismaService,
+    UserService,
+    TechService,
+    MessageService,
+    AppGateway,
     OauthService,
     ChannelService,
     BanAndMuteService,
 	  TfaService
   ],
 })
-export class AppModule {}
+export class AppModule { }

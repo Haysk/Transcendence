@@ -40,7 +40,12 @@ import { BlocUserProfileComponent } from './widgets/bloc-user-profile/bloc-user-
 import { Vip2RoomComponent } from './vip2-room/vip2-room.component';
 import { InvitationRefuseComponent } from './widgets/invitation-refuse/invitation-refuse.component';
 import { AuthModule } from './auth/auth.module';
+import { GameSettingsComponent } from './widgets/game-settings/game-settings.component';
+import { AreYouReadyComponent } from './widgets/are-you-ready/are-you-ready.component';
 import { NotFoundComponent } from './not-found/not-found.component';
+import { GameScoreComponent } from './widgets/game-score/game-score.component';
+import { SearchingPlayerComponent } from './widgets/searching-player/searching-player.component';
+import { MatchHistoryComponent } from './widgets/match-history/match-history.component';
 
 @NgModule({
   declarations: [
@@ -78,20 +83,25 @@ import { NotFoundComponent } from './not-found/not-found.component';
     BlocUserProfileComponent,
     Vip2RoomComponent,
     InvitationRefuseComponent,
-    NotFoundComponent
+    GameSettingsComponent,
+    AreYouReadyComponent,
+    NotFoundComponent,
+    GameScoreComponent,
+    SearchingPlayerComponent,
+    MatchHistoryComponent
   ],
   imports: [
     BrowserModule,
     AppRoutingModule,
     HttpClientModule,
     FormsModule,
-	AuthModule
+	  AuthModule
   ],
   providers: [
     HttpClient,
     ApiService,
-	StorageService,
-	Storage,
+	  StorageService,
+	  Storage,
   ],
   bootstrap: [AppComponent]
 })

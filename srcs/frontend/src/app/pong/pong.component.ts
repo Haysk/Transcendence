@@ -1,8 +1,8 @@
-import { Component, OnDestroy, OnInit } from "@angular/core";
+import { Component, Input, OnDestroy, OnInit } from "@angular/core";
 import { filter, fromEvent, interval, Subscription } from "rxjs";
 import { SocketService } from "../services/socket.service";
 import { Ai } from "./game/ai";
-import { defaultGameConfig } from "./game/config";
+import { DefaultGame } from "./game/config";
 import { Game } from "./game/game";
 import { IGameStates } from "./game/interfaces/game-states.interface";
 import { IGame, PlayerMode } from "./game/interfaces/game.interface";
@@ -11,6 +11,24 @@ import { IInput } from "./game/interfaces/input.interface";
 const interval_tick = 8;
 const keyStart = " ";
 
+//partie en 3 acte:
+// gestion des param (config de la partie)
+// partie en cours
+// affichage du scors final
+
+// ajoue d'un mod bonus:
+// taille ball/rackette
+// vitess ball/racquett
+
+//ajout d'un bouton start
+
+//si pause ne fonctionne pas : le desactiver
+
+//ajout des fonctions secrete:
+//1: passage du joueur left en mode local
+//2: passage du joueur left en mode ai easy
+//3: passage du joueur left en mode ai hard
+
 @Component({
   selector: "app-pong",
   templateUrl: "./pong.component.html",
@@ -18,7 +36,25 @@ const keyStart = " ";
   providers: [Game, Ai],
 })
 export class PongComponent implements OnInit, OnDestroy {
-  gameConfig: IGame;
+  //une config doit etre envoyer pour configurer une partie
+  @Input()
+  customs: IGame = new DefaultGame();
+
+  gameConfig: IGame = new DefaultGame();
+
+  // initGameConfig(): IGame{
+  //   let data = new DefaultGame();
+  //   data.left = this.customs.left;
+  //   data.right = this.customs.right;
+  //   return data;
+  // }
+
+  //nom de la room pong (en cours de dev)
+  @Input()
+  gameName = "bidule";
+
+  // showscore:boolean=false;
+
   moveLeft: IInput;
   moveRight: IInput;
   prevMoveLeft: IInput;
@@ -29,18 +65,61 @@ export class PongComponent implements OnInit, OnDestroy {
   ctx!: CanvasRenderingContext2D;
 
   moveSubscription!: Subscription;
-  startSubscription!: Subscription;
+  //startSubscription!: Subscription;
   gameStatesSubscription!: Subscription;
   tickSubscription!: Subscription;
+
+  //event clavier
   upSubscription!: Subscription;
   downSubscription!: Subscription;
+
+  testGameStatesSubscription!: Subscription;
+  
+  //event souri
+  canvasMouseUpSubscription!: Subscription;
+  canvasMouseDownSubscription!: Subscription;
+  canvasMouseLeaveSubscription!: Subscription;
+
+  //event tactil
+  //https://developer.mozilla.org/fr/docs/Web/API/Touch_events
+  canvasTouchStartSubscription!: Subscription;
+  canvasTouchEndSubscription!: Subscription;
+  canvasTouchCancelSubscription!: Subscription;
 
   constructor(
     private socketService: SocketService,
     private game: Game,
     private ai: Ai
   ) {
-    this.gameConfig = structuredClone(defaultGameConfig);
+    this.gameConfig.states.ball.collor = this.customs.states.ball.collor;
+    this.gameConfig.board.board.color = this.customs.board.board.color;
+    this.gameConfig.left.mode = this.customs.left.mode;
+    this.gameConfig.states.racketLeft.color =
+      this.customs.states.racketLeft.color;
+    this.gameConfig.right.mode = this.customs.right.mode;
+    this.gameConfig.states.racketRight.color =
+      this.customs.states.racketRight.color;
+
+    this.game = new Game();
+    this.ai = new Ai();
+    this.game.updateAll(this.gameConfig);
+    this.ai.setAll(this.gameConfig);
+    this.moveLeft = { userId: 0, up: false, down: false };
+    this.moveRight = { userId: 1, up: false, down: false };
+    this.prevMoveLeft = { userId: 0, up: false, down: false };
+    this.prevMoveRight = { userId: 1, up: false, down: false };
+  }
+
+  initGame(){
+    this.gameConfig.states.ball.collor = this.customs.states.ball.collor;
+    this.gameConfig.board.board.color = this.customs.board.board.color;
+    this.gameConfig.left.mode = this.customs.left.mode;
+    this.gameConfig.states.racketLeft.color =
+      this.customs.states.racketLeft.color;
+    this.gameConfig.right.mode = this.customs.right.mode;
+    this.gameConfig.states.racketRight.color =
+      this.customs.states.racketRight.color;
+
     this.game = new Game();
     this.ai = new Ai();
     this.game.updateAll(this.gameConfig);
@@ -52,16 +131,19 @@ export class PongComponent implements OnInit, OnDestroy {
   }
 
   ngOnInit(): void {
+    this.initGame();
     this.moveSubscription = this.socketService
       .getMove()
       .subscribe((move: IInput) => {
         this.game.updateInput(move);
       });
-    this.startSubscription = this.socketService.getStart().subscribe(() => {
-      this.game.start();
-    });
+    // ce doit etre uniquement le serveur qui recois le start et qui doit metre a jour sa partie intern
+    // this.startSubscription = this.socketService.getStart().subscribe(() => {
+    //   console.log("start")
+    //   this.game.start();
+    // });
     this.gameStatesSubscription = this.socketService
-      .getGameStates()
+      .getGameStates(this.gameName)
       .subscribe((states: IGameStates) => {
         this.game.updateStates(states);
       });
@@ -80,15 +162,109 @@ export class PongComponent implements OnInit, OnDestroy {
       });
     this.canvas = <HTMLCanvasElement>document.getElementById("stage");
     this.ctx = <CanvasRenderingContext2D>this.canvas.getContext("2d");
+
+    // set the width and height
+    this.canvas.width = this.gameConfig.board.board.width;
+    this.canvas.height = this.gameConfig.board.board.height;
+
+    // we'll implement this method to start capturing mouse events
+    this.canvasMouseUpSubscription = fromEvent<MouseEvent>(
+      this.canvas,
+      "mouseup"
+    ).subscribe(() => {
+      this.unsetMove();
+    });
+    this.canvasMouseDownSubscription = fromEvent<MouseEvent>(
+      this.canvas,
+      "mousedown"
+    ).subscribe((event) => {
+      this.setMouseMove(event);
+    });
+    this.canvasMouseLeaveSubscription = fromEvent<MouseEvent>(
+      this.canvas,
+      "mouseleave"
+    ).subscribe(() => {
+      this.unsetMove();
+    });
+    this.canvasTouchStartSubscription = fromEvent<TouchEvent>(
+      this.canvas,
+      "touchstart"
+    ).subscribe((event) => {
+      this.setTouchMove(event);
+    });
+    this.canvasTouchEndSubscription = fromEvent<TouchEvent>(
+      this.canvas,
+      "touchend"
+    ).subscribe(() => {
+      this.unsetMove();
+    });
+    this.canvasTouchCancelSubscription = fromEvent<TouchEvent>(
+      this.canvas,
+      "touchcancel"
+    ).subscribe(() => {
+      this.unsetMove();
+    });
+  }
+
+  setMouseMove(event: MouseEvent): void {
+    this.setMove(
+      event.offsetX,
+      event.offsetY,
+      this.canvas.clientWidth,
+      this.canvas.clientHeight
+    );
+  }
+
+  setTouchMove(event: TouchEvent): void {
+    const r = this.canvas.getBoundingClientRect();
+    this.setMove(
+      event.touches[0].clientX - r.left,
+      event.touches[0].clientY - r.y,
+      r.right - r.left,
+      r.bottom - r.y
+    );
+  }
+
+  setMove(x: number, y: number, width: number, height: number): void {
+    if (x < width / 2) {
+      if (y < height / 2 && this.gameConfig.left.mode.type === "local") {
+        this.moveLeft.up = true;
+      } else {
+        this.moveLeft.down = true;
+      }
+    } else if (this.gameConfig.right.mode.type === "local") {
+      if (y < height / 2) {
+        this.moveRight.up = true;
+      } else {
+        this.moveRight.down = true;
+      }
+    }
+  }
+
+  unsetMove(): void {
+    if (this.gameConfig.left.mode.type === "local") {
+      this.moveLeft.up = false;
+      this.moveLeft.down = false;
+    }
+    if (this.gameConfig.right.mode.type === "local") {
+      this.moveRight.up = false;
+      this.moveRight.down = false;
+    }
   }
 
   ngOnDestroy(): void {
     this.moveSubscription.unsubscribe();
-    this.startSubscription.unsubscribe();
+    //this.startSubscription.unsubscribe();
     this.gameStatesSubscription.unsubscribe();
     this.tickSubscription.unsubscribe();
     this.upSubscription.unsubscribe();
     this.downSubscription.unsubscribe();
+    this.canvasMouseUpSubscription.unsubscribe();
+    this.canvasMouseDownSubscription.unsubscribe();
+    this.canvasMouseLeaveSubscription.unsubscribe();
+    this.canvasTouchStartSubscription.unsubscribe();
+    this.canvasTouchEndSubscription.unsubscribe();
+    this.canvasTouchCancelSubscription.unsubscribe();
   }
 
   sendMove(move: IInput) {
@@ -96,7 +272,7 @@ export class PongComponent implements OnInit, OnDestroy {
       move.userId === this.gameConfig.left.id &&
       (move.down !== this.prevMoveLeft.down || move.up !== this.prevMoveLeft.up)
     ) {
-      this.socketService.sendMove(move);
+      this.socketService.sendMove(move, this.gameName);
       this.prevMoveLeft.up = move.up;
       this.prevMoveLeft.down = move.down;
     } else if (
@@ -104,14 +280,14 @@ export class PongComponent implements OnInit, OnDestroy {
       (move.down !== this.prevMoveRight.down ||
         move.up !== this.prevMoveRight.up)
     ) {
-      this.socketService.sendMove(move);
+      this.socketService.sendMove(move, this.gameName);
       this.prevMoveRight.up = move.up;
       this.prevMoveRight.down = move.down;
     }
   }
 
   sendStart() {
-    this.socketService.sendStart();
+    this.socketService.sendStart(this.gameName);
   }
 
   sendGameStates(gameStates: IGameStates) {
@@ -153,13 +329,43 @@ export class PongComponent implements OnInit, OnDestroy {
     if (key === keyStart) {
       this.sendStart();
     }
+    if (this.gameConfig.left.mode.type !== "remote") {
+      if (key === "1") {
+        this.gameConfig.left.mode = new DefaultGame().left.mode;
+      } else if (key === "2") {
+        this.gameConfig.left.mode = {
+          type: "ai",
+          level: "easy",
+        };
+      } else if (key == "3") {
+        this.gameConfig.left.mode = {
+          type: "ai",
+          level: "hard",
+        };
+      }
+    }
+    if (this.gameConfig.right.mode.type !== "remote") {
+      if (key === "4") {
+        this.gameConfig.right.mode = new DefaultGame().right.mode;
+      } else if (key === "5") {
+        this.gameConfig.right.mode = {
+          type: "ai",
+          level: "easy",
+        };
+      } else if (key == "6") {
+        this.gameConfig.right.mode = {
+          type: "ai",
+          level: "hard",
+        };
+      }
+    }
   }
 
   tick(): void {
-    this.gameConfig.states.racketRight.left =
+    this.gameConfig.states.racketRight.position.left =
       this.gameConfig.board.board.width -
       this.gameConfig.board.board.margin -
-      this.gameConfig.right.racket.width;
+      this.gameConfig.states.racketRight.width;
 
     if (this.gameConfig.left.mode.type !== "remote") {
       const move = this.getInput(
@@ -221,12 +427,13 @@ export class PongComponent implements OnInit, OnDestroy {
     return this.game.getWinner();
   }
 
-  reset(): void {
-    this.game.updateStates(structuredClone(defaultGameConfig).states);
+  start(): void {
+    this.sendStart();
   }
 
-  resetAll(): void {
-    this.game.updateAll(structuredClone(defaultGameConfig));
+  reset(): void {
+    this.socketService.sendReset(this.gameName);
+    //this.game.updateStates(structuredClone(defaultGameConfig).states);
   }
 
   roundRect(
@@ -269,11 +476,13 @@ export class PongComponent implements OnInit, OnDestroy {
 
   drawBall() {
     this.ctx.beginPath();
-    this.ctx.fillStyle = this.gameConfig.ball.collor;
+    this.ctx.fillStyle = this.gameConfig.states.ball.collor;
     this.ctx.arc(
-      this.gameConfig.states.ball.left + this.gameConfig.ball.diammeter / 2,
-      this.gameConfig.states.ball.top + this.gameConfig.ball.diammeter / 2,
-      this.gameConfig.ball.diammeter / 2,
+      this.gameConfig.states.ball.position.left +
+        this.gameConfig.states.ball.diammeter / 2,
+      this.gameConfig.states.ball.position.top +
+        this.gameConfig.states.ball.diammeter / 2,
+      this.gameConfig.states.ball.diammeter / 2,
       0,
       2 * Math.PI
     );
@@ -302,28 +511,42 @@ export class PongComponent implements OnInit, OnDestroy {
 
     // draw left racket
 
-    this.ctx.fillStyle = this.gameConfig.left.racket.color;
+    this.ctx.fillStyle = this.gameConfig.states.racketLeft.color;
     this.roundRect(
-      this.gameConfig.states.racketLeft.left,
-      this.gameConfig.states.racketLeft.top,
-      this.gameConfig.left.racket.width,
-      this.gameConfig.left.racket.height,
+      this.gameConfig.states.racketLeft.position.left,
+      this.gameConfig.states.racketLeft.position.top,
+      this.gameConfig.states.racketLeft.width,
+      this.gameConfig.states.racketLeft.height,
       10,
       true,
       false
     );
 
     // draw left racket
-    this.ctx.fillStyle = this.gameConfig.right.racket.color;
+    this.ctx.fillStyle = this.gameConfig.states.racketRight.color;
     this.roundRect(
-      this.gameConfig.states.racketRight.left,
-      this.gameConfig.states.racketRight.top,
-      this.gameConfig.right.racket.width,
-      this.gameConfig.right.racket.height,
+      this.gameConfig.states.racketRight.position.left,
+      this.gameConfig.states.racketRight.position.top,
+      this.gameConfig.states.racketRight.width,
+      this.gameConfig.states.racketRight.height,
       10,
       true,
       false
     );
+
+    // draw power-ups
+    for (const powerUp of this.gameConfig.states.powerUps) {
+      this.ctx.fillStyle = powerUp.color;
+      this.roundRect(
+        powerUp.position.left,
+        powerUp.position.top,
+        powerUp.width,
+        powerUp.height,
+        0,
+        true,
+        false
+      );
+    }
 
     // draw ball
     this.drawBall();
@@ -343,4 +566,9 @@ export class PongComponent implements OnInit, OnDestroy {
       this.gameConfig.board.board.height * 0.05
     );
   }
+
+  // receiveCloseScoreEvent($event:boolean){
+  //   this.showscore= $event;
+
+  // }
 }

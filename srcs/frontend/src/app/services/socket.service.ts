@@ -3,10 +3,12 @@ import { Observable } from 'rxjs';
 import { io } from 'socket.io-client';
 import { ApiService } from '../services/api.service';
 import { User } from '../models/user';
+import { SGame } from '../models/savedGame';
 import { Channel } from '../models/channel'
 import { environment } from 'src/environments/environment';
 import { IGameStates } from '../pong/game/interfaces/game-states.interface';
 import { IInput } from '../pong/game/interfaces/input.interface';
+import { GameMode, PlayerMode, IGame } from '../pong/game/interfaces/game.interface';
 
 
 @Injectable({
@@ -303,6 +305,20 @@ amIBanned()
     })
   }
 
+  askMatchHistory(current: User)
+  {
+    this.socket.emit('matchHistoryPlz', current);
+  }
+
+  getMatchHistory()
+  {
+    return new Observable<SGame[]> ((obs) => {
+      this.socket.on("hereIsTheMatchHistory", (res) => {
+        obs.next(res);
+      })
+    })
+  }
+
 //START COMPONENT
 
   iAmReady()
@@ -351,16 +367,16 @@ amIBanned()
     this.socket.emit('CreateRoomToPlay', player1, player2);
   }
 
-  isGameReady(){
-    return new Observable<boolean>((obs) => {
-      this.socket.on('GameIsReady', () => {
-        obs.next(true);
-      })
-    })
-  }
+  // isGameReady(){
+  //   return new Observable<boolean>((obs) => {
+  //     this.socket.on('GameIsReady', () => {
+  //       obs.next(true);
+  //     })
+  //   })
+  // }
 
-  displayInvitation(target: User, target2:User){
-    this.socket.emit('initDisplayInvitation', target, target2);
+  displayInvitation(player2: User, player1:User, gameConfig: IGame){
+    this.socket.emit('initDisplayInvitation', player2, player1, gameConfig);
   }
 
   refuseInvitation(target: User, target2:string){
@@ -369,13 +385,12 @@ amIBanned()
 
   doIHaveToDisplay(){
     return new Observable<any>((obs) => {
-      this.socket.on('DisplayInvitation', (res:boolean, res2: User) => {
-        let data = {res, res2}
+      this.socket.on('DisplayInvitation', (res:boolean, res2: User, res3: User, res4: IGame) => {
+        let data = {res, res2, res3, res4}
         obs.next(data);
       })
     })
   }
-
 
   showrefuseInvitation(){
     return new Observable<any>((obs) => {
@@ -386,23 +401,76 @@ amIBanned()
     })
   }
 
+  readySignal(player1: User, player2: User, gameConfig: IGame)
+  {
+    this.socket.emit('ready', player1, player2, gameConfig);
+  }
 
-  acceptInvitation(target: User){
-    this.socket.emit('invitationIsAccepted', target);
+  acceptInvitation(player2: User, player1: User){
+    // console.log("ACCEPT INVITATION :");
+    
+    // console.log(player1);
+    // console.log(player2);
+    
+    this.socket.emit('invitationIsAccepted', player2, player1);
   }
 
   isGameAccepted(){
+    return new Observable<any>((obs) => {
+      this.socket.on('invitationAccepted', (res:boolean, res2:User, res3: User) => {
+        let data = {res, res2, res3}
+        obs.next(data);
+      })
+    })
+  }
+
+  areYouReady(){
     return new Observable<boolean>((obs) => {
-      this.socket.on('invitationAccepted', () => {
-        obs.next(true);
+      this.socket.on('areYouReady', (res: boolean) => {
+        obs.next(res);
+      })
+    })
+  }
+
+  isGameReady()
+  {
+    return new Observable<any>((obs) => {
+      this.socket.on('bothPlayerAreReady', (res:User, res2:User, res3:IGame) => {
+        let data = {res, res2, res3}
+        obs.next(data);
+      })
+    })
+  }
+
+  createGame(roomName: string, gameConfig: IGame, player1: User, player2: User, bonus: boolean)
+  {
+    this.socket.emit('createGamePlz', roomName, gameConfig, player1, player2, bonus);
+  }
+
+  stopMatchmaking(bonus: boolean)
+  {
+    this.socket.emit('stopMatchmaking', false);
+  }
+
+  matchmaking(player: User, bonus: boolean)
+  {
+    this.socket.emit('matchmaking', player, bonus);
+  }
+
+  listenForMatchmaking()
+  {
+    return new Observable<any> ((obs) => {
+      this.socket.on('matchmakingDone', (res, res2, res3) => {
+        let data = {res, res2, res3}
+        obs.next(data);
       })
     })
   }
 
   //PONG GAME
 
-  sendMove(move: IInput): void {
-    this.socket.emit('moveToServer', move);
+  sendMove(move: IInput, name: string): void {
+    this.socket.emit('moveToServer', move, name);
   }
 
   getMove(): Observable<IInput> {
@@ -417,18 +485,93 @@ amIBanned()
     this.socket.emit('gameStatesToServer', gameStates);
   }
 
-  getGameStates(): Observable<IGameStates> {
+  getGameStates(name: string): Observable<IGameStates> {
     return new Observable<IGameStates>((observer) => {
-      this.socket.on('gameStatesToClient', (message) => {
+      this.socket.on(name + '_gameStatesToClient', (message) => {
         observer.next(message);
       });
     });
   }
 
+  isGameFinished()
+  {
+    return new Observable<SGame> ((res) => {
+      this.socket.on('gameIsFinished', (obs: any) =>
+      {
+        res.next(obs);
+      })
+    })
+  }
+
+//SHOW ROOM
+
+  getMatches()
+  {
+    this.socket.emit("gamesPlz");
+  }
+
+  receiveMatches()
+  {
+    return new Observable<SGame> ((obs) => {
+      this.socket.on('hereIsMatchesList', (res) => {
+        obs.next(res);
+      })
+    })
+  }
+
+// GAME HISTORY
+
+  askForGameHistory(current: User)
+  {
+    this.socket.emit('matchHistoryPlz', current);
+  }
+
+  receiveGameHistory()
+  {
+    return new Observable<SGame>((obs) => {
+      this.socket.on('hereIsGameHistory', (data) => {
+        obs.next(data);
+      })
+    })
+  }
+
+  gameIsReadyToSpectate()
+  {
+    return new Observable<boolean> ((obs) => {
+      this.socket.on('gameIsReadyToSpectate', (data) => {
+        obs.next(data);
+      })
+    })
+  }
+
+  spectateGame(roomName: string)
+  {
+    this.socket.emit('iWantToWatchThis', roomName);
+  }
+
+  getGamePlayers(game: SGame)
+  {
+    this.socket.emit('gameInfosPlz', game);
+  }
+
+  receiveGamePlayers(game: SGame)
+  {
+    let answer = 'hereAreTheGame' + game.id + 'Infos'
+    return new Observable<SGame> ((obs) => {
+      this.socket.on(answer, (res) => {
+        obs.next(res);
+      })
+    })
+  }
+
 //INIT
 
-  sendStart(): void {
-    this.socket.emit('startToServer');
+  sendStart(name: string): void {
+    this.socket.emit('startToServer', name);
+  }
+
+  sendReset(name: string): void {
+    this.socket.emit('resetToServer', name);
   }
 
   getStart() {

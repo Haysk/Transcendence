@@ -1,4 +1,5 @@
 import { Component, Input, OnInit } from '@angular/core';
+import { DefaultGame } from '../pong/game/config';
 import { IGame } from '../pong/game/interfaces/game.interface';
 
 @Component({
@@ -8,7 +9,7 @@ import { IGame } from '../pong/game/interfaces/game.interface';
 })
 export class PongGameComponent implements OnInit {
   @Input()
-  game!: IGame;
+  game: IGame = new DefaultGame();
 
   constructor() { }
 

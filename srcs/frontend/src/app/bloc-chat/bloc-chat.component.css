@@ -149,3 +149,19 @@ button:hover{
     }
 
 } 
+
+@media only screen and (max-width: 600px) {
+
+    .icon_chat:hover{
+        width: 120px;
+        height: 100px;
+        background-image: url("../../assets/icons/chatroom.gif");
+        background-size: contain;
+        background-repeat: no-repeat;
+        background-position: center; 
+        margin-bottom: 0px;
+        border: 1px rgb(255, 254, 254) solid;
+    }
+    
+
+}

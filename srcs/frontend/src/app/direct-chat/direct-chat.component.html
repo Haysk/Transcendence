@@ -2,11 +2,21 @@
 <input [(ngModel)]="message" />
 <button (click)="sendMessage()">Send</button> -->
 
-<div class="all_direct">
+<div class="gameSetting">
+	<app-game-settings 
+	(showGameSettingsEvent)="receiveShowGameSettings($event)" 
+	(globalEvent)="receiveGlobalEvent($event)"
+	[player2]="this.Dest" [player1]="this.Me"
+	*ngIf="showGameSettings==true"></app-game-settings>
+</div>
+<div class="all_direct" *ngIf="showGameSettings!=true">
+	
 	
 	<!-- <div class="contenu_chat"  #scrollMe [scrollTop]="scrollMe.scrollHeight"> -->
 	<div class="contenu_chat"  #scrollMe scrollTop={{scrolltop}}   >
-		
+
+	
+	<!-- <div class="direct_chat" > -->
 		<div class="chatwith"> Chat with {{Dest.nickname}}</div>
 		
 		<!-- <div class="chat_history">
@@ -28,6 +38,7 @@
 	<input type="text" (keydown.enter)="sendMessage()" [(ngModel)]="message">
 	</div>
 
+
 	<div class="relation">
 	
 		<app-button-v3 *ngIf="this.bloqueOrNot" [text]= "friend" (click)="addDelFriend()" ></app-button-v3>
@@ -40,6 +51,5 @@
 	</div><!-- fin de realtion -->
 
 
-
-
 </div><!-- fin de all_direct -->
+<!-- </div> -->

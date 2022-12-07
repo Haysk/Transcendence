@@ -1,4 +1,5 @@
-<div class="all_game">
+<div *ngIf="redirectPong==false">
+<div class="all_game" *ngIf="show==false">
 
     <div class="titre_game"></div>
     <div class="bloc_item_games">
@@ -11,23 +12,23 @@
     </div><!-- fin de div bloc_item_games  -->
 
     <div class="pong_jouers">
-        <div class="bloc_players_available" *ngIf="visible==true">
+        <!-- <div class="bloc_players_available" *ngIf="visible==true">
         
             <h2>Players available for PONG</h2>    
             <div class="env_player_available">
                 <div class="player_available" *ngFor="let user of list_user"> 
-                    <app-player-pong [user]="user" ></app-player-pong>
+                    <app-player-pong [user]="user" > </app-player-pong>
                 </div>
             </div>
-        </div><!-- fin de div bloc_player_available  -->
+        </div>fin de div bloc_player_available  -->
 
         <div class="bloc_players_anonyme">
             <div class="bloc_just_play" *ngIf="visible==true">
         
                 <h2>Just Play</h2>    
-                <div class="env_just_play">
+                <div class="env_just_play" (click)="justPlay()">
                     <div class="just_play_photo"> </div>
-                    <div class="just_play_name">Faceless Men</div>
+                    <div class="just_play_name">???</div>
                     <div class="just_play_play>">PLAY</div>
                 </div>
             </div><!-- fin de div bloc_player_available  -->
@@ -36,3 +37,7 @@
     </div><!-- fin de div pong_jouers  -->
     
 </div><!-- fin de div all_game  -->
+
+<app-searching-player *ngIf="showSearching==true" (showSearchingPlayerEvent)="receiveShowSearching($event)"></app-searching-player>
+</div>
+<app-pong *ngIf="redirectPong==true" [customs]="gameConfig" [gameName]="gameName"></app-pong>

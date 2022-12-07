@@ -61,6 +61,8 @@ services:
     build:
       context: ./srcs/nginx
       dockerfile: Dockerfile
+      args:
+        - domain_name=${IP_HOST}
     image: nginx
     restart: always
     ports:

@@ -212,7 +212,6 @@ export class AppController {
 			/n/tcode: " + code);
 			return false;
 		}
-
 	}
 
 	@Post('auth/')
