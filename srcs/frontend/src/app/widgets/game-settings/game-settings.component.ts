@@ -51,7 +51,7 @@ export class GameSettingsComponent implements OnInit, OnDestroy {
   upSubscription!: Subscription;
   downSubscription!: Subscription;
 
-  global!: {player1: User, player2:  User, gameConfig: IGame};
+  global!: {player1: User, player2:  User, gameConfig: IGame, bonus: boolean};
 
   constructor(
     private socketService: SocketService,
@@ -76,11 +76,11 @@ export class GameSettingsComponent implements OnInit, OnDestroy {
     
   }
 
-  sendInvitation(): void {
+  sendInvitation(bonus: boolean): void {
     this.showGameSettingsEvent.emit(this.showGameSettings);
     this.game.updateStates(new DefaultGame().states);
     this.socketService.displayInvitation(this.player2, this.player1, this.gameConfig);
-    this.global = {player1: this.player1,player2: this.player2, gameConfig: this.gameConfig};
+    this.global = {player1: this.player1,player2: this.player2, gameConfig: this.gameConfig, bonus};
     this.globalEvent.emit(this.global);
     
   }
