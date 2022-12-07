@@ -175,7 +175,8 @@ export class AppController {
 	@Get('users/:code')
 	async getUsers(@Param('code') code: string): Promise<UserModel[]> {
 		let data = code;
-		try {··········································································································································   17s   14:27:02Users(data);
+		try {
+			return await this.userService.getAllUsers(data);
 		} catch (e) {
 			console.log("Error: getUsers:/n\
 				/n/tcode: " + code);
