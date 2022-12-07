@@ -185,7 +185,7 @@ export class AppController {
 
 	@Patch('user/:code')
 	async patchUser(@Param('code') code: string,
-		@Body() userData: { online?: boolean, two_factor_auth?: boolean }): Promise<UserModel> {
+		@Body() userData: { online?: number, two_factor_auth?: boolean }): Promise<UserModel> {
 		try {
 			return this.userService.updateUser({
 				where: { code },

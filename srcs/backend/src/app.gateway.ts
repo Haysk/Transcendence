@@ -216,9 +216,6 @@ export class AppGateway
 @SubscribeMessage('banUserByTime')
 async banUserByTime(client: any, payload: any)
 {
-  // let data = await this.BaM.banUserDuringDelay(payload[0], payload[1], payload[2]);
-  // if (data != null && data != undefined)
-  //   this.server.emit('youAreBanned', payload[0], data);
   try{
     let data = await this.Prisma.channel.update({
       where: {
@@ -311,7 +308,6 @@ async banUser(client: any, payload: any)
 @SubscribeMessage('unbanUser')
 async unbanUser(client: any, payload: any)
 {
-  // this.BaM.unbanUserFromChannel(payload[0], payload[1]);
   try{
     let data = await this.Prisma.channel.update({
       where: {
@@ -429,7 +425,7 @@ async unbanUser(client: any, payload: any)
         login: payload,
       },
       data: {
-        online: true,
+        online: 1,
       }
     })
     if(data != null && data != undefined)
@@ -450,7 +446,7 @@ async unbanUser(client: any, payload: any)
         login: payload
       },
       data: {
-        online: false
+        online: 0
       }
     })
     if (data != null && data != undefined)
@@ -1032,10 +1028,8 @@ catch(err){
     })
     if(data != null && data != undefined)
     {
-      console.log("bonus =" + payload[1])
       if(payload[1] == false) //sans bonus
       {
-        console.log("on est pas dans les bonus")
         if(this.TabMatchmaking[0] === null || this.TabMatchmaking[0] === undefined)
         {
           this.TabMatchmaking[0] = data;
@@ -1060,7 +1054,6 @@ catch(err){
       }
       else //avec bonus 
       {
-        console.log("on est dans les bonus")
         if(this.TabMatchmaking[1] === null || this.TabMatchmaking[1] === undefined)
         {
           this.TabMatchmaking[1] = data;
@@ -1100,6 +1093,56 @@ catch(err){
 
   @SubscribeMessage('gameStatesToServer')
   handleGameStates(client: Socket, payload: any): void {
+  }
+
+  @SubscribeMessage('thisPlayerIsPlaying')
+  async playerIsPlaying(client: Socket, payload: any)
+  {
+    try
+    {
+      let data = await this.Prisma.user.update({
+        where: {
+          id: payload.id
+        },
+        data:{
+          online: 2,
+        },
+      })
+    if (data != null && data != undefined)
+      {
+        this.server.emit('userListUpdated');
+      }
+    }
+    catch(err)
+    {
+      console.log("error in playerIsPlaying");
+      console.log(err);
+    }
+  }
+
+  @SubscribeMessage('thisPlayerStoppedPlaying')
+  async playerIsPlaying2(client: Socket, payload: any)
+  {
+    try
+    {
+      let data = await this.Prisma.user.update({
+        where: {
+          id: payload.id
+        },
+        data:{
+          online: 1,
+        },
+      })
+    if (data != null && data != undefined)
+      {
+        this.server.emit('userListUpdated');
+      }
+    }
+    catch(err)
+    {
+      console.log("error in playerIsPlaying");
+      console.log(err);
+    }
   }
 
 /* SHOW ROOM */

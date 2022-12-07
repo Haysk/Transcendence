@@ -535,6 +535,16 @@ amIBanned()
     })
   }
 
+  updatePlayerStatus(current: User)
+  {
+    this.socket.emit('thisPlayerIsPlaying', current);
+  }
+
+  updatePlayerStatus2(current: User)
+  {
+    this.socket.emit('thisPlayerStoppedPlaying', current);
+  }
+
 //SHOW ROOM
 
   getMatches()

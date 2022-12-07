@@ -212,7 +212,7 @@ export class UserService {
 									}
 								},
 							},
-							online: true,
+							online: 1,
 						},
 					});
 				} catch (e) {
@@ -228,7 +228,7 @@ export class UserService {
 									access_token: params.access_token,
 								}
 							},
-							online: true,
+							online: 1,
 						}
 					});
 				}
