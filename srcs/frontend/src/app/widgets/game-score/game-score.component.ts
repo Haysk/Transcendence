@@ -1,6 +1,7 @@
 import { Component, Input, OnInit, Output, EventEmitter } from '@angular/core';
 import { User } from 'src/app/models/oauth';
 import { SGame } from 'src/app/models/savedGame';
+import { gameHeight } from 'src/app/pong/game/config';
 
 @Component({
   selector: 'app-game-score',
@@ -29,6 +30,7 @@ export class GameScoreComponent {
     }
 
   winnerIs(): User{
+     console.log (this.GameData);
       this.scorePlayer1=this.GameData.player1_score;
       this.scorePlayer2=this.GameData.player2_score;
       if(this.scorePlayer1 > this.scorePlayer2){

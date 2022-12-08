@@ -13,6 +13,8 @@ import { UserService } from './user.service';
 import { PongService } from './pong/pong.service';
 import { Game, User } from '@prisma/client';
 
+
+
 @WebSocketGateway({
   cors: {
     origin: 'https://' + process.env.IP_HOST,
@@ -668,12 +670,16 @@ catch(err){
   @SubscribeMessage('createPrivChannel')
   async createPrivChannel(client: Socket, payload: any)
   {
+    const bcrypt = require('bcrypt');
+    const saltRounds =10;
+    const password = await bcrypt.hash (payload[2], saltRounds);
+
     try{
       await this.Prisma.channel.create({
 			  data: {
           name: String(payload[0]), 
           creator_id: Number(payload[1]),
-          password: String(payload[2]),
+          password: password,
           joined: {
             connect: [{id: Number(payload[1])}],
           },
@@ -766,7 +772,9 @@ catch(err){
     })
     if (data != null && data != undefined)
     {
-      if(data.password == payload[0])
+      const bcrypt = require('bcrypt');
+      let bool = bcrypt.compareSync(payload[0], data.password)
+      if(bool==true)
         this.server.to(client.id).emit('goodPassword', true);
       else
         this.server.to(client.id).emit('wrongPassword', false);
@@ -776,13 +784,16 @@ catch(err){
   @SubscribeMessage('resetChannelPassword')
   async resetChannelPassword(client: Socket, payload: any)
   {
+    const bcrypt = require('bcrypt');
+    const saltRounds =10;
+    const password = await bcrypt.hash (payload[1], saltRounds);
     try{
     let data = await this.Prisma.channel.update({
       where:{
         name: String(payload[0].name)
       },
       data:{
-        password: payload[1]
+        password: password
       },
       include: {
         joined: true,

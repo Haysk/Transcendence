@@ -22,6 +22,8 @@ export class GameRoomComponent implements OnInit {
 
   gameName!:string;
   gameConfig: IGame =  new DefaultGame();;
+  color:string= "rgb(115, 130, 130);"
+
 
   
   user: User = {
@@ -164,6 +166,7 @@ export class GameRoomComponent implements OnInit {
   activateBonus()
   {
     this.bonus = !this.bonus;
+    this.color=this.bonus?"rgb(255, 87, 51)":"rgb(115, 130, 130)"; 
     console.log("bonus: " + this.bonus)
   }
 
