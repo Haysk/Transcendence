@@ -1,4 +1,5 @@
 import { WebSocketGateway, WebSocketServer } from '@nestjs/websockets';
+import { Socket } from 'dgram';
 import { Server } from 'socket.io';
 import { SaveGameService } from 'src/save-game/save-game.service';
 import { IGameStates } from './game/interfaces/game-states.interface';
@@ -18,6 +19,9 @@ export class PongGateway {
   async gameIsFinished(game: SGame)
   {
     var result = await this.saveGame.createGame(game);
+    // let data = this.server.in(game.roomName).fetchSockets()
+    // console.log("DATA :");
+    // console.log(await data);
     this.server.to(game.roomName).emit('gameIsFinished', result);
   }
 }

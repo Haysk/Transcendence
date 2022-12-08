@@ -14,6 +14,11 @@
         <div class="onoff" style ="background-color: rgb(114, 113, 113)"></div>
         {{user.nickname}} </button> 
 
+    <button class="chat_user_online" *ngIf="user.online==2" (click)="sendBtn(user)">
+        <div class="onoff" style ="background-color: rgb(185, 115, 24)"></div>
+        {{user.nickname}} </button> 
+    
+
     </div>
 
 <!-- <app-direct-chat *ngIf="this.show_chat==true" [Dest]="this.user" [Me]="this.Me"></app-direct-chat> -->

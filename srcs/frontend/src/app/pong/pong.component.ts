@@ -1,6 +1,8 @@
 import { Component, Input, OnDestroy, OnInit } from "@angular/core";
 import { filter, fromEvent, interval, Subscription } from "rxjs";
+import { User } from "../models/user";
 import { SocketService } from "../services/socket.service";
+import { StorageService } from "../services/storage.service";
 import { Ai } from "./game/ai";
 import { DefaultGame } from "./game/config";
 import { Game } from "./game/game";
@@ -41,7 +43,19 @@ export class PongComponent implements OnInit, OnDestroy {
   customs: IGame = new DefaultGame();
 
   gameConfig: IGame = new DefaultGame();
-
+  Me: User = {
+		id: this.storageService.getId(),
+		login: this.storageService.getLogin(),
+		email: this.storageService.getEmail(),
+		first_name: this.storageService.getFirstName(),
+		last_name: this.storageService.getLastName(),
+		url: this.storageService.getUrl(),
+		displayname: this.storageService.getDisplayName(),
+		nickname: this.storageService.getNickName(),
+		image: this.storageService.getImage(),
+		avatar: this.storageService.getAvatar(),
+		online: this.storageService.getOnline(),
+	};
   // initGameConfig(): IGame{
   //   let data = new DefaultGame();
   //   data.left = this.customs.left;
@@ -89,7 +103,8 @@ export class PongComponent implements OnInit, OnDestroy {
   constructor(
     private socketService: SocketService,
     private game: Game,
-    private ai: Ai
+    private ai: Ai,
+    private storageService: StorageService
   ) {
     this.gameConfig.states.ball.collor = this.customs.states.ball.collor;
     this.gameConfig.board.board.color = this.customs.board.board.color;
@@ -132,6 +147,7 @@ export class PongComponent implements OnInit, OnDestroy {
 
   ngOnInit(): void {
     this.initGame();
+    this.socketService.updatePlayerStatus(this.Me);
     this.moveSubscription = this.socketService
       .getMove()
       .subscribe((move: IInput) => {
@@ -265,6 +281,7 @@ export class PongComponent implements OnInit, OnDestroy {
     this.canvasTouchStartSubscription.unsubscribe();
     this.canvasTouchEndSubscription.unsubscribe();
     this.canvasTouchCancelSubscription.unsubscribe();
+    this.socketService.updatePlayerStatus2(this.Me)
   }
 
   sendMove(move: IInput) {

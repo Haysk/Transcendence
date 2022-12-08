@@ -38,7 +38,7 @@ export class AppComponent implements OnInit {
 	GameData!: SGame;
 	showGameScore: boolean = false;
 
-	to: User = {
+	Me: User = {
 		id: this.storageService.getId(),
 		login: this.storageService.getLogin(),
 		email: this.storageService.getEmail(),
@@ -110,6 +110,7 @@ export class AppComponent implements OnInit {
 					this.socketService.createGame(this.roomName, this.gameConfig, this.player1, this.player2, bonus);
 				this.gameIsReady = false;
 				this.redirectPong = true;
+        
 			}
 		})
 		this.socketService.isGameFinished().subscribe((res) => {
@@ -124,7 +125,8 @@ export class AppComponent implements OnInit {
 				this.player1 = res.players[0];
 				this.player2 = res.players[1];
 				this.setUpGameConfig();
-				this.roomName = this.createGameRoomName(this.player1.login, this.player2.login)
+				this.roomName = this.createGameRoomName(this.player1.login, this.player2.login);
+        this.socketService.addMeToRoom(this.roomName);
 				this.redirectPong = true;
 			}
 		})

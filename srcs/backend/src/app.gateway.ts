@@ -1146,6 +1146,12 @@ catch(err){
     }
   }
 
+  @SubscribeMessage('addMeToRoom')
+  addToRoom(client: Socket, payload: string)
+  {
+    this.server.in(client.id).socketsJoin(payload);
+  }
+
 /* SHOW ROOM */
 
   @SubscribeMessage('gamesPlz')

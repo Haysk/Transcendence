@@ -545,6 +545,11 @@ amIBanned()
     this.socket.emit('thisPlayerStoppedPlaying', current);
   }
 
+  addMeToRoom(gameName: string)
+  {
+    this.socket.emit('addMeToRoom', gameName);
+  }
+
 //SHOW ROOM
 
   getMatches()
