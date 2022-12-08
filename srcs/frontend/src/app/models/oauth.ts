@@ -9,7 +9,7 @@ export interface User {
 	nickname:		string;
 	image:			string;
 	avatar:			string;
-	online:			boolean;
+	online:			number;
 	oauth_id?:		number;
 	oauth?:			Oauth;
 	socket?:		string;

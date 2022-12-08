@@ -13,6 +13,8 @@ import { UserService } from './user.service';
 import { PongService } from './pong/pong.service';
 import { Game, User } from '@prisma/client';
 
+
+
 @WebSocketGateway({
   cors: {
     origin: 'https://' + process.env.IP_HOST,
@@ -32,8 +34,8 @@ export class AppGateway
   ) {}
 
   ngOnInit(){
-    this.TabMatchmaking[0][0] = null;
-    this.TabMatchmaking[1][0] = null;
+    this.TabMatchmaking[0] = null;
+    this.TabMatchmaking[1] = null;
   }
 
   sleep(ms:number) {
@@ -216,9 +218,6 @@ export class AppGateway
 @SubscribeMessage('banUserByTime')
 async banUserByTime(client: any, payload: any)
 {
-  // let data = await this.BaM.banUserDuringDelay(payload[0], payload[1], payload[2]);
-  // if (data != null && data != undefined)
-  //   this.server.emit('youAreBanned', payload[0], data);
   try{
     let data = await this.Prisma.channel.update({
       where: {
@@ -311,7 +310,6 @@ async banUser(client: any, payload: any)
 @SubscribeMessage('unbanUser')
 async unbanUser(client: any, payload: any)
 {
-  // this.BaM.unbanUserFromChannel(payload[0], payload[1]);
   try{
     let data = await this.Prisma.channel.update({
       where: {
@@ -429,7 +427,7 @@ async unbanUser(client: any, payload: any)
         login: payload,
       },
       data: {
-        online: true,
+        online: 1,
       }
     })
     if(data != null && data != undefined)
@@ -450,7 +448,7 @@ async unbanUser(client: any, payload: any)
         login: payload
       },
       data: {
-        online: false
+        online: 0
       }
     })
     if (data != null && data != undefined)
@@ -672,12 +670,16 @@ catch(err){
   @SubscribeMessage('createPrivChannel')
   async createPrivChannel(client: Socket, payload: any)
   {
+    const bcrypt = require('bcrypt');
+    const saltRounds =10;
+    const password = await bcrypt.hash (payload[2], saltRounds);
+
     try{
       await this.Prisma.channel.create({
 			  data: {
           name: String(payload[0]), 
           creator_id: Number(payload[1]),
-          password: String(payload[2]),
+          password: password,
           joined: {
             connect: [{id: Number(payload[1])}],
           },
@@ -770,7 +772,9 @@ catch(err){
     })
     if (data != null && data != undefined)
     {
-      if(data.password == payload[0])
+      const bcrypt = require('bcrypt');
+      let bool = bcrypt.compareSync(payload[0], data.password)
+      if(bool==true)
         this.server.to(client.id).emit('goodPassword', true);
       else
         this.server.to(client.id).emit('wrongPassword', false);
@@ -780,13 +784,16 @@ catch(err){
   @SubscribeMessage('resetChannelPassword')
   async resetChannelPassword(client: Socket, payload: any)
   {
+    const bcrypt = require('bcrypt');
+    const saltRounds =10;
+    const password = await bcrypt.hash (payload[1], saltRounds);
     try{
     let data = await this.Prisma.channel.update({
       where:{
         name: String(payload[0].name)
       },
       data:{
-        password: payload[1]
+        password: password
       },
       include: {
         joined: true,
@@ -1066,7 +1073,7 @@ catch(err){
         {
           let data2 = await this.Prisma.user.findFirst({
             where: {
-              id: this.TabMatchmaking[0].id
+              id: this.TabMatchmaking[1].id
             }
           })
           if (data2 != null && data2 != undefined)
@@ -1075,8 +1082,8 @@ catch(err){
             this.server.in(data2.socket).socketsJoin(gameName);
             this.server.in(client.id).socketsJoin(gameName);
             this.pongService.addGame(gameName, payload[1],  this.TabMatchmaking[1], payload[0]);
-            this.TabMatchmaking[1] = null;
-            this.server.to(gameName).emit('matchmakingDone', gameName);
+            this.server.to(gameName).emit('matchmakingDone', gameName, this.TabMatchmaking[1], payload[0]);
+            this.TabMatchmaking[0] = null;
           }
         }
       }
@@ -1097,6 +1104,56 @@ catch(err){
 
   @SubscribeMessage('gameStatesToServer')
   handleGameStates(client: Socket, payload: any): void {
+  }
+
+  @SubscribeMessage('thisPlayerIsPlaying')
+  async playerIsPlaying(client: Socket, payload: any)
+  {
+    try
+    {
+      let data = await this.Prisma.user.update({
+        where: {
+          id: payload.id
+        },
+        data:{
+          online: 2,
+        },
+      })
+    if (data != null && data != undefined)
+      {
+        this.server.emit('userListUpdated');
+      }
+    }
+    catch(err)
+    {
+      console.log("error in playerIsPlaying");
+      console.log(err);
+    }
+  }
+
+  @SubscribeMessage('thisPlayerStoppedPlaying')
+  async playerIsPlaying2(client: Socket, payload: any)
+  {
+    try
+    {
+      let data = await this.Prisma.user.update({
+        where: {
+          id: payload.id
+        },
+        data:{
+          online: 1,
+        },
+      })
+    if (data != null && data != undefined)
+      {
+        this.server.emit('userListUpdated');
+      }
+    }
+    catch(err)
+    {
+      console.log("error in playerIsPlaying");
+      console.log(err);
+    }
   }
 
 /* SHOW ROOM */

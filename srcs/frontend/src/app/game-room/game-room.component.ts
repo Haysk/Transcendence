@@ -18,9 +18,12 @@ export class GameRoomComponent implements OnInit {
   show:boolean=false;
   showSearching:boolean=false;
   redirectPong:boolean=false;
+  bonus:boolean=false;
 
   gameName!:string;
   gameConfig: IGame =  new DefaultGame();;
+  color:string= "rgb(115, 130, 130);"
+
 
   
   user: User = {
@@ -63,6 +66,8 @@ export class GameRoomComponent implements OnInit {
 
   setUpGameConfig(player1: User, player2: User) //PLAYER 1 EST A GAUCHE
   {
+    console.log(player1)
+    console.log(player2)
     let id = Number(this.storageService.getId());
     if (id == player1.id)
     {
@@ -147,22 +152,29 @@ export class GameRoomComponent implements OnInit {
   }
 
 
-  getOnline(): boolean{
+  getOnline(): number{
     let online = localStorage.getItem("online");
-    if (online === "true")
-      return true
+    if (online === "1")
+      return 1
     else
-      return false
+      return 0
   }
 
   justPlay(){
-    this.socketService.matchmaking(this.user, false);
+    this.socketService.matchmaking(this.user, this.bonus);
     this.showSearching=true;
 
   }
 
   receiveShowSearching($event){
     this.showSearching=$event;
+  }
+
+  activateBonus()
+  {
+    this.bonus = !this.bonus;
+    this.color=this.bonus?"rgb(255, 87, 51)":"rgb(115, 130, 130)"; 
+    console.log("bonus: " + this.bonus)
   }
 
 }

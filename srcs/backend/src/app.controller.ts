@@ -175,7 +175,8 @@ export class AppController {
 	@Get('users/:code')
 	async getUsers(@Param('code') code: string): Promise<UserModel[]> {
 		let data = code;
-		try {··········································································································································   17s   14:27:02Users(data);
+		try {
+				return await this.userService.getAllUsers(data);
 		} catch (e) {
 			console.log("Error: getUsers:/n\
 				/n/tcode: " + code);
@@ -184,7 +185,7 @@ export class AppController {
 
 	@Patch('user/:code')
 	async patchUser(@Param('code') code: string,
-		@Body() userData: { online?: boolean, two_factor_auth?: boolean }): Promise<UserModel> {
+		@Body() userData: { online?: number, two_factor_auth?: boolean }): Promise<UserModel> {
 		try {
 			return this.userService.updateUser({
 				where: { code },

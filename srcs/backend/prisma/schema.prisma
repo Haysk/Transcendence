@@ -45,7 +45,7 @@ model 				User {
 	nickname		String?
 	image			String?
 	avatar			String?
-	online			Boolean @default(false)
+	online			Int @default(0)
 	oauth_id		Int @unique
 	oauth 			Oauth? @relation(fields: [oauth_id], references: [id])
 	socket			String?

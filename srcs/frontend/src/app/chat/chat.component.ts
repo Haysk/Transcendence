@@ -31,7 +31,7 @@ export class ChatComponent implements OnInit {
 		avatar: this.storageService.getAvatar(),
 		online: this.storageService.getOnline(),
 	};
-	Dest: User = { id: 0, login: "", email: "", first_name: "", last_name: "", url: "", displayname: "", nickname: "", image: "", avatar: "", online: false };
+	Dest: User = { id: 0, login: "", email: "", first_name: "", last_name: "", url: "", displayname: "", nickname: "", image: "", avatar: "", online: 0 };
 	User_list!: User[];
 	User_filtred_list!: User[];
 	User_filtred_list_final!: User[];

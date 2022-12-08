@@ -473,6 +473,8 @@ amIBanned()
     return new Observable<any> ((obs) => {
       this.socket.on('matchmakingDone', (res, res2, res3) => {
         let data = {res, res2, res3}
+        console.log("verif socket : ")
+        console.log(data);
         obs.next(data);
       })
     })
@@ -531,6 +533,16 @@ amIBanned()
         obs.next(res);
       })
     })
+  }
+
+  updatePlayerStatus(current: User)
+  {
+    this.socket.emit('thisPlayerIsPlaying', current);
+  }
+
+  updatePlayerStatus2(current: User)
+  {
+    this.socket.emit('thisPlayerStoppedPlaying', current);
   }
 
 //SHOW ROOM

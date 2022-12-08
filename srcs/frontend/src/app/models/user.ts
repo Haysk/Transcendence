@@ -12,7 +12,7 @@ export interface 	User {
 	nickname:		string;
 	image:			string;
 	avatar:			string;
-	online:			boolean;
+	online:			number;
 	channel_joined?:Channel[];
 	muted?:			Channel[];
 	banned?:		Channel[];

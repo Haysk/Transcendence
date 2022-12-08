@@ -90,12 +90,12 @@ export class StorageService {
 
 	}
 
-	getOnline(): boolean {
+	getOnline(): number {
 		let online = localStorage.getItem("online");
 		if (online === "true")
-			return true
+			return 1
 		else
-			return false
+			return 2
 	}
 
 	getTwoFactorAuthVerbose(): string {

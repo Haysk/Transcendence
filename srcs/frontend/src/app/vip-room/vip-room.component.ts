@@ -28,7 +28,7 @@ import { SGame } from '../models/savedGame';
 		avatar: this.storage.getAvatar(),
 		nickname: this.storage.getNickName(),
 		id: this.storage.getId(),
-		online: true,
+		online: 1,
 		email: "",
 		first_name: "",
 		last_name: "",
