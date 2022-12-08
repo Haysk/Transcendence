@@ -32,8 +32,8 @@ export class AppGateway
   ) {}
 
   ngOnInit(){
-    this.TabMatchmaking[0][0] = null;
-    this.TabMatchmaking[1][0] = null;
+    this.TabMatchmaking[0] = null;
+    this.TabMatchmaking[1] = null;
   }
 
   sleep(ms:number) {
@@ -1032,8 +1032,10 @@ catch(err){
     })
     if(data != null && data != undefined)
     {
+      console.log("bonus =" + payload[1])
       if(payload[1] == false) //sans bonus
       {
+        console.log("on est pas dans les bonus")
         if(this.TabMatchmaking[0] === null || this.TabMatchmaking[0] === undefined)
         {
           this.TabMatchmaking[0] = data;
@@ -1058,6 +1060,7 @@ catch(err){
       }
       else //avec bonus 
       {
+        console.log("on est dans les bonus")
         if(this.TabMatchmaking[1] === null || this.TabMatchmaking[1] === undefined)
         {
           this.TabMatchmaking[1] = data;
@@ -1066,7 +1069,7 @@ catch(err){
         {
           let data2 = await this.Prisma.user.findFirst({
             where: {
-              id: this.TabMatchmaking[0].id
+              id: this.TabMatchmaking[1].id
             }
           })
           if (data2 != null && data2 != undefined)
@@ -1075,8 +1078,8 @@ catch(err){
             this.server.in(data2.socket).socketsJoin(gameName);
             this.server.in(client.id).socketsJoin(gameName);
             this.pongService.addGame(gameName, payload[1],  this.TabMatchmaking[1], payload[0]);
-            this.TabMatchmaking[1] = null;
-            this.server.to(gameName).emit('matchmakingDone', gameName);
+            this.server.to(gameName).emit('matchmakingDone', gameName, this.TabMatchmaking[1], payload[0]);
+            this.TabMatchmaking[0] = null;
           }
         }
       }
@@ -1168,6 +1171,32 @@ catch(err){
       console.log("error dans getGameInfos :")
       console.log(err);
     }
+  }
+
+  @SubscribeMessage('closeThisRoom')
+  closeGameRoom(client: Socket, payload: any)
+  {
+    this.server.in(payload).disconnectSockets();
+  }
+
+  // @SubscribeMessage('amIInTheRoom')
+  // async isInTheRoom(client: Socket, payload: any)
+  // {
+  //   let check = false;
+  //   let data = await this.server.in(payload).fetchSockets();
+  //   data.forEach((res) => {
+  //     if (res.id == client.id)
+  //     {
+  //       check = true;
+  //     }
+  //   })
+  //   this.server.to(client.id).emit('responseAreYouInTheRoom', check);
+  // }
+
+  @SubscribeMessage('getGames')
+  getGames(client: Socket)
+  {
+    this.server.to(client.id).emit('hereIsGames', this.pongService.getGames());
   }
 
   /* INIT */

@@ -22,7 +22,7 @@ export class BlocChatComponent implements OnInit {
   visible2:boolean = true;
   color:string= "rgb(50, 53, 60)";
   lien: string = "../../assets/icons/chatroom-f.jpg"
-  global4!: {player1: User, player2:  User, gameConfig: IGame};
+  global4!: {player1: User, player2:  User, gameConfig: IGame, bonus: boolean};
   
   showhide(){
     this.visible = this.visible?false:true;

@@ -11,6 +11,15 @@ import { IInput } from '../pong/game/interfaces/input.interface';
 import { GameMode, PlayerMode, IGame } from '../pong/game/interfaces/game.interface';
 
 
+interface ITest {
+  name: string;
+  playerLeft: User;
+  playerRight: User;
+  game: any;
+  activatePowerUp: boolean | undefined;
+  tickSubscription: any;
+}
+
 @Injectable({
   providedIn: 'root'
 })
@@ -20,6 +29,8 @@ export class SocketService {
   API_SERVER = 'https://' + environment.IP_HOST + '/api';
   target !: User;
   sock :string | undefined = "";
+
+  games: SGame[] = [];
 
   constructor(private apiService: ApiService) {
     this.socket = io(this.url);
@@ -462,6 +473,8 @@ amIBanned()
     return new Observable<any> ((obs) => {
       this.socket.on('matchmakingDone', (res, res2, res3) => {
         let data = {res, res2, res3}
+        console.log("verif socket : ")
+        console.log(data);
         obs.next(data);
       })
     })
@@ -499,6 +512,25 @@ amIBanned()
       this.socket.on('gameIsFinished', (obs: any) =>
       {
         res.next(obs);
+      })
+    })
+  }
+
+  closeGameRoom(gameName: string)
+  {
+    this.socket.emit('closeThisRoom', gameName);
+  }
+
+  includedInRoom(gameName: string)
+  {
+    this.socket.emit('amIInTheRoom', gameName);
+  }
+
+  receiveIncludedInRoom()
+  {
+    return new Observable<boolean> ((obs) => {
+      this.socket.on('responseAreYouInTheRoom', (res) => {
+        obs.next(res);
       })
     })
   }
@@ -562,6 +594,34 @@ amIBanned()
         obs.next(res);
       })
     })
+  }
+
+  askForGames(id: number)
+  {
+    let returnValue: any = null;
+    return new Observable<any>((obs) => {
+      this.socket.on('hereIsGames', (res) => {
+        console.log(res);
+        if (res) {
+          this.games = res;
+          this.games.forEach((data) => {
+            if(data.players[0].id == id || data.players[1].id == id)
+              returnValue = data;
+          })
+      }
+        obs.next(returnValue);
+      })
+    })
+  }
+
+  getGames()
+  {
+    this.socket.emit('getGames');
+  }
+
+  closeTheRoom(gameName: string)
+  {
+    this.socket.emit('closeThisRoom', gameName);
   }
 
 //INIT
