@@ -15,9 +15,9 @@ export class PongGateway {
     this.server.emit(name + '_gameStatesToClient', gameStates);
   }
 
-  public gameIsFinished(game: SGame)
+  async gameIsFinished(game: SGame)
   {
-    this.saveGame.createGame(game);
-    this.server.to(game.roomName).emit('gameIsFinished', game);
+    var result = await this.saveGame.createGame(game);
+    this.server.to(game.roomName).emit('gameIsFinished', result);
   }
 }

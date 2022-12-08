@@ -8,37 +8,37 @@ import { SGame } from '../app/models/savedGame';
 import { DefaultGame } from './pong/game/config';
 
 @Component({
-  selector: 'app-root',
-  templateUrl: './app.component.html',
-  styleUrls: ['./app.component.css']
+	selector: 'app-root',
+	templateUrl: './app.component.html',
+	styleUrls: ['./app.component.css']
 })
 
-export class AppComponent implements OnInit{
+export class AppComponent implements OnInit {
 	constructor(
-    public route: ActivatedRoute,
+		public route: ActivatedRoute,
 		public router: Router,
-    private socketService: SocketService, 
-    private storageService: StorageService){
-  }
-  
-  invitationFromWho! :User;
-  refuseFromWho! : User;
-  player1!: User;
-  player2!: User;
-  gameConfig = new DefaultGame();
-  invitation:boolean=false;
-  refuse:boolean=false;
-  gameAccepted:boolean = false;
-  gameIsReady:boolean = false;
-  showPong:boolean =false;
-  global5!: {player1: User, player2:  User, gameConfig: IGame};
-  roomName!:string;
-  redirectPong:boolean = false;
- 
-  GameData!: SGame;
-  showGameScore:boolean = false;
+		private socketService: SocketService,
+		private storageService: StorageService) {
+	}
 
-  to: User = {
+	invitationFromWho!: User;
+	refuseFromWho!: User;
+	player1!: User;
+	player2!: User;
+	gameConfig = new DefaultGame();
+	invitation: boolean = false;
+	refuse: boolean = false;
+	gameAccepted: boolean = false;
+	gameIsReady: boolean = false;
+	showPong: boolean = false;
+	global5!: { player1: User, player2: User, gameConfig: IGame, bonus: boolean };
+	roomName!: string;
+	redirectPong: boolean = false;
+
+	GameData!: SGame;
+	showGameScore: boolean = false;
+
+	to: User = {
 		id: this.storageService.getId(),
 		login: this.storageService.getLogin(),
 		email: this.storageService.getEmail(),
@@ -52,144 +52,144 @@ export class AppComponent implements OnInit{
 		online: this.storageService.getOnline(),
 	};
 
-  ngOnInit(): void {
-    // this.socketService.doIHaveToDisplay().subscribe((res) => {
-    //   this.invitation = res;
-    // })
+	ngOnInit(): void {
+		// this.socketService.doIHaveToDisplay().subscribe((res) => {
+		//   this.invitation = res;
+		// })
 
-    this.socketService.isGameAccepted().subscribe((data) => {
-      this.gameAccepted = data.res;
-      console.log(data.res);
-      
-      if(this.gameAccepted == true)
-      {
+		this.socketService.isGameAccepted().subscribe((data) => {
+			this.gameAccepted = data.res;
+			console.log(data.res);
 
-        // this.showPong=true;
-        this.invitation=false;
-        // console.log("player1 : ");
-        // console.log(data.res3);
-        // console.log("player2 : ");
-        // console.log(data.res2);
-      }
-    })
+			if (this.gameAccepted == true) {
 
-    this.socketService.areYouReady().subscribe((res) => {
-      this.gameIsReady = res;
-      this.invitation = false;
-    })
+				// this.showPong=true;
+				this.invitation = false;
+				// console.log("player1 : ");
+				// console.log(data.res3);
+				// console.log("player2 : ");
+				// console.log(data.res2);
+			}
+		})
 
-    this.socketService.doIHaveToDisplay().subscribe({
-      next: (data: {res: boolean, res2:User, res3:User, res4: IGame;}) =>{
-      this.invitation = data.res;
-      this.invitationFromWho = data.res2;
-      this.player1 = data.res2;
-      this.player2 = data.res3;
-      this.gameConfig = data.res4;
-      }
-    })
+		this.socketService.areYouReady().subscribe((res) => {
+			this.gameIsReady = res;
+			this.invitation = false;
+		})
 
-    this.socketService.showrefuseInvitation().subscribe({
-      next: (data: {res: boolean, res2:User;}) =>{
-      this.refuse = data.res;
-      this.refuseFromWho = data.res2;
-      }
-    })
+		this.socketService.doIHaveToDisplay().subscribe({
+			next: (data: { res: boolean, res2: User, res3: User, res4: IGame; }) => {
+				this.invitation = data.res;
+				this.invitationFromWho = data.res2;
+				this.player1 = data.res2;
+				this.player2 = data.res3;
+				this.gameConfig = data.res4;
+			}
+		})
 
-    this.socketService.isGameReady().subscribe({
-      next: (data: {res: User, res2: User, res3: IGame}) => {
-        this.player1 = data.res;
-        this.player2 = data.res2;
-        this.gameConfig = data.res3;
-        this.setUpGameConfig();
-        this.roomName = this.createGameRoomName(this.player1.login, this.player2.login);
-        if(this.player1.id == Number(this.storageService.getId()))
-          this.socketService.createGame(this.roomName, this.gameConfig, this.player1, this.player2, false);
-        this.gameIsReady=false;
-        this.redirectPong=true;
-      }
-    })
-    this.socketService.isGameFinished().subscribe((res) => {
-      this.GameData = res;
-      this.redirectPong= false;
-      this.showGameScore = true;
-    })
-    this.socketService.askForGames(this.storageService.getId()).subscribe((res) => {
-      if(res != null)
-      {
-        this.player1 = res.players[0];
-        this.player2 = res.players[1];
-        this.setUpGameConfig();
-        this.roomName =  this.createGameRoomName(this.player1.login, this.player2.login)
-        this.redirectPong=true;
-      }
-    })
-    this.socketService.getGames();
-  }
+		this.socketService.showrefuseInvitation().subscribe({
+			next: (data: { res: boolean, res2: User; }) => {
+				this.refuse = data.res;
+				this.refuseFromWho = data.res2;
+			}
+		})
 
-  ngOnDestroy() {
-	this.socketService.unsubscribeSocket("DisplayInvitation");
-	this.socketService.unsubscribeSocket("refuseInvitation");
-  }
-
-  createGameRoomName(login1: string, login2: string): string{
-    let result: string;
-
-    if (login1 < login2)
-      result = login1 + login2;
-    else
-      result = login2 + login1;
-    result = result + "_game"
-    return result;
-  }
-
-  setUpGameConfig() //PLAYER 1 EST A GAUCHE
-  {
-    let id = this.storageService.getId();
-    if (id == this.player1.id)
-    {
-      this.gameConfig.left.mode.type = "local";
-      this.gameConfig.right.mode.type = "remote";
-    }
-    else if (id == this.player2.id)
-    {
-      this.gameConfig.left.mode.type = "remote";
-      this.gameConfig.right.mode.type = "local";
-    }
-  }
-
-  public getLogin(): string | null{
-	var login = localStorage.getItem("login");
-  this.socketService.sendLogin(String(login)); //mettre son socket a jour
-	if (login == undefined) {
-		return null;
+		this.socketService.isGameReady().subscribe({
+			next: (data: { res: User, res2: User, bonus: boolean }) => {
+				this.player1 = data.res;
+				this.player2 = data.res2;
+				this.gameConfig = new DefaultGame();
+				this.setUpGameConfig();
+				this.roomName = this.createGameRoomName(this.player1.login, this.player2.login);
+				var bonus = false;
+				if (data.bonus)
+					bonus = data.bonus;
+				else if (this.global5 != undefined)
+					bonus = this.global5.bonus; 
+				if (this.player1.id == Number(this.storageService.getId()))
+					this.socketService.createGame(this.roomName, this.gameConfig, this.player1, this.player2, bonus);
+				this.gameIsReady = false;
+				this.redirectPong = true;
+			}
+		})
+		this.socketService.isGameFinished().subscribe((res) => {
+			console.log(res);
+			
+			this.GameData = res;
+			this.redirectPong = false;
+			this.showGameScore = true;
+		})
+		this.socketService.askForGames(this.storageService.getId()).subscribe((res) => {
+			if (res != null) {
+				this.player1 = res.players[0];
+				this.player2 = res.players[1];
+				this.setUpGameConfig();
+				this.roomName = this.createGameRoomName(this.player1.login, this.player2.login)
+				this.redirectPong = true;
+			}
+		})
+		this.socketService.getGames();
 	}
-	return login;
-  }
 
-  public getRoute() {
-	return this.router.url.split("?")[0];
-  }
+	ngOnDestroy() {
+		this.socketService.unsubscribeSocket("DisplayInvitation");
+		this.socketService.unsubscribeSocket("refuseInvitation");
+	}
 
-  receiveShowInivtationEvent($event: boolean){
-    this.invitation = $event;
-  }
+	createGameRoomName(login1: string, login2: string): string {
+		let result: string;
 
-  receiverefueInvitationEvent($event: boolean){
-    this.refuse = $event;
-  }
+		if (login1 < login2)
+			result = login1 + login2;
+		else
+			result = login2 + login1;
+		result = result + "_game"
+		return result;
+	}
 
-  receiveGlobal4Event($event: any){
-    this.global5= $event;
-    this.player1 = this.global5.player1;
-    this.player2 = this.global5.player2;
-    this.gameConfig = this.global5.gameConfig;
-  }
+	setUpGameConfig() //PLAYER 1 EST A GAUCHE
+	{
+		let id = this.storageService.getId();
+		if (id == this.player1.id) {
+			this.gameConfig.left.mode.type = "local";
+			this.gameConfig.right.mode.type = "remote";
+		}
+		else if (id == this.player2.id) {
+			this.gameConfig.left.mode.type = "remote";
+			this.gameConfig.right.mode.type = "local";
+		}
+	}
 
-  receiveCloseScoreEvent($event:boolean){
-       this.showGameScore= $event;
-  }
+	public getLogin(): string | null {
+		var login = localStorage.getItem("login");
+		this.socketService.sendLogin(String(login)); //mettre son socket a jour
+		if (login == undefined) {
+			return null;
+		}
+		return login;
+	}
 
+	public getRoute() {
+		return this.router.url.split("?")[0];
+	}
 
+	receiveShowInivtationEvent($event: boolean) {
+		this.invitation = $event;
+	}
 
+	receiverefueInvitationEvent($event: boolean) {
+		this.refuse = $event;
+	}
+
+	receiveGlobal4Event($event: any) {
+		this.global5 = $event;
+		this.player1 = this.global5.player1;
+		this.player2 = this.global5.player2;
+		this.gameConfig = this.global5.gameConfig;
+	}
+
+	receiveCloseScoreEvent($event: boolean) {
+		this.showGameScore = $event;
+	}
 }
 

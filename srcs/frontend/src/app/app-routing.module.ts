@@ -1,7 +1,6 @@
 import { NgModule } from '@angular/core';
 import { RouterModule, Routes } from '@angular/router';
 import { HomeComponent } from './home/home.component';
-import { PongComponent } from './pong/pong.component';
 import { GameRoomComponent } from './game-room/game-room.component';
 import { ShowRoomComponent } from './show-room/show-room.component';
 import { VipRoomComponent } from './vip-room/vip-room.component';
@@ -30,9 +29,6 @@ const routes: Routes = [
 		canActivate: [AuthGuard]
 	},
 	{ path: 'rest-room', component: RestRoomComponent,
-		canActivate: [AuthGuard]
-	},
-	{ path: 'pong', component: PongComponent,
 		canActivate: [AuthGuard]
 	},
 	{ path: 'home', component: HomeComponent,

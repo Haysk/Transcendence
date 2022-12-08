@@ -998,8 +998,9 @@ catch(err){
         room[1] = Client.id;
       }
     }
+	console.log("WTF");
     if (room[0] != "" && room[1] != "")
-      this.server.to(roomName).emit('bothPlayerAreReady', payload[0], payload[1], payload[2]);
+      this.server.to(roomName).emit('bothPlayerAreReady', payload[0], payload[1]);
   }
 
 /* PONG GAME */
@@ -1047,7 +1048,7 @@ catch(err){
             this.server.in(data2.socket).socketsJoin(gameName);
             this.server.in(client.id).socketsJoin(gameName);
             this.pongService.addGame(gameName, payload[1],  this.TabMatchmaking[0], payload[0]);
-            this.server.to(gameName).emit('matchmakingDone', gameName, this.TabMatchmaking[0], payload[0]);
+            this.server.to(gameName).emit('bothPlayerAreReady', this.TabMatchmaking[0], payload[0], false);
             this.TabMatchmaking[0] = null;
           }
         }
@@ -1071,7 +1072,7 @@ catch(err){
             this.server.in(data2.socket).socketsJoin(gameName);
             this.server.in(client.id).socketsJoin(gameName);
             this.pongService.addGame(gameName, payload[1],  this.TabMatchmaking[1], payload[0]);
-            this.server.to(gameName).emit('matchmakingDone', gameName, this.TabMatchmaking[1], payload[0]);
+            this.server.to(gameName).emit('bothPlayerAreReady', this.TabMatchmaking[1], payload[0], true);
             this.TabMatchmaking[0] = null;
           }
         }

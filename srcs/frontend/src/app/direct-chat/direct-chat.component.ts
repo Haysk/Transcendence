@@ -35,7 +35,7 @@ export class DirectChatComponent implements OnInit {
   old_messages: Message[] = [];
   friendList!: User[];
   showGameSettings:boolean = false;
-  global!: {player1: User, player2:  User, gameConfig: IGame};
+  global!: {player1: User, player2:  User, gameConfig: IGame, bonus: boolean};
 
 
   constructor(private socketService: SocketService,

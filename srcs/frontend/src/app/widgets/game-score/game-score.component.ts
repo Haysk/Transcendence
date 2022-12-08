@@ -16,7 +16,7 @@ export class GameScoreComponent {
   @Output() closeScoreEvent = new EventEmitter<boolean>();
   scorePlayer1!: number;
   scorePlayer2!: number;
-  winner!:User;
+  winner!: User;
   
 
   ngOnInit(): void {
@@ -31,13 +31,19 @@ export class GameScoreComponent {
   winnerIs(): User{
       this.scorePlayer1=this.GameData.player1_score;
       this.scorePlayer2=this.GameData.player2_score;
-      if(this.scorePlayer1>this.scorePlayer2){
-        return this.GameData.player1;        
+      if(this.scorePlayer1 > this.scorePlayer2){
+        return this.getPlayer(this.GameData.player1_id);
       }
       else{
-        return this.GameData.player2;
+        return this.getPlayer(this.GameData.player2_id);
       }
-     
+  }
+
+  getPlayer(id: number) {
+	if (this.GameData.players[0].id == id)
+		return this.GameData.players[0];
+	if (this.GameData.players[1].id == id)
+		return this.GameData.players[1];
   }
     
 }
