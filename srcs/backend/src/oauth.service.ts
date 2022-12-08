@@ -1,9 +1,9 @@
 
 import { Injectable } from '@nestjs/common';
-import { PrismaService } from './prisma.service';
 import { Oauth, Prisma } from '@prisma/client';
 import { HttpService } from '@nestjs/axios';
 import { take } from 'rxjs';
+import { PrismaService } from './prisma/prisma.service';
 
 export interface Tokens {
 		access_token: string,

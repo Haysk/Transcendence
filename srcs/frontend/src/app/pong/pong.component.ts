@@ -535,6 +535,8 @@ export class PongComponent implements OnInit, OnDestroy {
     );
 
     // draw power-ups
+    this.ctx.font = "40px Arial";
+    this.ctx.textAlign = "center";
     for (const powerUp of this.gameConfig.states.powerUps) {
       this.ctx.fillStyle = powerUp.color;
       this.roundRect(
@@ -545,6 +547,12 @@ export class PongComponent implements OnInit, OnDestroy {
         0,
         true,
         false
+      );
+      this.ctx.fillStyle = "black";
+      this.ctx.fillText(
+        '?',
+        powerUp.position.left + powerUp.width / 2,
+        powerUp.position.top + powerUp.height * 0.8
       );
     }
 

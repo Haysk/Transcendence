@@ -9,7 +9,6 @@ import {
 	ConsoleLogger,
 	Patch,
 } from '@nestjs/common';
-import { UserService } from './user.service';
 import { MessageService } from './message.service';
 import { ChannelService } from './channel.service';
 import { OauthService } from './oauth.service';
@@ -22,6 +21,7 @@ import {
 	Channel as ChannelModel,
 	Prisma
 } from '@prisma/client';
+import { UserService } from './user/user.service';
 
 @Controller()
 export class AppController {
@@ -176,7 +176,7 @@ export class AppController {
 	async getUsers(@Param('code') code: string): Promise<UserModel[]> {
 		let data = code;
 		try {
-				return await this.userService.getAllUsers(data);
+			return await this.userService.getAllUsers(data);
 		} catch (e) {
 			console.log("Error: getUsers:/n\
 				/n/tcode: " + code);

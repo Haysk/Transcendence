@@ -50,7 +50,7 @@ export class ChatComponent implements OnInit {
 
 	channel_name!: string;
 	privateChannel!: Channel;
-	global2!: {player1: User, player2:  User, gameConfig: IGame};
+	global2!: {player1: User, player2:  User, gameConfig: IGame, bonus: boolean};
 
 	@Output() global3Event = new EventEmitter<any>();
 

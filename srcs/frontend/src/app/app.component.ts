@@ -31,7 +31,7 @@ export class AppComponent implements OnInit{
   gameAccepted:boolean = false;
   gameIsReady:boolean = false;
   showPong:boolean =false;
-  global5!: {player1: User, player2:  User, gameConfig: IGame};
+  global5!: {player1: User, player2:  User, gameConfig: IGame, bonus: boolean};
   roomName!:string;
   redirectPong:boolean = false;
  
@@ -103,7 +103,7 @@ export class AppComponent implements OnInit{
         this.setUpGameConfig();
         this.roomName = this.createGameRoomName(this.player1.login, this.player2.login);
         if(this.player1.id == Number(this.storageService.getId()))
-          this.socketService.createGame(this.roomName, this.gameConfig, this.player1, this.player2, false);
+          this.socketService.createGame(this.roomName, this.gameConfig, this.player1, this.player2, this.global5.bonus);
         this.gameIsReady=false;
         this.redirectPong=true;
       }

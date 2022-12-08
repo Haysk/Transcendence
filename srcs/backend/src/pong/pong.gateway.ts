@@ -9,15 +9,13 @@ export class PongGateway {
   @WebSocketServer()
   server!: Server;
 
-  constructor(private saveGame: SaveGameService){}
+  constructor(private saveGame: SaveGameService) {}
 
   public sendGameStates(gameStates: IGameStates, name: string): void {
     this.server.emit(name + '_gameStatesToClient', gameStates);
   }
 
-
-  public gameIsFinished(game: SGame)
-  {
+  public gameIsFinished(game: SGame) {
     this.saveGame.createGame(game);
     this.server.to(game.roomName).emit('gameIsFinished', game);
   }
