@@ -55,6 +55,7 @@ export class PongComponent implements OnInit, OnDestroy {
 		image: this.storageService.getImage(),
 		avatar: this.storageService.getAvatar(),
 		online: this.storageService.getOnline(),
+		level: this.storageService.getLvl()
 	};
   // initGameConfig(): IGame{
   //   let data = new DefaultGame();

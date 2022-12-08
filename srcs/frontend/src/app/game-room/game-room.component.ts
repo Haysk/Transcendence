@@ -27,17 +27,18 @@ export class GameRoomComponent implements OnInit {
 
   
   user: User = {
-    id: this.getId(),
-    login: this.getLogin(),
-    email: this.getEmail(),
-    first_name: this.getFirstName(),
-    last_name: this.getLastName(),
-    url: this.getUrl(),
-    displayname: this.getDisplayName(),
-    nickname: this.getNickname(),
-    image: this.getImage(),
-    avatar: this.getAvatar(),
-    online: this.getOnline(),
+    id: this.storageService.getId(),
+    login: this.storageService.getLogin(),
+    email: this.storageService.getEmail(),
+    first_name: this.storageService.getFirstName(),
+    last_name: this.storageService.getLastName(),
+    url: this.storageService.getUrl(),
+    displayname: this.storageService.getDisplayName(),
+    nickname: this.storageService.getNickName(),
+    image: this.storageService.getImage(),
+    avatar: this.storageService.getAvatar(),
+    online: this.storageService.getOnline(),
+	level: this.storageService.getLvl()
   }
 
 

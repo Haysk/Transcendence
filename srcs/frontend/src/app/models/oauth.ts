@@ -10,6 +10,7 @@ export interface User {
 	image:			string;
 	avatar:			string;
 	online:			number;
+	level:			number;
 	oauth_id?:		number;
 	oauth?:			Oauth;
 	socket?:		string;

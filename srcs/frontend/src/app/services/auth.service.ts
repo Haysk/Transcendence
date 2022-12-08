@@ -90,7 +90,8 @@ export class AuthService {
 		this.storageService.setDisplayName(user.displayname) &&
 		this.storageService.setNickName(user.nickname) &&
 		this.storageService.setImage(user.image) &&
-		this.storageService.setAvatar(user.avatar)) {
+		this.storageService.setAvatar(user.avatar) &&
+		this.storageService.setLvl(user.level)) {
 			return true;
 		} else {
 			return false
@@ -98,7 +99,7 @@ export class AuthService {
 	}
 
 	logout() {
-		//this.storageService.clear();
+		this.storageService.clear();
 		this.code = "";
 		this.router.navigate(["../"], {relativeTo: this.route}); 
 		this.locked = true;

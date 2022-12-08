@@ -22,6 +22,7 @@ export class Vip2RoomComponent implements OnInit {
 	nickname:string =  "";
 	login:string = "";
 	avatar:string = "";
+	level:number = 0;
 	searchName:string = "";
 	games!:any;
 	user!: User;
@@ -49,6 +50,7 @@ export class Vip2RoomComponent implements OnInit {
 				this.nickname = res.nickname;
 				this.login = res.login;
 				this.avatar = res.avatar;
+				this.level = res.level;
 				this.user = res;
 				this.socketService.askForGameHistory(this.user);
 			} else if (!res && !this.login)

@@ -32,7 +32,8 @@ import { SGame } from '../models/savedGame';
 		email: "",
 		first_name: "",
 		last_name: "",
-		url: this.storage.getAvatar()
+		url: this.storage.getAvatar(),
+		level: this.storage.getLvl()
 	};
 	login = this.storage.getLogin();
 	displayname = this.storage.getDisplayName();
@@ -115,7 +116,7 @@ import { SGame } from '../models/savedGame';
 			this.apiService.updateNickName(Number(this.id), this.newNickName).subscribe((result) => {
 				if (result) {
 					this.storage.setNickName(result.nickname)
-					window.alert('***Nickname changed. Reload page ***');
+					window.alert('*** Nickname changed ***');
 					this.userToShow.nickname = result.nickname;
 				} else
 					window.alert('*** Invalid Nickname ***');

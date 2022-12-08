@@ -50,6 +50,7 @@ export class AppComponent implements OnInit {
 		image: this.storageService.getImage(),
 		avatar: this.storageService.getAvatar(),
 		online: this.storageService.getOnline(),
+		level: this.storageService.getLvl()
 	};
 
 	ngOnInit(): void {

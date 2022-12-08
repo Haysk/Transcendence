@@ -113,11 +113,19 @@ export class StorageService {
 	}
 
 	getQrCode(): string {
-		var qrCode = localStorage.getItem("qrCode");
+		let qrCode = localStorage.getItem("qrCode");
 		if (qrCode === null || qrCode === undefined || qrCode === "null")
 			return "";
 		return qrCode;
 	}
+
+	getLvl(): number {
+		let lvl = localStorage.getItem("lvl");
+		if (lvl == null || lvl == undefined)
+			return 0;
+		return Number(lvl);
+	}
+
 
 	setCode(code: string | undefined) {
 		if (code === undefined)
@@ -227,6 +235,14 @@ export class StorageService {
 		else
 			localStorage.setItem("qrCode", "");
 
+	}
+
+	setLvl(lvl: number) {
+		if (lvl) {
+			localStorage.setItem("lvl", String(lvl));
+			return true;
+		}
+		return false;
 	}
 
 	clear() {
