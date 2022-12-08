@@ -2,6 +2,7 @@ import { Injectable } from '@nestjs/common';
 import { User } from '@prisma/client';
 import { interval, Subscription } from 'rxjs';
 import { SaveGameService } from 'src/save-game/save-game.service';
+import { UserService } from 'src/user/user.service';
 import { Game } from './game/game';
 import { IInput } from './game/interfaces/input.interface';
 import { SGame } from './game/interfaces/save-game.interface';
@@ -25,10 +26,10 @@ export class PongService {
   constructor(
     private pongGateway: PongGateway,
     private saveGame: SaveGameService,
+    private userService: UserService,
   ) {}
 
-  public returnGames()
-  {
+  public returnGames() {
     return this.games;
   }
 
@@ -38,7 +39,12 @@ export class PongService {
 
   public addGame(name: string): void;
   public addGame(name: string, powerUp?: boolean): void;
-  public addGame(name: string, activatePowerUp?: boolean, playerLeft?: User, playerRight?: User): void;
+  public addGame(
+    name: string,
+    activatePowerUp?: boolean,
+    playerLeft?: User,
+    playerRight?: User,
+  ): void;
   public addGame(
     name: string,
     activatePowerUp?: boolean,
@@ -76,10 +82,10 @@ export class PongService {
       const element = this.games[index];
       games.push({
         roomName: element.name,
-        players: [element.playerLeft,element.playerRight],
+        players: [element.playerLeft, element.playerRight],
         player1_score: element.game.getGameStates().scoreLeft,
         player2_score: element.game.getGameStates().scoreRight,
-        winner: null
+        winner: null,
       });
     }
     return games;
@@ -130,6 +136,13 @@ export class PongService {
       };
       this.pongGateway.gameIsFinished(sgame);
       // this.saveGame.createGame(sgame);
+
+      //addXp for winner
+      if (sgame.player1_score > sgame.player2_score) {
+        this.userService.addXp({ id: sgame.players[0].id, addXp: 1 });
+      } else {
+        this.userService.addXp({ id: sgame.players[1].id, addXp: 1 });
+      }
     }
   }
 

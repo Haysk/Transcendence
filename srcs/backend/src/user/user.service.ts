@@ -117,6 +117,7 @@ export class UserService {
     });
   }
 
+<<<<<<< HEAD
   // async addXp(params: { id: number; addXp: number }): Promise<User> {
   //   const user = await this.prisma.user.findFirstOrThrow({
   //     where: {
@@ -148,6 +149,39 @@ export class UserService {
   //     })
   //   ).level;
   // }
+=======
+  async addXp(params: { id: number; addXp: number }): Promise<User> {
+    const user = await this.prisma.user.findFirstOrThrow({
+      where: {
+        id: params.id,
+      },
+    });
+    user.xp += params.addXp;
+    while (user.xp >= user.level + 1) {
+      user.xp -= user.level + 1;
+      user.level += 1;
+    }
+    return await this.prisma.user.update({
+      where: {
+        id: params.id,
+      },
+      data: {
+        xp: user.xp,
+        level: user.level,
+      },
+    });
+  }
+
+  async getLevel(id: number): Promise<number> {
+    return (
+      await this.prisma.user.findUnique({
+        where: {
+          id: id,
+        },
+      })
+    ).level;
+  }
+>>>>>>> origin/ching22Bis
 
   async user(code: string): Promise<User> {
     return this.prisma.user.findFirst({

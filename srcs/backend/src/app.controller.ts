@@ -9,7 +9,6 @@ import {
 	ConsoleLogger,
 	Patch,
 } from '@nestjs/common';
-import { UserService } from './user.service';
 import { MessageService } from './message.service';
 import { ChannelService } from './channel.service';
 import { OauthService } from './oauth.service';
@@ -22,6 +21,7 @@ import {
 	Channel as ChannelModel,
 	Prisma
 } from '@prisma/client';
+import { UserService } from './user/user.service';
 
 @Controller()
 export class AppController {

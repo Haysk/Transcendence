@@ -29,13 +29,19 @@ export class MatchHistoryComponent {
   ngOnInit(): void {
     this.socketService.receiveGamePlayers(this.match).subscribe((res) => {
       this.match = res;
+      console.log("111")
+      console.log(this.match)
       if (this.match.player1_id == this.match.players[0].id) {
+        console.log("2222")
+        console.log(this.match)
         this.player1_avatar = this.match.players[0].avatar;
         this.player1_login = this.match.players[0].login;
         this.player2_avatar = this.match.players[1].avatar;
         this.player2_login = this.match.players[1].login;  
       }
       else {
+        console.log("3333")
+        console.log(this.match)
         this.player1_avatar = this.match.players[1].avatar;
         this.player1_login = this.match.players[1].login;
         this.player2_avatar = this.match.players[0].avatar;

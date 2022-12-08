@@ -1,7 +1,7 @@
 import { Injectable } from "@nestjs/common";
 import { OauthService } from "./oauth.service";
-import { PrismaService } from "./prisma.service";
 import { Tfa as TfaModel } from "@prisma/client"
+import { PrismaService } from "./prisma/prisma.service";
 
 @Injectable()
 export class TfaService {

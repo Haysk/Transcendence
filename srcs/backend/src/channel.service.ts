@@ -1,8 +1,8 @@
 import { Injectable } from '@nestjs/common';
 import { HttpService } from '@nestjs/axios';
-import { PrismaService } from './prisma.service';
 import { Channel } from '@prisma/client';
-import { UserService } from './user.service';
+import { PrismaService } from './prisma/prisma.service';
+import { UserService } from './user/user.service';
 
 @Injectable()
 export class ChannelService {

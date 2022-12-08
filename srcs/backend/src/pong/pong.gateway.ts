@@ -7,21 +7,17 @@ import { SGame } from './game/interfaces/save-game.interface';
 
 @WebSocketGateway()
 export class PongGateway {
-  @WebSocketServer()
-  server!: Server;
+	@WebSocketServer()
+	server!: Server;
 
-  constructor(private saveGame: SaveGameService){}
+	constructor(private saveGame: SaveGameService) { }
 
-  public sendGameStates(gameStates: IGameStates, name: string): void {
-    this.server.emit(name + '_gameStatesToClient', gameStates);
-  }
+	public sendGameStates(gameStates: IGameStates, name: string): void {
+		this.server.emit(name + '_gameStatesToClient', gameStates);
+	}
 
-  async gameIsFinished(game: SGame)
-  {
-    var result = await this.saveGame.createGame(game);
-    // let data = this.server.in(game.roomName).fetchSockets()
-    // console.log("DATA :");
-    // console.log(await data);
-    this.server.to(game.roomName).emit('gameIsFinished', result);
-  }
+	async gameIsFinished(game: SGame) {
+		var result = await this.saveGame.createGame(game);
+		this.server.to(game.roomName).emit('gameIsFinished', result);
+	}
 }
