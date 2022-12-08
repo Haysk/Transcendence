@@ -7,11 +7,11 @@ import {
   WebSocketGateway,
   WebSocketServer,
 } from '@nestjs/websockets';
-import { PrismaService } from './prisma.service';
 import { Server, Socket } from 'socket.io';
-import { UserService } from './user.service';
 import { PongService } from './pong/pong.service';
-import { Game, User } from '@prisma/client';
+import { User } from '@prisma/client';
+import { PrismaService } from './prisma/prisma.service';
+import { UserService } from './user/user.service';
 
 @WebSocketGateway({
   cors: {

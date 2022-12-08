@@ -1,9 +1,8 @@
 import { Injectable } from '@nestjs/common';
-import { PrismaService } from './prisma.service';
 import { User, Prisma } from '@prisma/client';
 import { HttpService } from '@nestjs/axios';
 import { take } from 'rxjs';
-import { OauthService } from './oauth.service';
+import { PrismaService } from 'src/prisma/prisma.service';
 
 type Version = {
   large: string;
@@ -30,11 +29,7 @@ type UserIntra = {
 
 @Injectable()
 export class UserService {
-  constructor(
-    private prisma: PrismaService,
-    private httpClient: HttpService,
-    private oauthService: OauthService,
-  ) {}
+  constructor(private prisma: PrismaService, private httpClient: HttpService) {}
 
   INTRA_API = 'https://api.intra.42.fr';
 
@@ -82,7 +77,7 @@ export class UserService {
       return;
     } catch {
       try {
-        var user = await this.prisma.user.findFirstOrThrow({
+        const user = await this.prisma.user.findFirstOrThrow({
           where: {
             login: params.nickname,
           },
