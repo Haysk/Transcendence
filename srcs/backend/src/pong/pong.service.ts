@@ -143,15 +143,6 @@ export class PongService {
       } else {
         this.userService.addXp({ id: sgame.players[1].id, addXp: 1 });
       }
-
-      console.log(
-        'level player[0]',
-        this.userService.getLevel(sgame.players[0].id),
-      );
-      console.log(
-        'level player[1]',
-        this.userService.getLevel(sgame.players[1].id),
-      );
     }
   }
 
