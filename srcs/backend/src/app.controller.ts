@@ -38,9 +38,9 @@ export class AppController {
 		try {
 			return await this.channelService.addChannel(ChannelData);
 		} catch (e) {
-			console.log("Error: addChannel :/no\
-			/tname: " + ChannelData.name +
-				"/n/tcreator_id: " + ChannelData.creator_id);
+			console.log("Error: addChannel :\n\
+			\tname: " + ChannelData.name +
+				"\n\tcreator_id: " + ChannelData.creator_id);
 		}
 	}
 
@@ -49,9 +49,9 @@ export class AppController {
 		try {
 			return await this.channelService.addChannel(ChannelData);
 		} catch (e) {
-			console.log("Error: addChannel :/n\
-			/tname: " + ChannelData.name +
-				"/n/tcreator_id: " + ChannelData.creator_id);
+			console.log("Error: addChannel :\n\
+			\tname: " + ChannelData.name +
+				"\n\tcreator_id: " + ChannelData.creator_id);
 		}
 	}
 
@@ -60,9 +60,9 @@ export class AppController {
 		try {
 			return await this.userService.updateNickName(UserData);
 		} catch (e) {
-			console.log("Error: updateNickName :/n\
-			/tid: " + UserData.id +
-				"/n/tnickname: " + UserData.nickname);
+			console.log("Error: updateNickName :\n\
+			\tid: " + UserData.id +
+				"\n\tnickname: " + UserData.nickname);
 		}
 	}
 
@@ -71,9 +71,9 @@ export class AppController {
 		try {
 			return await this.userService.updateAvatar(UserData);
 		} catch (e) {
-			console.log("Error: updateAvatar :/n\
-			/tid: " + UserData.id +
-				"/n/tavatar: " + UserData.avatar);
+			console.log("Error: updateAvatar :\n\
+			\tid: " + UserData.id +
+				"\n\tavatar: " + UserData.avatar);
 		}
 	}
 
@@ -91,8 +91,8 @@ export class AppController {
 		try {
 			return await this.channelService.findChannelByName(name);
 		} catch (e) {
-			console.log("Error: findChannelByName :/n\
-			/n/tname: " + name);
+			console.log("Error: findChannelByName :\n\
+			\n\tname: " + name);
 		}
 	}
 
@@ -101,8 +101,8 @@ export class AppController {
 		try {
 			return await this.userService.findUserByLogin(login);
 		} catch (e) {
-			console.log("Error: getUserByLogin:/n\
-			/n/tlogin: " + login);
+			console.log("Error: getUserByLogin:\n\
+			\n\tlogin: " + login);
 		}
 	}
 
@@ -113,11 +113,11 @@ export class AppController {
 		try {
 			return await this.messageService.createMessage(messageData);
 		} catch (e) {
-			console.log("Error: addMessage:/n\
-			/n/tuserId: " + messageData.userId +
-				"/n/tfromUserName: " + messageData.fromUserName +
-				"/n/tfromUserId: " + messageData.fromUserId +
-				"/n/tcontent: " + messageData.content);
+			console.log("Error: addMessage:\n\
+			\n\tuserId: " + messageData.userId +
+				"\n\tfromUserName: " + messageData.fromUserName +
+				"\n\tfromUserId: " + messageData.fromUserId +
+				"\n\tcontent: " + messageData.content);
 		}
 	}
 
@@ -127,11 +127,11 @@ export class AppController {
 		try {
 			return await this.messageService.createChannelMessage(messageData);
 		} catch (e) {
-			console.log("Error: channelMessage:/n\
-			/n/tchannel_name: " + messageData.channel_name +
-				"/n/tfromUserName: " + messageData.fromUserName +
-				"/n/tfromUserId: " + messageData.fromUserId +
-				"/n/tcontent: " + messageData.content);
+			console.log("Error: channelMessage:\n\
+			\n\tchannel_name: " + messageData.channel_name +
+				"\n\tfromUserName: " + messageData.fromUserName +
+				"\n\tfromUserId: " + messageData.fromUserId +
+				"\n\tcontent: " + messageData.content);
 		}
 	}
 
@@ -140,8 +140,8 @@ export class AppController {
 		try {
 			return await this.userService.findUserByLogin(login);
 		} catch (e) {
-			console.log("Error: getSocket:/n\
-				/n/tlogin: " + login);
+			console.log("Error: getSocket:\n\
+				\n\tlogin: " + login);
 		}
 	}
 
@@ -153,9 +153,9 @@ export class AppController {
 		try {
 			return await this.messageService.getMessages(data);
 		} catch (e) {
-			console.log("Error: getMessage:/n\
-				/n/tfromUserId: " + fromUserId +
-				"/n/tuserId: " + userId);
+			console.log("Error: getMessage:\n\
+				\n\tfromUserId: " + fromUserId +
+				"\n\tuserId: " + userId);
 		}
 	}
 
@@ -167,8 +167,8 @@ export class AppController {
 		try {
 			return await this.messageService.getChannelMessages(data);
 		} catch (e) {
-			console.log("Error: getChannelMessage:/n\
-				/n/tchannelName: " + channelName);
+			console.log("Error: getChannelMessage:\n\
+				\n\tchannelName: " + channelName);
 		}
 	}
 
@@ -192,10 +192,10 @@ export class AppController {
 				data: userData
 			});
 		} catch (e) {
-			console.log("Error: patchUser:/n\
-			/n/tcode: " + code +
-				"/n/tonline: " + userData.online +
-				"/n/ttwo_factor_auth: " + userData.two_factor_auth);
+			console.log("Error: patchUser:\n\
+			\n\tcode: " + code +
+				"\n\tonline: " + userData.online +
+				"\n\ttwo_factor_auth: " + userData.two_factor_auth);
 		}
 	}
 
@@ -208,8 +208,8 @@ export class AppController {
 			return result;
 		}
 		catch {
-			console.log("Error: getUserInfo:/n\
-			/n/tcode: " + code);
+			console.log("Error: getUserInfo:\n\
+			\n\tcode: " + code);
 			return false;
 		}
 	}
@@ -226,8 +226,8 @@ export class AppController {
 				throw Prisma.PrismaClientKnownRequestError
 			}
 		} catch (e) {
-			console.log("Error: signup:/n\
-			/n/tcode: " + auth.code);
+			console.log("Error: signup:\n\
+			\n\tcode: " + auth.code);
 		}
 	}
 
@@ -237,8 +237,8 @@ export class AppController {
 		try {
 			this.tfaService.disableTfa(params.code);
 		} catch (e) {
-			console.log("Error: patchTfa:/n\
-			/n/tcode: " + params.code);
+			console.log("Error: patchTfa:\n\
+			\n\tcode: " + params.code);
 		}
 	}
 
@@ -248,8 +248,8 @@ export class AppController {
 		try {
 			return (this.tfaService.createTfa(params.code));
 		} catch (e) {
-			console.log("Error: postSignup:/n\
-			/n/tcode: " + params.code);
+			console.log("Error: postSignup:\n\
+			\n\tcode: " + params.code);
 		}
 	}
 
@@ -259,9 +259,9 @@ export class AppController {
 		try {
 			return (await this.tfaService.verifyTfa(param))
 		} catch (e) {
-			console.log("Error: postVerify:/n\
-			/n/tcode: " + param.code +
-				"/n/ttfa_key: " + param.tfa_key);
+			console.log("Error: postVerify:\n\
+			\n\tcode: " + param.code +
+				"\n\ttfa_key: " + param.tfa_key);
 		}
 	}
 
@@ -271,9 +271,9 @@ export class AppController {
 		try {
 			return (await this.tfaService.validateTfa(param));
 		} catch (e) {
-			console.log("Error: postValidate:/n\
-			/n/tcode: " + param.code +
-				"/n/ttfa_key: " + param.tfa_key);
+			console.log("Error: postValidate:\n\
+			\n\tcode: " + param.code +
+				"\n\ttfa_key: " + param.tfa_key);
 		}
 	}
 }
