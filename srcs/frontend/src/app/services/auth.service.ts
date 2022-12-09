@@ -81,7 +81,6 @@ export class AuthService {
 		if (user.oauth !== undefined) {
 			this.storageService.setTfa(user.oauth.tfa?.tfa_activated);
 		}
-		console.log(user.level);
 		if (this.storageService.setId(user.id) &&
 		this.storageService.setEmail(user.email) &&
 		this.storageService.setLogin(user.login) &&

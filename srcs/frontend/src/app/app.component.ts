@@ -56,8 +56,6 @@ export class AppComponent implements OnInit {
 	ngOnInit(): void {
 		this.socketService.isGameAccepted().subscribe((data) => {
 			this.gameAccepted = data.res;
-			console.log(data.res);
-
 			if (this.gameAccepted == true) {
 				this.invitation = false;
 			}
@@ -105,12 +103,9 @@ export class AppComponent implements OnInit {
 			}
 		})
 		this.socketService.isGameFinished().subscribe((res) => {
-			console.log(res);
-			
 			this.GameData = res;
 			this.redirectPong = false;
 			this.showGameScore = true;
-			window.location.reload();
 		})
 		this.socketService.askForGames(this.storageService.getId()).subscribe((res) => {
 			if (res != null) {
@@ -118,7 +113,7 @@ export class AppComponent implements OnInit {
 				this.player2 = res.players[1];
 				this.setUpGameConfig();
 				this.roomName = this.createGameRoomName(this.player1.login, this.player2.login);
-        this.socketService.addMeToRoom(this.roomName);
+        		this.socketService.addMeToRoom(this.roomName);
 				this.redirectPong = true;
 			}
 		})

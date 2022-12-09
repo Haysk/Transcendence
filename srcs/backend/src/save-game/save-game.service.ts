@@ -24,7 +24,6 @@ export class SaveGameService {
 		  }
       });
       if (result !== null && result !== undefined) {
-        console.log('data game created');
 		return result;
       }
       }

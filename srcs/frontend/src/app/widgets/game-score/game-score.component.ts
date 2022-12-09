@@ -25,9 +25,10 @@ export class GameScoreComponent {
   }
 
 
-  closeGameScore(){
-      this.closeScoreEvent.emit(false);
-    }
+	closeGameScore() {
+		this.closeScoreEvent.emit(false);
+		window.location.reload();
+	}
 
   winnerIs(): User{
       this.scorePlayer1=this.GameData.player1_score;
