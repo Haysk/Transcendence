@@ -70,6 +70,20 @@ export class AppGateway
 
   /* SEARCH USER */
 
+  @SubscribeMessage('infosPlz')
+  async getInfos(client: Socket, payload: number)
+  {
+    let data = await this.Prisma.user.findFirst({
+      where: {
+        id: Number(payload),
+      },
+    })
+    if (data != null && data != undefined)
+    {
+      this.server.to(client.id).emit('hereIsInfos', data);
+    }
+  }
+
   @SubscribeMessage('SearchForThisUser')
   async searchForThisUser(client: any, payload: any)
   {

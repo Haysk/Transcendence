@@ -97,6 +97,16 @@
      
     
     }
+    .metaille{
+        background-color: aqua;
+        width: 30px;
+        height: 40px;
+        /* background-image: url("../../assets/metaille0.png"); */
+        background-size: cover;
+        background-repeat: no-repeat;
+        background-position: center; 
+       
+    }
     
     .tfa_input{
         /* background-color: bisque; */

@@ -7,9 +7,14 @@
         <div class="user_photo"  style="background-image:url({{this.userToShow.avatar}})" ></div>
         <div class="user_name" >{{this.userToShow.nickname}}</div>
         <div class="user_name" >Level : {{this.userToShow.level}}</div>
-        
-        
-      
+        <div class="env_metaille">
+        <div *ngIf="this.succes<1" class="metaille" style="background-image: url(../../assets/metaille0.png)"></div>
+            <div *ngIf="this.succes>=1" class="metaille" style="background-image: url(../../assets/metaille1.png)"></div>
+            <div *ngIf="this.succes>=2" class="metaille"  style="background-image: url(../../assets/metaille2.png)"></div>
+            <div *ngIf="this.succes<2" class="metaille"  style="background-image: url(../../assets/metaille0.png)"></div>
+            <div *ngIf="this.succes>=3" class="metaille" style="background-image: url(../../assets/metaille3.png)"></div>
+            <div *ngIf="this.succes<3" class="metaille" style="background-image: url(../../assets/metaille0.png)"></div>
+        </div>
 
         <div  *ngIf="this.login != this.userToShow.login">
         <app-button-v4 [text]="'Back to your profile'" (click)="backtoMyself()"></app-button-v4></div>

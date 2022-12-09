@@ -264,6 +264,20 @@ amIBanned()
 
   //USER
 
+  getInfos(id: number)
+  {
+    this.socket.emit('infosPlz');
+  }
+
+  receiveInfos()
+  {
+    return new Observable<User> ((obs) => {
+      this.socket.on('hereIsInfos', (res) => {
+        obs.next(res);
+      })
+    })
+  }
+
   askForUserList(current_id: number)
   {
     this.socket.emit('userListPlz', current_id);

@@ -1,6 +1,6 @@
 .all_vip{
     width: 100%;
-    height: 100vh;
+    height: 120vh;
     background-color: rgb(33, 40, 46);
     background-image: url("../../assets/imgs/vip2540x1240px.jpg");
     background-size: cover;
@@ -23,9 +23,29 @@
 
 }
 
+.env_metaille{
+    width: 100%;
+    display: flex;
+    justify-content: center;
+}
+
+.metaille{
+    /* background-color: aqua; */
+    width: 30px;
+    height: 40px;
+    /* background-image: url("../../assets/metaille0.png"); */
+    background-size: cover;
+    background-repeat: no-repeat;
+    background-position: center; 
+
+    
+
+}
+
+
 .bloc_vip_historique{
     width: 100%;
-    height: 600px;
+    height: 400px;
     color:aliceblue;
     text-align: center;
     display: flex;
