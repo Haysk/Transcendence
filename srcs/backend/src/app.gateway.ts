@@ -1225,7 +1225,7 @@ catch(err){
   spectateGame(client: Socket, payload: any)
   {
     this.server.in(client.id).socketsJoin(payload);
-    this.server.to(client.id).emit('gameIsReadyToSpectate', true);
+    this.server.to(client.id).emit('gameIsReadyToSpectate', payload);
   }
 
   @SubscribeMessage('gameInfosPlz')

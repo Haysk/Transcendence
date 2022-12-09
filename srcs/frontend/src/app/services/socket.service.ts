@@ -598,7 +598,7 @@ amIBanned()
 
   gameIsReadyToSpectate()
   {
-    return new Observable<boolean> ((obs) => {
+    return new Observable<string> ((obs) => {
       this.socket.on('gameIsReadyToSpectate', (data) => {
         obs.next(data);
       })

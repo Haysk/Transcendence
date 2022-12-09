@@ -16,7 +16,7 @@
         <app-bloc-user-profile [match]="match"></app-bloc-user-profile>
         </div> 
      
-       
-
+<div *ngIf="redirectPong==true">
+          <app-pong [customs]="gameConfig" [gameName]="this.roomName"></app-pong>
     </div><!-- fin de div bloc_show  -->
 </div><!-- fin de div all_show  -->

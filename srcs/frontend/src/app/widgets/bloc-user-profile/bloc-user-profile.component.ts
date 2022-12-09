@@ -14,31 +14,16 @@ export class BlocUserProfileComponent implements OnInit {
   @Input() user!: User;
   @Input() match!: any;
 
-  redirectPong:boolean = false;
-  gameConfig: IGame = new DefaultGame();
+
 
   constructor(private socketService: SocketService) { }
 
   ngOnInit(): void {
-    this.setUpGameConfig();
-    this.socketService.gameIsReadyToSpectate().subscribe((res) => {
-      this.redirectPong = res;
-    })
 
-    this.socketService.isGameFinished().subscribe((res) => {
-      this.redirectPong= false;
-    })
   }
 
   spectate()
   {
     this.socketService.spectateGame(this.match.roomName);
   }
-
-  setUpGameConfig()
-  {
-    this.gameConfig.left.mode.type = "remote";
-    this.gameConfig.right.mode.type = "remote";
-  }
-
 }
