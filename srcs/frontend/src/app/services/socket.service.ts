@@ -564,6 +564,11 @@ amIBanned()
     this.socket.emit('addMeToRoom', gameName);
   }
 
+  leaveTheRoom(name: string)
+  {
+    this.socket.emit('emptyTheRoom', name);
+  }
+
 //SHOW ROOM
 
   getMatches()
