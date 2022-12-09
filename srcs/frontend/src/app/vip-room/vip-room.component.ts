@@ -44,6 +44,7 @@ import { SGame } from '../models/savedGame';
 	newNickName!:string;
 	searchName:string = "";
 	games!:any;
+	succes:number = 0;
 	
 	constructor(private apiService: ApiService,
 		private http: HttpClient,
@@ -89,6 +90,11 @@ import { SGame } from '../models/savedGame';
 	}
 
 	ngOnInit(): void {
+		this.socketService.receiveInfos().subscribe((res) => {
+			console.log(res);
+			this.userToShow = res;
+		})
+		this.socketService.getInfos(this.storage.getId());
 		this.socketService.waitForAUser().subscribe((res) => {
 		this.userToShow = res;
 		})
@@ -98,6 +104,7 @@ import { SGame } from '../models/savedGame';
 			this.games = res;
 		})
 		this.socketService.askForGameHistory(this.userToShow);
+		this.setUpachievement();
 	}
 
 	ngOnDestroy() {
@@ -109,6 +116,16 @@ import { SGame } from '../models/savedGame';
 		this.visible = this.visible ? false : true;
 		this.visible_nickname = false;
 		this.visible_avatar = false;
+	}
+
+	setUpachievement()
+	{
+		if (this.userToShow.level >= 1)
+			this.succes = 1;
+		if (this.userToShow.level >= 3)
+			this.succes = 2;
+		if (this.userToShow.level >= 4)
+			this.succes = 2;
 	}
 
 	changeNickname(){
