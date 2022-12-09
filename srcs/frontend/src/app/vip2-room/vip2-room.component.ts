@@ -53,22 +53,21 @@ export class Vip2RoomComponent implements OnInit {
 				this.avatar = res.avatar;
 				this.level = res.level;
 				this.user = res;
+				this.setUpachievement();
 				this.socketService.askForGameHistory(this.user);
 			} else if (!res && !this.login)
 				this.router.navigateByUrl("vip-room");
 			this.searchName = "";
 		})
-		this.setUpachievement()
 	}
-
 	setUpachievement()
 	{
-		if (this.level >= 1)
+		if (this.level > 0)
 			this.succes = 1;
-		if (this.level >= 3)
+		if (this.level >= 2)
 			this.succes = 2;
 		if (this.level >= 4)
-			this.succes = 2;
+			this.succes = 3;
 	}
 
 	ngOnDestroy() {

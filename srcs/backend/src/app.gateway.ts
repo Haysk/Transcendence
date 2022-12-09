@@ -691,9 +691,11 @@ catch(err){
   {
     const bcrypt = require('bcrypt');
     const saltRounds =10;
-    const password = await bcrypt.hash (payload[2], saltRounds);
-
+    var password: string = null;
+    console.log(payload);
     try{
+      if (payload[2])
+        password = await bcrypt.hash (payload[2], saltRounds);
       await this.Prisma.channel.create({
 			  data: {
           name: String(payload[0]), 
@@ -805,21 +807,27 @@ catch(err){
   {
     const bcrypt = require('bcrypt');
     const saltRounds =10;
-    const password = await bcrypt.hash (payload[1], saltRounds);
+    let password: string = null;
+    console.log("clear");
+    console.log(payload);
+    
+    
     try{
-    let data = await this.Prisma.channel.update({
-      where:{
-        name: String(payload[0].name)
-      },
-      data:{
-        password: password
-      },
-      include: {
-        joined: true,
-        muted: true,
-        banned: true,
-        admins: true
-      },
+      if (payload[1])
+        password = await bcrypt.hash (payload[1], saltRounds);
+      let data = await this.Prisma.channel.update({
+        where:{
+          name: String(payload[0].name)
+        },
+        data:{
+          password
+        },
+        include: {
+          joined: true,
+          muted: true,
+          banned: true,
+          admins: true
+        },
     })
     }
     catch(error){
@@ -974,9 +982,6 @@ catch(err){
     })
     if(data != null && data != undefined && data2 != null && data2 != undefined)
     {
-      // console.log("GATEWAY ACCEPT INVITATION :")
-      // console.log(data);
-      // console.log(data2);
       this.server.to(data.socket).emit('invitationAccepted', true, data, data2);
       let roomName = this.createGameRoomName(data.login, data2.login);
       this.server.in(data.socket).socketsJoin(roomName);
@@ -1028,7 +1033,6 @@ catch(err){
         room[1] = Client.id;
       }
     }
-	console.log("WTF");
     if (room[0] != "" && room[1] != "")
       this.server.to(roomName).emit('bothPlayerAreReady', payload[0], payload[1]);
   }

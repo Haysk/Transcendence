@@ -44,7 +44,7 @@ import { SGame } from '../models/savedGame';
 	newNickName!:string;
 	searchName:string = "";
 	games!:any;
-	succes:number = 0;
+	succes:number =0;
 	
 	constructor(private apiService: ApiService,
 		private http: HttpClient,
@@ -80,7 +80,6 @@ import { SGame } from '../models/savedGame';
 		
 		if (this.selectedFile.size < 75000){
 		this.apiService.updateAvatar(Number(this.id), String(this.userToShow.avatar)).subscribe();
-		console.log("this.url")
 		this.storage.setAvatar(String(this.userToShow.avatar));
 		window.alert('***Update done***');
 		}
@@ -93,6 +92,8 @@ import { SGame } from '../models/savedGame';
 		this.socketService.receiveInfos().subscribe((res) => {
 			console.log(res);
 			this.userToShow = res;
+			this.setUpachievement();
+
 		})
 		this.socketService.getInfos(this.storage.getId());
 		this.socketService.waitForAUser().subscribe((res) => {
@@ -104,7 +105,6 @@ import { SGame } from '../models/savedGame';
 			this.games = res;
 		})
 		this.socketService.askForGameHistory(this.userToShow);
-		this.setUpachievement();
 	}
 
 	ngOnDestroy() {
@@ -120,12 +120,12 @@ import { SGame } from '../models/savedGame';
 
 	setUpachievement()
 	{
-		if (this.userToShow.level >= 1)
+		if (this.userToShow.level > 0)
 			this.succes = 1;
-		if (this.userToShow.level >= 3)
+		if (this.userToShow.level >= 2)
 			this.succes = 2;
 		if (this.userToShow.level >= 4)
-			this.succes = 2;
+			this.succes = 3;
 	}
 
 	changeNickname(){

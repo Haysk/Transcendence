@@ -168,7 +168,6 @@ export class GameRoomComponent implements OnInit {
   {
     this.bonus = !this.bonus;
     this.color=this.bonus?"rgb(255, 87, 51)":"rgb(115, 130, 130)"; 
-    console.log("bonus: " + this.bonus)
   }
 
 }

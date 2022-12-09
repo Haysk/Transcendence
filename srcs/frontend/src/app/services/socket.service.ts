@@ -266,7 +266,7 @@ amIBanned()
 
   getInfos(id: number)
   {
-    this.socket.emit('infosPlz');
+    this.socket.emit('infosPlz', id);
   }
 
   receiveInfos()
@@ -431,8 +431,7 @@ amIBanned()
     this.socket.emit('ready', player1, player2, gameConfig);
   }
 
-  acceptInvitation(player2: User, player1: User)
-  {
+  acceptInvitation(player2: User, player1: User){
     this.socket.emit('invitationIsAccepted', player2, player1);
   }
 

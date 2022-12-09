@@ -52,13 +52,6 @@ export class InvitationGameComponent implements OnInit {
   Yesplease(){
     this.showInvitationEvent.emit(false);
     this.socketService.acceptInvitation(this.to, this.fromWho);
-    
-    // console.log("IMPORTANT");
-    // console.log(this.fromWho);
-    // console.log(this.to);
-    
-    //let data = {fromWho: this.fromWho, to: this.to}
-    //this.router.navigateByUrl('/pong');
   }
 
 }
