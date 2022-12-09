@@ -487,6 +487,11 @@ async handleDisconnect(client: Socket): Promise<void> {
     {
       this.isOffline(client, data.login);
       this.server.emit('userListUpdated');
+      let games = this.pongService.returnGames();
+      games.forEach((tmp) => {
+        this.server.in(client.id).socketsLeave(tmp.name);
+      })
+      //ici
     }
   }
   catch(err){

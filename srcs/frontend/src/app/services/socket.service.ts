@@ -435,7 +435,8 @@ amIBanned()
     this.socket.emit('invitationIsAccepted', player2, player1);
   }
 
-  isGameAccepted(){
+  isGameAccepted()
+  {
     return new Observable<any>((obs) => {
       this.socket.on('invitationAccepted', (res:boolean, res2:User, res3: User) => {
         let data = {res, res2, res3}
@@ -444,7 +445,8 @@ amIBanned()
     })
   }
 
-  areYouReady(){
+  areYouReady()
+  {
     return new Observable<boolean>((obs) => {
       this.socket.on('areYouReady', (res: boolean) => {
         obs.next(res);
