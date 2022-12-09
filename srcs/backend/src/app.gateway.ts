@@ -80,7 +80,6 @@ export class AppGateway
     })
     if (data != null && data != undefined)
     {
-      console.log("oui oui oui")
       this.server.to(client.id).emit('hereIsInfos', data);
     }
   }
@@ -970,9 +969,6 @@ catch(err){
     })
     if(data != null && data != undefined && data2 != null && data2 != undefined)
     {
-      // console.log("GATEWAY ACCEPT INVITATION :")
-      // console.log(data);
-      // console.log(data2);
       this.server.to(data.socket).emit('invitationAccepted', true, data, data2);
       let roomName = this.createGameRoomName(data.login, data2.login);
       this.server.in(data.socket).socketsJoin(roomName);
@@ -1024,7 +1020,6 @@ catch(err){
         room[1] = Client.id;
       }
     }
-	console.log("WTF");
     if (room[0] != "" && room[1] != "")
       this.server.to(roomName).emit('bothPlayerAreReady', payload[0], payload[1]);
   }

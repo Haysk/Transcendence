@@ -154,11 +154,6 @@ export class PongComponent implements OnInit, OnDestroy {
       .subscribe((move: IInput) => {
         this.game.updateInput(move);
       });
-    // ce doit etre uniquement le serveur qui recois le start et qui doit metre a jour sa partie intern
-    // this.startSubscription = this.socketService.getStart().subscribe(() => {
-    //   console.log("start")
-    //   this.game.start();
-    // });
     this.gameStatesSubscription = this.socketService
       .getGameStates(this.gameName)
       .subscribe((states: IGameStates) => {

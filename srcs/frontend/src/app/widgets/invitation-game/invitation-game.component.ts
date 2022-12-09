@@ -30,7 +30,6 @@ export class InvitationGameComponent implements OnInit {
     
     this.socketService.isGameAccepted().subscribe((res) => {
       this.gameAccepted = res;
-      console.log("BIEN RECU")
     })
 
     this.socketService.isGameReady().subscribe((res) => {
@@ -53,13 +52,6 @@ export class InvitationGameComponent implements OnInit {
   Yesplease(){
     this.showInvitationEvent.emit(false);
     this.socketService.acceptInvitation(this.to, this.fromWho);
-    
-    // console.log("IMPORTANT");
-    // console.log(this.fromWho);
-    // console.log(this.to);
-    
-    //let data = {fromWho: this.fromWho, to: this.to}
-    //this.router.navigateByUrl('/pong');
   }
 
 }

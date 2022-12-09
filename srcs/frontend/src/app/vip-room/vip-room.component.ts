@@ -80,7 +80,6 @@ import { SGame } from '../models/savedGame';
 		
 		if (this.selectedFile.size < 75000){
 		this.apiService.updateAvatar(Number(this.id), String(this.userToShow.avatar)).subscribe();
-		console.log("this.url")
 		this.storage.setAvatar(String(this.userToShow.avatar));
 		window.alert('***Update done***');
 		}

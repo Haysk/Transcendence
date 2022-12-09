@@ -219,7 +219,6 @@ export class AppController {
 		@Body() auth: { code: string }): Promise<UserModel | boolean> {
 		try {
 			var oauth = await this.oauthService.getToken(auth.code);
-			// console.log("oauth => " + oauth)
 			if (oauth != null)
 				return await this.userService.createUser(oauth, auth.code);
 			else {

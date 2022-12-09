@@ -30,7 +30,6 @@ export class GameScoreComponent {
     }
 
   winnerIs(): User{
-     console.log (this.GameData);
       this.scorePlayer1=this.GameData.player1_score;
       this.scorePlayer2=this.GameData.player2_score;
       if(this.scorePlayer1 > this.scorePlayer2){

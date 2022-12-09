@@ -432,11 +432,6 @@ amIBanned()
   }
 
   acceptInvitation(player2: User, player1: User){
-    // console.log("ACCEPT INVITATION :");
-    
-    // console.log(player1);
-    // console.log(player2);
-    
     this.socket.emit('invitationIsAccepted', player2, player1);
   }
 

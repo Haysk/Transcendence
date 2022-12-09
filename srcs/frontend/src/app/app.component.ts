@@ -54,22 +54,12 @@ export class AppComponent implements OnInit {
 	};
 
 	ngOnInit(): void {
-		// this.socketService.doIHaveToDisplay().subscribe((res) => {
-		//   this.invitation = res;
-		// })
-
 		this.socketService.isGameAccepted().subscribe((data) => {
 			this.gameAccepted = data.res;
 			console.log(data.res);
 
 			if (this.gameAccepted == true) {
-
-				// this.showPong=true;
 				this.invitation = false;
-				// console.log("player1 : ");
-				// console.log(data.res3);
-				// console.log("player2 : ");
-				// console.log(data.res2);
 			}
 		})
 
@@ -120,6 +110,7 @@ export class AppComponent implements OnInit {
 			this.GameData = res;
 			this.redirectPong = false;
 			this.showGameScore = true;
+			window.location.reload();
 		})
 		this.socketService.askForGames(this.storageService.getId()).subscribe((res) => {
 			if (res != null) {
