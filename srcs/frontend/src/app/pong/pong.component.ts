@@ -283,6 +283,7 @@ export class PongComponent implements OnInit, OnDestroy {
     this.canvasTouchEndSubscription.unsubscribe();
     this.canvasTouchCancelSubscription.unsubscribe();
     this.socketService.updatePlayerStatus2(this.Me)
+    this.socketService.leaveTheRoom(this.gameName);
   }
 
   sendMove(move: IInput) {

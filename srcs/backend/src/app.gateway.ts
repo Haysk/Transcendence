@@ -1248,6 +1248,12 @@ catch(err){
     }
   }
 
+  @SubscribeMessage('emptyTheRoom')
+  emptyTheRoom(client: Socket, payload: string)
+  {
+    this.server.in(client.id).socketsLeave(payload);
+  }
+
   @SubscribeMessage('closeThisRoom')
   closeGameRoom(client: Socket, payload: any)
   {
