@@ -266,7 +266,7 @@ amIBanned()
 
   getInfos(id: number)
   {
-    this.socket.emit('infosPlz');
+    this.socket.emit('infosPlz', id);
   }
 
   receiveInfos()

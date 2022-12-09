@@ -80,6 +80,7 @@ export class AppGateway
     })
     if (data != null && data != undefined)
     {
+      console.log("oui oui oui")
       this.server.to(client.id).emit('hereIsInfos', data);
     }
   }

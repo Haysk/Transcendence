@@ -93,6 +93,8 @@ import { SGame } from '../models/savedGame';
 		this.socketService.receiveInfos().subscribe((res) => {
 			console.log(res);
 			this.userToShow = res;
+			this.setUpachievement();
+
 		})
 		this.socketService.getInfos(this.storage.getId());
 		this.socketService.waitForAUser().subscribe((res) => {
@@ -104,7 +106,6 @@ import { SGame } from '../models/savedGame';
 			this.games = res;
 		})
 		this.socketService.askForGameHistory(this.userToShow);
-		this.setUpachievement();
 	}
 
 	ngOnDestroy() {

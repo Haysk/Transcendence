@@ -26,7 +26,7 @@ export class Vip2RoomComponent implements OnInit {
 	searchName:string = "";
 	games!:any;
 	user!: User;
-	succes!:string;
+	succes:number = 0;
 	
 	constructor(private storage: StorageService,
 				private socketService: SocketService,
@@ -53,24 +53,21 @@ export class Vip2RoomComponent implements OnInit {
 				this.avatar = res.avatar;
 				this.level = res.level;
 				this.user = res;
+				this.setUpachievement();
 				this.socketService.askForGameHistory(this.user);
 			} else if (!res && !this.login)
 				this.router.navigateByUrl("vip-room");
 			this.searchName = "";
 		})
-		this.setUpachievement()
 	}
-
 	setUpachievement()
 	{
-		console.log ("11111")
-		console.log (this.level)
-		if (this.level >= 0 )
-			this.succes = "../../assets/metaille0.png";
+		if (this.level > 0)
+			this.succes = 1;
 		if (this.level >= 2)
-			this.succes = "../../assets/metaille1.png";
+			this.succes = 2;
 		if (this.level >= 4)
-			this.succes = "../../assets/metaille2.png";
+			this.succes = 3;
 	}
 
 	ngOnDestroy() {
