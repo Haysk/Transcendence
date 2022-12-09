@@ -127,7 +127,7 @@ export class AppComponent implements OnInit {
 				this.player2 = res.players[1];
 				this.setUpGameConfig();
 				this.roomName = this.createGameRoomName(this.player1.login, this.player2.login);
-        this.socketService.addMeToRoom(this.roomName);
+        		this.socketService.addMeToRoom(this.roomName);
 				this.redirectPong = true;
 			}
 		})

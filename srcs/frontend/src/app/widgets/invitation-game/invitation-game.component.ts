@@ -24,18 +24,17 @@ export class InvitationGameComponent implements OnInit {
   constructor(private socketService: SocketService, private storageService: StorageService, public router: Router) {}
 
   ngOnInit(): void {
-    // this.socketService.doIHaveToDisplay().subscribe((res) => {
-    //   this.toDisplay = res;
-    // })
+    this.socketService.doIHaveToDisplay().subscribe((res) => {
+      this.toDisplay = res;
+    })
     
-    // this.socketService.isGameAccepted().subscribe((res) => {
-    //   this.gameAccepted = res;
-    //   console.log("BIEN RECU")
-    // })
+    this.socketService.isGameAccepted().subscribe((res) => {
+      this.gameAccepted = res;
+    })
 
-    // this.socketService.isGameReady().subscribe((res) => {
-    //   this.gameIsReady = res;
-    // })
+    this.socketService.isGameReady().subscribe((res) => {
+      this.gameIsReady = res;
+    })
   }
 
 	ngOnDestroy() {
