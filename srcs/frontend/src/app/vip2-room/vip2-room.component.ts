@@ -26,6 +26,7 @@ export class Vip2RoomComponent implements OnInit {
 	searchName:string = "";
 	games!:any;
 	user!: User;
+	succes:number = 0;
 	
 	constructor(private storage: StorageService,
 				private socketService: SocketService,
