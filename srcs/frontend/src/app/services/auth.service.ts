@@ -81,6 +81,7 @@ export class AuthService {
 		if (user.oauth !== undefined) {
 			this.storageService.setTfa(user.oauth.tfa?.tfa_activated);
 		}
+		console.log(user.level);
 		if (this.storageService.setId(user.id) &&
 		this.storageService.setEmail(user.email) &&
 		this.storageService.setLogin(user.login) &&
@@ -92,8 +93,10 @@ export class AuthService {
 		this.storageService.setImage(user.image) &&
 		this.storageService.setAvatar(user.avatar) &&
 		this.storageService.setLvl(user.level)) {
+			console.log(true);
 			return true;
 		} else {
+			console.log(false);
 			return false
 		}
 	}

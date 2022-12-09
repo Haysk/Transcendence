@@ -238,7 +238,7 @@ export class StorageService {
 	}
 
 	setLvl(lvl: number) {
-		if (lvl) {
+		if (lvl !== undefined && lvl !== null) {
 			localStorage.setItem("lvl", String(lvl));
 			return true;
 		}

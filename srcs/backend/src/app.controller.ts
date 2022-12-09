@@ -14,7 +14,7 @@ import { ChannelService } from './channel.service';
 import { OauthService } from './oauth.service';
 import { TfaService } from './tfa.service';
 import {
-	User as UserModel, Tech as TechModel,
+	User as UserModel,
 	Oauth as OauthModel,
 	Tfa as TfaModel,
 	Message as MessageModel,
