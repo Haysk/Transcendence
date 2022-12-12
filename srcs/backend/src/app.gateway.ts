@@ -1106,7 +1106,7 @@ catch(err){
             this.server.in(client.id).socketsJoin(gameName);
             this.pongService.addGame(gameName, payload[1],  this.TabMatchmaking[1], payload[0]);
             this.server.to(gameName).emit('bothPlayerAreReady', this.TabMatchmaking[1], payload[0], true);
-            this.TabMatchmaking[0] = null;
+            this.TabMatchmaking[1] = null;
           }
         }
       }
