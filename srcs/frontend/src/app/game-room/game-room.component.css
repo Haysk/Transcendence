@@ -7,12 +7,13 @@
     display: flex;
     align-items: center;
     flex-direction: column;
-    padding-top: 100px;
+    padding-top: 80px;
 
     background-image: url("../../assets/imgs/game2540x1240px.jpg");
     background-size: cover;
     background-repeat: no-repeat;
     background-position: center; 
+    background-color: aqua;
 }
 
 button{
@@ -43,14 +44,15 @@ button{
 
 
 .bloc_item_games{
-    /* background-color: #8b642d; */
+    /* background-color: #8b642d;  */
     padding-top: 50px;
     width: 960px;
-    height: 500px;
+    height: 250px;
     display: flex;
     flex-wrap:wrap;
     justify-content: center;
     /* margin-left: 200px; */
+    
 
 
 }
