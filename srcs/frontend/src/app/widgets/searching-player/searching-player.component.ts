@@ -1,4 +1,4 @@
-import { Component,Output, EventEmitter } from '@angular/core';
+import { Component,Output, EventEmitter, Input } from '@angular/core';
 import { User } from 'src/app/models/oauth';
 import { SocketService } from '../../services/socket.service';
 
@@ -12,8 +12,10 @@ export class SearchingPlayerComponent {
   @Output() showSearchingPlayerEvent = new EventEmitter<boolean>();
   constructor(private socketService: SocketService){}
 
+  @Input() bonus:boolean = false;
+
   giveUp(){
-    this.socketService.stopMatchmaking(false); //Mettre true si on met les bonus dans le matchmaking
+    this.socketService.stopMatchmaking(this.bonus); //Mettre true si on met les bonus dans le matchmaking
     this.showSearchingPlayerEvent.emit(false);
   }
 
